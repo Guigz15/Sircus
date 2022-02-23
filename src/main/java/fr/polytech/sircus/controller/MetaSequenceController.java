@@ -140,7 +140,7 @@ public class MetaSequenceController
 		metaSeqComboBox.setItems ( metaSequences );
 
 		//Lecture des donnees serialisees
-		metaSequences.addAll ( SircusApplication.dataSircus.getMetaSequencesList() );
+		metaSequences.addAll ( SircusApplication.dataSircus.getMetaSequencesList () );
 
 		metaSeqComboBox.getSelectionModel ().select ( 0 );
 		//--------------------------------------------------------------------------------------------------------------
