@@ -51,7 +51,7 @@ public class ResultatController  implements  Initializable {
 
     private List<Resultat> initResultat() {
         List<MetaSequence> metaSequences = new ArrayList<MetaSequence>();
-        metaSequences.add(SircusApplication.dataSircus.getMetaSequenceList().get(0));
+        metaSequences.add(SircusApplication.dataSircus.getMetaSequencesList().get(0));
         List<Resultat> resultats = new ArrayList<Resultat>();
         for (MetaSequence metaSequence:metaSequences){
             Resultat resultat = new Resultat();
