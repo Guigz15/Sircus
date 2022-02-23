@@ -19,7 +19,7 @@ public final class Serializer {
     /**
      * Objet "stub" d'une meta sequence, pour tester
      */
-    private static DataSircus stubData;
+    private static final DataSircus stubData;
 
     /**
      * Bool�en permettant de savoir si on utilise les objets "stub" lors des appels aux methodes de lectures
@@ -50,6 +50,7 @@ public final class Serializer {
 
     /**
      * Permet de faciliter la lecture d'un objet depuis un fichier
+     *
      * @param file Fichier a lire
      * @param stub Objet "stub" si jamais le fichier n'existe pas
      * @return L'objet lu ou l'objet "stub" si le fichier n'existe pas
@@ -57,14 +58,14 @@ public final class Serializer {
      */
     private static Object readObject(File file, Object stub) throws IOException {
 
-        if(useStub) {
+        if (useStub) {
             return stub;
         }
 
         Object obj = stub;
 
         // On ne lit dans le fichier que si ce dernier existe
-        if(file.exists()) {
+        if (file.exists()) {
             try {
                 ObjectInputStream input = new ObjectInputStream(new FileInputStream(file));
 
@@ -72,9 +73,9 @@ public final class Serializer {
 
                 input.close();
 
-            } catch(FileNotFoundException ex) {
+            } catch (FileNotFoundException ex) {
                 ex.printStackTrace();
-            } catch(ClassNotFoundException ex) {
+            } catch (ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
         }
@@ -84,14 +85,15 @@ public final class Serializer {
 
     /**
      * Permet de faciliter l'ecriture d'un fichier
-     * @param file Fichier dans lequel ecrire
+     *
+     * @param file   Fichier dans lequel ecrire
      * @param object Objet a ecrire
      * @throws IOException Si le fichier n'est pas accessible
      */
     private static void writeObject(File file, Object object) throws IOException {
 
         // On verifie qu'il ne s'agisse pas d'un dossier
-        if(!file.isDirectory()) {
+        if (!file.isDirectory()) {
             try {
                 ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file));
 
@@ -99,7 +101,7 @@ public final class Serializer {
 
                 output.close();
 
-            } catch(FileNotFoundException ex) {
+            } catch (FileNotFoundException ex) {
                 ex.printStackTrace();
             }
         }
@@ -108,6 +110,7 @@ public final class Serializer {
     /**
      * Permet de lire les donnees de l'application depuis un fichier
      * Si le fichier n'existe pas, une donnee "stub" est renvoyee
+     *
      * @return DataCircus lue
      * @throws IOException Si le fichier n'est pas accessible
      */
@@ -117,6 +120,7 @@ public final class Serializer {
 
     /**
      * Permet d'enregistrer les informations de l'application dans un fichier
+     *
      * @param dataSircus Objet representant les donnees a enregistrer
      * @throws IOException Si le fichier n'est pas accessible
      */

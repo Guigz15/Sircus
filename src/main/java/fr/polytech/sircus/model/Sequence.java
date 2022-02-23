@@ -21,7 +21,8 @@ public class Sequence implements Serializable {
     /**
      * Nom de la sequence
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private String name;
 
     /**
@@ -33,20 +34,23 @@ public class Sequence implements Serializable {
     /**
      * Liste des medias de la sequence
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private List<Media> listMedias;
 
     /**
      * Booleen verrouille
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private Boolean verr;
 
     /**
      * Constructeur de l'objet sequence
+     *
      * @param name nom de la sequence
      */
-    public Sequence(String name){
+    public Sequence(String name) {
         this.name = name;
         this.duration = Duration.ZERO;
         this.listMedias = new ArrayList<>();
@@ -55,9 +59,10 @@ public class Sequence implements Serializable {
 
     /**
      * Constructeur de l'objet sequence par copie
+     *
      * @param sequence Sequence a copier
      */
-    public Sequence(Sequence sequence){
+    public Sequence(Sequence sequence) {
         this.name = sequence.getName();
         this.duration = sequence.getDuration();
         this.listMedias = sequence.getListMedias();
@@ -66,13 +71,14 @@ public class Sequence implements Serializable {
 
     /**
      * Retourne la duree de la sequence
+     *
      * @return duration la duree
      */
     public Duration getDuration() {
         Duration duration = Duration.ofSeconds(0);
-        for(int index = 0; index < listMedias.size(); index++){
+        for (int index = 0; index < listMedias.size(); index++) {
             duration = duration.plus(listMedias.get(index).getDuration());
-            if(listMedias.get(index).getInterStim() != null){
+            if (listMedias.get(index).getInterStim() != null) {
                 duration = duration.plus(listMedias.get(index).getInterStim().getDuration());
             }
         }
@@ -81,28 +87,31 @@ public class Sequence implements Serializable {
 
     /**
      * Ajoute un media a la liste des medias de la sequence
+     *
      * @param media le media a ajouter
      */
-    public void addMedia(Media media)
-    {
-        this.listMedias.add ( media );
+    public void addMedia(Media media) {
+        this.listMedias.add(media);
         this.setDuration(this.getDuration());
     }
 
     /**
      * Supprime un media a la liste des medias de la sequence
+     *
      * @param media le media a supprimer
      */
-    public void remMedia(Media media)
-    {
-        if ( this.listMedias.remove ( media ) ) {
+    public void remMedia(Media media) {
+        if (this.listMedias.remove(media)) {
             this.setDuration(this.getDuration());
         }
     }
 
     /**
      * Surcharge de la methode toString
+     *
      * @return name le nom
      */
-    public String toString() { return name; }
+    public String toString() {
+        return name;
+    }
 }

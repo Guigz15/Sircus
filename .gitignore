@@ -2,3 +2,5 @@
 target/classes/
 
 .idea/
+
+*.jar

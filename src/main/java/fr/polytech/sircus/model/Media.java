@@ -19,45 +19,52 @@ public class Media implements Serializable {
     /**
      * Nom du media
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private String name;
 
     /**
      * Nom du fichier
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private String filename;
 
     /**
      * Duree d'affichage du media
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private Duration duration;
 
     /**
      * Type du media (image ou video)
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private TypeMedia type;
 
     /**
      * Interstim apres chaque media
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private Media interStim;
 
     /**
      * Booleen verrouille
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private Boolean verr;
 
     /**
      * Constructeur de l'objet Media
-     * @param name Nom du media
+     *
+     * @param name     Nom du media
      * @param filename nom du fichier
      * @param duration Duree du media
-     * @param type Type du media
+     * @param type     Type du media
      */
     public Media(String name, String filename, Duration duration, TypeMedia type, Media interStim) {
         this.name = name;
@@ -70,6 +77,7 @@ public class Media implements Serializable {
 
     /**
      * Constructeur de l'objet Media par copie
+     *
      * @param media media a copier
      */
     public Media(Media media) {
@@ -83,7 +91,10 @@ public class Media implements Serializable {
 
     /**
      * Surcharge de la methode toString
+     *
      * @return name le nom
      */
-    public String toString() { return name; }
+    public String toString() {
+        return name;
+    }
 }

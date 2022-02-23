@@ -8,13 +8,16 @@ import java.util.List;
 
 public class Resultat {
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String nomMetaSequence;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private Duration duration;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private List<Sequence> listSequences;
 
     public Resultat(String nomMetaSequence, Duration duration, List<Sequence> listSequences) {
@@ -22,6 +25,7 @@ public class Resultat {
         this.duration = duration;
         this.listSequences = listSequences;
     }
+
     public Resultat() {
 
     }

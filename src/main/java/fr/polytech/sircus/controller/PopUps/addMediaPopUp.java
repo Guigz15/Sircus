@@ -13,6 +13,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,71 +30,60 @@ public class addMediaPopUp {
     //******************************************************************************************************************
 
     /**
+     * Objet du bouton d'ajout de fichier : permet la sélection du fichier pour le média à ajouter
+     */
+    @FXML
+    private final FileChooser fileChooserMedia;
+    /**
+     * Objet du bouton d'ajout fichier : permet la sélection du fichier pour l'inter-stimulation du média à ajouter
+     */
+    @FXML
+    private final FileChooser fileChooserInterstim;
+    /**
      * Label du nom du média à ajouter
      */
     @FXML
     private Label nameNewMedia;
-
     /**
      * Champ de texte de la durée du média à ajouter
      */
     @FXML
     private TextField durationField;
-
     /**
      * Fichier pour le média à ajouter
      */
     @FXML
     private File newFileMedia;
-
     /**
      * Champ texte du nom de l'inter-stimulation à ajouter
      */
     @FXML
     private Label nameNewInterstim;
-
     /**
      * Fichier pour l'inter-stimulation du média à ajouter
      */
     @FXML
     private File newFileInterstim;
-
     /**
      * Bouton annulant l'ajout du média
      */
     @FXML
     private Button addMediaCancel;
-
     /**
      * Bouton validant l'ajout du média
      */
     @FXML
     private Button addMediaSave;
-
     /**
      * Bouton d'ajout d'un fichier pour le média à ajouter
      */
     @FXML
     private Button addMediaFile;
-
-    /**
-     * Objet du bouton d'ajout de fichier : permet la sélection du fichier pour le média à ajouter
-     */
-    @FXML
-    private FileChooser fileChooserMedia;
-
     /**
      * Bouton d'ajout d'un fichier pour l'inter-stimulation du média à ajouter
      */
     @FXML
     private Button addInterstimFile;
-
-    /**
-     * Objet du bouton d'ajout fichier : permet la sélection du fichier pour l'inter-stimulation du média à ajouter
-     */
-    @FXML
-    private FileChooser fileChooserInterstim;
-
     /**
      * Bouton radio sélectionnant l'ajout d'un nouveau média
      */
@@ -148,10 +138,11 @@ public class addMediaPopUp {
 
     /**
      * Constructeur du contrôleur de la pop-up d'ajout d'un média à une séquence et de ses composantes
-     * @param owner fenêtre principale
+     *
+     * @param owner      fenêtre principale
      * @param listMedias liste des médias de la séquence
-     * @param sequence la séquence dans laquelle on ajoute un média
-     * @param listener event listener de modification de la séquence provenant du controller modifySeqPopUp
+     * @param sequence   la séquence dans laquelle on ajoute un média
+     * @param listener   event listener de modification de la séquence provenant du controller modifySeqPopUp
      */
     public addMediaPopUp(Window owner, ObservableList<Media> listMedias, Sequence sequence,
                          modifySeqPopUp.SequenceModificationListener listener, FileChooser fileChooserMedia,
@@ -164,7 +155,7 @@ public class addMediaPopUp {
         this.fileChooserInterstim = fileChooserInterstim;
 
         try {
-            this.sequence   = sequence;
+            this.sequence = sequence;
             this.listMedias = listMedias;
             this.listener = listener;
 
@@ -212,7 +203,7 @@ public class addMediaPopUp {
     @FXML
     private void initialize() {
         this.nameListMedias.setItems(this.listMedias);
-        this.nameListMedias.getSelectionModel().select (0);
+        this.nameListMedias.getSelectionModel().select(0);
         this.nameListMedias.setDisable(true);
         this.addMediaSave.setDisable(true);
         this.addMediaFile.setDisable(true);
@@ -226,8 +217,8 @@ public class addMediaPopUp {
         this.addCopyMedia.setOnMouseClicked(mouseEvent -> selectAddCopyMedia());
         this.addNewMedia.setOnMouseClicked(mouseEvent -> selectAddNewMedia());
         this.addMediaFile.setOnMouseClicked(mouseEvent -> selectMediaFile());
-        this.addMediaCancel.setOnMouseClicked (mouseEvent -> cancelAddMedia());
-        this.addMediaSave.setOnMouseClicked (mouseEvent -> {
+        this.addMediaCancel.setOnMouseClicked(mouseEvent -> cancelAddMedia());
+        this.addMediaSave.setOnMouseClicked(mouseEvent -> {
             try {
                 addMediaToSeq();
             } catch (IOException e) {
@@ -273,7 +264,7 @@ public class addMediaPopUp {
      * si non le désactive
      */
     private void checkNameNewMediaFilled() {
-        if(this.addNewMedia.isSelected()) {
+        if (this.addNewMedia.isSelected()) {
             this.addMediaSave.setDisable(
                     this.nameNewMedia.getText().length() <= 0 || this.durationField.getText().length() <= 0
             );
@@ -284,7 +275,7 @@ public class addMediaPopUp {
      * Méthode gérant l'évenement de sélection de la checkbox de sélection d'un nouveau média
      */
     private void selectAddNewMedia() {
-        if(addCopyMedia.isSelected()) {
+        if (addCopyMedia.isSelected()) {
             this.addCopyMedia.fire();
         }
         this.nameListMedias.setDisable(true);
@@ -299,7 +290,7 @@ public class addMediaPopUp {
      * Méthode gérant l'évenement de sélection de la checkbox de sélection de la copie d'un média
      */
     private void selectAddCopyMedia() {
-        if(this.addNewMedia.isSelected()) {
+        if (this.addNewMedia.isSelected()) {
             this.addNewMedia.fire();
         }
 
@@ -314,45 +305,44 @@ public class addMediaPopUp {
 
     /**
      * Méthode d'ajout d'un média à la séquence
+     *
      * @throws IOException si problème lié à la sélection d'un fichier
      */
     private void addMediaToSeq() throws IOException {
         Alert alert = new Alert(
                 Alert.AlertType.CONFIRMATION,
-                "Etes-vous sûr de vouloir enregistrer les modifications de " + this.sequence.getName () + " ?",
+                "Etes-vous sûr de vouloir enregistrer les modifications de " + this.sequence.getName() + " ?",
                 ButtonType.YES,
                 ButtonType.NO
         );
         alert.showAndWait();
 
-        if (alert.getResult() == ButtonType.YES)
-        {
+        if (alert.getResult() == ButtonType.YES) {
             if (this.addNewMedia.isSelected()) {
                 if (this.newFileMedia.exists()) {
 
                     Path path = Paths.get(this.newFileMedia.getPath());
                     OutputStream os = new FileOutputStream("medias/" + this.newFileMedia.getName());
-                    Files.copy(path,os);
+                    Files.copy(path, os);
 
                     if (this.newFileInterstim != null) {
                         if (this.newFileInterstim.isFile()) {
                             Path path2 = Paths.get(this.newFileInterstim.getPath());
                             OutputStream os2 = new FileOutputStream("medias/" + this.newFileInterstim.getName());
-                            Files.copy(path2,os2);
+                            Files.copy(path2, os2);
                         }
                     }
 
                     String extension = "";
                     int i = this.newFileMedia.getPath().lastIndexOf('.');
                     if (i > 0) {
-                        extension = this.newFileMedia.getPath().substring(i+1);
+                        extension = this.newFileMedia.getPath().substring(i + 1);
                     }
 
                     TypeMedia typeMedia;
                     if (extension.equals("mp4")) {
                         typeMedia = TypeMedia.VIDEO;
-                    }
-                    else {
+                    } else {
                         typeMedia = TypeMedia.PICTURE;
                     }
 
@@ -378,9 +368,8 @@ public class addMediaPopUp {
 
                     this.sequence.addMedia(newMedia);
                 }
-            }
-            else {
-                Media copiedMedia = new Media((Media) this.nameListMedias.getSelectionModel().getSelectedItem());
+            } else {
+                Media copiedMedia = new Media(this.nameListMedias.getSelectionModel().getSelectedItem());
                 if (copiedMedia.getInterStim() != null) {
                     copiedMedia.setInterStim(new Media(copiedMedia.getInterStim()));
                 }

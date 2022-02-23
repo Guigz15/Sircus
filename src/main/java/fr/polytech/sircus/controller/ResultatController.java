@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.net.URL;
@@ -26,8 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ResultatController  implements  Initializable {
+public class ResultatController implements Initializable {
 
+    public ObservableList<Resultat> list = FXCollections.observableArrayList(
+            initResultat());
     @FXML
     private TableView<Resultat> tableResultat;
     @FXML
@@ -48,12 +51,11 @@ public class ResultatController  implements  Initializable {
         return resultats;
     }
 
-
     private List<Resultat> initResultat() {
         List<MetaSequence> metaSequences = new ArrayList<MetaSequence>();
         metaSequences.add(SircusApplication.dataSircus.getMetaSequencesList().get(0));
         List<Resultat> resultats = new ArrayList<Resultat>();
-        for (MetaSequence metaSequence:metaSequences){
+        for (MetaSequence metaSequence : metaSequences) {
             Resultat resultat = new Resultat();
             resultat.setNomMetaSequence(metaSequence.getName());
             resultat.setDuration(metaSequence.getDuration());
@@ -64,9 +66,6 @@ public class ResultatController  implements  Initializable {
 
 
     }
-
-    public ObservableList<Resultat> list = FXCollections.observableArrayList(
-            initResultat()    );
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -83,7 +82,7 @@ public class ResultatController  implements  Initializable {
     private void export(ActionEvent event) throws FileNotFoundException {
         try {
             Document my_pdf_report = new Document();
-            PdfWriter.getInstance((com.itextpdf.text.Document) my_pdf_report, new FileOutputStream("rapport_projet_circus.pdf"));
+            PdfWriter.getInstance(my_pdf_report, new FileOutputStream("rapport_projet_circus.pdf"));
             my_pdf_report.open();
             //we have 3 columns in our table
             PdfPTable my_report_table = new PdfPTable(3);
@@ -111,11 +110,10 @@ public class ResultatController  implements  Initializable {
 
             }
             my_pdf_report.close();
-        }catch (DocumentException | FileNotFoundException e) {
+        } catch (DocumentException | FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
 
 
     }

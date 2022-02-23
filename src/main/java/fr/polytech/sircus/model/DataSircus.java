@@ -20,13 +20,15 @@ public class DataSircus implements Serializable {
     /**
      * Liste des meta sequences de l'application
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private List<MetaSequence> metaSequencesList;
 
     /**
      * Liste des lieux d'examen
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private List<String> locationsList;
 
     /**
@@ -38,19 +40,21 @@ public class DataSircus implements Serializable {
 
     /**
      * Ajoute un lieu a la liste des lieux
+     *
      * @param location nouveau lieu a ajouter
      */
     public void setLieuxList(String location) {
-        if(!this.locationsList.contains(location)){
+        if (!this.locationsList.contains(location)) {
             this.locationsList.add(location);
         }
     }
 
     /**
      * Ajoute une meta sequence a la liste des meta sequences
+     *
      * @param metaSequence la nouvelle meta sequence
      */
-    public void saveMetaSeq(MetaSequence metaSequence){
+    public void saveMetaSeq(MetaSequence metaSequence) {
         this.metaSequencesList.add(metaSequence);
     }
 }
