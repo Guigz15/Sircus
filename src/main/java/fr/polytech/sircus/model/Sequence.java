@@ -12,34 +12,20 @@ import java.util.List;
  */
 public class Sequence implements Serializable {
 
-    /**
-     * Class version number (required to use Serializable)
-     */
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Sequence's name
-     */
     @Getter @Setter
     private String name;
 
-    /**
-     * Sequence's duration
-     */
     @Setter
     private Duration duration;
 
-    /**
-     * The medias list
-     */
     @Getter @Setter
     private List<Media> listMedias;
 
-    /**
-     * A boolean to lock a sequence
-     */
     @Getter @Setter
     private Boolean lock;
+
 
     /**
      * The constructor

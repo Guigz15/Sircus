@@ -22,33 +22,18 @@ import java.io.IOException;
  */
 public class modifyMetaSeqPopUp {
 
-    /**
-     * Text field for the new name
-     */
     @FXML
     private TextField modifyMetaSeqName;
 
-    /**
-     * Button to delete the meta sequence
-     */
     @FXML
     private Button modifyMetaSeqDelete;
 
-    /**
-     * Button to cancel the modification
-     */
     @FXML
     private Button modifyMetaSeqCancel;
 
-    /**
-     * Button to save the modification
-     */
     @FXML
     private Button modifyMetaSeqSave;
 
-    /**
-     * Meta sequences list
-     */
     private ObservableMetaSequenceSet metaSequences = null;
 
     /**
@@ -61,9 +46,6 @@ public class modifyMetaSeqPopUp {
      */
     private Stage popUpStage = null;
 
-    /**
-     * Listener about the modification of the meta sequence
-     */
     private MetaSequenceController.ModificationMetaSeqListener modificationMetaSeqListener = null;
 
 

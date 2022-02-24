@@ -7,8 +7,5 @@ public class MainWindowController {
 
     public MainWindowController() {}
 
-    /**
-     * Initialize the controller
-     */
     private void initialize() {}
 }

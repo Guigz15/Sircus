@@ -340,8 +340,7 @@ public class modifySeqPopUp {
                         } else {
                             hBox.setAlignment(Pos.CENTER);
                             hBox.setSpacing(20);
-                            Media media = getTableView()
-                                    .getItems().get(getIndex());
+                            Media media = getTableView().getItems().get(getIndex());
 
                             tableViewVerrCheckBox.setSelected(media.getLock());
 

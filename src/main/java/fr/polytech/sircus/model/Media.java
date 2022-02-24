@@ -10,47 +10,26 @@ import java.time.Duration;
  */
 public class Media implements Serializable {
 
-    /**
-     * Class version number (required to use Serializable)
-     */
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Media's name
-     */
     @Getter @Setter
     private String name;
 
-    /**
-     * File's name
-     */
     @Getter @Setter
     private String filename;
 
-    /**
-     * Media's duration
-     */
     @Getter @Setter
     private Duration duration;
 
-    /**
-     * Media's type
-     */
     @Getter @Setter
     private TypeMedia type;
 
-    /**
-     * Inter-stimulus after each media
-     */
     @Getter @Setter
     private Media interStim;
 
-    /**
-     * A boolean to lock a media
-     */
-    @Getter
-    @Setter
+    @Getter @Setter
     private Boolean lock;
+
 
     /**
      * The constructor

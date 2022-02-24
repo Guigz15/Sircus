@@ -162,21 +162,15 @@ public class MetaSequenceController {
 
                             tableViewOptionButton.setOnMouseClicked(event ->
                             {
-                                Sequence sequence = getTableView()
-                                        .getItems().get(getIndex());
+                                Sequence sequence = getTableView().getItems().get(getIndex());
                                 modifySeqInMetaSeq(sequence);
                             });
 
                             tableViewDeleteButton.setOnAction(event ->
                             {
-                                MetaSequence metaSequence =
-                                        metaSeqComboBox.getValue();
-                                metaSequence.getListSequences().remove(
-                                        getTableView().getItems()
-                                                .get(getIndex()));
-                                metaSeqTable.setItems(
-                                        FXCollections.observableList(
-                                                metaSequence.getListSequences()));
+                                MetaSequence metaSequence = metaSeqComboBox.getValue();
+                                metaSequence.getListSequences().remove(getTableView().getItems().get(getIndex()));
+                                metaSeqTable.setItems(FXCollections.observableList(metaSequence.getListSequences()));
                             });
 
                             setGraphic(hBox);
@@ -203,8 +197,7 @@ public class MetaSequenceController {
                             hBox.setAlignment(Pos.CENTER);
                             hBox.setSpacing(20);
 
-                            Sequence sequence = getTableView()
-                                    .getItems().get(getIndex());
+                            Sequence sequence = getTableView().getItems().get(getIndex());
 
                             tableViewVerrCheckBox.setSelected(sequence.getLock());
 
