@@ -1,4 +1,15 @@
 
-target/classes/
+target/
 
 .idea/
+
+*.jar
+
+**/.DS_Store
+data.sr
+
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+
+target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+
+target/maven-archiver/pom.properties

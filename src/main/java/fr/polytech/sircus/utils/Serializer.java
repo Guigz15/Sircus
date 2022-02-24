@@ -19,7 +19,7 @@ public final class Serializer {
     /**
      * Stub meta sequence to test
      */
-    private static DataSircus stubData;
+    private static final DataSircus stubData;
 
     /**
      * Boolean to know if we use a stub object
@@ -72,7 +72,7 @@ public final class Serializer {
                 input.close();
             } catch(FileNotFoundException ex) {
                 ex.printStackTrace();
-            } catch(ClassNotFoundException ex) {
+            } catch (ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
         }

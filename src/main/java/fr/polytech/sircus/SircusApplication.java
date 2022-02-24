@@ -7,43 +7,44 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.Objects;
 
 public class SircusApplication extends Application {
 
-	public static DataSircus dataSircus;
-	private MainWindowController mainWindowController;
+    public static DataSircus dataSircus;
+    private MainWindowController mainWindowController;
 
-	@Override
-	public void start(Stage stage) throws IOException {
+    public static void main(String[] args) {
+        launch();
+    }
 
-		SircusApplication.dataSircus = new DataSircus();
-		FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("views/main_window.fxml")));
-		mainWindowController = fxmlLoader.getController();
+    @Override
+    public void start(Stage stage) throws IOException {
 
-		try {
-			SircusApplication.dataSircus = Serializer.readDataCircus();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        SircusApplication.dataSircus = new DataSircus();
+        FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("views/main_window.fxml")));
+        mainWindowController = fxmlLoader.getController();
 
-		Scene scene = new Scene(fxmlLoader.load(), 1000, 500 );
+        try {
+            SircusApplication.dataSircus = Serializer.readDataCircus();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-		stage.setOnCloseRequest(event -> {
-			try {
-				Serializer.writeDataCircus(SircusApplication.dataSircus);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 500);
 
-		stage.setTitle("Application Sircus");
-		stage.setScene(scene);
-		stage.show();
-	}
+        stage.setOnCloseRequest(event -> {
+            try {
+                Serializer.writeDataCircus(SircusApplication.dataSircus);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
-	public static void main(String[] args) {
-		launch();
-	}
+        stage.setTitle("Application Sircus");
+        stage.setScene(scene);
+        stage.show();
+    }
 }
