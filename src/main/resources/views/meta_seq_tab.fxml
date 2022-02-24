@@ -40,7 +40,7 @@
                     <Insets bottom="30.0" right="10.0"/>
                 </HBox.margin>
             </Button>
-            <Button fx:id="metaSeqAddQuit" mnemonicParsing="false" onMouseClicked="#addQuitMetaSeq">
+            <Button fx:id="metaSeqAddQuit" mnemonicParsing="false" onMouseClicked="#quitAddMetaSeq">
                 <graphic>
                     <FontIcon iconLiteral="fa-times" iconSize="15"/>
                 </graphic>
@@ -75,13 +75,13 @@
                 <TableColumn fx:id="metaSeqTableColumnName" minWidth="100.0" prefWidth="100.0" text="Nom"/>
                 <TableColumn fx:id="metaSeqTableColumnDuration" prefWidth="75.0" text="Temps"/>
                 <TableColumn fx:id="metaSeqTableColumnOption" prefWidth="75.0" text="Options"/>
-                <TableColumn fx:id="metaSeqTableColumnVerrouillage" prefWidth="75.0" text="Verrouillage"/>
+                <TableColumn fx:id="metaSeqTableColumnLock" prefWidth="75.0" text="Verrouillage"/>
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
             </columnResizePolicy>
         </TableView>
-        <ProgressBar fx:id="progressBar" minHeight="23.0" prefWidth="707.0" progress="0.0" GridPane.columnSpan="2"
+        <ProgressBar fx:id="metaSeqProgressBar" minHeight="23.0" prefWidth="707.0" progress="0.0" GridPane.columnSpan="2"
                      GridPane.rowIndex="2"/>
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="2"
               GridPane.rowIndex="2">
@@ -90,7 +90,7 @@
                     <FontIcon iconLiteral="fa-fast-backward" iconSize="15"/>
                 </graphic>
             </Button>
-            <Button fx:id="metaSeqPlay" mnemonicParsing="false" onMouseClicked="#play">
+            <Button fx:id="metaSeqPlay" mnemonicParsing="false" onMouseClicked="#togglePlay">
                 <graphic>
                     <FontIcon iconLiteral="fa-play" iconSize="15"/>
                 </graphic>
