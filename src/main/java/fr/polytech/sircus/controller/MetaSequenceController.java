@@ -139,21 +139,15 @@ public class MetaSequenceController {
 
                             tableViewOptionButton.setOnMouseClicked(event ->
                             {
-                                Sequence sequence = getTableView()
-                                        .getItems().get(getIndex());
+                                Sequence sequence = getTableView().getItems().get(getIndex());
                                 modifySeqInMetaSeq(sequence);
                             });
 
                             tableViewDeleteButton.setOnAction(event ->
                             {
-                                MetaSequence metaSequence =
-                                        metaSeqComboBox.getValue();
-                                metaSequence.getListSequences().remove(
-                                        getTableView().getItems()
-                                                .get(getIndex()));
-                                metaSeqTable.setItems(
-                                        FXCollections.observableList(
-                                                metaSequence.getListSequences()));
+                                MetaSequence metaSequence = metaSeqComboBox.getValue();
+                                metaSequence.getListSequences().remove(getTableView().getItems().get(getIndex()));
+                                metaSeqTable.setItems(FXCollections.observableList(metaSequence.getListSequences()));
                             });
 
                             setGraphic(hBox);
@@ -180,13 +174,12 @@ public class MetaSequenceController {
                             hBox.setAlignment(Pos.CENTER);
                             hBox.setSpacing(20);
 
-                            Sequence sequence = getTableView()
-                                    .getItems().get(getIndex());
+                            Sequence sequence = getTableView().getItems().get(getIndex());
 
-                            tableViewCheckBoxLock.setSelected(sequence.getVerr());
+                            tableViewCheckBoxLock.setSelected(sequence.getLock());
 
                             tableViewCheckBoxLock.setOnAction(event ->
-                                    sequence.setVerr(tableViewCheckBoxLock.isSelected()));
+                                    sequence.setLock(tableViewCheckBoxLock.isSelected()));
 
                             setGraphic(hBox);
                         }
@@ -340,10 +333,10 @@ public class MetaSequenceController {
         int randInt;
 
         for (int z = 0; z < seqList.size(); z += 1) {
-            if (!seqList.get(z).getVerr()) {
+            if (!seqList.get(z).getLock()) {
                 randInt = (int) (Math.random() * (((seqList.size() - 1)) + 1));
 
-                while (seqList.get(randInt).getVerr()) {
+                while (seqList.get(randInt).getLock()) {
                     randInt += 1;
                     if (randInt > (seqList.size() - 1)) {
                         randInt = 0;
@@ -359,10 +352,10 @@ public class MetaSequenceController {
             ArrayList<Media> cloneList = new ArrayList<>(sequence.getListMedias());
 
             for (int i = 0; i < cloneList.size(); i += 1) {
-                if (!sequence.getListMedias().get(i).getVerr()) {
+                if (!sequence.getListMedias().get(i).getLock()) {
                     randInt = (int) (Math.random() * (((cloneList.size() - 1)) + 1));
 
-                    while (sequence.getListMedias().get(randInt).getVerr()) {
+                    while (sequence.getListMedias().get(randInt).getLock()) {
                         randInt += 1;
                         if (randInt > cloneList.size() - 1) {
                             randInt = 0;

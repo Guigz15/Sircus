@@ -16,6 +16,7 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.Objects;
 
 public class modifyMediaPopUp {
     //******************************************************************************************************************
@@ -161,8 +162,8 @@ public class modifyMediaPopUp {
      * si non le désactive
      */
     private void checkMediaNameAndDuration() {
-        this.modifyMediaSave.setDisable(this.newMediaNameField.getText() == this.media.getName()
-                && this.newMediaDurationField.getText() == this.media.getDuration().toString());
+        this.modifyMediaSave.setDisable(Objects.equals(this.newMediaNameField.getText(), this.media.getName())
+                && Objects.equals(this.newMediaDurationField.getText(), this.media.getDuration().toString()));
     }
 
     /**
@@ -204,7 +205,7 @@ public class modifyMediaPopUp {
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.YES) {
-            this.sequence.remMedia(this.media);
+            this.sequence.removeMedia(this.media);
             this.listener1.onModified(this.sequence);
             this.popUpStage.close();
         }

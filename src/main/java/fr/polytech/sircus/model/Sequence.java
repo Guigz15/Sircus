@@ -2,93 +2,75 @@ package fr.polytech.sircus.model;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Objet permettant de représenter une sequence
+ * This class represents a sequence
  */
 public class Sequence implements Serializable {
 
-    /**
-     * Numéro de version de la classe, nécessaire pour l'interface Serializable
-     */
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Nom de la sequence
-     */
-    @Getter
-    @Setter
+    @Getter @Setter
     private String name;
 
-    /**
-     * Duree de la sequence
-     */
     @Setter
     private Duration duration;
 
-    /**
-     * Liste des medias de la sequence
-     */
-    @Getter
-    @Setter
+    @Getter @Setter
     private List<Media> listMedias;
 
-    /**
-     * Booleen verrouille
-     */
-    @Getter
-    @Setter
-    private Boolean verr;
+    @Getter @Setter
+    private Boolean lock;
+
 
     /**
-     * Constructeur de l'objet sequence
+     * The constructor
      *
-     * @param name nom de la sequence
+     * @param name Sequence's name
      */
     public Sequence(String name) {
         this.name = name;
         this.duration = Duration.ZERO;
         this.listMedias = new ArrayList<>();
-        this.verr = true;
+        this.lock = true;
     }
 
     /**
-     * Constructeur de l'objet sequence par copie
+     * The copy constructor
      *
-     * @param sequence Sequence a copier
+     * @param sequence Sequence to copy
      */
     public Sequence(Sequence sequence) {
         this.name = sequence.getName();
         this.duration = sequence.getDuration();
         this.listMedias = sequence.getListMedias();
-        this.verr = sequence.getVerr();
+        this.lock = sequence.getLock();
     }
 
     /**
-     * Retourne la duree de la sequence
+     * Compute the duration of a sequence
      *
-     * @return duration la duree
+     * @return Sequence's duration
      */
     public Duration getDuration() {
         Duration duration = Duration.ofSeconds(0);
-        for (int index = 0; index < listMedias.size(); index++) {
-            duration = duration.plus(listMedias.get(index).getDuration());
-            if (listMedias.get(index).getInterStim() != null) {
-                duration = duration.plus(listMedias.get(index).getInterStim().getDuration());
+        for (Media listMedia : listMedias) {
+            duration = duration.plus(listMedia.getDuration());
+            if (listMedia.getInterStim() != null) {
+                duration = duration.plus(listMedia.getInterStim().getDuration());
             }
         }
         return duration;
     }
 
     /**
-     * Ajoute un media a la liste des medias de la sequence
+     * Add a media to this sequence
      *
-     * @param media le media a ajouter
+     * @param media Media to add
      */
     public void addMedia(Media media) {
         this.listMedias.add(media);
@@ -96,20 +78,20 @@ public class Sequence implements Serializable {
     }
 
     /**
-     * Supprime un media a la liste des medias de la sequence
+     * To remove a media from this sequence
      *
-     * @param media le media a supprimer
+     * @param media Media to remove
      */
-    public void remMedia(Media media) {
+    public void removeMedia(Media media) {
         if (this.listMedias.remove(media)) {
             this.setDuration(this.getDuration());
         }
     }
 
     /**
-     * Surcharge de la methode toString
+     * Override the method toString to display only the name
      *
-     * @return name le nom
+     * @return Sequence's name
      */
     public String toString() {
         return name;

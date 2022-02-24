@@ -18,78 +18,44 @@ import javafx.stage.Window;
 import java.io.IOException;
 
 /**
- * Controleur permettant la gestion de modification d'une meta sequence
+ * This class allows us to modify a meta sequence
  */
 public class modifyMetaSeqPopUp {
-    //******************************************************************************************************************
-    // Composants UI
-    //******************************************************************************************************************
 
-    /**
-     * Champ texte du nouveau nom de la meta sequence
-     */
     @FXML
     private TextField modifyMetaSeqName;
 
-    /**
-     * Bouton supprimant la meta sequence
-     */
     @FXML
     private Button modifyMetaSeqDelete;
 
-    /**
-     * Bouton annulant la modification de la meta sequence
-     */
     @FXML
     private Button modifyMetaSeqCancel;
 
-    /**
-     * Bouton sauvegardant la modification de la meta sequence
-     */
     @FXML
     private Button modifyMetaSeqSave;
-    //******************************************************************************************************************
 
-    //******************************************************************************************************************
-    // Gestionnaires méta-sequences
-    //******************************************************************************************************************
-    /**
-     * List des meta sequences
-     */
     private ObservableMetaSequenceSet metaSequences = null;
 
     /**
-     * Meta sequence a modifier
+     * Meta sequence to modify
      */
     private MetaSequence metaSequence = null;
 
     /**
-     * Pop up ajout de sequence
+     * Pop up to add a sequence
      */
     private Stage popUpStage = null;
 
-    /**
-     * Listener de la modification de la meta sequence
-     */
     private MetaSequenceController.ModificationMetaSeqListener modificationMetaSeqListener = null;
 
-    //******************************************************************************************************************
-
-    //******************************************************************************************************************
-    //   ###    ###   #   #   ####  #####  ####   #   #   ###   #####   ###   ####    ####
-    //  #   #  #   #  ##  #  #        #    #   #  #   #  #   #    #    #   #  #   #  #
-    //  #      #   #  # # #   ###     #    ####   #   #  #        #    #   #  ####    ###
-    //  #   #  #   #  #  ##      #    #    #   #  #   #  #   #    #    #   #  #   #      #
-    //   ###    ###   #   #  ####     #    #   #   ###    ###     #     ###   #   #  ####
-    //******************************************************************************************************************
 
     /**
      * Constructeur du controleur
      *
-     * @param owner                       la fenetre principale
-     * @param metaSequences               la liste des meta sequences
-     * @param metaSequence                la meta sequence a modifier
-     * @param modificationMetaSeqListener le listener de l'evenement de modification
+     * @param owner The main window
+     * @param metaSequences The meta sequences list
+     * @param metaSequence The meta sequence to modify
+     * @param modificationMetaSeqListener The listener about the modification
      */
     public modifyMetaSeqPopUp(Window owner,
                               final ObservableMetaSequenceSet metaSequences,
@@ -122,16 +88,9 @@ public class modifyMetaSeqPopUp {
         }
     }
 
-    //******************************************************************************************************************
-    //      #  #####  #   #         #####  #   #  #   #   ###   #####  #   ###   #   #   ####
-    //      #  #       # #          #      #   #  ##  #  #   #    #    #  #   #  ##  #  #
-    //      #  ###      #           ###    #   #  # # #  #        #    #  #   #  # # #   ###
-    //  #   #  #       # #          #      #   #  #  ##  #   #    #    #  #   #  #  ##      #
-    //   ###   #      #   #         #       ###   #   #   ###     #    #   ###   #   #  ####
-    //******************************************************************************************************************
 
     /**
-     * Initialise le controleur et ses attributs, ajoute des controleurs a chaque composant
+     * Initialize the controller, its attributes and bind a controller to each component
      */
     @FXML
     private void initialize() {
@@ -145,7 +104,7 @@ public class modifyMetaSeqPopUp {
     }
 
     /**
-     * Desactive le bouton modifiant la meta sequence si le nouveau nom existe deja pour une meta sequence
+     * If the new name of meta sequence already exists, it disables the save button
      */
     @FXML
     private void checkMetaSeqName() {
@@ -153,12 +112,12 @@ public class modifyMetaSeqPopUp {
     }
 
     /**
-     * Supprime la meta sequence
+     * Delete the meta sequence
      */
     @FXML
     private void deleteMetaSeq() {
         Alert alert = new Alert(Alert.AlertType.WARNING,
-                "Etes-vous sûr de vouloir supprimer " + this.metaSequence.getName() + " ?",
+                "Êtes-vous sûr de vouloir supprimer " + this.metaSequence.getName() + " ?",
                 ButtonType.YES,
                 ButtonType.NO);
         alert.showAndWait();
@@ -170,7 +129,7 @@ public class modifyMetaSeqPopUp {
     }
 
     /**
-     * Ferme la pop up de modification de la meta sequence
+     * If you choose to cancel the modification, it closes the window
      */
     @FXML
     private void cancelModificationsMetaSeq() {
@@ -178,7 +137,7 @@ public class modifyMetaSeqPopUp {
     }
 
     /**
-     * Modifie le nom de la meta sequence par son nouveau nom et ferme la pop up
+     * Save the modification
      */
     @FXML
     private void saveModificationsMetaSeq() {
