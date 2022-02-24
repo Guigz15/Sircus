@@ -206,13 +206,10 @@ public class MetaSequenceController {
                             Sequence sequence = getTableView()
                                     .getItems().get(getIndex());
 
-                            tableViewVerrCheckBox.setSelected(sequence.getVerr());
+                            tableViewVerrCheckBox.setSelected(sequence.getLock());
 
                             tableViewVerrCheckBox.setOnAction(event ->
-                            {
-                                sequence.setVerr(tableViewVerrCheckBox.isSelected());
-
-                            });
+                                    sequence.setLock(tableViewVerrCheckBox.isSelected()));
 
                             setGraphic(hBox);
                         }
@@ -332,9 +329,7 @@ public class MetaSequenceController {
     @FXML
     private void modifySeqInMetaSeq(Sequence sequence) {
         ModificationSequenceListener listener = seq ->
-        {
-            this.metaSeqTable.refresh();
-        };
+                this.metaSeqTable.refresh();
 
         new modifySeqPopUp(
                 this.metaSeqComboBox.getScene().getWindow(),
@@ -366,10 +361,10 @@ public class MetaSequenceController {
         ArrayList<fr.polytech.sircus.model.Sequence> liste_seq = new ArrayList<>(Sequence.getListSequences());
 
         for (int z = 0; z < liste_seq.size(); z = z + 1) {
-            if (!liste_seq.get(z).getVerr()) {
+            if (!liste_seq.get(z).getLock()) {
                 int nombreAleatoire = (int) (Math.random() * (((liste_seq.size() - 1)) + 1));
 
-                while (liste_seq.get(nombreAleatoire).getVerr()) {
+                while (liste_seq.get(nombreAleatoire).getLock()) {
                     nombreAleatoire = nombreAleatoire + 1;
                     if (nombreAleatoire > (liste_seq.size() - 1)) {
                         nombreAleatoire = 0;
@@ -392,10 +387,10 @@ public class MetaSequenceController {
             ArrayList<Media> liste_clone = new ArrayList<>(sequence.getListMedias());
 
             for (int i = 0; i < liste_clone.size(); i = i + 1) {
-                if (!sequence.getListMedias().get(i).getVerr()) {
+                if (!sequence.getListMedias().get(i).getLock()) {
                     int nombreAleatoire = (int) (Math.random() * (((liste_clone.size() - 1)) + 1));
 
-                    while (sequence.getListMedias().get(nombreAleatoire).getVerr()) {
+                    while (sequence.getListMedias().get(nombreAleatoire).getLock()) {
                         nombreAleatoire = nombreAleatoire + 1;
                         if (nombreAleatoire > liste_clone.size() - 1) {
                             nombreAleatoire = 0;

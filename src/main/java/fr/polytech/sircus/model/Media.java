@@ -2,69 +2,63 @@ package fr.polytech.sircus.model;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import java.io.Serializable;
 import java.time.Duration;
 
 /**
- * Objet permettant de représenter un media (image ou video)
+ * This class represents a media (picture or video)
  */
 public class Media implements Serializable {
 
     /**
-     * Numéro de version de la classe, nécessaire pour l'interface Serializable
+     * Class version number (required to use Serializable)
      */
     private static final long serialVersionUID = 1L;
 
     /**
-     * Nom du media
+     * Media's name
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private String name;
 
     /**
-     * Nom du fichier
+     * File's name
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private String filename;
 
     /**
-     * Duree d'affichage du media
+     * Media's duration
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private Duration duration;
 
     /**
-     * Type du media (image ou video)
+     * Media's type
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private TypeMedia type;
 
     /**
-     * Interstim apres chaque media
+     * Inter-stimulus after each media
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private Media interStim;
 
     /**
-     * Booleen verrouille
+     * A boolean to lock a media
      */
     @Getter
     @Setter
-    private Boolean verr;
+    private Boolean lock;
 
     /**
-     * Constructeur de l'objet Media
+     * The constructor
      *
-     * @param name     Nom du media
-     * @param filename nom du fichier
-     * @param duration Duree du media
-     * @param type     Type du media
+     * @param name Media's name
+     * @param filename File's name
+     * @param duration Media's duration
+     * @param type Media's type
      */
     public Media(String name, String filename, Duration duration, TypeMedia type, Media interStim) {
         this.name = name;
@@ -72,13 +66,13 @@ public class Media implements Serializable {
         this.duration = duration;
         this.type = type;
         this.interStim = interStim;
-        this.verr = true;
+        this.lock = true;
     }
 
     /**
-     * Constructeur de l'objet Media par copie
+     * The copy constructor
      *
-     * @param media media a copier
+     * @param media Media to copy
      */
     public Media(Media media) {
         this.name = media.getName();
@@ -86,13 +80,13 @@ public class Media implements Serializable {
         this.duration = media.getDuration();
         this.type = media.getType();
         this.interStim = media.getInterStim();
-        this.verr = media.getVerr();
+        this.lock = media.getLock();
     }
 
     /**
-     * Surcharge de la methode toString
+     * Override the method toString to display only the name
      *
-     * @return name le nom
+     * @return Media's name
      */
     public String toString() {
         return name;

@@ -1,19 +1,14 @@
 package fr.polytech.sircus.controller;
 
 /**
- * Controleur de la fenetre principale (onglet informations)
+ * This class manages the main window (information tab)
  */
 public class MainWindowController {
 
-    /**
-     * Constructeur du controleur
-     */
-    public MainWindowController() {
-    }
+    public MainWindowController() {}
 
     /**
-     * Initialise le controleur
+     * Initialize the controller
      */
-    private void initialize() {
-    }
+    private void initialize() {}
 }

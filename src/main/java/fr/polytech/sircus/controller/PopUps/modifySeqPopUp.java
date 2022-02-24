@@ -278,7 +278,7 @@ public class modifySeqPopUp {
                             } else {
                                 tableViewDeleteButton.setOnAction(event ->
                                 {
-                                    sequence.remMedia(getTableView().getItems().get(getIndex()));
+                                    sequence.removeMedia(getTableView().getItems().get(getIndex()));
                                     consructMediaInterstimList();
                                     mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
                                     mediaTable.refresh();
@@ -343,10 +343,10 @@ public class modifySeqPopUp {
                             Media media = getTableView()
                                     .getItems().get(getIndex());
 
-                            tableViewVerrCheckBox.setSelected(media.getVerr());
+                            tableViewVerrCheckBox.setSelected(media.getLock());
 
                             tableViewVerrCheckBox.setOnAction(event ->
-                                    media.setVerr(tableViewVerrCheckBox.isSelected()));
+                                    media.setLock(tableViewVerrCheckBox.isSelected()));
 
                             setGraphic(hBox);
                         }
@@ -442,9 +442,7 @@ public class modifySeqPopUp {
             this.mediaTable.refresh();
         };
 
-        MediaModificationListener listener2 = temp -> {
-            this.mediaTable.refresh();
-        };
+        MediaModificationListener listener2 = temp -> this.mediaTable.refresh();
 
         new modifyMediaPopUp(
                 this.saveAddMediaSeq.getScene().getWindow(),
