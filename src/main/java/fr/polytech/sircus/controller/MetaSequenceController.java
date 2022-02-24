@@ -394,6 +394,10 @@ public class MetaSequenceController {
         // If no viewer is opened when Play is clicked, create one
         else {
             viewer = new ViewerController(this.metaSeqComboBox.getScene().getWindow(), metaSeqComboBox.getValue(), this);
+            // calls appropriate function of ViewerController, Also change displayed icon and state variable
+            viewer.playViewer();
+            metaSeqPlay.setGraphic(pauseIcon);
+            viewerPlayingState = false;
         }
     }
 

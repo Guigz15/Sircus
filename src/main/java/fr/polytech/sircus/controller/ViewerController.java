@@ -6,8 +6,6 @@ import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.model.TypeMedia;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -19,75 +17,52 @@ import javafx.scene.media.MediaView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
-
 import java.io.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+
 /**
- * Contrôleur permettant la gestion de la fenêtre du lecteur
+ * View window controller.
+ * <p>
+ * This class allows to manage the reading of the media and the view associated to this reading.
  */
 public class ViewerController {
-    //******************************************************************************************************************
-    // Composants UI
-    //******************************************************************************************************************
-    /**
-     * Le controller MetaSequenceController qui a créé ce controller
-     */
+
+
+    //the MetaSequenceController which create this controller
     private final MetaSequenceController metaSequenceController;
-    /**
-     * La métaséquence communiquée au viewer
-     */
+
+    //the MetaSequence that id passed to the viewer
     private final MetaSequence playingMetaSequence;
-    /**
-     * La liste contenant les temps de début des médias de la méta-séquence actuelle, ainsi que le temps de fin
-     */
-    ArrayList<Integer> listeDebutMedia;
-    //******************************************************************************************************************
-    /**
-     * L'objet qui gère la taille et la position des vidéos et contient le mediaPlayer
-     */
+
+    //The list containing the start times of the media of the current meta-sequence
+    ArrayList<Integer> listBeginningTimeMedia;
+
+    // UI components
     @FXML
     private MediaView mediaView;
-    /**
-     * L'objet affichant les images
-     */
     @FXML
     private ImageView imageView;
-    /**
-     * L'objet jouant les vidéos
-     */
+
+    //this allows the playing of media
     private MediaPlayer mediaPlayer;
-    /**
-     * Stage du viewer
-     */
+
+    //manage the stage of the media
     private Stage viewerStage = null;
-    /**
-     * La timeline permettant la lecture des médias avec gestion du temps de chacun
-     */
+
+    //The timeline allowing the reading of the media with management of the time of each one
     private Timeline timeline = null;
-    /**
-     * Booléen indiquant si la méta-séquence a déjà été démarrée une fois ou pas
-     */
+
+    //Boolean indiquant si la méta-séquence a déjà été démarrée une fois ou pas
     private boolean metaSequenceStarted;
 
-    private ViewerController viewerController;
-    //******************************************************************************************************************
-    //******************************************************************************************************************
-    //   ###    ###   #   #   ####  #####  ####   #   #   ###   #####   ###   ####    ####
-    //  #   #  #   #  ##  #  #        #    #   #  #   #  #   #    #    #   #  #   #  #
-    //  #      #   #  # # #   ###     #    ####   #   #  #        #    #   #  ####    ###
-    //  #   #  #   #  #  ##      #    #    #   #  #   #  #   #    #    #   #  #   #      #
-    //   ###    ###   #   #  ####     #    #   #   ###    ###     #     ###   #   #  ####
-    //******************************************************************************************************************
-
     /**
-     * Constructeur du controller
+     * Constructor of ViewerController class.
      *
-     * @param owner Fenetre principale
+     * @param owner the main Window.
      */
     public ViewerController(Window owner, MetaSequence metaSequence, MetaSequenceController metaSequenceController) {
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/viewer.fxml")));
@@ -112,32 +87,15 @@ public class ViewerController {
         playingMetaSequence = metaSequence;
         metaSequenceStarted = false;
         this.metaSequenceController = metaSequenceController;
-        listeDebutMedia = new ArrayList<Integer>();
+        listBeginningTimeMedia = new ArrayList<>();
         closingManager();
     }
 
-    //******************************************************************************************************************
-    //      #  #####  #   #         #####  #   #  #   #   ###   #####  #   ###   #   #   ####
-    //      #  #       # #          #      #   #  ##  #  #   #    #    #  #   #  ##  #  #
-    //      #  ###      #           ###    #   #  # # #  #        #    #  #   #  # # #   ###
-    //  #   #  #       # #          #      #   #  #  ##  #   #    #    #  #   #  #  ##      #
-    //   ###   #      #   #         #       ###   #   #   ###     #    #   ###   #   #  ####
-    //******************************************************************************************************************
 
     /**
-     * Initialise le controller et ses attributs
-     */
-    @FXML
-    private void initialize() {
-        // mediaView = new MediaView();
-        // Ne pas décommenter la ligne suivante, cela remplace l'ImageView déjà mise placée dans la vue
-        // imageView = new ImageView();
-    }
-
-    /**
-     * Retourne l'attribut timeline du controller
+     * Getter of the timeline attribute.
      *
-     * @return timeline l'attribut timeline du controller
+     * @return timeline attribute.
      */
     @FXML
     public Timeline getTimeline() {
@@ -145,9 +103,9 @@ public class ViewerController {
     }
 
     /**
-     * Affiche le Media donné en paramètre
+     * Display the media that is passed in parameter.
      *
-     * @param media Media que l'on veut afficher
+     * @param media the media that we want to display.
      */
     @FXML
     private void showMedia(Media media) {
@@ -157,9 +115,9 @@ public class ViewerController {
     }
 
     /**
-     * Affiche le Media dont le nom est donné en paramètre
+     * Display the media from its name.
      *
-     * @param name nom du Media que l'on veut afficher
+     * @param name the name of the media that we want to display.
      */
     @FXML
     private void showMediaFromName(String name) {
@@ -176,7 +134,7 @@ public class ViewerController {
     }
 
     /**
-     * Retire la vidéo affichée
+     * Removes the displayed media.
      */
     @FXML
     private void removeMedia() {
@@ -187,9 +145,9 @@ public class ViewerController {
     }
 
     /**
-     * Affiche l'image donnée en paramètre
+     * Display the image that is passed in parameter.
      *
-     * @param image l'image que l'on veut afficher
+     * @param image the image that we want to display.
      */
     @FXML
     private void showImage(Image image) {
@@ -198,26 +156,26 @@ public class ViewerController {
     }
 
     /**
-     * Affiche l'image dont le nom est donné en paramètre
+     * Display the image from its name.
      *
-     * @param name nom de l'image que l'on veut afficher
+     * @param name the name of the image that we want to display.
      */
     @FXML
     private void showImageFromName(String name) {
-        // On essaye de créer un InputStream avec le chemin du fichier
+        // try de create a InputStream with the path of the image.
         try {
             InputStream is = new FileInputStream("medias/" + name);
             Image image = new Image(is);
             showImage(image);
         }
-        // Si le chemin n'est pas trouvé on le signale
+        // if the path is not found we display a message.
         catch (FileNotFoundException error) {
             System.out.println("Le fichier n'existe pas.");
         }
     }
 
     /**
-     * Retire l'image affichée actuellement
+     * Removes the displayed image.
      */
     @FXML
     private void removeImage() {
@@ -225,9 +183,9 @@ public class ViewerController {
     }
 
     /**
-     * Commence la lecture de la méta-séquence donnée en paramètre
+     * Begin the playing of the meta-sequence that is passed in parameter.
      *
-     * @param metaSequence la meta-séquence à lancer
+     * @param metaSequence the meta-sequence to play.
      */
     @FXML
     private void startMetaSequence(MetaSequence metaSequence) {
@@ -235,87 +193,73 @@ public class ViewerController {
         timeline.setCycleCount(1);
         timeline.setAutoReverse(false);
 
-        // Compteur permettant de compter la durée totale des médias parcourus
-        int cptDuree = 0;
-        // System.out.println("CptDurée : " + cptDuree);
+        // Counter to count the total duration of the medias already played.
+        int counterDuration = 0;
 
         for (Sequence sequence : metaSequence.getSequencesList()) {
-            // Pour chaque Média de la séquence
+            // For each Media in the sequence.
             for (fr.polytech.sircus.model.Media media : sequence.getListMedias()) {
-                // Si le média est une image
+                // If the media is an image.
                 if (media.getType() == TypeMedia.PICTURE) {
-                    timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(cptDuree),
-                            new EventHandler<ActionEvent>() {
-                                @Override
-                                public void handle(ActionEvent event) {
-                                    removeMedia();
-                                    showImageFromName(media.getName());
-                                    // System.out.println("Image donnée.");
-                                }
+                    timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                            event -> {
+                                removeMedia();
+                                showImageFromName(media.getName());
                             }));
-                    // On ajoute dans la liste des départs de médias la seconde à laquelle l'image démarre
-                    listeDebutMedia.add(cptDuree);
+                    // The second at which the image starts is added to listBeginningTimeMedia.
+                    listBeginningTimeMedia.add(counterDuration);
 
-                    // On ajoute au compteur de durée la durée du média actuellement parcouru
-                    cptDuree += media.getDuration().getSeconds();
+                    // We add to the counterDuration the duration of the media currently read.
+                    counterDuration += media.getDuration().getSeconds();
                 }
-                // Si le média est une vidéo
+                //If the media is a video
                 else if (media.getType() == TypeMedia.VIDEO) {
-                    timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(cptDuree),
-                            new EventHandler<ActionEvent>() {
-                                @Override
-                                public void handle(ActionEvent event) {
-                                    removeImage();
-                                    showMediaFromName(media.getName());
-                                    // System.out.println("Vidéo donnée.");
-                                }
+                    timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                            event -> {
+                                removeImage();
+                                showMediaFromName(media.getName());
+                                // System.out.println("Vidéo donnée.");
                             }));
-                    // On ajoute dans la liste des départs de médias la seconde à laquelle la vidéo démarre
-                    listeDebutMedia.add(cptDuree);
-                    // On ajoute au compteur de durée la durée du média actuellement parcouru
-                    cptDuree += media.getDuration().getSeconds();
+                    // The second at which the video starts is added to listBeginningTimeMedia.
+                    listBeginningTimeMedia.add(counterDuration);
+                    // We add to the counterDuration the duration of the media currently read.
+                    counterDuration += media.getDuration().getSeconds();
                 }
-                // Si le média donné a une interstim
+                // If the current media has a "inter-stim".
                 if (media.getInterStim() != null) {
-                    timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(cptDuree),
-                            new EventHandler<ActionEvent>() {
-                                @Override
-                                public void handle(ActionEvent event) {
-                                    removeMedia();
-                                    showImageFromName(media.getInterStim().getName());
-                                    // System.out.println("Image donnée.");
-                                }
+                    timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                            event -> {
+                                removeMedia();
+                                showImageFromName(media.getInterStim().getName());
+                                // System.out.println("Image donnée.");
                             }));
-                    // On ajoute dans la liste des départs de médias quand l'interstimulation démarre
-                    // On pourrait commenter cette ligne si l'on ne souhaite pas passer par les interstimulations avec
-                    // les boutons permettant de passer un média ou de revenir au média précédent
-                    listeDebutMedia.add(cptDuree);
-                    // On ajoute au compteur de durée de l'interstimulation
-                    cptDuree += media.getInterStim().getDuration().getSeconds();
+                    // The second at which the "inter-stim" starts is added to listBeginningTimeMedia.
+                    // We could comment this line if we don't want to go through the inter-stim with the buttons
+                    // allowing to skip a media or to return to the previous media.
+                    listBeginningTimeMedia.add(counterDuration);
+                    // We add to the counterDuration the duration of the "inter-stim" currently read.
+                    counterDuration += media.getInterStim().getDuration().getSeconds();
                 }
             }
         }
 
-        // On ajoute un évènement qui retire l'image ou la vidéo à la fin de la lecture
-        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(cptDuree),
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        removeMedia();
-                        removeImage();
-                    }
+        // We add an event that removes the image or video at the end of the playback.
+        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                event -> {
+                    removeMedia();
+                    removeImage();
                 }));
-        // On ajoute dans la liste des départs de médias la fin de la lecture
-        // Cela permet notamment au bouton passant un média de déclencher la fin de la lecture de la méta-séquence
-        // si nous sommes en train de lire le dernier média
-        listeDebutMedia.add(cptDuree);
+        // The end of the playback is added to the listBeginningTimeMedia
+        // This allows the button passing a media to trigger the end of the playback of the meta-sequence
+        // if we are playing the last media.
+        listBeginningTimeMedia.add(counterDuration);
 
-        // On lance le chronomètre de la timeline pour que les évènements que l'on vient de créer se déclenchent
+        // We start the timeline's stopwatch so that the events we have just created are triggered
         timeline.play();
     }
 
     /**
-     * Met en pause la lecture
+     * Pause playback.
      */
     @FXML
     public void pauseViewer() {
@@ -328,7 +272,7 @@ public class ViewerController {
     }
 
     /**
-     * Démarre la lecture de 0 si la méta-séquence n'a jamais été lancée. Sinon, relance la lecture des médias.
+     * Starts playback from scratch if the meta-sequence has never been started. Otherwise, restarts the media playback.
      */
     @FXML
     public void playViewer() {
@@ -344,59 +288,57 @@ public class ViewerController {
     }
 
     /**
-     * Affiche le média suivant
+     * Display the next media
      */
     public void nextMedia() {
-        if (listeDebutMedia.size() > 0) {
-            // On définit une date de départ tampon, à la première date de départ de la liste des débuts (probablement 0)
-            Integer dateDebutTrouvee = listeDebutMedia.get(0);
+        if (listBeginningTimeMedia.size() > 0) {
+            // We define a buffer start date, at the first start date of the listBeginningTimeMedia (probably 0)
+            Integer startDateFound = listBeginningTimeMedia.get(0);
 
-            // Pour chaque date de départ de média
-            for (int i = 0; i < listeDebutMedia.size(); i++) {
-                // On vérifie si la date de départ est supérieure à la date actuelle de la timeline
-                if (listeDebutMedia.get(i) > timeline.getCurrentTime().toSeconds()) {
-                    // On a trouvé le média
-                    dateDebutTrouvee = listeDebutMedia.get(i);
+            // For each start date of media
+            for (Integer integer : listBeginningTimeMedia) {
+                // We check if the starting date is higher than the current date of the timeline
+                if (integer > timeline.getCurrentTime().toSeconds()) {
+                    // We found the media
+                    startDateFound = integer;
                     break;
                 }
             }
-            // Duration de javafx.util.Duration prend en paramètre de constructeur des ms
-            // On multiplie par 1000 les secondes
-            timeline.jumpTo(new Duration(dateDebutTrouvee * 1000));
+            // javafx.util.Duration takes milliseconds in parameter of constructor, so we multiply by 1000 seconds
+            timeline.jumpTo(new Duration(startDateFound * 1000));
         }
     }
 
     /**
-     * Affiche le média précédent
+     * Display the previous media
      */
     public void prevMedia() {
-        if (listeDebutMedia.size() > 0) {
-            // On définit une date de départ tampon, à la première date de départ de la liste des débuts (probablement 0)
-            Integer dateDebutTrouvee = listeDebutMedia.get(0);
+        if (listBeginningTimeMedia.size() > 0) {
+            // We define a buffer start date, at the first start date of the listBeginningTimeMedia (probably 0)
+            Integer startDateFound = listBeginningTimeMedia.get(0);
 
-            // Pour chaque date de départ de média
+            // For each start date of media
             int i = 0;
-            // Cette boucle permet de trouver l'index du premier média qui sera lancé après le média en cours
-            while (i < listeDebutMedia.size() && listeDebutMedia.get(i) < timeline.getCurrentTime().toSeconds()) {
+            // This loop allows to find the index of the first media which will be launched after the current media
+            while (i < listBeginningTimeMedia.size() && listBeginningTimeMedia.get(i) < timeline.getCurrentTime().toSeconds()) {
                 i++;
             }
 
-            // Si i est supérieur à 0, le média précédent est i-1, c'est l'index correspondant au médial actuel.
-            // Le média à l'index i correspond au prochain média
-            // Donc on veut retirer deux à i pour trouver le média précédent
+            // If "i" is greater than 0, the index "i-1" corresponds to the current media.
+            // The media at index "i" corresponds to the next media.
+            // So the previous media is at index "i-2".
             if (i > 1) {
                 i -= 2;
-                dateDebutTrouvee = listeDebutMedia.get(i);
+                startDateFound = listBeginningTimeMedia.get(i);
             }
 
-            // Duration de javafx.util.Duration prend en paramètre de constructeur des ms
-            // On multiplie par 1000 les secondes
-            timeline.jumpTo(new Duration(dateDebutTrouvee * 1000));
+            // javafx.util.Duration takes milliseconds in parameter of constructor, so we multiply by 1000 seconds
+            timeline.jumpTo(new Duration(startDateFound * 1000));
         }
     }
 
     /**
-     * Quitte le viewer
+     * Quit the viewer
      */
     @FXML
     private void quitViewer() {
@@ -404,16 +346,11 @@ public class ViewerController {
     }
 
     /**
-     * Le handle de cette méthode est appelé quand l'utilisateur ferme la fenêtre du viewer.
-     * Cela appelle la méthode appropriée du MetaSequence controller afin de pouvoir remettre par défaut
-     * certains attributs et pouvoir relancer le viewer correctement.
+     * The handle of this method is called when the user closes the viewer window.
+     * It calls the appropriate method of the MetaSequence controller in order to
+     * reset some attributes to default attributes and restart the viewer correctly.
      */
     private void closingManager() {
-        viewerStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                metaSequenceController.closeViewer();
-            }
-        });
+        viewerStage.setOnCloseRequest(event -> metaSequenceController.closeViewer());
     }
 }
