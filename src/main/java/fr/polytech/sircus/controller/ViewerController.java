@@ -412,7 +412,7 @@ public class ViewerController {
         viewerStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
-                metaSequenceController.viewerClosed();
+                metaSequenceController.closeViewer();
             }
         });
     }
