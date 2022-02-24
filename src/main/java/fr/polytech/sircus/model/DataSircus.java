@@ -8,49 +8,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Objet permettant de contenir l'ensemble des meta sequences pour simplifier la serialisation
+ * Object that contain all the meta sequences to simplify the serialization
  */
 public class DataSircus implements Serializable {
 
-    /**
-     * Numéro de version de la classe, nécessaire pour l'interface Serializable
-     */
     private static final long serialVersionUID = 1L;
-
-    /**
-     * Liste des meta sequences de l'application
-     */
     @Getter @Setter
     private List<MetaSequence> metaSequencesList;
-
-    /**
-     * Liste des lieux d'examen
-     */
     @Getter @Setter
     private List<String> locationsList;
 
     /**
-     * Constructeur de l'objet
+     * Constructor
      */
     public DataSircus() {
         this.metaSequencesList = new ArrayList<>();
     }
 
     /**
-     * Ajoute un lieu a la liste des lieux
-     * @param location nouveau lieu a ajouter
+     * Add a location to the list of locations
+     * @param location new location to add
      */
-    public void setLieuxList(String location) {
+    public void setLocationList(String location) {
         if(!this.locationsList.contains(location)){
             this.locationsList.add(location);
         }
     }
 
     /**
-     * Ajoute une meta sequence a la liste des meta sequences
-     * @param metaSequence la nouvelle meta sequence
+     * Add a meta sequence to the list of meta sequences
+     * @param metaSequence the new meta sequence
      */
-    public void saveMetaSeq(MetaSequence metaSequence){
+    public void saveMetaSeq(MetaSequence metaSequence) {
         this.metaSequencesList.add(metaSequence);
     }
 }

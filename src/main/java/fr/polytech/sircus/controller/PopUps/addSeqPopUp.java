@@ -16,153 +16,122 @@ import javafx.stage.Window;
 import java.io.IOException;
 
 /**
- * Controleur permettant la gestion d'ajout d'une sequence a une meta sequence
+ * Controller to add a sequence in a meta sequence
  */
-public class addSeqPopUp
-	{
-	//******************************************************************************************************************
-	// Composants UI
-	//******************************************************************************************************************
+public class addSeqPopUp {
 
 	/**
-	 * Champ texte du nom de la sequence a ajouter
+	 * Text field of the name of the sequence to add
 	 */
-	@FXML private TextField nameNewSeq;
-
+	@FXML
+	private TextField nameNewSeq;
 	/**
-	 * Bouton annulant la creation de la sequence
+	 * Button to cancel the creation of the sequence
 	 */
-	@FXML private Button    addSeqCancel;
-
+	@FXML
+	private Button addSeqCancel;
 	/**
-	 * Bouton validant la creation de la sequence
+	 * Button to validate the creation of the sequence
 	 */
-	@FXML private Button    addSeqSave;
-
+	@FXML
+	private Button addSeqSave;
 	/**
-	 * Bouton radio selectionnant la creation d'une nouvelle sequence
+	 * Radio button selecting the creation of a new sequence
 	 */
-	@FXML private RadioButton addNewSeq;
-
+	@FXML
+	private RadioButton addNewSeq;
 	/**
-	 * Bouton radio selectionnant la copie d'une nouvelle sequence
+	 * Radio button selecting the copy of a new sequence
 	 */
-	@FXML private RadioButton addCopySeq;
-
+	@FXML
+	private RadioButton addCopySeq;
 	/**
-	 * ComboBox representant l'ensemble des sequences
+	 * ComboBox representing all the sequences
 	 */
-	@FXML private ComboBox nameListSeq;
-	//******************************************************************************************************************
+	@FXML
+	private ComboBox nameListSeq;
 
-	//******************************************************************************************************************
-	// Gestionnaires méta-sequences
-	//******************************************************************************************************************
-
+	//manager of the meta sequence
 	/**
-	 * List des sequences
+	 * List of the sequences
 	 */
 	private ObservableList listSequences = null;
-
 	/**
-	 * Meta sequence a laquelle sera ajoutee la sequence
+	 * Meta sequence where the sequence will be added
 	 */
 	private MetaSequence metaSequence = null;
-
 	/**
-	 * Pop up ajout de sequence
+	 * Pop up adding of sequence
 	 */
 	private Stage popUpStage = null;
-
 	/**
-	 * Listener de l'ajout de la sequence
+	 * Listener of the adding of the sequence
 	 */
 	private MetaSequenceController.ModificationMetaSeqListener addListener = null;
-	//******************************************************************************************************************
-
-	//******************************************************************************************************************
-	//   ###    ###   #   #   ####  #####  ####   #   #   ###   #####   ###   ####    ####
-	//  #   #  #   #  ##  #  #        #    #   #  #   #  #   #    #    #   #  #   #  #
-	//  #      #   #  # # #   ###     #    ####   #   #  #        #    #   #  ####    ###
-	//  #   #  #   #  #  ##      #    #    #   #  #   #  #   #    #    #   #  #   #      #
-	//   ###    ###   #   #  ####     #    #   #   ###    ###     #     ###   #   #  ####
-	//******************************************************************************************************************
 
 	/**
-	 * Constructeur du controleur
-	 * @param owner la fenetre principale
-	 * @param listSequences la liste des sequences
-	 * @param metaSequence la meta sequence a laquelle on ajoute la sequence
-	 * @param addListener le listener de l'evenement d'ajout
+	 * Constructor of the controller
+	 * @param owner main frame
+	 * @param listSequences list of the sequences
+	 * @param metaSequence the meta sequence where we add the sequence
+	 * @param addListener the listener of the adding event
 	 */
 	public addSeqPopUp (Window owner,
 					   ObservableList<Sequence> listSequences,
                        MetaSequence metaSequence,
-                       MetaSequenceController.ModificationMetaSeqListener addListener )
-		{
+                       MetaSequenceController.ModificationMetaSeqListener addListener ) {
 
-		FXMLLoader fxmlLoader = new FXMLLoader ( SircusApplication.class.getClassLoader().getResource ( "views/popups/add_seq_popup.fxml" ) );
-		fxmlLoader.setController ( this );
+		FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/add_seq_popup.fxml" ));
+		fxmlLoader.setController(this);
 
-		try
-			{
-			this.metaSequence   = metaSequence;
+		try {
+			this.metaSequence = metaSequence;
 			this.listSequences = listSequences;
-			this.addListener    = addListener;
+			this.addListener = addListener;
 
-			Scene dialogScene  = new Scene ( fxmlLoader.load (), 500, 160 );
-			Stage dialog       = new Stage ();
+			Scene dialogScene = new Scene(fxmlLoader.load (),500,160);
+			Stage dialog = new Stage ();
 
 			this.popUpStage = dialog;
 
-			dialog.initModality ( Modality.APPLICATION_MODAL                 );
-			dialog.initOwner    ( owner                                      );
-			dialog.setScene     ( dialogScene                                );
-			dialog.setResizable ( true                                       );
-			dialog.setMinHeight(140); //110 (+30 hauteur de l'entête de la fenêtre sur windows)
-			dialog.setMinWidth(320); //310 (+10 largeur de la fenêtre sur windows)
-			dialog.setTitle     ( "Ajout Séquence à " + this.metaSequence.getName () );
-
+			dialog.initModality(Modality.APPLICATION_MODAL);
+			dialog.initOwner(owner);
+			dialog.setScene(dialogScene);
+			dialog.setResizable(true);
+			dialog.setMinHeight(140); //110 (+30 for the height of the header and the frame on Windows)
+			dialog.setMinWidth(320); //310 (+10 for the width of the frame on Windows)
+			dialog.setTitle("Ajout Séquence à " + this.metaSequence.getName());
 			dialog.show();
-			}
-		catch ( IOException e )
-			{
-			e.printStackTrace ();
-			}
 		}
-
-	//******************************************************************************************************************
-	//      #  #####  #   #         #####  #   #  #   #   ###   #####  #   ###   #   #   ####
-	//      #  #       # #          #      #   #  ##  #  #   #    #    #  #   #  ##  #  #
-	//      #  ###      #           ###    #   #  # # #  #        #    #  #   #  # # #   ###
-	//  #   #  #       # #          #      #   #  #  ##  #   #    #    #  #   #  #  ##      #
-	//   ###   #      #   #         #       ###   #   #   ###     #    #   ###   #   #  ####
-	//******************************************************************************************************************
-
-
-	/**
-	 * Initialise le controleur et ses attributs, ajoute des controleurs a chaque composant
-	 */
-	@FXML private void initialize () {
-		this.nameListSeq.setItems(listSequences);
-		this.nameListSeq.getSelectionModel ().select ( 0 );
-		this.nameListSeq.setDisable(true);
-		this.addSeqSave.setDisable (true);
-
-		this.nameNewSeq.setOnKeyReleased  ( keyEvent   -> checkNameNewSeqFilled           () );
-		this.addCopySeq.setOnMouseClicked(mouseEvent -> selectAddCopySeq ());
-		this.addNewSeq.setOnMouseClicked(mouseEvent -> selectAddNewSeq ());
-		this.addSeqCancel.setOnMouseClicked ( mouseEvent -> cancelAddSeq () );
-		this.addSeqSave.setOnMouseClicked ( mouseEvent -> addSeqToMetaSeq   () );
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
-	 * Desactive le bouton qui cree une sequence si l'utilisateur veut creer une nouvelle sequence
-	 * et que le nom de la nouvelle sequence est vide
+	 * Initialize the controller and the attributes, add controllers to each component
 	 */
-	@FXML private void checkNameNewSeqFilled() {
-		if(this.addNewSeq.isSelected()) {
-			if (this.nameNewSeq.getText().length() > 0) {
+	@FXML
+	private void initialize() {
+		this.nameListSeq.setItems(listSequences);
+		this.nameListSeq.getSelectionModel().select(0);
+		this.nameListSeq.setDisable(true);
+		this.addSeqSave.setDisable (true);
+
+		this.nameNewSeq.setOnKeyReleased(keyEvent->checkNameNewSeqFilled());
+		this.addCopySeq.setOnMouseClicked(mouseEvent->selectAddCopySeq());
+		this.addNewSeq.setOnMouseClicked(mouseEvent->selectAddNewSeq ());
+		this.addSeqCancel.setOnMouseClicked(mouseEvent->cancelAddSeq());
+		this.addSeqSave.setOnMouseClicked(mouseEvent->addSeqToMetaSeq());
+	}
+
+	/**
+	 * Disable the button that create a sequence if the name of the new sequence is empty
+	 */
+	@FXML
+	private void checkNameNewSeqFilled(){
+		if(this.addNewSeq.isSelected()){
+			if(this.nameNewSeq.getText().length() > 0){
 				this.addSeqSave.setDisable(false);
 			} else {
 				this.addSeqSave.setDisable(true);
@@ -171,25 +140,27 @@ public class addSeqPopUp
 	}
 
 	/**
-	 * Desactive l'autre bouton radio si un des deux est selectionne
+	 * Disable the radio button for a copy sequence if the new sequence radio button is selected
 	 */
-	@FXML private void selectAddNewSeq() {
+	@FXML
+	private void selectAddNewSeq() {
 		if(addCopySeq.isSelected()){
 			this.addCopySeq.fire();
 		}
 		this.nameListSeq.setDisable(true);
 
 		if(this.nameNewSeq.getText().length() > 0){
-			this.addSeqSave.setDisable (false);
+			this.addSeqSave.setDisable(false);
 		} else {
 			this.addSeqSave.setDisable(true);
 		}
 	}
 
 	/**
-	 * Desactive l'autre bouton radio si un des deux est selectionne
+	 * Disable the radio button for a new sequence if the copy sequence radio button is selected
 	 */
-	@FXML private void selectAddCopySeq() {
+	@FXML
+	private void selectAddCopySeq() {
 		if(this.addNewSeq.isSelected()){
 			this.addNewSeq.fire();
 		}
@@ -198,34 +169,33 @@ public class addSeqPopUp
 	}
 
 	/**
-	 * Ferme la pop up si le bouton annuler est cliqué
+	 * Close the pop-up
 	 */
-	@FXML private void cancelAddSeq() {
+	@FXML
+	private void cancelAddSeq() {
 		this.popUpStage.close ();
 	}
 
 	/**
-	 * Ajoute la sequence a la meta sequence si le bouton creer est cliqué
+	 * Create alert to confirm the adding of a sequence, add it if confirm
 	 */
-	@FXML private void addSeqToMetaSeq()
-		{
+	@FXML
+	private void addSeqToMetaSeq() {
 		Alert alert = new Alert( Alert.AlertType.CONFIRMATION,
 		                         "Etes-vous sûr de vouloir enregistrer les modifications de " + this.metaSequence.getName () + " ?",
 		                         ButtonType.YES,
 		                         ButtonType.NO);
 		alert.showAndWait();
 
-		if (alert.getResult() == ButtonType.YES)
-			{
-				if(this.addNewSeq.isSelected()) {
-					this.metaSequence.addSequence(new Sequence(this.nameNewSeq.getText()));
-				} else {
-					Sequence copiedSeq = new Sequence((Sequence) this.nameListSeq.getSelectionModel().getSelectedItem());
-					this.metaSequence.addSequence(copiedSeq);
-				}
-				this.addListener.onModified ( this.metaSequence );
-				this.popUpStage.close ();
+		if (alert.getResult() == ButtonType.YES) {
+			if(this.addNewSeq.isSelected()) {
+				this.metaSequence.addSequence(new Sequence(this.nameNewSeq.getText()));
+			} else {
+				Sequence copiedSeq = new Sequence((Sequence)this.nameListSeq.getSelectionModel().getSelectedItem());
+				this.metaSequence.addSequence(copiedSeq);
 			}
+			this.addListener.onModified(this.metaSequence);
+			this.popUpStage.close();
 		}
-
 	}
+}
