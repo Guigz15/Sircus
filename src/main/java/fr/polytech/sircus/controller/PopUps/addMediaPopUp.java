@@ -25,124 +25,117 @@ import java.time.Duration;
 
 public class addMediaPopUp {
 
-    //******************************************************************************************************************
-    // Composants UI
-    //******************************************************************************************************************
-
     /**
-     * Objet du bouton d'ajout de fichier : permet la sélection du fichier pour le média à ajouter
+     * FileChooser to choose the file used as a media.
      */
     @FXML
     private final FileChooser fileChooserMedia;
+
     /**
-     * Objet du bouton d'ajout fichier : permet la sélection du fichier pour l'inter-stimulation du média à ajouter
+     * FileChooser to choose the file shown after the media (interstim).
      */
     @FXML
     private final FileChooser fileChooserInterstim;
+
     /**
-     * Label du nom du média à ajouter
+     * Label of the name of the selected media.
      */
     @FXML
     private Label nameNewMedia;
+
     /**
-     * Champ de texte de la durée du média à ajouter
+     * Text field to input the duration of the media.
      */
     @FXML
     private TextField durationField;
+
     /**
-     * Fichier pour le média à ajouter
+     * File of the selected media.
      */
     @FXML
     private File newFileMedia;
+
     /**
-     * Champ texte du nom de l'inter-stimulation à ajouter
+     * Label of the name of the selected interstim.
      */
     @FXML
     private Label nameNewInterstim;
+
     /**
-     * Fichier pour l'inter-stimulation du média à ajouter
+     * File of the selected interstim.
      */
     @FXML
     private File newFileInterstim;
+
     /**
-     * Bouton annulant l'ajout du média
+     * Button to cancel the addition of a media.
      */
     @FXML
     private Button addMediaCancel;
+
     /**
-     * Bouton validant l'ajout du média
+     * Button to save the new media.
      */
     @FXML
     private Button addMediaSave;
+
     /**
-     * Bouton d'ajout d'un fichier pour le média à ajouter
+     * Button to choose the file used as a media.
      */
     @FXML
     private Button addMediaFile;
+
     /**
-     * Bouton d'ajout d'un fichier pour l'inter-stimulation du média à ajouter
+     * Button to choose the file shown after the media (interstim).
      */
     @FXML
     private Button addInterstimFile;
+
     /**
-     * Bouton radio sélectionnant l'ajout d'un nouveau média
+     * Radio button used to create a new media.
      */
     @FXML
     private RadioButton addNewMedia;
 
     /**
-     * Bouton radio sélectionnant la copie d'un média existant
+     * Radio button used to copy an existing media.
      */
     @FXML
     private RadioButton addCopyMedia;
 
     /**
-     * ComboBox representant l'ensemble des médias
+     * ComboBox containing all the existing medias.
      */
     @FXML
     private ComboBox<Media> nameListMedias;
 
-
-    //******************************************************************************************************************
-    // Gestionnaires sequences
-    //******************************************************************************************************************
-
     /**
-     * Liste des médias
+     * List of the medias of the mother sequence.
      */
     private ObservableList<Media> listMedias = null;
 
     /**
-     * Séquence à laquelle sera ajouté le média
+     * Sequence in which the media will be added.
      */
     private Sequence sequence = null;
 
     /**
-     * Pop-up ajout de média
+     * The popup to add a media.
      */
     private Stage popUpStage = null;
 
     /**
-     * Event listener de modification de la séquence provenant du controller modifySeqPopUp
+     * Event listener checking for sequence's modification from the modifySeqPopUp controller.
      */
     private modifySeqPopUp.SequenceModificationListener listener = null;
 
-
-    //******************************************************************************************************************
-    //   ###    ###   #   #   ####  #####  ####   #   #   ###   #####   ###   ####    ####
-    //  #   #  #   #  ##  #  #        #    #   #  #   #  #   #    #    #   #  #   #  #
-    //  #      #   #  # # #   ###     #    ####   #   #  #        #    #   #  ####    ###
-    //  #   #  #   #  #  ##      #    #    #   #  #   #  #   #    #    #   #  #   #      #
-    //   ###    ###   #   #  ####     #    #   #   ###    ###     #     ###   #   #  ####
-    //******************************************************************************************************************
-
     /**
-     * Constructeur du contrôleur de la pop-up d'ajout d'un média à une séquence et de ses composantes
+     * Constructor of the popup's controller to add a media to a sequence.
      *
-     * @param owner      fenêtre principale
-     * @param listMedias liste des médias de la séquence
-     * @param sequence   la séquence dans laquelle on ajoute un média
-     * @param listener   event listener de modification de la séquence provenant du controller modifySeqPopUp
+     * @param owner      main window.
+     * @param listMedias list of the medias of the sequence.
+     * @param sequence   the sequence in which the media will be added.
+     * @param listener   vent listener checking for sequence's modification from the modifySeqPopUp controller.
      */
     public addMediaPopUp(Window owner, ObservableList<Media> listMedias, Sequence sequence,
                          modifySeqPopUp.SequenceModificationListener listener, FileChooser fileChooserMedia,
@@ -178,8 +171,8 @@ public class addMediaPopUp {
             dialog.initOwner(owner);
             dialog.setScene(dialogScene);
             dialog.setResizable(true);
-            dialog.setMinHeight(200); //170 (+30 hauteur de l'entête de la fenêtre sur windows)
-            dialog.setMinWidth(290); //280 (+10 largeur de la fenêtre sur windows)
+            dialog.setMinHeight(200); //170 (+30 height of the window header on the Windows OS)
+            dialog.setMinWidth(290); //280 (+10 width of the window header on the Windows OS)
             dialog.setTitle("Ajout Media à " + this.sequence.getName());
 
             dialog.show();
@@ -188,17 +181,8 @@ public class addMediaPopUp {
         }
     }
 
-    //******************************************************************************************************************
-    //      #  #####  #   #         #####  #   #  #   #   ###   #####  #   ###   #   #   ####
-    //      #  #       # #          #      #   #  ##  #  #   #    #    #  #   #  ##  #  #
-    //      #  ###      #           ###    #   #  # # #  #        #    #  #   #  # # #   ###
-    //  #   #  #       # #          #      #   #  #  ##  #   #    #    #  #   #  #  ##      #
-    //   ###   #      #   #         #       ###   #   #   ###     #    #   ###   #   #  ####
-    //******************************************************************************************************************
-
-
     /**
-     * Méthode d'initialisation du controleur et de ses attributs puis ajoute des fonctionnalités à chaque composant
+     * Initializes the controller and its attributes.
      */
     @FXML
     private void initialize() {
@@ -228,7 +212,7 @@ public class addMediaPopUp {
     }
 
     /**
-     * Méthode permettant la sélection d'un fichier pour l'inter-stimualtion du média dans l'ordinateur de l'utilisateur
+     * Allows to pick a file used as the interstim in the user's computer.
      */
     private void selectInterstimFile() {
         this.newFileInterstim = this.fileChooserInterstim.showOpenDialog(this.popUpStage);
@@ -243,7 +227,7 @@ public class addMediaPopUp {
     }
 
     /**
-     * Méthode permettant la sélection d'un fichier pour le média dans l'ordinateur de l'utilisateur
+     * Allows to pick a file used as the media in the user's computer.
      */
     private void selectMediaFile() {
         this.newFileMedia = this.fileChooserMedia.showOpenDialog(this.popUpStage);
@@ -259,9 +243,9 @@ public class addMediaPopUp {
     }
 
     /**
-     * Méthode qui vérifie si un fichier a été sélectionné et si une durée a été remplie
-     * si oui active le bouton de sauvegarde
-     * si non le désactive
+     * Checks if a file has been selected for the media and if a duration has been set.
+     * If true, activates the button to save and quit.
+     * Disables it otherwise.
      */
     private void checkNameNewMediaFilled() {
         if (this.addNewMedia.isSelected()) {
@@ -272,7 +256,8 @@ public class addMediaPopUp {
     }
 
     /**
-     * Méthode gérant l'évenement de sélection de la checkbox de sélection d'un nouveau média
+     * Enables the widgets to add a new media if the radio button to create a new media is selected.
+     * Disables the other widgets.
      */
     private void selectAddNewMedia() {
         if (addCopyMedia.isSelected()) {
@@ -287,7 +272,8 @@ public class addMediaPopUp {
     }
 
     /**
-     * Méthode gérant l'évenement de sélection de la checkbox de sélection de la copie d'un média
+     * Enables the widgets to copy a media if the radio button to copy a media is selected.
+     * Disables the other widgets.
      */
     private void selectAddCopyMedia() {
         if (this.addNewMedia.isSelected()) {
@@ -304,9 +290,9 @@ public class addMediaPopUp {
     }
 
     /**
-     * Méthode d'ajout d'un média à la séquence
+     * Adds a media to the sequence.
      *
-     * @throws IOException si problème lié à la sélection d'un fichier
+     * @throws IOException if there is a problem relative to the file selection.
      */
     private void addMediaToSeq() throws IOException {
         Alert alert = new Alert(
@@ -382,7 +368,7 @@ public class addMediaPopUp {
     }
 
     /**
-     * Méthode de fermeture de la pop-up
+     * Closes the popup.
      */
     private void cancelAddMedia() {
         this.popUpStage.close();
