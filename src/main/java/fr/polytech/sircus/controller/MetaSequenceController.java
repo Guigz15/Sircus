@@ -146,8 +146,8 @@ public class MetaSequenceController {
                             tableViewDeleteButton.setOnAction(event ->
                             {
                                 MetaSequence metaSequence = metaSeqComboBox.getValue();
-                                metaSequence.getListSequences().remove(getTableView().getItems().get(getIndex()));
-                                metaSeqTable.setItems(FXCollections.observableList(metaSequence.getListSequences()));
+                                metaSequence.getSequencesList().remove(getTableView().getItems().get(getIndex()));
+                                metaSeqTable.setItems(FXCollections.observableList(metaSequence.getSequencesList()));
                             });
 
                             setGraphic(hBox);
@@ -196,7 +196,7 @@ public class MetaSequenceController {
                         metaSeqTableColumnName,
                         metaSeqTableColumnDuration,
                         metaSeqTableColumnOption));
-        metaSeqTable.setItems(FXCollections.observableList(metaSequences.get(0).getListSequences()));
+        metaSeqTable.setItems(FXCollections.observableList(metaSequences.get(0).getSequencesList()));
 
         // Add meta-sequences
         metaSeqAdd.setGraphic(addIcon);
@@ -228,7 +228,7 @@ public class MetaSequenceController {
     @FXML
     private void switchMetaSeq() {
         if (metaSeqComboBox.getValue() != null) {
-            metaSeqTable.setItems(FXCollections.observableList(metaSeqComboBox.getValue().getListSequences()));
+            metaSeqTable.setItems(FXCollections.observableList(metaSeqComboBox.getValue().getSequencesList()));
         }
     }
 
@@ -277,11 +277,11 @@ public class MetaSequenceController {
     @FXML
     private void addSeqToMetaSeq() {
         ModificationMetaSeqListener addListener = newMetaSequence ->
-                this.metaSeqTable.setItems(FXCollections.observableList(newMetaSequence.getListSequences()));
+                this.metaSeqTable.setItems(FXCollections.observableList(newMetaSequence.getSequencesList()));
 
         new addSeqPopUp(this.metaSeqComboBox.getScene().getWindow(),
                 FXCollections.observableList(
-                        this.metaSeqComboBox.getSelectionModel().getSelectedItem().getListSequences()),
+                        this.metaSeqComboBox.getSelectionModel().getSelectedItem().getSequencesList()),
                 this.metaSeqComboBox.getSelectionModel().getSelectedItem(),
                 addListener);
     }
@@ -329,7 +329,7 @@ public class MetaSequenceController {
         }
 
         ArrayList<Media> randomizedMediaList = new ArrayList<>();
-        ArrayList<fr.polytech.sircus.model.Sequence> seqList = new ArrayList<>(Sequence.getListSequences());
+        ArrayList<fr.polytech.sircus.model.Sequence> seqList = new ArrayList<>(Sequence.getSequencesList());
         int randInt;
 
         for (int z = 0; z < seqList.size(); z += 1) {
@@ -471,7 +471,7 @@ public class MetaSequenceController {
         long totalTime = 0;
         MetaSequence metaSequence = this.metaSeqComboBox.getValue();
 
-        for (Sequence sequence : metaSequence.getListSequences()) {
+        for (Sequence sequence : metaSequence.getSequencesList()) {
             for (Media media : sequence.getListMedias()) {
                 totalTime += media.getDuration().getSeconds();
             }

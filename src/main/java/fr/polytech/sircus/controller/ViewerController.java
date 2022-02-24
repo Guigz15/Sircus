@@ -239,7 +239,7 @@ public class ViewerController {
         int cptDuree = 0;
         // System.out.println("CptDurée : " + cptDuree);
 
-        for (Sequence sequence : metaSequence.getListSequences()) {
+        for (Sequence sequence : metaSequence.getSequencesList()) {
             // Pour chaque Média de la séquence
             for (fr.polytech.sircus.model.Media media : sequence.getListMedias()) {
                 // Si le média est une image
