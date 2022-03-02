@@ -23,6 +23,7 @@ public class DataSircus implements Serializable {
      */
     public DataSircus() {
         this.metaSequencesList = new ArrayList<>();
+        this.locationsList = new ArrayList<>();
     }
 
     /**
