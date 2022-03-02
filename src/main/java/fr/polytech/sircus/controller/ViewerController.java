@@ -32,31 +32,30 @@ import java.util.Objects;
 public class ViewerController {
 
 
-    //the MetaSequenceController which create this controller
+    // the MetaSequenceController which create this controller
     private final MetaSequenceController metaSequenceController;
 
-    //the MetaSequence that id passed to the viewer
+    // the MetaSequence that id passed to the viewer
     private final MetaSequence playingMetaSequence;
 
-    //The list containing the start times of the media of the current meta-sequence
+    // The list containing the start times of the media of the current meta-sequence
     ArrayList<Integer> listBeginningTimeMedia;
 
-    // UI components
     @FXML
     private MediaView mediaView;
     @FXML
     private ImageView imageView;
 
-    //this allows the playing of media
+    // this allows the playing of media
     private MediaPlayer mediaPlayer;
 
-    //manage the stage of the media
+    // manage the stage of the media
     private Stage viewerStage = null;
 
-    //The timeline allowing the reading of the media with management of the time of each one
+    // The timeline allowing the reading of the media with management of the time of each one
     private Timeline timeline = null;
 
-    //Boolean indiquant si la méta-séquence a déjà été démarrée une fois ou pas
+    // Boolean indicating if the meta-sequence has already been started once or not
     private boolean metaSequenceStarted;
 
     /**
@@ -126,7 +125,7 @@ public class ViewerController {
             Media media = new Media(mediaFile.toURI().toURL().toString());
             showMedia(media);
         }
-        // Si l'URL est malformée, on le signale
+        // If the URL is malformed, it is reported
         catch (MalformedURLException error) {
             System.out.println("URL malformée, le chemin vers la vidéo est incorrect.");
         }
@@ -212,13 +211,12 @@ public class ViewerController {
                     // We add to the counterDuration the duration of the media currently read.
                     counterDuration += media.getDuration().getSeconds();
                 }
-                //If the media is a video
+                // If the media is a video
                 else if (media.getType() == TypeMedia.VIDEO) {
                     timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
                             event -> {
                                 removeImage();
                                 showMediaFromName(media.getName());
-                                // System.out.println("Vidéo donnée.");
                             }));
                     // The second at which the video starts is added to listBeginningTimeMedia.
                     listBeginningTimeMedia.add(counterDuration);
@@ -231,7 +229,6 @@ public class ViewerController {
                             event -> {
                                 removeMedia();
                                 showImageFromName(media.getInterStim().getName());
-                                // System.out.println("Image donnée.");
                             }));
                     // The second at which the "inter-stim" starts is added to listBeginningTimeMedia.
                     // We could comment this line if we don't want to go through the inter-stim with the buttons
