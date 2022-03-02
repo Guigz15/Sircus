@@ -18,9 +18,9 @@
             </rowConstraints>
             <children>
 
-                <TableView fx:id="tableResultat" prefHeight="469.0" prefWidth="966.0" GridPane.rowIndex="1">
+                <TableView fx:id="resultTable" prefHeight="469.0" prefWidth="966.0" GridPane.rowIndex="1">
                     <columns>
-                        <TableColumn fx:id="nomMetaSequence" prefWidth="198.0" text="Méta-séquence"/>
+                        <TableColumn fx:id="metaSequenceName" prefWidth="198.0" text="Méta-séquence"/>
                         <TableColumn fx:id="duration" prefWidth="164.0" text="Durée"/>
                         <TableColumn fx:id="listSequences" prefWidth="179.0" text="Liste des séquences"/>
                     </columns>

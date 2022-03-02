@@ -14,13 +14,26 @@ import java.awt.Dimension;
 
 public class SircusApplication extends Application {
 
-    public static DataSircus dataSircus;
-    private MainWindowController mainWindowController;
+	/**
+     *  dataSircus object
+	 */
+	public static DataSircus dataSircus;
+
+	/**
+     *  main window controller
+	 */
+	private MainWindowController mainWindowController;
 
     public static void main(String[] args) {
         launch();
     }
 
+	/**
+     * Starts application
+	 *
+	 * @param stage
+	 * @throw IOException
+	 */
     @Override
     public void start(Stage stage) throws IOException {
 
