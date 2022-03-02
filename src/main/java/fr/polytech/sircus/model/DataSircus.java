@@ -23,13 +23,14 @@ public class DataSircus implements Serializable {
      */
     public DataSircus() {
         this.metaSequencesList = new ArrayList<>();
+        this.locationsList = new ArrayList<>();
     }
 
     /**
      * Add a location to the list of locations
      * @param location new location to add
      */
-    public void setLocationList(String location) {
+    public void addLocationToList(String location) {
         if(!this.locationsList.contains(location)){
             this.locationsList.add(location);
         }
