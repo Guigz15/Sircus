@@ -37,110 +37,90 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Controleur permettant la gestion de modification d'une sequence
+ * Controller handling the management of a sequence modification
  */
 public class modifySeqPopUp {
-    //******************************************************************************************************************
-    // Composants UI
-    //******************************************************************************************************************
 
-    /**
-     * Objet du bouton d'ajout de fichier : permet la sélection d'un fichier pour un media
-     */
+
+
+    //*********************
+    //    UI components
+    //*********************
+
+    /** The add file button object: allows the selection of a file for a media */
     private final FileChooser fileChooserMedia;
-    /**
-     * Bouton sauvegardant les modifications de la sequence
-     */
-    @FXML
-    private Button saveAddMediaSeq;
-    /**
-     * Bouton d'annulation, fermant la pop-up de modification de la séquence
-     */
-    @FXML
-    private Button cancelAddMediaSeq;
-    /**
-     * Bouton d'ajout d'un media à la sequence
-     */
-    @FXML
-    private Button addMediaToSeq;
-    /**
-     * Objet du bouton d'ajout de fichier : permet la sélection d'un fichier pour une inter-stimulation
-     */
+
+    /** The add file button object: allows the selection of a file for a cross-stimulus */
     private FileChooser fileChooserInterstim;
 
-    /**
-     * Champ de texte du nom de la séquence à modifier
-     */
+
+    /** Button to save the changes in the sequence */
+    @FXML
+    private Button saveAddMediaSeq;
+
+    /** Cancel button, closes the sequence modification pop-up */
+    @FXML
+    private Button cancelAddMediaSeq;
+
+    /** Button to add media to the sequence */
+    @FXML
+    private Button addMediaToSeq;
+
+    /** Text field for the name of the sequence to be modified */
     @FXML
     private TextField titleSequenceLabel;
 
-    /**
-     * Tableau des médias
-     */
+    /** Media table */
     @FXML
     private TableView<Media> mediaTable;
 
-    /**
-     * Tableau des médias : colonne pour le vérrouillage
-     */
+    /** Media table: column for locking */
     @FXML
     private TableColumn<Media, String> mediaTableColumnVerrouillage;
 
-    /**
-     * Tableau des médias : colonne du nom
-     */
+    /** Media table: name column */
     @FXML
     private TableColumn<Media, String> mediaTableColumnName;
 
-    /**
-     * Tableau des médias : colonne de la durée
-     */
+    /** Media table: duration column */
     @FXML
     private TableColumn<Media, String> mediaTableColumnDuration;
 
-    /**
-     * Tableau des médias : colonne des options (boutons de modifications)
-     */
+    /** Media table: options column (edit buttons) */
     @FXML
     private TableColumn<Media, String> mediaTableColumnOption;
-    //******************************************************************************************************************
 
-    //******************************************************************************************************************
-    // Gestionnaires sequences
-    //******************************************************************************************************************
 
-    /**
-     * Sequence a modifier
-     */
+
+    //*********************
+    // Sequence management
+    //*********************
+
+    /** Sequence to be modified */
     private Sequence sequence = null;
 
-    /**
-     * Pop up de modification
-     */
+    /** Modification pop-up */
     private Stage popUpStage = null;
 
-    /**
-     * Objet listener crée dans MetaSequenceController
-     */
+    /** Object listener created in MetaSequenceController */
     private MetaSequenceController.ModificationSequenceListener listener;
 
-    //******************************************************************************************************************
-    /**
-     * Liste des médias ET des médias d'inter-stimulation
-     */
+
+    /** List of media and cross-stimulus media */
     private List<Media> listMediaPlusInterstim = null;
-    /**
-     * Objet temporaire servant au stockage d'un média (utile lors de la création par copie d'un média)
-     */
+    /** Temporary object used to store media (useful when creating media by copying) */
     private Media tempMedia = null;
 
+
+
+
     /**
-     * Constructeur du contrôleur de la pop-up de modification d'une séquence et de ses composantes
+     * Constructor of the controller of the sequence modification pop-up and its components
      *
-     * @param owner      fenêtre principale
-     * @param listMedias liste des médias contenus dans la séquence
-     * @param sequence   la séquence à modifier
-     * @param listener   l'event listener de modification de la séquence provenant de MetaSequenceController
+     * @param owner      Main window
+     * @param listMedias List of media contained in the sequence
+     * @param sequence   The sequence to be modified
+     * @param listener   The event listener of sequence modification from MetaSequenceController
      */
     public modifySeqPopUp(Window owner, ObservableList<Media> listMedias, Sequence sequence,
                           MetaSequenceController.ModificationSequenceListener listener, FileChooser fileChooserMedia,
@@ -183,8 +163,9 @@ public class modifySeqPopUp {
         }
     }
 
+
     /**
-     * Constructeur de la liste des médias ET inter-stimulations
+     * Media list builder and cross-stimulus
      */
     private void consructMediaInterstimList() {
 
@@ -199,8 +180,9 @@ public class modifySeqPopUp {
         }
     }
 
+
     /**
-     * Méthode d'initialisation du controleur et de ses attributs puis ajoute des fonctionnalités à chaque composant
+     * Method of initializing the controller and its attributes, then adding functionality to each component.
      */
     @FXML
     private void initialize() {
@@ -371,16 +353,9 @@ public class modifySeqPopUp {
         });
     }
 
-    //******************************************************************************************************************
-    //   ###    ###   #   #   ####  #####  ####   #   #   ###   #####   ###   ####    ####
-    //  #   #  #   #  ##  #  #        #    #   #  #   #  #   #    #    #   #  #   #  #
-    //  #      #   #  # # #   ###     #    ####   #   #  #        #    #   #  ####    ###
-    //  #   #  #   #  #  ##      #    #    #   #  #   #  #   #    #    #   #  #   #      #
-    //   ###    ###   #   #  ####     #    #   #   ###    ###     #     ###   #   #  ####
-    //******************************************************************************************************************
 
     /**
-     * Méthode modifiant le nom de la séquence
+     * Method of modifying the name of the sequence
      */
     private void modifySequenceName() {
         if (!Objects.equals(this.sequence.getName(), this.titleSequenceLabel.getText())) {
@@ -399,16 +374,9 @@ public class modifySeqPopUp {
         }
     }
 
-    //******************************************************************************************************************
-    //      #  #####  #   #         #####  #   #  #   #   ###   #####  #   ###   #   #   ####
-    //      #  #       # #          #      #   #  ##  #  #   #    #    #  #   #  ##  #  #
-    //      #  ###      #           ###    #   #  # # #  #        #    #  #   #  # # #   ###
-    //  #   #  #       # #          #      #   #  #  ##  #   #    #    #  #   #  #  ##      #
-    //   ###   #      #   #         #       ###   #   #   ###     #    #   ###   #   #  ####
-    //******************************************************************************************************************
 
     /**
-     * Méthode d'ajoute d'un media à la séquence
+     * Method of adding media to the sequence
      */
     @FXML
     private void addMediaToSeq() {
@@ -428,10 +396,11 @@ public class modifySeqPopUp {
         );
     }
 
+
     /**
-     * Méthode de modification d'un média dans la séquence
+     * Method of modifying media in the sequence
      *
-     * @param media média à modifier
+     * @param media Media to be modified
      */
     @FXML
     private void modifyMediaInSeq(Media media) {
@@ -452,13 +421,15 @@ public class modifySeqPopUp {
         );
     }
 
+
     /**
-     * Méthode de fermeture de la pop-up de modification de la séquence
+     * Method of closing the sequence modification pop-up
      */
     @FXML
     private void cancelAddSeq() {
         this.popUpStage.close();
     }
+
 
     /**
      * Méthode de sauvegarde des modifications de la séquence et fermeture la pop-up
@@ -480,15 +451,17 @@ public class modifySeqPopUp {
         }
     }
 
+
     /**
-     * Event listener de modification d'une séquence
+     * Event listener of a sequence modification
      */
     public interface SequenceModificationListener extends EventListener {
         void onModified(Sequence sequence);
     }
 
+
     /**
-     * Event listener de modification d'un média
+     * Event listener of a media modification
      */
     public interface MediaModificationListener extends EventListener {
         void onModified(Media media);
