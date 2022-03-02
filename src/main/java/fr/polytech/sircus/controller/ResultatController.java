@@ -29,29 +29,37 @@ import java.util.ResourceBundle;
 
 public class ResultatController implements Initializable {
 
+    /**
+     * List of results
+     */
     public ObservableList<Result> list = FXCollections.observableArrayList(
-            initResultat());
-    @FXML
-    private TableView<Result> tableResultat;
-    @FXML
-    private TableColumn<Result, String> nomMetaSequence;
-    @FXML
-    private TableColumn<Result, Duration> duration;
-    @FXML
-    private TableColumn<Result, List<Sequence>> listSequences;
+            initResults());
 
-    public List<Result> initializeResultats(List<MetaSequence> metaSequences) {
-        List<Result> results = new ArrayList<Result>();
-        for (MetaSequence metaSequence : metaSequences) {
-            Result result = new Result();
-            result.setMetaSequenceName(metaSequence.getName());
-            result.setDuration(metaSequence.getDuration());
-            result.setSequencesList(metaSequence.getSequencesList());
-        }
-        return results;
-    }
+    /**
+     * Results table
+     */
+    @FXML private TableView<Result> resultTable;
 
-    private List<Result> initResultat() {
+    /**
+     * MetaSequence name
+     */
+    @FXML private TableColumn<Result, String> metaSequenceName;
+
+    /**
+     * Duration
+     */
+    @FXML private TableColumn<Result, Duration> duration;
+
+    /**
+     * List of sequences
+     */
+    @FXML private TableColumn<Result, List<Sequence>> listSequences;
+
+
+    /**
+     * Initializes list of results
+     */
+    private List<Result> initResults() {
         List<MetaSequence> metaSequences = new ArrayList<MetaSequence>();
         metaSequences.add(SircusApplication.dataSircus.getMetaSequencesList().get(0));
         List<Result> results = new ArrayList<Result>();
@@ -63,20 +71,15 @@ public class ResultatController implements Initializable {
             results.add(result);
         }
         return results;
-
-
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        nomMetaSequence.setCellValueFactory(new PropertyValueFactory<Result, String>("metaSequenceName"));
+        metaSequenceName.setCellValueFactory(new PropertyValueFactory<Result, String>("metaSequenceName"));
         duration.setCellValueFactory(new PropertyValueFactory<Result, Duration>("duration"));
         listSequences.setCellValueFactory(new PropertyValueFactory<Result, List<Sequence>>("sequencesList"));
-        tableResultat.setItems(list);
-
+        resultTable.setItems(list);
     }
-
 
     @FXML
     private void export(ActionEvent event) throws FileNotFoundException {
@@ -111,37 +114,7 @@ public class ResultatController implements Initializable {
             }
             my_pdf_report.close();
         } catch (DocumentException | FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-
     }
-/*
-            @FXML
-    private void download(ActionEvent event) {
-        event.consume();
-        //writableImage nodeshot = tableResultat.snapshot(new SnapshotParameters(), null);
-        File file = new File("chart.png");
-        try {
-            ImageIO.write(SwingFXUtils.fromFXImage(tableResultat.snapshot(new SnapshotParameters(), null), null), "png", file);
-        } catch (IOException e) {
-        }
-        PDDocument doc = new PDDocument();
-        PDPage page = new PDPage();
-        PDImageXObject pdimage;
-        PDPageContentStream content;
-        try {
-            pdimage = PDImageXObject.createFromFile("chart.png", doc);
-            content = new PDPageContentStream(doc, page);
-            content.drawImage(pdimage, 10, 10);
-            content.close();
-            doc.addPage(page);
-            doc.save("pdf_file.pdf");
-            doc.close();
-            file.delete();
-        } catch (IOException ex) {
-                //Logger.getLogger(NodeToPdf.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }*/
 }
