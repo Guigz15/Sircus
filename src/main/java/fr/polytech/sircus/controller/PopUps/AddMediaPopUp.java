@@ -23,7 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 
-public class addMediaPopUp {
+public class AddMediaPopUp {
 
     /**
      * FileChooser to choose the file used as a media.
@@ -127,7 +127,7 @@ public class addMediaPopUp {
     /**
      * Event listener checking for sequence's modification from the modifySeqPopUp controller.
      */
-    private modifySeqPopUp.SequenceModificationListener listener = null;
+    private ModifySeqPopUp.SequenceModificationListener listener = null;
 
     /**
      * Constructor of the popup's controller to add a media to a sequence.
@@ -137,8 +137,8 @@ public class addMediaPopUp {
      * @param sequence   the sequence in which the media will be added.
      * @param listener   vent listener checking for sequence's modification from the modifySeqPopUp controller.
      */
-    public addMediaPopUp(Window owner, ObservableList<Media> listMedias, Sequence sequence,
-                         modifySeqPopUp.SequenceModificationListener listener, FileChooser fileChooserMedia,
+    public AddMediaPopUp(Window owner, ObservableList<Media> listMedias, Sequence sequence,
+                         ModifySeqPopUp.SequenceModificationListener listener, FileChooser fileChooserMedia,
                          FileChooser fileChooserInterstim) {
 
         FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/add_media_popup.fxml"));

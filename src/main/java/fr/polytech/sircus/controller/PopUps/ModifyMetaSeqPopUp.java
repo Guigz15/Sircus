@@ -20,7 +20,7 @@ import java.io.IOException;
 /**
  * This class allows us to modify a meta sequence
  */
-public class modifyMetaSeqPopUp {
+public class ModifyMetaSeqPopUp {
 
     @FXML
     private TextField modifyMetaSeqName;
@@ -57,7 +57,7 @@ public class modifyMetaSeqPopUp {
      * @param metaSequence The meta sequence to modify
      * @param modificationMetaSeqListener The listener about the modification
      */
-    public modifyMetaSeqPopUp(Window owner,
+    public ModifyMetaSeqPopUp(Window owner,
                               final ObservableMetaSequenceSet metaSequences,
                               MetaSequence metaSequence,
                               MetaSequenceController.ModificationMetaSeqListener modificationMetaSeqListener) {

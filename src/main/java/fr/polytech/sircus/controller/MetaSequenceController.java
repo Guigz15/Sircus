@@ -1,9 +1,9 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.controller.PopUps.addSeqPopUp;
-import fr.polytech.sircus.controller.PopUps.modifyMetaSeqPopUp;
-import fr.polytech.sircus.controller.PopUps.modifySeqPopUp;
+import fr.polytech.sircus.controller.PopUps.AddSeqPopUp;
+import fr.polytech.sircus.controller.PopUps.ModifyMetaSeqPopUp;
+import fr.polytech.sircus.controller.PopUps.ModifySeqPopUp;
 import fr.polytech.sircus.model.Internals.ObservableMetaSequenceSet;
 import fr.polytech.sircus.model.Media;
 import fr.polytech.sircus.model.MetaSequence;
@@ -265,7 +265,7 @@ public class MetaSequenceController {
             this.metaSeqComboBox.getSelectionModel().select(newMetaSequence);
         };
 
-        new modifyMetaSeqPopUp(this.metaSeqComboBox.getScene().getWindow(),
+        new ModifyMetaSeqPopUp(this.metaSeqComboBox.getScene().getWindow(),
                 this.metaSequences,
                 this.metaSeqComboBox.getSelectionModel().getSelectedItem(),
                 modificationMetaSeqListener);
@@ -279,7 +279,7 @@ public class MetaSequenceController {
         ModificationMetaSeqListener addListener = newMetaSequence ->
                 this.metaSeqTable.setItems(FXCollections.observableList(newMetaSequence.getSequencesList()));
 
-        new addSeqPopUp(this.metaSeqComboBox.getScene().getWindow(),
+        new AddSeqPopUp(this.metaSeqComboBox.getScene().getWindow(),
                 FXCollections.observableList(
                         this.metaSeqComboBox.getSelectionModel().getSelectedItem().getSequencesList()),
                 this.metaSeqComboBox.getSelectionModel().getSelectedItem(),
@@ -296,7 +296,7 @@ public class MetaSequenceController {
         ModificationSequenceListener listener = seq ->
                 this.metaSeqTable.refresh();
 
-        new modifySeqPopUp(
+        new ModifySeqPopUp(
                 this.metaSeqComboBox.getScene().getWindow(),
                 FXCollections.observableList(sequence.getListMedias()),
                 sequence,

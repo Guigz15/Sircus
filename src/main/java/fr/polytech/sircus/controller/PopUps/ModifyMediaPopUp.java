@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Objects;
 
-public class modifyMediaPopUp {
+public class ModifyMediaPopUp {
     //******************************************************************************************************************
     // Composants UI
     //******************************************************************************************************************
@@ -77,8 +77,8 @@ public class modifyMediaPopUp {
     /**
      * Event listener provenant du controller modifySeqPopUp
      */
-    private modifySeqPopUp.SequenceModificationListener listener1 = null;
-    private modifySeqPopUp.MediaModificationListener listener2 = null;
+    private ModifySeqPopUp.SequenceModificationListener listener1 = null;
+    private ModifySeqPopUp.MediaModificationListener listener2 = null;
 
     //******************************************************************************************************************
 
@@ -99,9 +99,9 @@ public class modifyMediaPopUp {
      * @param listener1 event listener provenant du controller modifySeqPopUp
      * @param listener2 event listener provenant du controller modifySeqPopUp
      */
-    public modifyMediaPopUp(Window owner, Sequence sequence, Media media,
-                            modifySeqPopUp.SequenceModificationListener listener1,
-                            modifySeqPopUp.MediaModificationListener listener2) {
+    public ModifyMediaPopUp(Window owner, Sequence sequence, Media media,
+                            ModifySeqPopUp.SequenceModificationListener listener1,
+                            ModifySeqPopUp.MediaModificationListener listener2) {
 
         FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_media_popup.fxml"));
         fxmlLoader.setController(this);
