@@ -191,11 +191,11 @@ public class ModifySeqPopUp {
         this.listMediaPlusInterstim.clear();
 
         for (int i = 0; i < this.sequence.getListMedias().size(); i++) {
-            this.listMediaPlusInterstim.add(this.sequence.getListMedias().get(i));
-
             if (this.sequence.getListMedias().get(i).getInterStim() != null) {
                 this.listMediaPlusInterstim.add(this.sequence.getListMedias().get(i).getInterStim());
             }
+
+            this.listMediaPlusInterstim.add(this.sequence.getListMedias().get(i));
         }
     }
 

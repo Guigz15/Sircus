@@ -35,7 +35,7 @@
         </HBox>
         <TableView fx:id="mediaTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="1">
             <columns>
-                <TableColumn fx:id="mediaTableColumnVerrouillage" prefWidth="118.0" text="Positionnement aléatoire" />
+                <TableColumn fx:id="mediaTableColumnVerrouillage" prefWidth="118.0" text="Positionnement fixe" />
                 <TableColumn fx:id="mediaTableColumnName" minWidth="100.0" prefWidth="404.0" text="Nom" />
                 <TableColumn fx:id="mediaTableColumnDuration" prefWidth="75.0" text="Temps" />
                 <TableColumn fx:id="mediaTableColumnOption" prefWidth="75.0" text="Options" />
