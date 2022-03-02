@@ -25,6 +25,8 @@ import java.time.Duration;
 
 public class addMediaPopUp {
 
+    private final String MEDIAS_PATH = "medias/";
+
     /**
      * FileChooser to choose the file used as a media.
      */
@@ -306,16 +308,26 @@ public class addMediaPopUp {
         if (alert.getResult() == ButtonType.YES) {
             if (this.addNewMedia.isSelected()) {
                 if (this.newFileMedia.exists()) {
+                    Path pathMedia = Paths.get(this.newFileMedia.getPath());
+                    String absoluteMediaPath = new File(MEDIAS_PATH).getAbsolutePath();
 
-                    Path path = Paths.get(this.newFileMedia.getPath());
-                    OutputStream os = new FileOutputStream("medias/" + this.newFileMedia.getName());
-                    Files.copy(path, os);
+                    // We compare the absolute path of the "medias" directory with the new media's one.
+                    // If they are not the same directory, we copy the new media to the application's "medias" directory.
+                    if (!absoluteMediaPath.equals(pathMedia.toString().split("\\\\" + this.newFileMedia.getName())[0])) {
+                        OutputStream os = new FileOutputStream(MEDIAS_PATH + this.newFileMedia.getName());
+                        Files.copy(pathMedia, os);
+                    }
 
                     if (this.newFileInterstim != null) {
                         if (this.newFileInterstim.isFile()) {
-                            Path path2 = Paths.get(this.newFileInterstim.getPath());
-                            OutputStream os2 = new FileOutputStream("medias/" + this.newFileInterstim.getName());
-                            Files.copy(path2, os2);
+                            Path pathInterstim = Paths.get(this.newFileInterstim.getPath());
+
+                            // We compare the absolute path of the "medias" directory with the interstim's one.
+                            // If they are not the same directory, we copy the new interstim to the application's "medias" directory.
+                            if (!absoluteMediaPath.equals(pathMedia.toString().split(this.newFileInterstim.getName())[0])) {
+                                OutputStream os = new FileOutputStream(MEDIAS_PATH + this.newFileInterstim.getName());
+                                Files.copy(pathInterstim, os);
+                            }
                         }
                     }
 
