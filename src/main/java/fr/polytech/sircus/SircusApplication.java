@@ -13,13 +13,26 @@ import java.util.Objects;
 
 public class SircusApplication extends Application {
 
-    public static DataSircus dataSircus;
-    private MainWindowController mainWindowController;
+	/**
+     *  dataSircus object
+	 */
+	public static DataSircus dataSircus;
+
+	/**
+     *  main window controller
+	 */
+	private MainWindowController mainWindowController;
 
     public static void main(String[] args) {
         launch();
     }
 
+	/**
+     * Starts application
+	 *
+	 * @param stage
+	 * @throw IOException
+	 */
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -33,7 +46,7 @@ public class SircusApplication extends Application {
             e.printStackTrace();
         }
 
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 500);
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 600);
 
         stage.setOnCloseRequest(event -> {
             try {
@@ -45,6 +58,7 @@ public class SircusApplication extends Application {
 
         stage.setTitle("Application Sircus");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 }
