@@ -17,6 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <AnchorPane maxWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.MainWindowController">
     <TabPane layoutY="-4.0" maxWidth="1000.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -263,7 +264,18 @@
                                     </font>
                                 </Text>
                             </HBox>
-                            <ComboBox prefHeight="24.0" prefWidth="329.0" promptText="Sélectionner un lieu" />
+                            <HBox prefHeight="100.0" prefWidth="200.0">
+                                <ComboBox prefHeight="25.0" prefWidth="275.0" promptText="Sélectionner un lieu">
+                                    <HBox.margin>
+                                        <Insets right="16.0"/>
+                                    </HBox.margin>
+                                </ComboBox>
+                                <Button fx:id="locationAdd" mnemonicParsing="false" prefHeight="25.0" prefWidth="39.0">
+                                    <graphic>
+                                        <FontIcon iconLiteral="fa-plus" iconSize="15"/>
+                                    </graphic>
+                                </Button>
+                            </HBox>
                         </VBox>
                         <VBox prefHeight="40.0" prefWidth="329.0">
                             <VBox.margin>
@@ -277,7 +289,18 @@
                                     <Insets bottom="2.0" />
                                 </VBox.margin>
                             </Text>
-                            <ComboBox prefHeight="24.0" prefWidth="329.0" promptText="Sélectionner une méthode" />
+                            <HBox prefHeight="100.0" prefWidth="200.0">
+                                <ComboBox prefHeight="24.0" prefWidth="275.0" promptText="Sélectionner une méthode">
+                                    <HBox.margin>
+                                        <Insets right="16.0"/>
+                                    </HBox.margin>
+                                </ComboBox>
+                                <Button fx:id="methodAdd" mnemonicParsing="false" prefHeight="25.0" prefWidth="39.0">
+                                    <graphic>
+                                        <FontIcon iconLiteral="fa-plus" iconSize="15"/>
+                                    </graphic>
+                                </Button>
+                            </HBox>
                         </VBox>
                         <VBox prefHeight="42.0" prefWidth="329.0">
                             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Latéralité">
