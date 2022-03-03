@@ -1,27 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
 
 <AnchorPane maxWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.MainWindowController">
     <TabPane layoutY="-4.0" maxWidth="1000.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <Tab text="Informations">
+        <Tab fx:id="informationTab" text="Informations">
             <BorderPane maxWidth="1000.0">
                 <left>
                     <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="523.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
@@ -42,7 +31,7 @@
                            <Insets bottom="2.0" />
                         </VBox.margin>
                             </Text>
-                            <TextField>
+                            <TextField fx:id="id">
                         <font>
                            <Font size="14.0" />
                         </font></TextField>
@@ -71,7 +60,7 @@
                             <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                                 <RadioButton mnemonicParsing="false" text="M">
                                     <toggleGroup>
-                                        <ToggleGroup fx:id="Gender" />
+                                        <ToggleGroup fx:id="gender" />
                                     </toggleGroup>
                                     <HBox.margin>
                                         <Insets right="40.0" />
@@ -80,7 +69,7 @@
                               <Font size="14.0" />
                            </font>
                                 </RadioButton>
-                                <RadioButton mnemonicParsing="false" text="F" toggleGroup="$Gender">
+                                <RadioButton mnemonicParsing="false" text="F" toggleGroup="$gender">
                                     <HBox.margin>
                                         <Insets right="40.0" />
                                     </HBox.margin>
@@ -88,7 +77,7 @@
                               <Font size="14.0" />
                            </font>
                                 </RadioButton>
-                                <RadioButton mnemonicParsing="false" text="Autre" toggleGroup="$Gender">
+                                <RadioButton mnemonicParsing="false" text="Autre" toggleGroup="$gender">
                            <font>
                               <Font size="14.0" />
                            </font></RadioButton>
@@ -123,7 +112,7 @@
                                         </font>
                                     </Text>
                                 </HBox>
-                                <DatePicker />
+                                <DatePicker fx:id="birthDate" onAction="#computeAge" />
                             </VBox>
                             <VBox prefHeight="68.0" prefWidth="100.0">
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Âge">
@@ -134,7 +123,7 @@
                                         <Insets bottom="2.0" />
                                     </VBox.margin>
                                 </Text>
-                                <TextField alignment="CENTER_RIGHT" editable="false" mouseTransparent="true" text="ans">
+                                <TextField fx:id="age" alignment="CENTER_RIGHT" editable="false" mouseTransparent="true" text="ans">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
@@ -145,7 +134,7 @@
                             </VBox>
                         </HBox>
                         <VBox prefHeight="39.0" prefWidth="329.0">
-                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dominance occulaire">
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dominance oculaire">
                                 <font>
                                     <Font size="18.0" />
                                 </font>
@@ -153,7 +142,7 @@
                                     <Insets bottom="2.0" />
                                 </VBox.margin>
                             </Text>
-                            <TextField>
+                            <TextField fx:id="ocularDom">
                                 <font>
                                     <Font size="14.0" />
                                 </font>
@@ -195,7 +184,7 @@
                                 </Text>
                                 <RadioButton mnemonicParsing="false" selected="true">
                                     <toggleGroup>
-                                        <ToggleGroup fx:id="Type" />
+                                        <ToggleGroup fx:id="type" />
                                     </toggleGroup>
                                 </RadioButton>
                             </VBox>
@@ -211,7 +200,7 @@
                                         <Font size="18.0" />
                                     </font>
                                 </Text>
-                                <RadioButton mnemonicParsing="false" toggleGroup="$Type" />
+                                <RadioButton mnemonicParsing="false" toggleGroup="$type" />
                             </VBox>
                         </HBox>
                         <VBox prefHeight="40.0" prefWidth="329.0">
@@ -236,7 +225,7 @@
                                     </font>
                                 </Text>
                             </HBox>
-                            <TextField>
+                            <TextField fx:id="name">
                                 <font>
                                     <Font size="14.0" />
                                 </font>
@@ -265,14 +254,14 @@
                                 </Text>
                             </HBox>
                             <HBox prefHeight="100.0" prefWidth="200.0">
-                                <ComboBox prefHeight="25.0" prefWidth="275.0" promptText="Sélectionner un lieu">
+                                <ComboBox fx:id="location" prefHeight="25.0" prefWidth="275.0" promptText="Sélectionner un lieu">
                                     <HBox.margin>
-                                        <Insets right="16.0"/>
+                                        <Insets right="16.0" />
                                     </HBox.margin>
                                 </ComboBox>
                                 <Button fx:id="locationAdd" mnemonicParsing="false" prefHeight="25.0" prefWidth="39.0">
                                     <graphic>
-                                        <FontIcon iconLiteral="fa-plus" iconSize="15"/>
+                                        <FontIcon iconLiteral="fa-plus" iconSize="15" />
                                     </graphic>
                                 </Button>
                             </HBox>
@@ -290,14 +279,14 @@
                                 </VBox.margin>
                             </Text>
                             <HBox prefHeight="100.0" prefWidth="200.0">
-                                <ComboBox prefHeight="24.0" prefWidth="275.0" promptText="Sélectionner une méthode">
+                                <ComboBox fx:id="method" prefHeight="24.0" prefWidth="275.0" promptText="Sélectionner une méthode">
                                     <HBox.margin>
-                                        <Insets right="16.0"/>
+                                        <Insets right="16.0" />
                                     </HBox.margin>
                                 </ComboBox>
                                 <Button fx:id="methodAdd" mnemonicParsing="false" prefHeight="25.0" prefWidth="39.0">
                                     <graphic>
-                                        <FontIcon iconLiteral="fa-plus" iconSize="15"/>
+                                        <FontIcon iconLiteral="fa-plus" iconSize="15" />
                                     </graphic>
                                 </Button>
                             </HBox>
@@ -311,7 +300,7 @@
                                     <Insets bottom="2.0" />
                                 </VBox.margin>
                             </Text>
-                            <TextField />
+                            <TextField fx:id="lateral" />
                         </VBox>
                     </VBox>
                 </right>
@@ -337,7 +326,7 @@
                                 </font>
                             </Text>
                         </HBox>
-                        <Button mnemonicParsing="false" text="Sauvegarder">
+                        <Button mnemonicParsing="false" text="Sauvegarder" onMouseClicked="#checkContent">
                             <font>
                                 <Font size="16.0" />
                             </font>
@@ -350,10 +339,10 @@
             </bottom>
             </BorderPane>
         </Tab>
-        <Tab text="Méta-séquences">
+        <Tab fx:id="metaSeqTab" disable="true" text="Méta-séquences">
             <fx:include source="meta_seq_tab.fxml" />
         </Tab>
-        <Tab text="Résultats">
+        <Tab fx:id="resultTab" disable="true" text="Résultats">
             <fx:include source="resultat_tab.fxml" />
         </Tab>
     </TabPane>
