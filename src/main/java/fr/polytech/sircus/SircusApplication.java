@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.awt.Dimension;
 
 public class SircusApplication extends Application {
 
@@ -34,11 +33,7 @@ public class SircusApplication extends Application {
             e.printStackTrace();
         }
 
-        Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        double width = dimension.getWidth() * 0.667;
-        double height = dimension.getHeight() * 0.667;
-
-        Scene scene = new Scene(fxmlLoader.load(), width, height);
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 600);
 
         stage.setOnCloseRequest(event -> {
             try {
@@ -50,6 +45,7 @@ public class SircusApplication extends Application {
 
         stage.setTitle("Application Sircus");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 }
