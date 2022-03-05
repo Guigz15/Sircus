@@ -235,6 +235,17 @@ public class addMediaPopUp {
         try {
             if (this.newFileInterstim.isFile()) {
                 this.nameNewInterstim.setText(this.newFileInterstim.getName());
+
+                String newPath = Paths.get(newFileInterstim.getPath()).getParent().toString();
+                SircusApplication.dataSircus.getPath().setLastPath(newPath);
+                if(SircusApplication.dataSircus.getPath().isCustomPath() == false){
+                    this.fileChooserMedia.setInitialDirectory(
+                            new File(newPath)
+                    );
+                    this.fileChooserInterstim.setInitialDirectory(
+                            new File(newPath)
+                    );
+                }
             }
         } catch (Exception e) {
             System.out.print("Aucun média sélectionné.");
@@ -251,6 +262,17 @@ public class addMediaPopUp {
             if (this.newFileMedia.isFile()) {
                 this.nameNewMedia.setText(this.newFileMedia.getName());
                 checkNameNewMediaFilled();
+
+                String newPath = Paths.get(newFileMedia.getPath()).getParent().toString();
+                SircusApplication.dataSircus.getPath().setLastPath(newPath);
+                if(SircusApplication.dataSircus.getPath().isCustomPath() == false){
+                    this.fileChooserMedia.setInitialDirectory(
+                            new File(newPath)
+                    );
+                    this.fileChooserInterstim.setInitialDirectory(
+                            new File(newPath)
+                    );
+                }
             }
         } catch (Exception e) {
             System.out.print("Aucun média sélectionné.");
