@@ -1,5 +1,6 @@
 package fr.polytech.sircus.utils;
 
+import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.model.DataSircus;
 import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Sequence;

@@ -4,6 +4,7 @@ import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.model.Media;
 import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.model.TypeMedia;
+import fr.polytech.sircus.model.PathMedia;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -144,6 +145,8 @@ public class addMediaPopUp {
         FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/add_media_popup.fxml"));
         fxmlLoader.setController(this);
 
+        PathMedia paths = SircusApplication.dataSircus.getPath();
+        String pathUse;
         this.fileChooserMedia = fileChooserMedia;
         this.fileChooserInterstim = fileChooserInterstim;
 
@@ -152,14 +155,26 @@ public class addMediaPopUp {
             this.listMedias = listMedias;
             this.listener = listener;
 
+            if(paths.isCustomPath() == true || paths.getLastPath() == null){
+                pathUse = paths.getDefaultPath();
+            } else {
+                pathUse = paths.getLastPath();
+            }
+
             this.fileChooserMedia.setTitle("Open file (media)");
             this.fileChooserMedia.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("Image and video Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.mp4")
+            );
+            this.fileChooserMedia.setInitialDirectory(
+                    new File(pathUse)
             );
 
             this.fileChooserInterstim.setTitle("Open file (interstim)");
             this.fileChooserInterstim.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+            );
+            this.fileChooserInterstim.setInitialDirectory(
+                    new File(pathUse)
             );
 
             Scene dialogScene = new Scene(fxmlLoader.load());
