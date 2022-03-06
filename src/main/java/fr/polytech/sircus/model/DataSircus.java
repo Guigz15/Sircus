@@ -16,7 +16,7 @@ public class DataSircus implements Serializable {
     @Getter @Setter
     private List<MetaSequence> metaSequencesList;
     @Getter @Setter
-    private List<String> locationsList;
+    private List<Location> locationsList;
 
     /**
      * Constructor
@@ -30,7 +30,7 @@ public class DataSircus implements Serializable {
      * Add a location to the list of locations
      * @param location new location to add
      */
-    public void addLocationToList(String location) {
+    public void addLocationToList(Location location) {
         if(!this.locationsList.contains(location)){
             this.locationsList.add(location);
         }

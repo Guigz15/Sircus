@@ -1,6 +1,7 @@
 package fr.polytech.sircus.tests;
 
 import fr.polytech.sircus.model.DataSircus;
+import fr.polytech.sircus.model.Location;
 import fr.polytech.sircus.model.MetaSequence;
 import org.junit.jupiter.api.*;
 
@@ -28,7 +29,7 @@ class DataSircusTest {
 
         @Test
         void setLocationsList() {
-            ArrayList<String> newListLocations = new ArrayList<>(List.of(new String[]{"path\\setTest"}));
+            ArrayList<Location> newListLocations = new ArrayList<>(List.of(new Location[]{new Location("testCountry", "testCity", 37000, "testStreet", 1)}));
             testDataSircus.setLocationsList(newListLocations);
             assertEquals(testDataSircus.getLocationsList(),newListLocations);
         }
@@ -59,7 +60,8 @@ class DataSircusTest {
 
     @Test
     void addLocationToList() {
-        String newLocation = "test of new location";
+        Location newLocation = new Location();
+        newLocation.setStreet("test of new location");
         dataSircusTest.addLocationToList(newLocation);
         assertEquals(dataSircusTest.getLocationsList().get(0),newLocation);
     }
