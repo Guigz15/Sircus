@@ -504,8 +504,10 @@ public class MetaSequenceController {
         inputText.showAndWait();
         String newPath = inputText.getEditor().getText();
 
-        SircusApplication.dataSircus.getPath().setDefaultPath(newPath);
-        SircusApplication.dataSircus.getPath().setCustomPath(true);
+        if(!isNotDirectory(newPath)) {
+            SircusApplication.dataSircus.getPath().setDefaultPath(newPath);
+            SircusApplication.dataSircus.getPath().setCustomPath(true);
+        }
     }
 
     /**
