@@ -16,7 +16,8 @@ public class DataSircus implements Serializable {
     @Getter @Setter
     private List<MetaSequence> metaSequencesList;
     @Getter @Setter
-    private List<location> locationsList;
+    private List<Location> locationsList;
+    @Getter @Setter
     private PathMedia path;
 
     /**
@@ -44,13 +45,5 @@ public class DataSircus implements Serializable {
      */
     public void saveMetaSeq(MetaSequence metaSequence) {
         this.metaSequencesList.add(metaSequence);
-    }
-
-    public PathMedia getPath() {
-        return path;
-    }
-
-    public void setPath(PathMedia path) {
-        this.path = path;
     }
 }
