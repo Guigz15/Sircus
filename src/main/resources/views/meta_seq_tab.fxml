@@ -106,5 +106,9 @@
                 <Insets bottom="30.0"/>
             </GridPane.margin>
         </Label>
+        <Button fx:id="addDefaultPath" mnemonicParsing="false" onMouseClicked="#addDefaultPath"
+                text="Indiquer un chemin par défaut" textAlignment="CENTER" GridPane.columnIndex="1"
+                GridPane.halignment="CENTER" GridPane.valignment="TOP">
+        </Button>
     </GridPane>
 </AnchorPane>
