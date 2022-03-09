@@ -20,6 +20,7 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.8.2</version>
+
         </dependency>
 
         <dependency>
@@ -133,21 +134,29 @@
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.4.0</version>
-                <configuration>
-                    <executable>java</executable>
-                    <arguments>
-                        <argument>-classpath</argument>
-                        <argument>${project.mainClass}</argument>
-                    </arguments>
-                    <workingDirectory>${project.outDirectory}</workingDirectory>
-                    <mainClass>${project.mainClass}</mainClass>
-                </configuration>
-            </plugin>
-        </plugins>
+        <testSourceDirectory>tests</testSourceDirectory>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.4.0</version>
+                    <configuration>
+                        <executable>java</executable>
+                        <arguments>
+                            <argument>-classpath</argument>
+                            <argument>${project.mainClass}</argument>
+                        </arguments>
+                        <workingDirectory>${project.outDirectory}</workingDirectory>
+                        <mainClass>${project.mainClass}</mainClass>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0-M5</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>
