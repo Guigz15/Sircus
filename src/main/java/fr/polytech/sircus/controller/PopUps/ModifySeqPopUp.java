@@ -129,10 +129,6 @@ public class ModifySeqPopUp {
      * Liste des médias ET des médias d'inter-stimulation
      */
     private List<Media> listMediaPlusInterstim = null;
-    /**
-     * Objet temporaire servant au stockage d'un média (utile lors de la création par copie d'un média)
-     */
-    private Media tempMedia = null;
 
     /**
      * Constructeur du contrôleur de la pop-up de modification d'une séquence et de ses composantes
@@ -191,6 +187,7 @@ public class ModifySeqPopUp {
         this.listMediaPlusInterstim.clear();
 
         for (int i = 0; i < this.sequence.getListMedias().size(); i++) {
+
             if (this.sequence.getListMedias().get(i).getInterStim() != null) {
                 this.listMediaPlusInterstim.add(this.sequence.getListMedias().get(i).getInterStim());
             }
@@ -231,13 +228,6 @@ public class ModifySeqPopUp {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            Boolean interstim = Boolean.FALSE;
-                            if (tempMedia != null) {
-                                if (getTableRow().getItem() == tempMedia.getInterStim()) {
-                                    interstim = Boolean.TRUE;
-                                }
-                            }
-                            tempMedia = getTableRow().getItem();
 
                             final FontIcon addIcon = new FontIcon("fa-plus");
                             final FontIcon cogIcon = new FontIcon("fa-cog");
@@ -256,66 +246,48 @@ public class ModifySeqPopUp {
                                 modifyMediaInSeq(media);
                             });
 
+                            tableViewDeleteButton.setOnAction(event ->
+                            {
+                                sequence.removeMedia(getTableView().getItems().get(getIndex()));
+                                consructMediaInterstimList();
+                                mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
+                                mediaTable.refresh();
+                            });
 
-                            if (interstim) {
-                                tableViewAddButton.setDisable(true);
-
-                                tableViewDeleteButton.setOnAction(event ->
+                            // If the media doesn't have an Interstim and isn't one
+                            if (getTableView().getItems().get(getIndex()).getInterStim() == null &&
+                                !getTableView().getItems().get(getIndex()).getIsInterstim()) {
+                                tableViewAddButton.setOnMouseClicked(event ->
                                 {
-                                    for (Media media : listMediaPlusInterstim) {
-                                        if (media.getInterStim() == getTableView().getItems().get(getIndex())) {
-                                            media.setInterStim(null);
+                                    try {
+                                        File newInterstim = fileChooserInterstim.showOpenDialog(popUpStage);
+                                        Path path = Paths.get(newInterstim.getPath());
+                                        OutputStream os = new FileOutputStream("medias/" + newInterstim.getName());
+                                        Files.copy(path, os);
 
-                                        }
+                                        Media newMedia = new Media(
+                                                newInterstim.getName(),
+                                                newInterstim.getName(),
+                                                Duration.ofSeconds(1),
+                                                TypeMedia.PICTURE,
+                                                null
+                                        );
+                                        newMedia.setIsInterstim(true);
+
+                                        getTableView().getItems().get(getIndex()).setInterStim(newMedia);
+
+                                        consructMediaInterstimList();
+                                        mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
+                                        mediaTable.refresh();
+                                    } catch (Exception e) {
+                                        System.out.print("Aucun fichier selectionné.");
                                     }
-
-                                    consructMediaInterstimList();
-                                    mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
-                                    mediaTable.refresh();
                                 });
-
-                                getTableRow().setStyle("-fx-background-color : #e6f2ff");
-                            } else {
-                                tableViewDeleteButton.setOnAction(event ->
-                                {
-                                    sequence.removeMedia(getTableView().getItems().get(getIndex()));
-                                    consructMediaInterstimList();
-                                    mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
-                                    mediaTable.refresh();
-                                });
-
-                                if (getTableView().getItems().get(getIndex()).getInterStim() == null) {
-                                    tableViewAddButton.setOnMouseClicked(event ->
-                                    {
-                                        try {
-                                            File newInterstim = fileChooserInterstim.showOpenDialog(popUpStage);
-                                            Path path = Paths.get(newInterstim.getPath());
-                                            OutputStream os = new FileOutputStream("medias/" + newInterstim.getName());
-                                            Files.copy(path, os);
-
-                                            Media newMedia = new Media(
-                                                    newInterstim.getName(),
-                                                    newInterstim.getName(),
-                                                    Duration.ofSeconds(1),
-                                                    TypeMedia.PICTURE,
-                                                    null
-                                            );
-
-                                            getTableView().getItems().get(getIndex()).setInterStim(newMedia);
-
-                                            consructMediaInterstimList();
-                                            mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
-                                            mediaTable.refresh();
-                                        } catch (Exception e) {
-                                            System.out.print("Aucun fichier selectionné.");
-                                        }
-                                    });
-                                } else {
-                                    tableViewAddButton.setDisable(true);
-                                }
-
-                                getTableRow().setStyle("-fx-background-color : #b3d9ff");
+                            } else { // The media has an Interstim or is one
+                                tableViewAddButton.setDisable(true);
                             }
+
+                            getTableRow().setStyle("-fx-background-color : #b3d9ff");
 
                             setGraphic(hBox);
                         }
