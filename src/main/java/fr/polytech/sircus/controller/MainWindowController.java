@@ -1,6 +1,6 @@
 package fr.polytech.sircus.controller;
 
-import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.controller.PopUps.AddLocationPopup;
 import fr.polytech.sircus.model.Location;
 import fr.polytech.sircus.model.Method;
 import javafx.application.Platform;
@@ -120,5 +120,10 @@ public class MainWindowController implements Initializable {
             metaSeqTab.setDisable(false);
             resultTab.setDisable(false);
         }
+    }
+
+    @FXML
+    private void addLocation() {
+        //new AddLocationPopup(this.location.getScene().getWindow());
     }
 }
