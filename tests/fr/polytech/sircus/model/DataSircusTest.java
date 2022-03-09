@@ -1,8 +1,5 @@
-package fr.polytech.sircus.tests;
+package fr.polytech.sircus.model;
 
-import fr.polytech.sircus.model.DataSircus;
-import fr.polytech.sircus.model.Location;
-import fr.polytech.sircus.model.MetaSequence;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;

@@ -1,7 +1,5 @@
-package fr.polytech.sircus.tests;
+package fr.polytech.sircus.model;
 
-import fr.polytech.sircus.model.Media;
-import fr.polytech.sircus.model.TypeMedia;
 import java.time.Duration;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
