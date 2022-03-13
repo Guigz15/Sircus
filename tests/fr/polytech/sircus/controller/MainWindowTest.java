@@ -2,11 +2,14 @@ package fr.polytech.sircus.controller;
 
 
 import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.model.Location;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import org.junit.After;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxRobot;
@@ -15,8 +18,6 @@ import org.testfx.matcher.base.NodeMatchers;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.chrono.Chronology;
-import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -33,9 +34,17 @@ public class MainWindowTest{
         robot = new FxRobot();
     }
 
-    @AfterAll
+    @AfterEach
     public void cleanup() {
         ((DatePicker) robot.lookup("#birthDate").query()).getEditor().clear();
+        ComboBox<Location> location = ((ComboBox<Location>) robot.lookup("#location").query());
+        robot.interact(() -> {
+            location.getSelectionModel().select(null);
+        });
+        ((TextField) robot.lookup("#id").query()).clear();
+        ((TextField) robot.lookup("#name").query()).clear();
+        ((RadioButton) robot.lookup("M").query()).setSelected(false);
+
     }
 
 
@@ -80,8 +89,7 @@ public class MainWindowTest{
         System.out.println("Testing to switch to other view without fill correctly the form : ");
         //write the identifiant
         robot.clickOn("#id").write("identifiant");
-
-        System.out.println("-- Fill Gender fields");
+        System.out.println("-- Test without fill anythings");
         //click on save button
         robot.clickOn("#button_save");
         //need to click on Ok for 4 popup alert
@@ -91,24 +99,52 @@ public class MainWindowTest{
         robot.clickOn("OK");
 
         //check if we can't click on the other view
-        if (!robot.lookup("#meta_seq_tab_view").query().isDisabled() && !robot.lookup("#resultat_tab_view").query().isDisabled() ) {
+        if (!robot.lookup("#meta_seq_tab_view").query().isDisabled() || !robot.lookup("#resultat_tab_view").query().isDisabled() ) {
             fail("We can switch to other view whereas we should not.");
         }
+        System.out.println("-- Fill Gender field");
+        robot.clickOn((RadioButton) robot.lookup("M").query());
 
-        System.out.println("-- Fill birthDate fields");
-
-        robot.clickOn("#birthDate").write("03/05/2010").press(KeyCode.ENTER).release((KeyCode.ENTER));
-        //click on save button
         robot.clickOn("#button_save");
         //need to click on Ok for 3 popup alert
         robot.clickOn("OK");
         robot.clickOn("OK");
         robot.clickOn("OK");
 
+        System.out.println("-- Fill birthDate field");
+        robot.clickOn("#birthDate").write("03/05/2010").press(KeyCode.ENTER).release((KeyCode.ENTER));
+        //click on save button
+        robot.clickOn("#button_save");
+        //need to click on Ok for 3 popup alert
+        robot.clickOn("OK");
+        robot.clickOn("OK");
+
         //check if we can't click on the other view
-        if (!robot.lookup("#meta_seq_tab_view").query().isDisabled() && !robot.lookup("#resultat_tab_view").query().isDisabled() ) {
+        if (!robot.lookup("#meta_seq_tab_view").query().isDisabled() || !robot.lookup("#resultat_tab_view").query().isDisabled() ) {
             fail("We can switch to other view whereas we should not.");
         }
 
+        System.out.println("-- Fill Name field");
+        robot.clickOn("#name").write("Name_Patient_Test");
+        //click on save button
+        robot.clickOn("#button_save");
+        //need to click on Ok for 2 popup alert
+        robot.clickOn("OK");
+
+        //check if we can't click on the other view
+        if (!robot.lookup("#meta_seq_tab_view").query().isDisabled() || !robot.lookup("#resultat_tab_view").query().isDisabled() ) {
+            fail("We can switch to other view whereas we should not.");
+        }
+
+        ComboBox<Location> location = ((ComboBox<Location>) robot.lookup("#location").query());
+        robot.interact(() -> {
+            location.getSelectionModel().select(0);
+        });
+        //click on save button
+        robot.clickOn("#button_save");
+        //check if we can click on the other view
+        if (robot.lookup("#meta_seq_tab_view").query().isDisabled() || robot.lookup("#resultat_tab_view").query().isDisabled() ) {
+            fail("We can't switch to other view.");
+        }
     }
 }
