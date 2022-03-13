@@ -8,14 +8,12 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.matcher.base.NodeMatchers;
-
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -37,10 +35,8 @@ public class MainWindowTest{
     @AfterEach
     public void cleanup() {
         ((DatePicker) robot.lookup("#birthDate").query()).getEditor().clear();
-        ComboBox<Location> location = ((ComboBox<Location>) robot.lookup("#location").query());
-        robot.interact(() -> {
-            location.getSelectionModel().select(null);
-        });
+        ComboBox<Location> location = robot.lookup("#location").query();
+        robot.interact(() -> location.getSelectionModel().select(null));
         ((TextField) robot.lookup("#id").query()).clear();
         ((TextField) robot.lookup("#name").query()).clear();
         ((RadioButton) robot.lookup("M").query()).setSelected(false);
@@ -76,8 +72,8 @@ public class MainWindowTest{
         String date_test = "03/05/2010";
         robot.clickOn("#birthDate").write(date_test).press(KeyCode.ENTER).release(KeyCode.ENTER);
         String age = ((TextField) robot.lookup("#age").query()).getText().split(" ")[0];
-        Period period = Period.between(LocalDate.of(Integer.valueOf(date_test.split("/")[2]),Integer.valueOf(date_test.split("/")[1]),Integer.valueOf(date_test.split("/")[0])), LocalDate.now());
-        if (period.getYears() != Integer.valueOf(age)) {
+        Period period = Period.between(LocalDate.of(Integer.parseInt(date_test.split("/")[2]),Integer.parseInt(date_test.split("/")[1]),Integer.parseInt(date_test.split("/")[0])), LocalDate.now());
+        if (period.getYears() != Integer.parseInt(age)) {
             fail("The calcul of the age not working");
         }
         ((DatePicker) robot.lookup("#birthDate").query()).getEditor().clear();
@@ -136,10 +132,8 @@ public class MainWindowTest{
             fail("We can switch to other view whereas we should not.");
         }
 
-        ComboBox<Location> location = ((ComboBox<Location>) robot.lookup("#location").query());
-        robot.interact(() -> {
-            location.getSelectionModel().select(0);
-        });
+        ComboBox<Location> location = robot.lookup("#location").query();
+        robot.interact(() -> location.getSelectionModel().select(0));
         //click on save button
         robot.clickOn("#button_save");
         //check if we can click on the other view
