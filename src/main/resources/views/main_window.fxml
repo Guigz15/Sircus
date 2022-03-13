@@ -8,7 +8,7 @@
 <?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
-<AnchorPane maxWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.MainWindowController">
+<AnchorPane id="main_window_view" maxWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.MainWindowController">
     <TabPane layoutY="-4.0" maxWidth="1000.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Tab fx:id="informationTab" text="Informations">
             <BorderPane maxWidth="1000.0">
@@ -39,7 +39,7 @@
                         <Insets bottom="50.0" />
                      </VBox.margin>
                         </VBox>
-                        <VBox prefHeight="34.0" prefWidth="329.0">
+                        <VBox id="gender_selection" prefHeight="34.0" prefWidth="329.0">
                             <HBox prefHeight="12.0" prefWidth="100.0">
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Genre">
                            <font>
@@ -57,7 +57,7 @@
                            <Insets bottom="2.0" />
                         </VBox.margin>
                             </HBox>
-                            <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                            <HBox id="combobox_gender" alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                                 <RadioButton mnemonicParsing="false" text="M">
                                     <toggleGroup>
                                         <ToggleGroup fx:id="gender" />
@@ -166,7 +166,7 @@
                                 <Insets bottom="50.0" top="20.0" />
                             </VBox.margin>
                         </Text>
-                        <HBox alignment="TOP_CENTER" prefHeight="38.0" prefWidth="208.0">
+                        <HBox id="type_selection" alignment="TOP_CENTER" prefHeight="38.0" prefWidth="208.0">
                             <VBox.margin>
                                 <Insets bottom="9.0" />
                             </VBox.margin>
@@ -231,7 +231,7 @@
                                 </font>
                             </TextField>
                         </VBox>
-                        <VBox prefHeight="40.0" prefWidth="329.0">
+                        <VBox id="location_selection" prefHeight="40.0" prefWidth="329.0">
                             <VBox.margin>
                                 <Insets bottom="30.0" />
                             </VBox.margin>
@@ -259,14 +259,14 @@
                                         <Insets right="16.0" />
                                     </HBox.margin>
                                 </ComboBox>
-                                <Button fx:id="locationAdd" mnemonicParsing="false" prefHeight="25.0" prefWidth="39.0" onMouseClicked="#addLocation">
+                                <Button fx:id="locationAdd" mnemonicParsing="false" onMouseClicked="#addLocation" prefHeight="25.0" prefWidth="39.0">
                                     <graphic>
                                         <FontIcon iconLiteral="fa-plus" iconSize="15" />
                                     </graphic>
                                 </Button>
                             </HBox>
                         </VBox>
-                        <VBox prefHeight="40.0" prefWidth="329.0">
+                        <VBox id="method_selection" prefHeight="40.0" prefWidth="329.0">
                             <VBox.margin>
                                 <Insets bottom="30.0" />
                             </VBox.margin>
@@ -326,7 +326,7 @@
                                 </font>
                             </Text>
                         </HBox>
-                        <Button mnemonicParsing="false" text="Sauvegarder" onMouseClicked="#checkContent">
+                        <Button id="button_save" mnemonicParsing="false" onMouseClicked="#checkContent" text="Sauvegarder">
                             <font>
                                 <Font size="16.0" />
                             </font>

@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="1000.0"
+<AnchorPane id="resultat_tab_view" xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="1000.0"
             stylesheets="@../stylesheets/bootstrapfx.css" xmlns="http://javafx.com/javafx/14.0.2.1"
             fx:controller="fr.polytech.sircus.controller.ResultatController">
     <children>

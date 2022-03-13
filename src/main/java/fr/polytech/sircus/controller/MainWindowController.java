@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -60,11 +61,24 @@ public class MainWindowController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Location Combobox
         ObservableList<Location> locationsList = FXCollections.observableArrayList();
+        Location toursLocation = new Location("France","Tours",37000,"Rue Portalis",64);
+        locationsList.add(toursLocation);
         location.setItems(locationsList);
+        location.setConverter(new StringConverter<Location>() {
+            @Override
+            public String toString(Location location) {
+                return location.toString();
+            }
 
+            @Override
+            public Location fromString(String s) {
+                return null;
+            }
+        });
         // Method Combobox
         ObservableList<Method> methodsList = FXCollections.observableArrayList();
         method.setItems(methodsList);
+
     }
 
     @FXML

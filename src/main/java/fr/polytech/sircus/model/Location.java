@@ -47,4 +47,9 @@ public class Location implements Serializable {
         this.street = street;
         this.streetNumber = streetNumber;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(streetNumber) + " " + street + " a " + city + " (" + String.valueOf(postCode) + ") " + country;
+    }
 }
