@@ -39,7 +39,7 @@ import java.util.Objects;
 /**
  * Controller handling the management of a sequence modification
  */
-public class modifySeqPopUp {
+public class ModifySeqPopUp {
 
     /** The add file button object: allows the selection of a file for a media */
     private final FileChooser fileChooserMedia;
@@ -106,7 +106,7 @@ public class modifySeqPopUp {
      * @param sequence   The sequence to be modified
      * @param listener   The event listener of sequence modification from MetaSequenceController
      */
-    public modifySeqPopUp(Window owner, ObservableList<Media> listMedias, Sequence sequence,
+    public ModifySeqPopUp(Window owner, ObservableList<Media> listMedias, Sequence sequence,
                           MetaSequenceController.ModificationSequenceListener listener, FileChooser fileChooserMedia,
                           FileChooser fileChooserInterstim) {
 
@@ -345,7 +345,7 @@ public class modifySeqPopUp {
             this.mediaTable.refresh();
         };
 
-        new addMediaPopUp(
+        new AddMediaPopUp(
                 this.saveAddMediaSeq.getScene().getWindow(),
                 FXCollections.observableList(this.sequence.getListMedias()),
                 this.sequence,
@@ -370,7 +370,7 @@ public class modifySeqPopUp {
 
         MediaModificationListener listener2 = temp -> this.mediaTable.refresh();
 
-        new modifyMediaPopUp(
+        new ModifyMediaPopUp(
                 this.saveAddMediaSeq.getScene().getWindow(),
                 this.sequence,
                 media,
