@@ -240,12 +240,14 @@ public class ModifySeqPopUp {
                             tableViewOptionButton.setGraphic(cogIcon);
                             tableViewDeleteButton.setGraphic(delIcon);
 
+                            // Option button
                             tableViewOptionButton.setOnMouseClicked(event ->
                             {
                                 Media media = getTableView().getItems().get(getIndex());
                                 modifyMediaInSeq(media);
                             });
 
+                            // Delete button
                             tableViewDeleteButton.setOnAction(event ->
                             {
                                 sequence.removeMedia(getTableView().getItems().get(getIndex()));
@@ -254,6 +256,7 @@ public class ModifySeqPopUp {
                                 mediaTable.refresh();
                             });
 
+                            // Add button
                             // If the media doesn't have an Interstim and isn't one
                             if (getTableView().getItems().get(getIndex()).getInterStim() == null &&
                                 !getTableView().getItems().get(getIndex()).getIsInterstim()) {
@@ -272,7 +275,7 @@ public class ModifySeqPopUp {
                                                 TypeMedia.PICTURE,
                                                 null
                                         );
-                                        newMedia.setIsInterstim(true);
+                                        newMedia.setIsInterstim(true); // Indicate that the new media is an interstim
 
                                         getTableView().getItems().get(getIndex()).setInterStim(newMedia);
 
@@ -327,8 +330,8 @@ public class ModifySeqPopUp {
             }
         };
 
-        this.mediaTableColumnOption.setCellFactory(cellFactoryOption);
         this.mediaTableColumnVerrouillage.setCellFactory(cellFactoryVerr);
+        this.mediaTableColumnOption.setCellFactory(cellFactoryOption);
 
         this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
 
