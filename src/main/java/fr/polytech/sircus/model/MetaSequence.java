@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class representing a meta sequence.
@@ -22,20 +23,19 @@ public class MetaSequence implements Serializable {
     private String name;
 
     @Getter
-    @Setter
     private Duration duration;
 
     @Getter
-    @Setter
     private List<Sequence> sequencesList;
+
 
     /**
      * Default constructor of the MetaSequence class.
      */
     public MetaSequence() {
-        this.name = "MetaSequence";
-        this.duration = Duration.ZERO;
+        this("MetaSequence");
     }
+
 
     /**
      * Alternative constructor for the MetaSequence class.
@@ -48,21 +48,6 @@ public class MetaSequence implements Serializable {
         this.sequencesList = new ArrayList<>();
     }
 
-    /**
-     * Checks if two meta sequences are equal.
-     *
-     * @param object the meta sequence to compare with.
-     * @return boolean true if the meta sequences are the same, false otherwise.
-     */
-    public boolean equals(Object object) {
-        if (object instanceof MetaSequence) {
-            return this.name.equalsIgnoreCase(((MetaSequence) object).name);
-        }
-        if (object instanceof String) {
-            return this.name.equalsIgnoreCase(((String) object));
-        }
-        return false;
-    }
 
     /**
      * Adds a sequence to the meta sequence and adds its duration to the meta sequence duration.
@@ -73,6 +58,7 @@ public class MetaSequence implements Serializable {
         this.sequencesList.add(sequence);
         this.duration = this.duration.plus(sequence.getDuration());
     }
+
 
     /**
      * Removes a sequence from the meta sequence and removes duration to the meta sequence duration.
@@ -85,12 +71,54 @@ public class MetaSequence implements Serializable {
         }
     }
 
+
+    /**
+     *  Compute the duration of the meta sequence and its sequences.
+     */
+    public void computeDuration(){
+        Duration duration = Duration.ofSeconds(0);
+        for (Sequence sequence : sequencesList) {
+            sequence.computeDuration();
+            duration = duration.plus(sequence.getDuration());
+        }
+
+        this.duration = duration;
+    }
+
+
+    /**
+     * Setter for the List of sequences.
+     *
+     * @param sequenceList The list of sequences to set.
+     */
+    public void setSequencesList(List<Sequence> sequenceList){
+        this.sequencesList = sequenceList;
+        this.computeDuration();
+    }
+
+
     /**
      * Overrides the toString method.
      *
      * @return The name of the meta sequence.
      */
+    @Override
     public String toString() {
         return name;
+    }
+
+
+    /**
+     * Checks if two meta sequences are equals.
+     *
+     * @param o the meta sequence to compare with.
+     * @return boolean true if the meta sequences are the same, false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MetaSequence)) return false;
+        MetaSequence that = (MetaSequence) o;
+        return Objects.equals(getName(), that.getName()) && Objects.equals(getDuration(), that.getDuration()) && Objects.equals(getSequencesList(), that.getSequencesList());
     }
 }

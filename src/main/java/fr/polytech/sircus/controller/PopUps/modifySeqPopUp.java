@@ -445,7 +445,7 @@ public class modifySeqPopUp {
 
         if (alert.getResult() == ButtonType.YES) {
             this.sequence.setName(this.titleSequenceLabel.getText());
-            this.sequence.setDuration(sequence.getDuration());
+            this.sequence.computeDuration();//.setDuration(sequence.getDuration());
             this.listener.onModified(this.sequence);
             this.popUpStage.close();
         }

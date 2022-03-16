@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class represents a sequence
@@ -17,7 +18,7 @@ public class Sequence implements Serializable {
     @Getter @Setter
     private String name;
 
-    @Setter
+    @Getter
     private Duration duration;
 
     @Getter @Setter
@@ -52,29 +53,14 @@ public class Sequence implements Serializable {
     }
 
     /**
-     * Compute the duration of a sequence
-     *
-     * @return Sequence's duration
-     */
-    public Duration getDuration() {
-        Duration duration = Duration.ofSeconds(0);
-        for (Media listMedia : listMedias) {
-            duration = duration.plus(listMedia.getDuration());
-            if (listMedia.getInterStim() != null) {
-                duration = duration.plus(listMedia.getInterStim().getDuration());
-            }
-        }
-        return duration;
-    }
-
-    /**
      * Add a media to this sequence
      *
      * @param media Media to add
      */
     public void addMedia(Media media) {
         this.listMedias.add(media);
-        this.setDuration(this.getDuration());
+        this.duration = this.duration.plus(media.getDuration());
+        //computeDuration();
     }
 
     /**
@@ -84,16 +70,50 @@ public class Sequence implements Serializable {
      */
     public void removeMedia(Media media) {
         if (this.listMedias.remove(media)) {
-            this.setDuration(this.getDuration());
+            //computeDuration();
+            this.duration = this.duration.minus(media.getDuration());
         }
     }
+
+
+    /**
+     *  Compute the duration of the sequence.
+     */
+    public void computeDuration(){
+        Duration duration = Duration.ofSeconds(0);
+        for (Media listMedia : listMedias) {
+            duration = duration.plus(listMedia.getDuration());
+            if (listMedia.getInterStim() != null) {
+                duration = duration.plus(listMedia.getInterStim().getDuration());
+            }
+        }
+
+        this.duration = duration;
+    }
+
 
     /**
      * Override the method toString to display only the name
      *
      * @return Sequence's name
      */
+    @Override
     public String toString() {
         return name;
+    }
+
+
+    /**
+     * Checks if two sequences are equals.
+     *
+     * @param o the sequence to compare with.
+     * @return boolean true if the sequences are the same, false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Sequence)) return false;
+        Sequence sequence = (Sequence) o;
+        return Objects.equals(getName(), sequence.getName()) && Objects.equals(getDuration(), sequence.getDuration()) && Objects.equals(getListMedias(), sequence.getListMedias());
     }
 }
