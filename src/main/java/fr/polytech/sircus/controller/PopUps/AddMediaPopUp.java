@@ -361,7 +361,7 @@ public class AddMediaPopUp {
 
                             // We compare the absolute path of the "medias" directory with the interstim's one.
                             // If they are not the same directory, we copy the new interstim to the application's "medias" directory.
-                            if (!absoluteMediaPath.equals(pathMedia.toString().split(this.newFileInterstim.getName())[0])) {
+                            if (!absoluteMediaPath.equals(pathInterstim.toString().split("\\\\" + this.newFileInterstim.getName())[0])) {
                                 OutputStream os = new FileOutputStream(MEDIAS_PATH + this.newFileInterstim.getName());
                                 Files.copy(pathInterstim, os);
                             }
