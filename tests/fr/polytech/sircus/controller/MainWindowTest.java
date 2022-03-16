@@ -88,10 +88,7 @@ public class MainWindowTest{
         System.out.println("-- Test without fill anythings");
         //click on save button
         robot.clickOn("#button_save");
-        //need to click on Ok for 4 popup alert
-        robot.clickOn("OK");
-        robot.clickOn("OK");
-        robot.clickOn("OK");
+        //need to click on Ok for quit popup alert
         robot.clickOn("OK");
 
         //check if we can't click on the other view
@@ -104,15 +101,13 @@ public class MainWindowTest{
         robot.clickOn("#button_save");
         //need to click on Ok for 3 popup alert
         robot.clickOn("OK");
-        robot.clickOn("OK");
-        robot.clickOn("OK");
 
         System.out.println("-- Fill birthDate field");
         robot.clickOn("#birthDate").write("03/05/2010").press(KeyCode.ENTER).release((KeyCode.ENTER));
         //click on save button
         robot.clickOn("#button_save");
-        //need to click on Ok for 3 popup alert
-        robot.clickOn("OK");
+
+        //need to click on Ok for quit popup alert
         robot.clickOn("OK");
 
         //check if we can't click on the other view
@@ -124,7 +119,7 @@ public class MainWindowTest{
         robot.clickOn("#name").write("Name_Patient_Test");
         //click on save button
         robot.clickOn("#button_save");
-        //need to click on Ok for 2 popup alert
+        //need to click on Ok for quit popup alert
         robot.clickOn("OK");
 
         //check if we can't click on the other view
@@ -140,5 +135,41 @@ public class MainWindowTest{
         if (robot.lookup("#meta_seq_tab_view").query().isDisabled() || robot.lookup("#resultat_tab_view").query().isDisabled() ) {
             fail("We can't switch to other view.");
         }
+    }
+
+    @Test
+    public void test_add_location_cancel() {
+        //test to add a location and cancel
+        System.out.println("Testing to add a new location and cancel");
+        //click to add new location
+        robot.clickOn("#locationAdd");
+        robot.clickOn("#cancelButton");
+    }
+
+    @Test
+    public void test_add_location() {
+        System.out.println("Testing to add a new location");
+        //click to add new location
+        robot.clickOn("#locationAdd");
+
+        ComboBox<String> location = robot.lookup("#country").query();
+        robot.interact(() -> location.getSelectionModel().select("France"));
+
+        //We fill the city
+        robot.clickOn("#city").write("Tours");
+        //We fill the street
+        robot.clickOn("#street").write("Portalis");
+        //We fill the number street
+        robot.clickOn("#streetNumber").write("64");
+        //We fill the post code
+        robot.clickOn("#postCode").write("37000");
+
+        //We click on the add button
+        robot.clickOn("#addButton");
+
+        robot.clickOn("#cancelButton");
+        //TODO finish the test of add button of location. Remove the click to cancel
+
+
     }
 }
