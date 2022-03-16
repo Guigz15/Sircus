@@ -397,7 +397,7 @@ public class AddMediaPopUp {
                                 TypeMedia.PICTURE,
                                 null
                         );
-                        newInterstim.setIsInterstim(true);
+                        newInterstim.setIsInterstim(true); // Indicate that the new media is an interstim
 
                         newMedia.setInterStim(newInterstim);
                     }

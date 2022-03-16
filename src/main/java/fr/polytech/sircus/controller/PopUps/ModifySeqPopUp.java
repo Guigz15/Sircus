@@ -219,7 +219,14 @@ public class ModifySeqPopUp {
                             // Delete button
                             tableViewDeleteButton.setOnAction(event ->
                             {
-                                sequence.removeMedia(getTableView().getItems().get(getIndex()));
+                                if (getTableView().getItems().get(getIndex()).getIsInterstim()) {
+                                    // +1 to get the parent media of the interstim
+                                    // I didn't find a better way to do it
+                                    getTableView().getItems().get(getIndex()+1).setInterStim(null);
+                                }
+                                else {
+                                    sequence.removeMedia(getTableView().getItems().get(getIndex()));
+                                }
                                 constructMediaInterstimList();
                                 mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
                                 mediaTable.refresh();

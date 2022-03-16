@@ -85,7 +85,6 @@ public class Media implements Serializable {
         return getName().equals(media.getName()) && getFilename().equals(media.getFilename()) && getDuration().equals(media.getDuration()) && getType() == media.getType() && getInterStim().equals(media.getInterStim()) && Objects.equals(getLock(), media.getLock());
     }
 
-
     /**
      * Override the method toString to display only the name
      *
