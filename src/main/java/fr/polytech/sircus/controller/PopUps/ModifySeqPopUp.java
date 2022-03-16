@@ -266,7 +266,13 @@ public class ModifySeqPopUp {
                                 tableViewAddButton.setDisable(true);
                             }
 
-                            getTableRow().setStyle("-fx-background-color : #b3d9ff");
+
+                            if (getTableRow().getItem().getIsInterstim()) {
+                                getTableRow().setStyle("-fx-background-color: #e6f2ff; -fx-text-background-color: black;");
+
+                            } else {
+                                getTableRow().setStyle("-fx-background-color: #b3d9ff; -fx-text-background-color: black;");
+                            }
 
                             setGraphic(hBox);
                         }
