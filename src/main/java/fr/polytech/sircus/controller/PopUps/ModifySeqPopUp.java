@@ -39,20 +39,15 @@ import java.util.Objects;
 /**
  * Controller handling the management of a sequence modification
  */
-public class modifySeqPopUp {
+public class ModifySeqPopUp {
 
-
-
-    //*********************
-    //    UI components
-    //*********************
+    private final String MEDIAS_PATH = "medias/";
 
     /** The add file button object: allows the selection of a file for a media */
     private final FileChooser fileChooserMedia;
 
     /** The add file button object: allows the selection of a file for a cross-stimulus */
     private FileChooser fileChooserInterstim;
-
 
     /** Button to save the changes in the sequence */
     @FXML
@@ -90,12 +85,6 @@ public class modifySeqPopUp {
     @FXML
     private TableColumn<Media, String> mediaTableColumnOption;
 
-
-
-    //*********************
-    // Sequence management
-    //*********************
-
     /** Sequence to be modified */
     private Sequence sequence = null;
 
@@ -105,14 +94,11 @@ public class modifySeqPopUp {
     /** Object listener created in MetaSequenceController */
     private MetaSequenceController.ModificationSequenceListener listener;
 
-
     /** List of media and cross-stimulus media */
     private List<Media> listMediaPlusInterstim = null;
+
     /** Temporary object used to store media (useful when creating media by copying) */
     private Media tempMedia = null;
-
-
-
 
     /**
      * Constructor of the controller of the sequence modification pop-up and its components
@@ -122,7 +108,7 @@ public class modifySeqPopUp {
      * @param sequence   The sequence to be modified
      * @param listener   The event listener of sequence modification from MetaSequenceController
      */
-    public modifySeqPopUp(Window owner, ObservableList<Media> listMedias, Sequence sequence,
+    public ModifySeqPopUp(Window owner, ObservableList<Media> listMedias, Sequence sequence,
                           MetaSequenceController.ModificationSequenceListener listener, FileChooser fileChooserMedia,
                           FileChooser fileChooserInterstim) {
 
@@ -136,7 +122,7 @@ public class modifySeqPopUp {
             this.sequence = sequence;
             this.listener = listener;
             this.listMediaPlusInterstim = new ArrayList<>();
-            consructMediaInterstimList();
+            constructMediaInterstimList();
 
             this.fileChooserInterstim = new FileChooser();
             this.fileChooserInterstim.setTitle("Open file (interstim)");
@@ -153,8 +139,8 @@ public class modifySeqPopUp {
             dialog.initOwner(owner);
             dialog.setScene(dialogScene);
             dialog.setResizable(true);
-            dialog.setMinHeight(250); //220 (+30 hauteur de l'entête de la fenêtre sur windows)
-            dialog.setMinWidth(585); //575 (+10 largeur de la fenêtre sur windows)
+            dialog.setMinHeight(250); //220 (+30 height of the window's header on Windows)
+            dialog.setMinWidth(585); //575 (+10 width of the window's header on Windows)
             dialog.setTitle("Modifier la séquence : " + this.sequence.getName());
 
             dialog.show();
@@ -163,23 +149,21 @@ public class modifySeqPopUp {
         }
     }
 
-
     /**
      * Media list builder and cross-stimulus
      */
-    private void consructMediaInterstimList() {
+    private void constructMediaInterstimList() {
 
         this.listMediaPlusInterstim.clear();
 
         for (int i = 0; i < this.sequence.getListMedias().size(); i++) {
-            this.listMediaPlusInterstim.add(this.sequence.getListMedias().get(i));
-
             if (this.sequence.getListMedias().get(i).getInterStim() != null) {
                 this.listMediaPlusInterstim.add(this.sequence.getListMedias().get(i).getInterStim());
             }
+
+            this.listMediaPlusInterstim.add(this.sequence.getListMedias().get(i));
         }
     }
-
 
     /**
      * Method of initializing the controller and its attributes, then adding functionality to each component.
@@ -213,13 +197,6 @@ public class modifySeqPopUp {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            Boolean interstim = Boolean.FALSE;
-                            if (tempMedia != null) {
-                                if (getTableRow().getItem() == tempMedia.getInterStim()) {
-                                    interstim = Boolean.TRUE;
-                                }
-                            }
-                            tempMedia = getTableRow().getItem();
 
                             final FontIcon addIcon = new FontIcon("fa-plus");
                             final FontIcon cogIcon = new FontIcon("fa-cog");
@@ -232,71 +209,69 @@ public class modifySeqPopUp {
                             tableViewOptionButton.setGraphic(cogIcon);
                             tableViewDeleteButton.setGraphic(delIcon);
 
+                            // Option button
                             tableViewOptionButton.setOnMouseClicked(event ->
                             {
                                 Media media = getTableView().getItems().get(getIndex());
                                 modifyMediaInSeq(media);
                             });
 
+                            // Delete button
+                            tableViewDeleteButton.setOnAction(event ->
+                            {
+                                sequence.removeMedia(getTableView().getItems().get(getIndex()));
+                                constructMediaInterstimList();
+                                mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
+                                mediaTable.refresh();
+                            });
 
-                            if (interstim) {
-                                tableViewAddButton.setDisable(true);
-
-                                tableViewDeleteButton.setOnAction(event ->
+                            // Add button
+                            // If the media doesn't have an Interstim and isn't one
+                            if (getTableView().getItems().get(getIndex()).getInterStim() == null &&
+                                !getTableView().getItems().get(getIndex()).getIsInterstim()) {
+                                tableViewAddButton.setOnMouseClicked(event ->
                                 {
-                                    for (Media media : listMediaPlusInterstim) {
-                                        if (media.getInterStim() == getTableView().getItems().get(getIndex())) {
-                                            media.setInterStim(null);
+                                    try {
+                                        File newInterstim = fileChooserInterstim.showOpenDialog(popUpStage);
 
-                                        }
-                                    }
+                                        Path path = Paths.get(newInterstim.getPath());
+                                        String absoluteMediaPath = new File(MEDIAS_PATH).getAbsolutePath();
 
-                                    consructMediaInterstimList();
-                                    mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
-                                    mediaTable.refresh();
-                                });
-
-                                getTableRow().setStyle("-fx-background-color : #e6f2ff");
-                            } else {
-                                tableViewDeleteButton.setOnAction(event ->
-                                {
-                                    sequence.removeMedia(getTableView().getItems().get(getIndex()));
-                                    consructMediaInterstimList();
-                                    mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
-                                    mediaTable.refresh();
-                                });
-
-                                if (getTableView().getItems().get(getIndex()).getInterStim() == null) {
-                                    tableViewAddButton.setOnMouseClicked(event ->
-                                    {
-                                        try {
-                                            File newInterstim = fileChooserInterstim.showOpenDialog(popUpStage);
-                                            Path path = Paths.get(newInterstim.getPath());
-                                            OutputStream os = new FileOutputStream("medias/" + newInterstim.getName());
+                                        // We compare the absolute path of the "medias" directory with the new media's one.
+                                        // If they are not the same directory, we copy the new media to the application's "medias" directory.
+                                        if (!absoluteMediaPath.equals(path.toString().split("\\\\" + newInterstim.getName())[0])) {
+                                            OutputStream os = new FileOutputStream(MEDIAS_PATH + newInterstim.getName());
                                             Files.copy(path, os);
-
-                                            Media newMedia = new Media(
-                                                    newInterstim.getName(),
-                                                    newInterstim.getName(),
-                                                    Duration.ofSeconds(1),
-                                                    TypeMedia.PICTURE,
-                                                    null
-                                            );
-
-                                            getTableView().getItems().get(getIndex()).setInterStim(newMedia);
-
-                                            consructMediaInterstimList();
-                                            mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
-                                            mediaTable.refresh();
-                                        } catch (Exception e) {
-                                            System.out.print("Aucun fichier selectionné.");
                                         }
-                                    });
-                                } else {
-                                    tableViewAddButton.setDisable(true);
-                                }
 
-                                getTableRow().setStyle("-fx-background-color : #b3d9ff");
+                                        Media newMedia = new Media(
+                                                newInterstim.getName(),
+                                                newInterstim.getName(),
+                                                Duration.ofSeconds(1),
+                                                TypeMedia.PICTURE,
+                                                null
+                                        );
+                                        newMedia.setIsInterstim(true); // Indicate that the new media is an interstim
+
+                                        getTableView().getItems().get(getIndex()).setInterStim(newMedia);
+
+                                        constructMediaInterstimList();
+                                        mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
+                                        mediaTable.refresh();
+                                    } catch (Exception e) {
+                                        System.out.print("Aucun fichier selectionné.");
+                                    }
+                                });
+                            } else { // The media has an Interstim or is one
+                                tableViewAddButton.setDisable(true);
+                            }
+
+
+                            if (getTableRow().getItem().getIsInterstim()) {
+                                getTableRow().setStyle("-fx-background-color: #e6f2ff; -fx-text-background-color: black;");
+
+                            } else {
+                                getTableRow().setStyle("-fx-background-color: #b3d9ff; -fx-text-background-color: black;");
                             }
 
                             setGraphic(hBox);
@@ -337,8 +312,8 @@ public class modifySeqPopUp {
             }
         };
 
-        this.mediaTableColumnOption.setCellFactory(cellFactoryOption);
         this.mediaTableColumnVerrouillage.setCellFactory(cellFactoryVerr);
+        this.mediaTableColumnOption.setCellFactory(cellFactoryOption);
 
         this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
 
@@ -352,7 +327,6 @@ public class modifySeqPopUp {
             }
         });
     }
-
 
     /**
      * Method of modifying the name of the sequence
@@ -381,12 +355,12 @@ public class modifySeqPopUp {
     @FXML
     private void addMediaToSeq() {
         SequenceModificationListener listener = sequence -> {
-            consructMediaInterstimList();
+            constructMediaInterstimList();
             this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
             this.mediaTable.refresh();
         };
 
-        new addMediaPopUp(
+        new AddMediaPopUp(
                 this.saveAddMediaSeq.getScene().getWindow(),
                 FXCollections.observableList(this.sequence.getListMedias()),
                 this.sequence,
@@ -396,7 +370,6 @@ public class modifySeqPopUp {
         );
     }
 
-
     /**
      * Method of modifying media in the sequence
      *
@@ -405,14 +378,14 @@ public class modifySeqPopUp {
     @FXML
     private void modifyMediaInSeq(Media media) {
         SequenceModificationListener listener1 = sequence -> {
-            consructMediaInterstimList();
+            constructMediaInterstimList();
             this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
             this.mediaTable.refresh();
         };
 
         MediaModificationListener listener2 = temp -> this.mediaTable.refresh();
 
-        new modifyMediaPopUp(
+        new ModifyMediaPopUp(
                 this.saveAddMediaSeq.getScene().getWindow(),
                 this.sequence,
                 media,
@@ -420,7 +393,6 @@ public class modifySeqPopUp {
                 listener2
         );
     }
-
 
     /**
      * Method of closing the sequence modification pop-up
@@ -430,9 +402,8 @@ public class modifySeqPopUp {
         this.popUpStage.close();
     }
 
-
     /**
-     * Méthode de sauvegarde des modifications de la séquence et fermeture la pop-up
+     * Method to save any modifications made on the sequence and close the pop-up.
      */
     @FXML
     private void saveMediasToSeq() {
@@ -451,14 +422,12 @@ public class modifySeqPopUp {
         }
     }
 
-
     /**
      * Event listener of a sequence modification
      */
     public interface SequenceModificationListener extends EventListener {
         void onModified(Sequence sequence);
     }
-
 
     /**
      * Event listener of a media modification

@@ -29,8 +29,10 @@ public class Media implements Serializable {
     private Media interStim;
 
     @Getter @Setter
-    private Boolean lock;
+    private Boolean isInterstim;
 
+    @Getter @Setter
+    private Boolean lock;
 
     /**
      * The default constructor
@@ -51,6 +53,7 @@ public class Media implements Serializable {
         this.duration = duration;
         this.type = type;
         this.interStim = interStim;
+        this.isInterstim = false;
         this.lock = true;
     }
 

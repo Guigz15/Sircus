@@ -18,7 +18,7 @@ import java.io.IOException;
 /**
  * Controller to add a sequence in a meta sequence
  */
-public class addSeqPopUp {
+public class AddSeqPopUp {
 
 	/**
 	 * Text field of the name of the sequence to add
@@ -76,8 +76,8 @@ public class addSeqPopUp {
 	 * @param metaSequence the meta sequence where we add the sequence
 	 * @param addListener the listener of the adding event
 	 */
-	public addSeqPopUp (Window owner,
-					   ObservableList<Sequence> listSequences,
+	public AddSeqPopUp(Window owner,
+                       ObservableList<Sequence> listSequences,
                        MetaSequence metaSequence,
                        MetaSequenceController.ModificationMetaSeqListener addListener ) {
 

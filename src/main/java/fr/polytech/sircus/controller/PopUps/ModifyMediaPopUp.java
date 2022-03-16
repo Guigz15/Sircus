@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Objects;
 
-public class modifyMediaPopUp {
+public class ModifyMediaPopUp {
 
     /**
      * Text field of the new name of the media
@@ -68,11 +68,11 @@ public class modifyMediaPopUp {
     /**
      *  Event listener that comes from the controller modifySeqPopUp
      */
-    private modifySeqPopUp.SequenceModificationListener listener1 = null;
-    private modifySeqPopUp.MediaModificationListener listener2 = null;
+    private ModifySeqPopUp.SequenceModificationListener listener1 = null;
+    private ModifySeqPopUp.MediaModificationListener listener2 = null;
 
 
-    /** 
+    /**
      * Builds controller of the media modification pop-up, with the components
      *
      * @param owner main window
@@ -81,9 +81,9 @@ public class modifyMediaPopUp {
      * @param listener1 event listener that comes from the controller modifySeqPopUp
      * @param listener2 event listener that comes from the controller modifySeqPopUp
      */
-    public modifyMediaPopUp(Window owner, Sequence sequence, Media media,
-                            modifySeqPopUp.SequenceModificationListener listener1,
-                            modifySeqPopUp.MediaModificationListener listener2) {
+    public ModifyMediaPopUp(Window owner, Sequence sequence, Media media,
+                            ModifySeqPopUp.SequenceModificationListener listener1,
+                            ModifySeqPopUp.MediaModificationListener listener2) {
 
         FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_media_popup.fxml"));
         fxmlLoader.setController(this);
@@ -107,7 +107,7 @@ public class modifyMediaPopUp {
             dialog.setMinHeight(140); //110 (+30 window header height on windows)
             dialog.setMinWidth(330); //320 (+10 window width on windows)
             dialog.setTitle("Modifier le média : " + this.media.getName());
-           
+
             dialog.show();
         } catch (IOException e) {
             e.printStackTrace();
