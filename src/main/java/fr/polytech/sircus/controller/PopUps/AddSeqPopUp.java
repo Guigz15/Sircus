@@ -89,7 +89,7 @@ public class AddSeqPopUp {
 			this.listSequences = listSequences;
 			this.addListener = addListener;
 
-			Scene dialogScene = new Scene(fxmlLoader.load (),500,160);
+			Scene dialogScene = new Scene(fxmlLoader.load(),500,160);
 			Stage dialog = new Stage ();
 
 			this.popUpStage = dialog;

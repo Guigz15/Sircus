@@ -10,6 +10,8 @@ import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Sequence;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -22,6 +24,7 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EventListener;
@@ -59,6 +62,8 @@ public class MetaSequenceController {
     private Button metaSeqOption;
     @FXML
     private Button metaSeqPlay;
+    @FXML
+    private Button addDefaultPath;
 
     @FXML
     private TableView<Sequence> metaSeqTable;
@@ -481,6 +486,40 @@ public class MetaSequenceController {
             }
         }
         return totalTime;
+    }
+
+    /**
+     * Add a custom default path as define by the user
+     */
+    @FXML
+    private void addDefaultPath() {
+        TextInputDialog inputText = new TextInputDialog();
+        inputText.setTitle("Nouveau chemin par défaut");
+
+        Button okButton = (Button) inputText.getDialogPane().lookupButton(ButtonType.OK);
+        TextField inputField = inputText.getEditor();
+        BooleanBinding isInvalid = Bindings.createBooleanBinding(() -> isNotDirectory(inputField.getText()), inputField.textProperty());
+        okButton.disableProperty().bind(isInvalid);
+
+        inputText.showAndWait();
+        String newPath = inputText.getEditor().getText();
+
+        if(!isNotDirectory(newPath)) {
+            SircusApplication.dataSircus.getPath().setDefaultPath(newPath);
+            SircusApplication.dataSircus.getPath().setCustomPath(true);
+        }
+    }
+
+    /**
+     * Test if a string is a not directory
+     * @param text Text we want to test
+     * @return boolean
+     */
+    private boolean isNotDirectory(String text){
+        File file = new File(text);
+        boolean test = file.isDirectory();
+        file.delete();
+        return !test;
     }
 
     // Event interfaces

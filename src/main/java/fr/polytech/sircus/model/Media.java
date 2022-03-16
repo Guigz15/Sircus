@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import java.io.Serializable;
 import java.time.Duration;
+import java.util.Objects;
 
 /**
  * This class represents a media (picture or video)
@@ -32,6 +33,11 @@ public class Media implements Serializable {
 
     @Getter @Setter
     private Boolean lock;
+
+    /**
+     * The default constructor
+     */
+    public Media(){};
 
     /**
      * The constructor
@@ -64,6 +70,21 @@ public class Media implements Serializable {
         this.interStim = media.getInterStim();
         this.lock = media.getLock();
     }
+
+    /**
+     * Equals method that compare two media objet.
+     *
+     * @param o the media objet to compare.
+     * @return boolean if the current media is equal to o.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Media)) return false;
+        Media media = (Media) o;
+        return getName().equals(media.getName()) && getFilename().equals(media.getFilename()) && getDuration().equals(media.getDuration()) && getType() == media.getType() && getInterStim().equals(media.getInterStim()) && Objects.equals(getLock(), media.getLock());
+    }
+
 
     /**
      * Override the method toString to display only the name

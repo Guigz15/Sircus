@@ -4,6 +4,7 @@ import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.model.Media;
 import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.model.TypeMedia;
+import fr.polytech.sircus.model.PathMedia;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +25,8 @@ import java.nio.file.Paths;
 import java.time.Duration;
 
 public class AddMediaPopUp {
+
+    private final String MEDIAS_PATH = "medias/";
 
     /**
      * FileChooser to choose the file used as a media.
@@ -144,6 +147,8 @@ public class AddMediaPopUp {
         FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/add_media_popup.fxml"));
         fxmlLoader.setController(this);
 
+        PathMedia paths = SircusApplication.dataSircus.getPath();
+        String pathUse;
         this.fileChooserMedia = fileChooserMedia;
         this.fileChooserInterstim = fileChooserInterstim;
 
@@ -152,14 +157,26 @@ public class AddMediaPopUp {
             this.listMedias = listMedias;
             this.listener = listener;
 
+            if(paths.isCustomPath() == true || paths.getLastPath() == null){
+                pathUse = paths.getDefaultPath();
+            } else {
+                pathUse = paths.getLastPath();
+            }
+
             this.fileChooserMedia.setTitle("Open file (media)");
             this.fileChooserMedia.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("Image and video Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.mp4")
+            );
+            this.fileChooserMedia.setInitialDirectory(
+                    new File(pathUse)
             );
 
             this.fileChooserInterstim.setTitle("Open file (interstim)");
             this.fileChooserInterstim.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+            );
+            this.fileChooserInterstim.setInitialDirectory(
+                    new File(pathUse)
             );
 
             Scene dialogScene = new Scene(fxmlLoader.load());
@@ -220,6 +237,17 @@ public class AddMediaPopUp {
         try {
             if (this.newFileInterstim.isFile()) {
                 this.nameNewInterstim.setText(this.newFileInterstim.getName());
+
+                String newPath = Paths.get(newFileInterstim.getPath()).getParent().toString();
+                SircusApplication.dataSircus.getPath().setLastPath(newPath);
+                if(SircusApplication.dataSircus.getPath().isCustomPath() == false){
+                    this.fileChooserMedia.setInitialDirectory(
+                            new File(newPath)
+                    );
+                    this.fileChooserInterstim.setInitialDirectory(
+                            new File(newPath)
+                    );
+                }
             }
         } catch (Exception e) {
             System.out.print("Aucun média sélectionné.");
@@ -236,6 +264,17 @@ public class AddMediaPopUp {
             if (this.newFileMedia.isFile()) {
                 this.nameNewMedia.setText(this.newFileMedia.getName());
                 checkNameNewMediaFilled();
+
+                String newPath = Paths.get(newFileMedia.getPath()).getParent().toString();
+                SircusApplication.dataSircus.getPath().setLastPath(newPath);
+                if(SircusApplication.dataSircus.getPath().isCustomPath() == false){
+                    this.fileChooserMedia.setInitialDirectory(
+                            new File(newPath)
+                    );
+                    this.fileChooserInterstim.setInitialDirectory(
+                            new File(newPath)
+                    );
+                }
             }
         } catch (Exception e) {
             System.out.print("Aucun média sélectionné.");
@@ -306,16 +345,26 @@ public class AddMediaPopUp {
         if (alert.getResult() == ButtonType.YES) {
             if (this.addNewMedia.isSelected()) {
                 if (this.newFileMedia.exists()) {
+                    Path pathMedia = Paths.get(this.newFileMedia.getPath());
+                    String absoluteMediaPath = new File(MEDIAS_PATH).getAbsolutePath();
 
-                    Path path = Paths.get(this.newFileMedia.getPath());
-                    OutputStream os = new FileOutputStream("medias/" + this.newFileMedia.getName());
-                    Files.copy(path, os);
+                    // We compare the absolute path of the "medias" directory with the new media's one.
+                    // If they are not the same directory, we copy the new media to the application's "medias" directory.
+                    if (!absoluteMediaPath.equals(pathMedia.toString().split("\\\\" + this.newFileMedia.getName())[0])) {
+                        OutputStream os = new FileOutputStream(MEDIAS_PATH + this.newFileMedia.getName());
+                        Files.copy(pathMedia, os);
+                    }
 
                     if (this.newFileInterstim != null) {
                         if (this.newFileInterstim.isFile()) {
-                            Path path2 = Paths.get(this.newFileInterstim.getPath());
-                            OutputStream os2 = new FileOutputStream("medias/" + this.newFileInterstim.getName());
-                            Files.copy(path2, os2);
+                            Path pathInterstim = Paths.get(this.newFileInterstim.getPath());
+
+                            // We compare the absolute path of the "medias" directory with the interstim's one.
+                            // If they are not the same directory, we copy the new interstim to the application's "medias" directory.
+                            if (!absoluteMediaPath.equals(pathMedia.toString().split(this.newFileInterstim.getName())[0])) {
+                                OutputStream os = new FileOutputStream(MEDIAS_PATH + this.newFileInterstim.getName());
+                                Files.copy(pathInterstim, os);
+                            }
                         }
                     }
 

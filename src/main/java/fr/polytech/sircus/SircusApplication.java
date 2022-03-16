@@ -7,20 +7,31 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.Objects;
-import java.awt.Dimension;
 
 public class SircusApplication extends Application {
 
-    public static DataSircus dataSircus;
-    private MainWindowController mainWindowController;
+	/**
+     *  dataSircus object
+	 */
+	public static DataSircus dataSircus;
+
+	/**
+     *  main window controller
+	 */
+	private MainWindowController mainWindowController;
 
     public static void main(String[] args) {
         launch();
     }
 
+	/**
+     * Starts application
+	 *
+	 * @param stage
+	 * @throw IOException
+	 */
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -34,11 +45,7 @@ public class SircusApplication extends Application {
             e.printStackTrace();
         }
 
-        Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        double width = dimension.getWidth() * 0.667;
-        double height = dimension.getHeight() * 0.667;
-
-        Scene scene = new Scene(fxmlLoader.load(), width, height);
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 600);
 
         stage.setOnCloseRequest(event -> {
             try {
@@ -50,6 +57,7 @@ public class SircusApplication extends Application {
 
         stage.setTitle("Application Sircus");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 }

@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="1000.0"
+<AnchorPane id="resultat_tab_view" xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="1000.0"
             stylesheets="@../stylesheets/bootstrapfx.css" xmlns="http://javafx.com/javafx/14.0.2.1"
             fx:controller="fr.polytech.sircus.controller.ResultatController">
     <children>
@@ -18,9 +18,9 @@
             </rowConstraints>
             <children>
 
-                <TableView fx:id="tableResultat" prefHeight="469.0" prefWidth="966.0" GridPane.rowIndex="1">
+                <TableView fx:id="resultTable" prefHeight="469.0" prefWidth="966.0" GridPane.rowIndex="1">
                     <columns>
-                        <TableColumn fx:id="nomMetaSequence" prefWidth="198.0" text="Méta-séquence"/>
+                        <TableColumn fx:id="metaSequenceName" prefWidth="198.0" text="Méta-séquence"/>
                         <TableColumn fx:id="duration" prefWidth="164.0" text="Durée"/>
                         <TableColumn fx:id="listSequences" prefWidth="179.0" text="Liste des séquences"/>
                     </columns>

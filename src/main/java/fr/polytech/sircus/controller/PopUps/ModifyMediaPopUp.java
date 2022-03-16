@@ -18,90 +18,72 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Objects;
 
-public class ModifyMediaPopUp {
-    //******************************************************************************************************************
-    // Composants UI
-    //******************************************************************************************************************
+public class modifyMediaPopUp {
 
     /**
-     * Champ texte du nouveau nom du media
+     * Text field of the new name of the media
      */
     @FXML
     private TextField newMediaNameField;
 
     /**
-     * Champ texte de la nouvelle durée
+     * Text field of the new duration of the media
      */
     @FXML
     private TextField newMediaDurationField;
 
     /**
-     * Bouton supprimant le media
+     *  Button that deletes the media
      */
     @FXML
     private Button modifyMediaDelete;
 
     /**
-     * Bouton annulant la modification de la meta sequence
+     *  Button that cancels changes of the meta sequence
      */
     @FXML
     private Button modifyMediaCancel;
 
     /**
-     * Bouton sauvegardant la modification de la meta sequence
+     *  Button that saves changes of the meta sequence
      */
     @FXML
     private Button modifyMediaSave;
 
-    //******************************************************************************************************************
-
-    //******************************************************************************************************************
-    // Gestionnaires medias
-    //******************************************************************************************************************
-
     /**
-     * Sequence à laquelle appartient le media
+     *  Sequence that contains the media
      */
     private Sequence sequence = null;
 
     /**
-     * Media à modifier
+     *  Media that is to be modified
      */
     private Media media = null;
 
     /**
-     * Pop up de modification
+     *  Modification pop-up
      */
     private Stage popUpStage = null;
 
     /**
-     * Event listener provenant du controller modifySeqPopUp
+     *  Event listener that comes from the controller modifySeqPopUp
      */
-    private ModifySeqPopUp.SequenceModificationListener listener1 = null;
-    private ModifySeqPopUp.MediaModificationListener listener2 = null;
+    private modifySeqPopUp.SequenceModificationListener listener1 = null;
+    private modifySeqPopUp.MediaModificationListener listener2 = null;
 
-    //******************************************************************************************************************
-
-    //******************************************************************************************************************
-    //   ###    ###   #   #   ####  #####  ####   #   #   ###   #####   ###   ####    ####
-    //  #   #  #   #  ##  #  #        #    #   #  #   #  #   #    #    #   #  #   #  #
-    //  #      #   #  # # #   ###     #    ####   #   #  #        #    #   #  ####    ###
-    //  #   #  #   #  #  ##      #    #    #   #  #   #  #   #    #    #   #  #   #      #
-    //   ###    ###   #   #  ####     #    #   #   ###    ###     #     ###   #   #  ####
-    //******************************************************************************************************************
 
     /**
-     * Constructeur du contrôleur de la pop-up de modification d'un média à une séquence et de ses composantes
+     * Builds controller of the media modification pop-up, with the components
      *
-     * @param owner     fenêtre principale
-     * @param sequence  séquence dans laquelle se trouve le média
-     * @param media     média à modifier
-     * @param listener1 event listener provenant du controller modifySeqPopUp
-     * @param listener2 event listener provenant du controller modifySeqPopUp
+     * @param owner main window
+     * @param sequence sequence that contains the media
+     * @param media media that is to be modified
+     * @param listener1 event listener that comes from the controller modifySeqPopUp
+     * @param listener2 event listener that comes from the controller modifySeqPopUp
      */
-    public ModifyMediaPopUp(Window owner, Sequence sequence, Media media,
-                            ModifySeqPopUp.SequenceModificationListener listener1,
-                            ModifySeqPopUp.MediaModificationListener listener2) {
+    public modifyMediaPopUp(Window owner, Sequence sequence, Media media,
+                            modifySeqPopUp.SequenceModificationListener listener1,
+                            modifySeqPopUp.MediaModificationListener listener2) {
 
         FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_media_popup.fxml"));
         fxmlLoader.setController(this);
@@ -117,12 +99,13 @@ public class ModifyMediaPopUp {
 
             this.popUpStage = dialog;
 
+            dialog.initModality ( Modality.APPLICATION_MODAL );
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(owner);
             dialog.setScene(dialogScene);
             dialog.setResizable(true);
-            dialog.setMinHeight(140); //110 (+30 hauteur de l'entête de la fenêtre sur windows)
-            dialog.setMinWidth(330); //320 (+10 largeur de la fenêtre sur windows)
+            dialog.setMinHeight(140); //110 (+30 window header height on windows)
+            dialog.setMinWidth(330); //320 (+10 window width on windows)
             dialog.setTitle("Modifier le média : " + this.media.getName());
 
             dialog.show();
@@ -131,24 +114,15 @@ public class ModifyMediaPopUp {
         }
     }
 
-    //******************************************************************************************************************
-    //      #  #####  #   #         #####  #   #  #   #   ###   #####  #   ###   #   #   ####
-    //      #  #       # #          #      #   #  ##  #  #   #    #    #  #   #  ##  #  #
-    //      #  ###      #           ###    #   #  # # #  #        #    #  #   #  # # #   ###
-    //  #   #  #       # #          #      #   #  #  ##  #   #    #    #  #   #  #  ##      #
-    //   ###   #      #   #         #       ###   #   #   ###     #    #   ###   #   #  ####
-    //******************************************************************************************************************
 
     /**
-     * Initialise le controleur et ses attributs, ajoute des controleurs a chaque composant
+     *  Initializes controller, adds controllers to each component
      */
     @FXML
     private void initialize() {
         this.newMediaNameField.setText(this.media.getName());
         this.newMediaDurationField.setText((Long.toString(this.media.getDuration().getSeconds())));
-
         this.modifyMediaSave.setDisable(true);
-
         this.newMediaNameField.setOnKeyReleased(keyEvent -> checkMediaNameAndDuration());
         this.newMediaDurationField.setOnKeyReleased(keyEvent -> checkMediaNameAndDuration());
         this.modifyMediaDelete.setOnMouseClicked(mouseEvent -> deleteMedia());
@@ -157,9 +131,10 @@ public class ModifyMediaPopUp {
     }
 
     /**
-     * Méthode qui vérifie si un fichier a été sélectionné et si une durée a été remplie
-     * si oui active le bouton de sauvegarde
-     * si non le désactive
+     *  Function that checks if a file is selected and if its duration is set
+     *
+     * if yes, turns on the save button
+     * if no, turns off the save button
      */
     private void checkMediaNameAndDuration() {
         this.modifyMediaSave.setDisable(Objects.equals(this.newMediaNameField.getText(), this.media.getName())
@@ -167,7 +142,7 @@ public class ModifyMediaPopUp {
     }
 
     /**
-     * Méthode permettant la sauvegarde du média modifié
+     *  Function that saves the modified media
      */
     private void saveModificationsMedia() {
         Alert alert = new Alert(
@@ -176,7 +151,6 @@ public class ModifyMediaPopUp {
                 ButtonType.YES,
                 ButtonType.NO
         );
-
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.YES) {
@@ -192,7 +166,7 @@ public class ModifyMediaPopUp {
     }
 
     /**
-     * Méthode de suppression du média
+     *  Function that deletes the media
      */
     private void deleteMedia() {
         Alert alert = new Alert(
@@ -201,7 +175,6 @@ public class ModifyMediaPopUp {
                 ButtonType.YES,
                 ButtonType.NO
         );
-
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.YES) {
@@ -212,7 +185,7 @@ public class ModifyMediaPopUp {
     }
 
     /**
-     * Méthode de fermeture de la pop-up de modification du média
+     *  Function taht closes the media modification pop-up
      */
     private void cancelModificationsMedia() {
         this.popUpStage.close();

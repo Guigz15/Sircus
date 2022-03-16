@@ -65,15 +65,6 @@ public class MetaSequence implements Serializable {
     }
 
     /**
-     * Overrides the toString method.
-     *
-     * @return The name of the meta sequence.
-     */
-    public String toString() {
-        return name;
-    }
-
-    /**
      * Adds a sequence to the meta sequence and adds its duration to the meta sequence duration.
      *
      * @param sequence The sequence to add.
@@ -92,5 +83,14 @@ public class MetaSequence implements Serializable {
         if (this.sequencesList.remove(sequence)) {
             this.duration = this.duration.minus(sequence.getDuration());
         }
+    }
+
+    /**
+     * Overrides the toString method.
+     *
+     * @return The name of the meta sequence.
+     */
+    public String toString() {
+        return name;
     }
 }
