@@ -41,6 +41,8 @@ import java.util.Objects;
  */
 public class modifySeqPopUp {
 
+    private final String MEDIAS_PATH = "medias/";
+
     /** The add file button object: allows the selection of a file for a media */
     private final FileChooser fileChooserMedia;
 
@@ -229,7 +231,6 @@ public class modifySeqPopUp {
                                     for (Media media : listMediaPlusInterstim) {
                                         if (media.getInterStim() == getTableView().getItems().get(getIndex())) {
                                             media.setInterStim(null);
-
                                         }
                                     }
 
@@ -253,9 +254,16 @@ public class modifySeqPopUp {
                                     {
                                         try {
                                             File newInterstim = fileChooserInterstim.showOpenDialog(popUpStage);
+
                                             Path path = Paths.get(newInterstim.getPath());
-                                            OutputStream os = new FileOutputStream("medias/" + newInterstim.getName());
-                                            Files.copy(path, os);
+                                            String absoluteMediaPath = new File(MEDIAS_PATH).getAbsolutePath();
+
+                                            // We compare the absolute path of the "medias" directory with the new media's one.
+                                            // If they are not the same directory, we copy the new media to the application's "medias" directory.
+                                            if (!absoluteMediaPath.equals(path.toString().split("\\\\" + newInterstim.getName())[0])) {
+                                                OutputStream os = new FileOutputStream(MEDIAS_PATH + newInterstim.getName());
+                                                Files.copy(path, os);
+                                            }
 
                                             Media newMedia = new Media(
                                                     newInterstim.getName(),
@@ -355,7 +363,6 @@ public class modifySeqPopUp {
         }
     }
 
-
     /**
      * Method of adding media to the sequence
      */
@@ -376,7 +383,6 @@ public class modifySeqPopUp {
                 fileChooserInterstim
         );
     }
-
 
     /**
      * Method of modifying media in the sequence
@@ -415,7 +421,6 @@ public class modifySeqPopUp {
      */
     @FXML
     private void saveMediasToSeq() {
-
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                 "Etes-vous sûr de vouloir enregistrer les modifications de " + this.sequence.getName() + " ?",
                 ButtonType.YES,
