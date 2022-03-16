@@ -41,18 +41,11 @@ import java.util.Objects;
  */
 public class modifySeqPopUp {
 
-
-
-    //*********************
-    //    UI components
-    //*********************
-
     /** The add file button object: allows the selection of a file for a media */
     private final FileChooser fileChooserMedia;
 
     /** The add file button object: allows the selection of a file for a cross-stimulus */
     private FileChooser fileChooserInterstim;
-
 
     /** Button to save the changes in the sequence */
     @FXML
@@ -90,12 +83,6 @@ public class modifySeqPopUp {
     @FXML
     private TableColumn<Media, String> mediaTableColumnOption;
 
-
-
-    //*********************
-    // Sequence management
-    //*********************
-
     /** Sequence to be modified */
     private Sequence sequence = null;
 
@@ -105,14 +92,11 @@ public class modifySeqPopUp {
     /** Object listener created in MetaSequenceController */
     private MetaSequenceController.ModificationSequenceListener listener;
 
-
     /** List of media and cross-stimulus media */
     private List<Media> listMediaPlusInterstim = null;
+
     /** Temporary object used to store media (useful when creating media by copying) */
     private Media tempMedia = null;
-
-
-
 
     /**
      * Constructor of the controller of the sequence modification pop-up and its components
@@ -136,7 +120,7 @@ public class modifySeqPopUp {
             this.sequence = sequence;
             this.listener = listener;
             this.listMediaPlusInterstim = new ArrayList<>();
-            consructMediaInterstimList();
+            constructMediaInterstimList();
 
             this.fileChooserInterstim = new FileChooser();
             this.fileChooserInterstim.setTitle("Open file (interstim)");
@@ -153,8 +137,8 @@ public class modifySeqPopUp {
             dialog.initOwner(owner);
             dialog.setScene(dialogScene);
             dialog.setResizable(true);
-            dialog.setMinHeight(250); //220 (+30 hauteur de l'entête de la fenêtre sur windows)
-            dialog.setMinWidth(585); //575 (+10 largeur de la fenêtre sur windows)
+            dialog.setMinHeight(250); //220 (+30 height of the window's header on Windows)
+            dialog.setMinWidth(585); //575 (+10 width of the window's header on Windows)
             dialog.setTitle("Modifier la séquence : " + this.sequence.getName());
 
             dialog.show();
@@ -163,11 +147,10 @@ public class modifySeqPopUp {
         }
     }
 
-
     /**
      * Media list builder and cross-stimulus
      */
-    private void consructMediaInterstimList() {
+    private void constructMediaInterstimList() {
 
         this.listMediaPlusInterstim.clear();
 
@@ -179,7 +162,6 @@ public class modifySeqPopUp {
             }
         }
     }
-
 
     /**
      * Method of initializing the controller and its attributes, then adding functionality to each component.
@@ -251,7 +233,7 @@ public class modifySeqPopUp {
                                         }
                                     }
 
-                                    consructMediaInterstimList();
+                                    constructMediaInterstimList();
                                     mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
                                     mediaTable.refresh();
                                 });
@@ -261,7 +243,7 @@ public class modifySeqPopUp {
                                 tableViewDeleteButton.setOnAction(event ->
                                 {
                                     sequence.removeMedia(getTableView().getItems().get(getIndex()));
-                                    consructMediaInterstimList();
+                                    constructMediaInterstimList();
                                     mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
                                     mediaTable.refresh();
                                 });
@@ -285,7 +267,7 @@ public class modifySeqPopUp {
 
                                             getTableView().getItems().get(getIndex()).setInterStim(newMedia);
 
-                                            consructMediaInterstimList();
+                                            constructMediaInterstimList();
                                             mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
                                             mediaTable.refresh();
                                         } catch (Exception e) {
@@ -353,7 +335,6 @@ public class modifySeqPopUp {
         });
     }
 
-
     /**
      * Method of modifying the name of the sequence
      */
@@ -381,7 +362,7 @@ public class modifySeqPopUp {
     @FXML
     private void addMediaToSeq() {
         SequenceModificationListener listener = sequence -> {
-            consructMediaInterstimList();
+            constructMediaInterstimList();
             this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
             this.mediaTable.refresh();
         };
@@ -405,7 +386,7 @@ public class modifySeqPopUp {
     @FXML
     private void modifyMediaInSeq(Media media) {
         SequenceModificationListener listener1 = sequence -> {
-            consructMediaInterstimList();
+            constructMediaInterstimList();
             this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
             this.mediaTable.refresh();
         };
@@ -421,7 +402,6 @@ public class modifySeqPopUp {
         );
     }
 
-
     /**
      * Method of closing the sequence modification pop-up
      */
@@ -430,9 +410,8 @@ public class modifySeqPopUp {
         this.popUpStage.close();
     }
 
-
     /**
-     * Méthode de sauvegarde des modifications de la séquence et fermeture la pop-up
+     * Method to save any modifications made on the sequence and close the pop-up.
      */
     @FXML
     private void saveMediasToSeq() {
@@ -451,14 +430,12 @@ public class modifySeqPopUp {
         }
     }
 
-
     /**
      * Event listener of a sequence modification
      */
     public interface SequenceModificationListener extends EventListener {
         void onModified(Sequence sequence);
     }
-
 
     /**
      * Event listener of a media modification
