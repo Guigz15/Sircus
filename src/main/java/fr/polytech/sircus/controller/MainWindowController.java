@@ -1,5 +1,6 @@
 package fr.polytech.sircus.controller;
 
+import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.controller.PopUps.AddLocationPopup;
 import fr.polytech.sircus.model.Location;
 import fr.polytech.sircus.model.Method;
@@ -21,8 +22,6 @@ import java.util.ResourceBundle;
 public class MainWindowController implements Initializable {
 
     @FXML
-    private Tab informationTab;
-    @FXML
     private Tab metaSeqTab;
     @FXML
     private Tab resultTab;
@@ -37,8 +36,6 @@ public class MainWindowController implements Initializable {
     private TextField age;
     @FXML
     private TextField ocularDom;
-    @FXML
-    private ToggleGroup type;
     @FXML
     private TextField name;
     @FXML
@@ -59,7 +56,7 @@ public class MainWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Location Combobox
-        ObservableList<Location> locationsList = FXCollections.observableArrayList();
+        ObservableList<Location> locationsList = FXCollections.observableArrayList(SircusApplication.dataSircus.getLocationsList());
         location.setItems(locationsList);
 
         // Method Combobox
@@ -83,47 +80,32 @@ public class MainWindowController implements Initializable {
         try {
             genderChecked = gender.getSelectedToggle().isSelected();
         } catch (NullPointerException e) {
-            Platform.runLater(() -> {
-                Alert dialog = new Alert(Alert.AlertType.ERROR, "Vous devez renseigner un genre pour passer à la suite.", ButtonType.OK);
-                dialog.show();
-            });
+            System.out.println("None of gender selected");
         }
 
-        if (birthDate.getValue() == null) {
-            Platform.runLater(() -> {
-                Alert dialog = new Alert(Alert.AlertType.ERROR, "Vous devez renseigner une date de naissance pour passer à la suite.", ButtonType.OK);
-                dialog.show();
-            });
-        } else {
+        if (birthDate.getValue() != null)
             birthDateChecked = true;
-        }
 
-        if (name.getText().isEmpty()) {
-            Platform.runLater(() -> {
-                Alert dialog = new Alert(Alert.AlertType.ERROR, "Vous devez renseigner un nom pour passer à la suite.", ButtonType.OK);
-                dialog.show();
-            });
-        } else {
+        if (!name.getText().isEmpty())
             nameChecked = true;
-        }
 
-        if (location.getSelectionModel().isEmpty()) {
-            Platform.runLater(() -> {
-                Alert dialog = new Alert(Alert.AlertType.ERROR, "Vous devez renseigner le lieu de diagnostic pour passer à la suite.", ButtonType.OK);
-                dialog.show();
-            });
-        } else {
+        if (!location.getSelectionModel().isEmpty())
             locationChecked = true;
-        }
+
 
         if (genderChecked && birthDateChecked && nameChecked && locationChecked) {
             metaSeqTab.setDisable(false);
             resultTab.setDisable(false);
+        } else {
+            Platform.runLater(() -> {
+                Alert dialog = new Alert(Alert.AlertType.ERROR, "Tous les champs obligatoires (*) n'ont pas été remplis correctement.", ButtonType.OK);
+                dialog.show();
+            });
         }
     }
 
     @FXML
     private void addLocation() {
-        //new AddLocationPopup(this.location.getScene().getWindow());
+        new AddLocationPopup(this.locationAdd.getScene().getWindow());
     }
 }

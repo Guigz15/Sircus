@@ -10,7 +10,7 @@
 
 <AnchorPane maxWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.MainWindowController">
     <TabPane layoutY="-4.0" maxWidth="1000.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <Tab fx:id="informationTab" text="Informations">
+        <Tab text="Informations">
             <BorderPane maxWidth="1000.0">
                 <left>
                     <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="523.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
@@ -259,7 +259,7 @@
                                         <Insets right="16.0" />
                                     </HBox.margin>
                                 </ComboBox>
-                                <Button fx:id="locationAdd" mnemonicParsing="false" prefHeight="25.0" prefWidth="39.0" onMouseClicked="#addLocation">
+                                <Button fx:id="locationAdd" mnemonicParsing="false" prefHeight="25.0" prefWidth="39.0" onAction="#addLocation">
                                     <graphic>
                                         <FontIcon iconLiteral="fa-plus" iconSize="15" />
                                     </graphic>

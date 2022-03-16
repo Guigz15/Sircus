@@ -47,4 +47,18 @@ public class Location implements Serializable {
         this.street = street;
         this.streetNumber = streetNumber;
     }
+
+    /**
+     * Overrides the toString method.
+     *
+     * @return The full address.
+     */
+    @Override
+    public String toString() {
+        if (streetNumber == 0) {
+            return street + ", " + postCode + " " + city;
+        } else {
+            return streetNumber + ", " + street + ", " + postCode + " " + city;
+        }
+    }
 }
