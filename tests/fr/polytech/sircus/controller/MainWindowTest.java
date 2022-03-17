@@ -8,25 +8,26 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.matcher.base.NodeMatchers;
+
 import java.time.LocalDate;
 import java.time.Period;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.testfx.api.FxAssert.verifyThat;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MainWindowTest{
 
     private static FxRobot robot;
 
     @BeforeAll
     public static void setup() throws Exception {
-        System.out.println("Testing the main UI");
+        System.out.println("*--- Testing the main UI ---*");
         FxToolkit.registerPrimaryStage();
         FxToolkit.setupApplication(SircusApplication.class);
         robot = new FxRobot();
@@ -45,7 +46,8 @@ public class MainWindowTest{
 
 
     @Test
-    public void test_all_component_are_defined() {
+    @Order(1)
+    public void test1_all_component_are_defined() {
         System.out.println("Testing if all components are initialized");
         verifyThat("#id", NodeMatchers.isNotNull());
         verifyThat("#gender_selection", NodeMatchers.isNotNull());
@@ -66,7 +68,8 @@ public class MainWindowTest{
     }
 
     @Test
-    public void test_calcul_age_function() {
+    @Order(2)
+    public void test2_calcul_age_function() {
         System.out.println("Testing if the calcul of the age is working");
 
         String date_test = "03/05/2010";
@@ -80,7 +83,58 @@ public class MainWindowTest{
     }
 
     @Test
-    public void test_try_to_switch_other_tab_without_fill_correctly_form() {
+    @Order(3)
+    public void test3_add_location_cancel() {
+        //test to add a location and cancel
+        System.out.println("Testing to add a new location and cancel");
+        //click to add new location
+        robot.clickOn("#locationAdd");
+
+        robot.clickOn("#city").write("Tours");
+        robot.clickOn("#street").write("test to cancel");
+        robot.clickOn("#streetNumber").write("64");
+        robot.clickOn("#postCode").write("37000");
+
+        robot.clickOn("#cancelButton");
+
+        //we verify that the new location was not added.
+        ComboBox<Location> location = robot.lookup("#location").query();
+        for (Location loca : location.getItems()) {
+            assertNotEquals(loca.getStreet(),"test to cancel");
+        }
+    }
+
+    @Test
+    @Order(4)
+    public void test4_add_location() {
+        System.out.println("Testing to add a new location");
+        //click to add new location
+        robot.clickOn("#locationAdd");
+
+        ComboBox<String> location = robot.lookup("#country").query();
+        robot.interact(() -> location.getSelectionModel().select("France"));
+
+        //We fill the city
+        robot.clickOn("#city").write("Tours");
+        //We fill the street
+        robot.clickOn("#street").write("Portalis");
+        //We fill the number street
+        robot.clickOn("#streetNumber").write("64");
+        //We fill the post code
+        robot.clickOn("#postCode").write("37000");
+
+        //We click on the add button
+        robot.clickOn("#addButton");
+
+        robot.clickOn("#cancelButton");
+        //TODO finish the test of add button of location. Remove the click to cancel
+
+
+    }
+
+    @Test
+    @Order(5)
+    public void test5_try_to_switch_other_tab_without_fill_correctly_form() {
 
         System.out.println("Testing to switch to other view without fill correctly the form : ");
         //write the identifiant
@@ -135,41 +189,5 @@ public class MainWindowTest{
         if (robot.lookup("#meta_seq_tab_view").query().isDisabled() || robot.lookup("#resultat_tab_view").query().isDisabled() ) {
             fail("We can't switch to other view.");
         }
-    }
-
-    @Test
-    public void test_add_location_cancel() {
-        //test to add a location and cancel
-        System.out.println("Testing to add a new location and cancel");
-        //click to add new location
-        robot.clickOn("#locationAdd");
-        robot.clickOn("#cancelButton");
-    }
-
-    @Test
-    public void test_add_location() {
-        System.out.println("Testing to add a new location");
-        //click to add new location
-        robot.clickOn("#locationAdd");
-
-        ComboBox<String> location = robot.lookup("#country").query();
-        robot.interact(() -> location.getSelectionModel().select("France"));
-
-        //We fill the city
-        robot.clickOn("#city").write("Tours");
-        //We fill the street
-        robot.clickOn("#street").write("Portalis");
-        //We fill the number street
-        robot.clickOn("#streetNumber").write("64");
-        //We fill the post code
-        robot.clickOn("#postCode").write("37000");
-
-        //We click on the add button
-        robot.clickOn("#addButton");
-
-        robot.clickOn("#cancelButton");
-        //TODO finish the test of add button of location. Remove the click to cancel
-
-
     }
 }
