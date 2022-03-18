@@ -145,7 +145,6 @@
             </exclusions>
         </dependency>
 
-
     </dependencies>
 
     <build>

@@ -273,7 +273,13 @@ public class ModifySeqPopUp {
                                 tableViewAddButton.setDisable(true);
                             }
 
-                            getTableRow().setStyle("-fx-background-color : #b3d9ff");
+
+                            if (getTableRow().getItem().getIsInterstim()) {
+                                getTableRow().setStyle("-fx-background-color: #e6f2ff; -fx-text-background-color: black;");
+
+                            } else {
+                                getTableRow().setStyle("-fx-background-color: #b3d9ff; -fx-text-background-color: black;");
+                            }
 
                             setGraphic(hBox);
                         }
@@ -417,7 +423,7 @@ public class ModifySeqPopUp {
 
         if (alert.getResult() == ButtonType.YES) {
             this.sequence.setName(this.titleSequenceLabel.getText());
-            this.sequence.setDuration(sequence.getDuration());
+            this.sequence.computeDuration();//.setDuration(sequence.getDuration());
             this.listener.onModified(this.sequence);
             this.popUpStage.close();
         }
