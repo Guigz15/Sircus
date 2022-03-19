@@ -94,11 +94,5 @@ public class MetaSequenceTest {
         }
     }
 
-    @Test
-    @Order(4)
-    public void test4_modifying_the_sequence() {
-        System.out.println("Testing to modify the sequence");
-        
-    }
 }
 
