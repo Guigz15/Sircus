@@ -6,8 +6,10 @@ import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.model.TypeMedia;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,6 +17,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -31,11 +34,10 @@ import java.util.Objects;
  */
 public class ViewerController {
 
-
-    // the MetaSequenceController which create this controller
+    // The MetaSequenceController which create this controller
     private final MetaSequenceController metaSequenceController;
 
-    // the MetaSequence that id passed to the viewer
+    // The MetaSequence that id passed to the viewer
     private final MetaSequence playingMetaSequence;
 
     // The list containing the start times of the media of the current meta-sequence
@@ -43,13 +45,14 @@ public class ViewerController {
 
     @FXML
     private MediaView mediaView;
+
     @FXML
     private ImageView imageView;
 
-    // this allows the playing of media
+    // This allows the playing of media
     private MediaPlayer mediaPlayer;
 
-    // manage the stage of the media
+    // Manage the stage of the media
     private Stage viewerStage = null;
 
     // The timeline allowing the reading of the media with management of the time of each one
@@ -68,17 +71,27 @@ public class ViewerController {
         fxmlLoader.setController(this);
 
         try {
-            Scene dialogScene = new Scene(fxmlLoader.load(), 1600, 900);
-            Stage dialog = new Stage();
+            Scene viewerScene = new Scene(fxmlLoader.load(), 1600, 900);
+            Stage viewerStage = new Stage();
 
-            viewerStage = dialog;
+            this.viewerStage = viewerStage;
 
-            dialog.initModality(Modality.NONE);
-            dialog.initOwner(owner);
-            dialog.setScene(dialogScene);
-            dialog.setResizable(true);
-            dialog.setTitle("Viewer");
-            dialog.show();
+            ObservableList<Screen> screens = Screen.getScreens();
+
+            if (screens.size() > 1) {
+                Rectangle2D bounds = screens.get(1).getVisualBounds();
+
+                viewerStage.setX(bounds.getMinX());
+                viewerStage.setY(bounds.getMinY());
+                viewerStage.setFullScreen(true);
+            }
+
+            viewerStage.initModality(Modality.NONE);
+            viewerStage.initOwner(owner);
+            viewerStage.setScene(viewerScene);
+            viewerStage.setResizable(true);
+            viewerStage.setTitle("Viewer");
+            viewerStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -161,13 +174,14 @@ public class ViewerController {
      */
     @FXML
     private void showImageFromName(String name) {
-        // try de create a InputStream with the path of the image.
+        // Try to create an InputStream with the path of the image.
         try {
             InputStream is = new FileInputStream("medias/" + name);
             Image image = new Image(is);
             showImage(image);
+            centerImage();
         }
-        // if the path is not found we display a message.
+        // If the path is not found we display a message.
         catch (FileNotFoundException error) {
             System.out.println("Le fichier n'existe pas.");
         }
@@ -349,5 +363,24 @@ public class ViewerController {
      */
     private void closingManager() {
         viewerStage.setOnCloseRequest(event -> metaSequenceController.closeViewer());
+    }
+
+    /**
+     * Method to center the imageview in the viewer.
+     */
+    private void centerImage() {
+        Image img = imageView.getImage();
+        if (img != null) {
+            double ratioX = imageView.getFitWidth() / img.getWidth();
+            double ratioY = imageView.getFitHeight() / img.getHeight();
+
+            double reducCoeff = Math.min(ratioX, ratioY);
+
+            double w = img.getWidth() * reducCoeff;
+            double h = img.getHeight() * reducCoeff;
+
+            imageView.setTranslateX((imageView.getFitWidth() - w) / 2);
+            imageView.setTranslateY((imageView.getFitHeight() - h) / 2);
+        }
     }
 }
