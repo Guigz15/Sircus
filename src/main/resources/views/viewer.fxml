@@ -2,17 +2,14 @@
 
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.media.MediaView?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="900.0" prefWidth="1600.0"
-            xmlns="http://javafx.com/javafx/14.0.2.1">
-    <MediaView fx:id="mediaView" fitHeight="900.0" fitWidth="1600.0" layoutX="382.0" layoutY="194.0"
-               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-               AnchorPane.topAnchor="0.0">
+
+<AnchorPane prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+    <MediaView fx:id="mediaView" fitHeight="900.0" fitWidth="1600.0" layoutX="382.0" layoutY="194.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <viewport>
-            <Rectangle2D height="900.0" minX="5.0" minY="5.0" width="1600.0"/>
+            <Rectangle2D height="900.0" minX="5.0" minY="5.0" width="1600.0" />
         </viewport>
     </MediaView>
-    <ImageView fx:id="imageView" fitHeight="900.0" fitWidth="1600.0" AnchorPane.bottomAnchor="0.0"
-               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+    <ImageView fx:id="imageView" fitHeight="900.0" fitWidth="1600.0" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
 </AnchorPane>

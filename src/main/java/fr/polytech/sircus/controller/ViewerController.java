@@ -6,8 +6,10 @@ import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.model.TypeMedia;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,6 +17,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -31,11 +34,10 @@ import java.util.Objects;
  */
 public class ViewerController {
 
-
-    // the MetaSequenceController which create this controller
+    // The MetaSequenceController which create this controller
     private final MetaSequenceController metaSequenceController;
 
-    // the MetaSequence that id passed to the viewer
+    // The MetaSequence that id passed to the viewer
     private final MetaSequence playingMetaSequence;
 
     // The list containing the start times of the media of the current meta-sequence
@@ -43,13 +45,14 @@ public class ViewerController {
 
     @FXML
     private MediaView mediaView;
+
     @FXML
     private ImageView imageView;
 
-    // this allows the playing of media
+    // This allows the playing of media
     private MediaPlayer mediaPlayer;
 
-    // manage the stage of the media
+    // Manage the stage of the media
     private Stage viewerStage = null;
 
     // The timeline allowing the reading of the media with management of the time of each one
@@ -68,17 +71,29 @@ public class ViewerController {
         fxmlLoader.setController(this);
 
         try {
-            Scene dialogScene = new Scene(fxmlLoader.load(), 1600, 900);
-            Stage dialog = new Stage();
+            Scene viewerScene = new Scene(fxmlLoader.load(), 1280, 720);
+            viewerStage = new Stage();
 
-            viewerStage = dialog;
+            ObservableList<Screen> screens = Screen.getScreens();
 
-            dialog.initModality(Modality.NONE);
-            dialog.initOwner(owner);
-            dialog.setScene(dialogScene);
-            dialog.setResizable(true);
-            dialog.setTitle("Viewer");
-            dialog.show();
+            Rectangle2D bounds;
+
+            if (screens.size() > 1) {
+                bounds = screens.get(1).getBounds();
+                viewerStage.setFullScreen(true);
+            } else {
+                bounds = screens.get(0).getBounds();
+            }
+
+            viewerStage.setX(bounds.getMinX());
+            viewerStage.setY(bounds.getMinY());
+
+            viewerStage.initModality(Modality.NONE);
+            viewerStage.initOwner(owner);
+            viewerStage.setScene(viewerScene);
+            viewerStage.setResizable(true);
+            viewerStage.setTitle("Viewer");
+            viewerStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -129,7 +144,6 @@ public class ViewerController {
         catch (MalformedURLException error) {
             System.out.println("URL malformée, le chemin vers la vidéo est incorrect.");
         }
-
     }
 
     /**
@@ -161,13 +175,18 @@ public class ViewerController {
      */
     @FXML
     private void showImageFromName(String name) {
-        // try de create a InputStream with the path of the image.
+        // Try to create an InputStream with the path of the image.
         try {
             InputStream is = new FileInputStream("medias/" + name);
             Image image = new Image(is);
+
+            imageView.setFitWidth(image.getWidth());
+            imageView.setFitHeight(image.getHeight());
+
             showImage(image);
+            centerImage();
         }
-        // if the path is not found we display a message.
+        // If the path is not found we display a message.
         catch (FileNotFoundException error) {
             System.out.println("Le fichier n'existe pas.");
         }
@@ -245,6 +264,7 @@ public class ViewerController {
                 event -> {
                     removeMedia();
                     removeImage();
+                    quitViewer();
                 }));
         // The end of the playback is added to the listBeginningTimeMedia
         // This allows the button passing a media to trigger the end of the playback of the meta-sequence
@@ -339,6 +359,7 @@ public class ViewerController {
      */
     @FXML
     private void quitViewer() {
+        metaSequenceController.closeViewer();
         viewerStage.close();
     }
 
@@ -349,5 +370,23 @@ public class ViewerController {
      */
     private void closingManager() {
         viewerStage.setOnCloseRequest(event -> metaSequenceController.closeViewer());
+    }
+
+    /**
+     * Method to center the imageview in the viewer.
+     */
+    private void centerImage() {
+        if (imageView.getImage() != null) {
+            double ratio = Math.min(viewerStage.getWidth() / imageView.getFitWidth(), viewerStage.getHeight() / imageView.getFitHeight());
+
+            imageView.setFitWidth(imageView.getFitWidth() * ratio);
+            imageView.setFitHeight(imageView.getFitHeight() * ratio);
+
+            double w = (viewerStage.getWidth() - imageView.getFitWidth()) / 2;
+            double h = (viewerStage.getHeight() - imageView.getFitHeight()) / 2;
+
+            imageView.setTranslateX(w);
+            imageView.setTranslateY(h);
+        }
     }
 }
