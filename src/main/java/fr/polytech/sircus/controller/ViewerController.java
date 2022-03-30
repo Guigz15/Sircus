@@ -71,20 +71,22 @@ public class ViewerController {
         fxmlLoader.setController(this);
 
         try {
-            Scene viewerScene = new Scene(fxmlLoader.load(), 1600, 900);
-            Stage viewerStage = new Stage();
-
-            this.viewerStage = viewerStage;
+            Scene viewerScene = new Scene(fxmlLoader.load(), 1280, 720);
+            viewerStage = new Stage();
 
             ObservableList<Screen> screens = Screen.getScreens();
 
-            if (screens.size() > 1) {
-                Rectangle2D bounds = screens.get(1).getVisualBounds();
+            Rectangle2D bounds;
 
-                viewerStage.setX(bounds.getMinX());
-                viewerStage.setY(bounds.getMinY());
+            if (screens.size() > 1) {
+                bounds = screens.get(1).getBounds();
                 viewerStage.setFullScreen(true);
+            } else {
+                bounds = screens.get(0).getBounds();
             }
+
+            viewerStage.setX(bounds.getMinX());
+            viewerStage.setY(bounds.getMinY());
 
             viewerStage.initModality(Modality.NONE);
             viewerStage.initOwner(owner);
@@ -142,7 +144,6 @@ public class ViewerController {
         catch (MalformedURLException error) {
             System.out.println("URL malformée, le chemin vers la vidéo est incorrect.");
         }
-
     }
 
     /**
@@ -178,6 +179,10 @@ public class ViewerController {
         try {
             InputStream is = new FileInputStream("medias/" + name);
             Image image = new Image(is);
+
+            imageView.setFitWidth(image.getWidth());
+            imageView.setFitHeight(image.getHeight());
+
             showImage(image);
             centerImage();
         }
@@ -259,6 +264,7 @@ public class ViewerController {
                 event -> {
                     removeMedia();
                     removeImage();
+                    quitViewer();
                 }));
         // The end of the playback is added to the listBeginningTimeMedia
         // This allows the button passing a media to trigger the end of the playback of the meta-sequence
@@ -353,6 +359,7 @@ public class ViewerController {
      */
     @FXML
     private void quitViewer() {
+        metaSequenceController.closeViewer();
         viewerStage.close();
     }
 
@@ -369,18 +376,17 @@ public class ViewerController {
      * Method to center the imageview in the viewer.
      */
     private void centerImage() {
-        Image img = imageView.getImage();
-        if (img != null) {
-            double ratioX = imageView.getFitWidth() / img.getWidth();
-            double ratioY = imageView.getFitHeight() / img.getHeight();
+        if (imageView.getImage() != null) {
+            double ratio = Math.min(viewerStage.getWidth() / imageView.getFitWidth(), viewerStage.getHeight() / imageView.getFitHeight());
 
-            double reducCoeff = Math.min(ratioX, ratioY);
+            imageView.setFitWidth(imageView.getFitWidth() * ratio);
+            imageView.setFitHeight(imageView.getFitHeight() * ratio);
 
-            double w = img.getWidth() * reducCoeff;
-            double h = img.getHeight() * reducCoeff;
+            double w = (viewerStage.getWidth() - imageView.getFitWidth()) / 2;
+            double h = (viewerStage.getHeight() - imageView.getFitHeight()) / 2;
 
-            imageView.setTranslateX((imageView.getFitWidth() - w) / 2);
-            imageView.setTranslateY((imageView.getFitHeight() - h) / 2);
+            imageView.setTranslateX(w);
+            imageView.setTranslateY(h);
         }
     }
 }
