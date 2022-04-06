@@ -1,32 +1,36 @@
 package fr.polytech.sircus.utils;
 
+import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.model.DataSircus;
+import fr.polytech.sircus.model.Location;
 import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Sequence;
 
 import java.io.*;
 
 /**
- * Classe permettant de serialiser et de deserialiser des objets facilement
+ * Class that allow the serialization et deserialization of objects easily
  */
 public final class Serializer {
 
     /**
-     * Fichier contenant les informations sur les meta sequences
+     * File containing the information on the meta sequences
      */
     private static final File DATA_FILE = new File("data.sr");
 
     /**
-     * Objet "stub" d'une meta sequence, pour tester
+     * Stub meta sequence to test
      */
-    private static DataSircus stubData;
+    private static final DataSircus stubData;
 
     /**
-     * Bool�en permettant de savoir si on utilise les objets "stub" lors des appels aux methodes de lectures
+     * Boolean to know if we use a stub object
      */
     public static boolean useStub = false;
 
-    // G�n�ration d'une entreprise "stub"
+    /**
+     * Generation of stub data
+     */
     static {
 
         stubData = new DataSircus();
@@ -46,59 +50,55 @@ public final class Serializer {
 
         stubData.saveMetaSeq(stubMetaSeq1);
         stubData.saveMetaSeq(stubMetaSeq2);
+
+        Location location1 = new Location("France", "Tours", 37044, "Boulevard Tonnellé", 2);
+        Location location2 = new Location("France", "Chambray-lès-Tours", 37170, "Avenue de la République", 0);
+
+        stubData.addLocationToList(location1);
+        stubData.addLocationToList(location2);
     }
 
     /**
-     * Permet de faciliter la lecture d'un objet depuis un fichier
-     * @param file Fichier a lire
-     * @param stub Objet "stub" si jamais le fichier n'existe pas
-     * @return L'objet lu ou l'objet "stub" si le fichier n'existe pas
-     * @throws IOException Si le fichier n'est pas accessible
+     * Allows to facilitate the reading of an object from a file
+     * @param file File to read
+     * @param stub Stub object if the file doesn't exist
+     * @return Object read or stub if the file doesn't exist
+     * @throws IOException The file in not accessible
      */
     private static Object readObject(File file, Object stub) throws IOException {
-
         if(useStub) {
             return stub;
         }
 
         Object obj = stub;
 
-        // On ne lit dans le fichier que si ce dernier existe
+        // Read in the file only if it exists
         if(file.exists()) {
             try {
                 ObjectInputStream input = new ObjectInputStream(new FileInputStream(file));
-
                 obj = input.readObject();
-
                 input.close();
-
             } catch(FileNotFoundException ex) {
                 ex.printStackTrace();
-            } catch(ClassNotFoundException ex) {
+            } catch (ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
         }
-
         return obj;
     }
 
     /**
-     * Permet de faciliter l'ecriture d'un fichier
-     * @param file Fichier dans lequel ecrire
-     * @param object Objet a ecrire
-     * @throws IOException Si le fichier n'est pas accessible
+     * Allows to facilitate the writing of a file
+     * @param file File to write in
+     * @param object Object to write
+     * @throws IOException The file in not accessible
      */
     private static void writeObject(File file, Object object) throws IOException {
-
-        // On verifie qu'il ne s'agisse pas d'un dossier
         if(!file.isDirectory()) {
             try {
                 ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file));
-
                 output.writeObject(object);
-
                 output.close();
-
             } catch(FileNotFoundException ex) {
                 ex.printStackTrace();
             }
@@ -106,23 +106,22 @@ public final class Serializer {
     }
 
     /**
-     * Permet de lire les donnees de l'application depuis un fichier
-     * Si le fichier n'existe pas, une donnee "stub" est renvoyee
-     * @return DataCircus lue
-     * @throws IOException Si le fichier n'est pas accessible
+     * Allow to read the data of the application from a file
+     * If the file doesn't exist, a stub data is return
+     * @return DataCircus read
+     * @throws IOException The file in not accessible
      */
     public static DataSircus readDataCircus() throws IOException {
         return (DataSircus) readObject(DATA_FILE, stubData);
     }
 
     /**
-     * Permet d'enregistrer les informations de l'application dans un fichier
-     * @param dataSircus Objet representant les donnees a enregistrer
-     * @throws IOException Si le fichier n'est pas accessible
+     * Allow to save the information of the application in a file
+     * @param dataSircus Object that represent the data to record
+     * @throws IOException The file in not accessible
      */
     public static void writeDataCircus(DataSircus dataSircus) throws IOException {
         writeObject(DATA_FILE, dataSircus);
     }
-
 }
 

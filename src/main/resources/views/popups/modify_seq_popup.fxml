@@ -28,14 +28,14 @@
             <RowConstraints maxHeight="140.0" minHeight="30.0" prefHeight="59.0" vgrow="SOMETIMES" />
         </rowConstraints>
         <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="97.0" prefWidth="514.0">
-         <children>
-            <Label text="Séquence : " />
-            <TextField fx:id="titleSequenceLabel" />
-         </children>
+            <children>
+                <Label text="Séquence : " />
+                <TextField fx:id="titleSequenceLabel" />
+            </children>
         </HBox>
         <TableView fx:id="mediaTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="1">
             <columns>
-                <TableColumn fx:id="mediaTableColumnVerrouillage" prefWidth="118.0" text="Verrouillage" />
+                <TableColumn fx:id="mediaTableColumnVerrouillage" prefWidth="118.0" text="Positionnement fixe" />
                 <TableColumn fx:id="mediaTableColumnName" minWidth="100.0" prefWidth="404.0" text="Nom" />
                 <TableColumn fx:id="mediaTableColumnDuration" prefWidth="75.0" text="Temps" />
                 <TableColumn fx:id="mediaTableColumnOption" prefWidth="75.0" text="Options" />
@@ -44,20 +44,20 @@
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
         </TableView>
-      <Button fx:id="addMediaToSeq" minHeight="27.0" minWidth="95.0" mnemonicParsing="false" prefHeight="9.0" prefWidth="95.0" style="-fx-background-color: #006380;" text="Ajouter média" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
-         <GridPane.margin>
-            <Insets bottom="3.0" />
-         </GridPane.margin>
-      </Button>
-         <Button fx:id="saveAddMediaSeq" minHeight="27.0" minWidth="58.0" mnemonicParsing="false" style="-fx-background-color: #006380;" text="Valider" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-             <graphic>
-<!--                 <FontIcon iconLiteral="fa-fast-forward" iconSize="15" />-->
-             </graphic>
-         </Button>
-      <Button fx:id="cancelAddMediaSeq" minHeight="27.0" minWidth="58.0" mnemonicParsing="false" style="-fx-background-color: rgb(255,89,89);" text="Annuler" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-         <graphic>
-<!--            <FontIcon iconLiteral="fa-fast-forward" iconSize="15" />-->
-         </graphic>
-      </Button>
+        <Button fx:id="addMediaToSeq" minHeight="27.0" minWidth="95.0" mnemonicParsing="false" prefHeight="9.0" prefWidth="95.0" style="-fx-background-color: #006380;" text="Ajouter média" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+            <GridPane.margin>
+                <Insets bottom="3.0" />
+            </GridPane.margin>
+        </Button>
+        <Button fx:id="saveAddMediaSeq" minHeight="27.0" minWidth="58.0" mnemonicParsing="false" style="-fx-background-color: #006380;" text="Valider" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+            <graphic>
+                <!--                 <FontIcon iconLiteral="fa-fast-forward" iconSize="15" />-->
+            </graphic>
+        </Button>
+        <Button fx:id="cancelAddMediaSeq" minHeight="27.0" minWidth="58.0" mnemonicParsing="false" style="-fx-background-color: rgb(255,89,89);" text="Annuler" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+            <graphic>
+                <!--            <FontIcon iconLiteral="fa-fast-forward" iconSize="15" />-->
+            </graphic>
+        </Button>
     </GridPane>
 </AnchorPane>

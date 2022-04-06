@@ -1,7 +1,7 @@
 package fr.polytech.sircus.model;
 
 /**
- * Enumeration representant les differents types d'un media possible
+ * Represents the different types of media.
  */
 public enum TypeMedia {
     PICTURE,

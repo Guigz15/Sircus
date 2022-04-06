@@ -12,38 +12,52 @@ import java.util.Objects;
 
 public class SircusApplication extends Application {
 
+	/**
+     *  dataSircus object
+	 */
 	public static DataSircus dataSircus;
+
+	/**
+     *  main window controller
+	 */
 	private MainWindowController mainWindowController;
 
-	@Override
-	public void start(Stage stage) throws IOException {
+    public static void main(String[] args) {
+        launch();
+    }
 
-		SircusApplication.dataSircus = new DataSircus();
-		FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("views/main_window.fxml")));
-		mainWindowController = fxmlLoader.getController();
+	/**
+     * Starts application
+	 *
+	 * @param stage
+	 * @throw IOException
+	 */
+    @Override
+    public void start(Stage stage) throws IOException {
 
-		try {
-			SircusApplication.dataSircus = Serializer.readDataCircus();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        SircusApplication.dataSircus = new DataSircus();
+        FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("views/main_window.fxml")));
+        mainWindowController = fxmlLoader.getController();
 
-		Scene scene = new Scene(fxmlLoader.load(), 1000, 500 );
+        try {
+            SircusApplication.dataSircus = Serializer.readDataCircus();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-		stage.setOnCloseRequest(event -> {
-			try {
-				Serializer.writeDataCircus(SircusApplication.dataSircus);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 600);
 
-		stage.setTitle("Application Sircus");
-		stage.setScene(scene);
-		stage.show();
-	}
+        stage.setOnCloseRequest(event -> {
+            try {
+                Serializer.writeDataCircus(SircusApplication.dataSircus);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
-	public static void main(String[] args) {
-		launch();
-	}
+        stage.setTitle("Application Sircus");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+    }
 }

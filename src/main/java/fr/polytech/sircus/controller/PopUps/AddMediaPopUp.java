@@ -4,6 +4,7 @@ import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.model.Media;
 import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.model.TypeMedia;
+import fr.polytech.sircus.model.PathMedia;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,160 +24,159 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 
-public class addMediaPopUp {
+public class AddMediaPopUp {
 
-    //******************************************************************************************************************
-    // Composants UI
-    //******************************************************************************************************************
+    private final String MEDIAS_PATH = "medias/";
 
     /**
-     * Label du nom du média à ajouter
+     * FileChooser to choose the file used as a media.
+     */
+    @FXML
+    private final FileChooser fileChooserMedia;
+
+    /**
+     * FileChooser to choose the file shown after the media (interstim).
+     */
+    @FXML
+    private final FileChooser fileChooserInterstim;
+
+    /**
+     * Label of the name of the selected media.
      */
     @FXML
     private Label nameNewMedia;
 
     /**
-     * Champ de texte de la durée du média à ajouter
+     * Text field to input the duration of the media.
      */
     @FXML
     private TextField durationField;
 
     /**
-     * Fichier pour le média à ajouter
+     * File of the selected media.
      */
     @FXML
     private File newFileMedia;
 
     /**
-     * Champ texte du nom de l'inter-stimulation à ajouter
+     * Label of the name of the selected interstim.
      */
     @FXML
     private Label nameNewInterstim;
 
     /**
-     * Fichier pour l'inter-stimulation du média à ajouter
+     * File of the selected interstim.
      */
     @FXML
     private File newFileInterstim;
 
     /**
-     * Bouton annulant l'ajout du média
+     * Button to cancel the addition of a media.
      */
     @FXML
     private Button addMediaCancel;
 
     /**
-     * Bouton validant l'ajout du média
+     * Button to save the new media.
      */
     @FXML
     private Button addMediaSave;
 
     /**
-     * Bouton d'ajout d'un fichier pour le média à ajouter
+     * Button to choose the file used as a media.
      */
     @FXML
     private Button addMediaFile;
 
     /**
-     * Objet du bouton d'ajout de fichier : permet la sélection du fichier pour le média à ajouter
-     */
-    @FXML
-    private FileChooser fileChooserMedia;
-
-    /**
-     * Bouton d'ajout d'un fichier pour l'inter-stimulation du média à ajouter
+     * Button to choose the file shown after the media (interstim).
      */
     @FXML
     private Button addInterstimFile;
 
     /**
-     * Objet du bouton d'ajout fichier : permet la sélection du fichier pour l'inter-stimulation du média à ajouter
-     */
-    @FXML
-    private FileChooser fileChooserInterstim;
-
-    /**
-     * Bouton radio sélectionnant l'ajout d'un nouveau média
+     * Radio button used to create a new media.
      */
     @FXML
     private RadioButton addNewMedia;
 
     /**
-     * Bouton radio sélectionnant la copie d'un média existant
+     * Radio button used to copy an existing media.
      */
     @FXML
     private RadioButton addCopyMedia;
 
     /**
-     * ComboBox representant l'ensemble des médias
+     * ComboBox containing all the existing medias.
      */
     @FXML
     private ComboBox<Media> nameListMedias;
 
-
-    //******************************************************************************************************************
-    // Gestionnaires sequences
-    //******************************************************************************************************************
-
     /**
-     * Liste des médias
+     * List of the medias of the mother sequence.
      */
     private ObservableList<Media> listMedias = null;
 
     /**
-     * Séquence à laquelle sera ajouté le média
+     * Sequence in which the media will be added.
      */
     private Sequence sequence = null;
 
     /**
-     * Pop-up ajout de média
+     * The popup to add a media.
      */
     private Stage popUpStage = null;
 
     /**
-     * Event listener de modification de la séquence provenant du controller modifySeqPopUp
+     * Event listener checking for sequence's modification from the modifySeqPopUp controller.
      */
-    private modifySeqPopUp.SequenceModificationListener listener = null;
-
-
-    //******************************************************************************************************************
-    //   ###    ###   #   #   ####  #####  ####   #   #   ###   #####   ###   ####    ####
-    //  #   #  #   #  ##  #  #        #    #   #  #   #  #   #    #    #   #  #   #  #
-    //  #      #   #  # # #   ###     #    ####   #   #  #        #    #   #  ####    ###
-    //  #   #  #   #  #  ##      #    #    #   #  #   #  #   #    #    #   #  #   #      #
-    //   ###    ###   #   #  ####     #    #   #   ###    ###     #     ###   #   #  ####
-    //******************************************************************************************************************
+    private ModifySeqPopUp.SequenceModificationListener listener = null;
 
     /**
-     * Constructeur du contrôleur de la pop-up d'ajout d'un média à une séquence et de ses composantes
-     * @param owner fenêtre principale
-     * @param listMedias liste des médias de la séquence
-     * @param sequence la séquence dans laquelle on ajoute un média
-     * @param listener event listener de modification de la séquence provenant du controller modifySeqPopUp
+     * Constructor of the popup's controller to add a media to a sequence.
+     *
+     * @param owner      main window.
+     * @param listMedias list of the medias of the sequence.
+     * @param sequence   the sequence in which the media will be added.
+     * @param listener   vent listener checking for sequence's modification from the modifySeqPopUp controller.
      */
-    public addMediaPopUp(Window owner, ObservableList<Media> listMedias, Sequence sequence,
-                         modifySeqPopUp.SequenceModificationListener listener, FileChooser fileChooserMedia,
+    public AddMediaPopUp(Window owner, ObservableList<Media> listMedias, Sequence sequence,
+                         ModifySeqPopUp.SequenceModificationListener listener, FileChooser fileChooserMedia,
                          FileChooser fileChooserInterstim) {
 
         FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/add_media_popup.fxml"));
         fxmlLoader.setController(this);
 
+        PathMedia paths = SircusApplication.dataSircus.getPath();
+        String pathUse;
         this.fileChooserMedia = fileChooserMedia;
         this.fileChooserInterstim = fileChooserInterstim;
 
         try {
-            this.sequence   = sequence;
+            this.sequence = sequence;
             this.listMedias = listMedias;
             this.listener = listener;
+
+            if(paths.isCustomPath() == true || paths.getLastPath() == null){
+                pathUse = paths.getDefaultPath();
+            } else {
+                pathUse = paths.getLastPath();
+            }
 
             this.fileChooserMedia.setTitle("Open file (media)");
             this.fileChooserMedia.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("Image and video Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.mp4")
             );
+            this.fileChooserMedia.setInitialDirectory(
+                    new File(pathUse)
+            );
 
             this.fileChooserInterstim.setTitle("Open file (interstim)");
             this.fileChooserInterstim.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+            );
+            this.fileChooserInterstim.setInitialDirectory(
+                    new File(pathUse)
             );
 
             Scene dialogScene = new Scene(fxmlLoader.load());
@@ -187,8 +188,8 @@ public class addMediaPopUp {
             dialog.initOwner(owner);
             dialog.setScene(dialogScene);
             dialog.setResizable(true);
-            dialog.setMinHeight(200); //170 (+30 hauteur de l'entête de la fenêtre sur windows)
-            dialog.setMinWidth(290); //280 (+10 largeur de la fenêtre sur windows)
+            dialog.setMinHeight(200); //170 (+30 height of the window header on the Windows OS)
+            dialog.setMinWidth(290); //280 (+10 width of the window header on the Windows OS)
             dialog.setTitle("Ajout Media à " + this.sequence.getName());
 
             dialog.show();
@@ -197,22 +198,13 @@ public class addMediaPopUp {
         }
     }
 
-    //******************************************************************************************************************
-    //      #  #####  #   #         #####  #   #  #   #   ###   #####  #   ###   #   #   ####
-    //      #  #       # #          #      #   #  ##  #  #   #    #    #  #   #  ##  #  #
-    //      #  ###      #           ###    #   #  # # #  #        #    #  #   #  # # #   ###
-    //  #   #  #       # #          #      #   #  #  ##  #   #    #    #  #   #  #  ##      #
-    //   ###   #      #   #         #       ###   #   #   ###     #    #   ###   #   #  ####
-    //******************************************************************************************************************
-
-
     /**
-     * Méthode d'initialisation du controleur et de ses attributs puis ajoute des fonctionnalités à chaque composant
+     * Initializes the controller and its attributes.
      */
     @FXML
     private void initialize() {
         this.nameListMedias.setItems(this.listMedias);
-        this.nameListMedias.getSelectionModel().select (0);
+        this.nameListMedias.getSelectionModel().select(0);
         this.nameListMedias.setDisable(true);
         this.addMediaSave.setDisable(true);
         this.addMediaFile.setDisable(true);
@@ -226,8 +218,8 @@ public class addMediaPopUp {
         this.addCopyMedia.setOnMouseClicked(mouseEvent -> selectAddCopyMedia());
         this.addNewMedia.setOnMouseClicked(mouseEvent -> selectAddNewMedia());
         this.addMediaFile.setOnMouseClicked(mouseEvent -> selectMediaFile());
-        this.addMediaCancel.setOnMouseClicked (mouseEvent -> cancelAddMedia());
-        this.addMediaSave.setOnMouseClicked (mouseEvent -> {
+        this.addMediaCancel.setOnMouseClicked(mouseEvent -> cancelAddMedia());
+        this.addMediaSave.setOnMouseClicked(mouseEvent -> {
             try {
                 addMediaToSeq();
             } catch (IOException e) {
@@ -237,7 +229,7 @@ public class addMediaPopUp {
     }
 
     /**
-     * Méthode permettant la sélection d'un fichier pour l'inter-stimualtion du média dans l'ordinateur de l'utilisateur
+     * Allows to pick a file used as the interstim in the user's computer.
      */
     private void selectInterstimFile() {
         this.newFileInterstim = this.fileChooserInterstim.showOpenDialog(this.popUpStage);
@@ -245,6 +237,17 @@ public class addMediaPopUp {
         try {
             if (this.newFileInterstim.isFile()) {
                 this.nameNewInterstim.setText(this.newFileInterstim.getName());
+
+                String newPath = Paths.get(newFileInterstim.getPath()).getParent().toString();
+                SircusApplication.dataSircus.getPath().setLastPath(newPath);
+                if(SircusApplication.dataSircus.getPath().isCustomPath() == false){
+                    this.fileChooserMedia.setInitialDirectory(
+                            new File(newPath)
+                    );
+                    this.fileChooserInterstim.setInitialDirectory(
+                            new File(newPath)
+                    );
+                }
             }
         } catch (Exception e) {
             System.out.print("Aucun média sélectionné.");
@@ -252,7 +255,7 @@ public class addMediaPopUp {
     }
 
     /**
-     * Méthode permettant la sélection d'un fichier pour le média dans l'ordinateur de l'utilisateur
+     * Allows to pick a file used as the media in the user's computer.
      */
     private void selectMediaFile() {
         this.newFileMedia = this.fileChooserMedia.showOpenDialog(this.popUpStage);
@@ -261,6 +264,17 @@ public class addMediaPopUp {
             if (this.newFileMedia.isFile()) {
                 this.nameNewMedia.setText(this.newFileMedia.getName());
                 checkNameNewMediaFilled();
+
+                String newPath = Paths.get(newFileMedia.getPath()).getParent().toString();
+                SircusApplication.dataSircus.getPath().setLastPath(newPath);
+                if(SircusApplication.dataSircus.getPath().isCustomPath() == false){
+                    this.fileChooserMedia.setInitialDirectory(
+                            new File(newPath)
+                    );
+                    this.fileChooserInterstim.setInitialDirectory(
+                            new File(newPath)
+                    );
+                }
             }
         } catch (Exception e) {
             System.out.print("Aucun média sélectionné.");
@@ -268,12 +282,12 @@ public class addMediaPopUp {
     }
 
     /**
-     * Méthode qui vérifie si un fichier a été sélectionné et si une durée a été remplie
-     * si oui active le bouton de sauvegarde
-     * si non le désactive
+     * Checks if a file has been selected for the media and if a duration has been set.
+     * If true, activates the button to save and quit.
+     * Disables it otherwise.
      */
     private void checkNameNewMediaFilled() {
-        if(this.addNewMedia.isSelected()) {
+        if (this.addNewMedia.isSelected()) {
             this.addMediaSave.setDisable(
                     this.nameNewMedia.getText().length() <= 0 || this.durationField.getText().length() <= 0
             );
@@ -281,10 +295,11 @@ public class addMediaPopUp {
     }
 
     /**
-     * Méthode gérant l'évenement de sélection de la checkbox de sélection d'un nouveau média
+     * Enables the widgets to add a new media if the radio button to create a new media is selected.
+     * Disables the other widgets.
      */
     private void selectAddNewMedia() {
-        if(addCopyMedia.isSelected()) {
+        if (addCopyMedia.isSelected()) {
             this.addCopyMedia.fire();
         }
         this.nameListMedias.setDisable(true);
@@ -296,10 +311,11 @@ public class addMediaPopUp {
     }
 
     /**
-     * Méthode gérant l'évenement de sélection de la checkbox de sélection de la copie d'un média
+     * Enables the widgets to copy a media if the radio button to copy a media is selected.
+     * Disables the other widgets.
      */
     private void selectAddCopyMedia() {
-        if(this.addNewMedia.isSelected()) {
+        if (this.addNewMedia.isSelected()) {
             this.addNewMedia.fire();
         }
 
@@ -313,46 +329,55 @@ public class addMediaPopUp {
     }
 
     /**
-     * Méthode d'ajout d'un média à la séquence
-     * @throws IOException si problème lié à la sélection d'un fichier
+     * Adds a media to the sequence.
+     *
+     * @throws IOException if there is a problem relative to the file selection.
      */
     private void addMediaToSeq() throws IOException {
         Alert alert = new Alert(
                 Alert.AlertType.CONFIRMATION,
-                "Etes-vous sûr de vouloir enregistrer les modifications de " + this.sequence.getName () + " ?",
+                "Etes-vous sûr de vouloir enregistrer les modifications de " + this.sequence.getName() + " ?",
                 ButtonType.YES,
                 ButtonType.NO
         );
         alert.showAndWait();
 
-        if (alert.getResult() == ButtonType.YES)
-        {
+        if (alert.getResult() == ButtonType.YES) {
             if (this.addNewMedia.isSelected()) {
                 if (this.newFileMedia.exists()) {
+                    Path pathMedia = Paths.get(this.newFileMedia.getPath());
+                    String absoluteMediaPath = new File(MEDIAS_PATH).getAbsolutePath();
 
-                    Path path = Paths.get(this.newFileMedia.getPath());
-                    OutputStream os = new FileOutputStream("medias/" + this.newFileMedia.getName());
-                    Files.copy(path,os);
+                    // We compare the absolute path of the "medias" directory with the new media's one.
+                    // If they are not the same directory, we copy the new media to the application's "medias" directory.
+                    if (!absoluteMediaPath.equals(pathMedia.toString().split("\\\\" + this.newFileMedia.getName())[0])) {
+                        OutputStream os = new FileOutputStream(MEDIAS_PATH + this.newFileMedia.getName());
+                        Files.copy(pathMedia, os);
+                    }
 
                     if (this.newFileInterstim != null) {
                         if (this.newFileInterstim.isFile()) {
-                            Path path2 = Paths.get(this.newFileInterstim.getPath());
-                            OutputStream os2 = new FileOutputStream("medias/" + this.newFileInterstim.getName());
-                            Files.copy(path2,os2);
+                            Path pathInterstim = Paths.get(this.newFileInterstim.getPath());
+
+                            // We compare the absolute path of the "medias" directory with the interstim's one.
+                            // If they are not the same directory, we copy the new interstim to the application's "medias" directory.
+                            if (!absoluteMediaPath.equals(pathInterstim.toString().split("\\\\" + this.newFileInterstim.getName())[0])) {
+                                OutputStream os = new FileOutputStream(MEDIAS_PATH + this.newFileInterstim.getName());
+                                Files.copy(pathInterstim, os);
+                            }
                         }
                     }
 
                     String extension = "";
                     int i = this.newFileMedia.getPath().lastIndexOf('.');
                     if (i > 0) {
-                        extension = this.newFileMedia.getPath().substring(i+1);
+                        extension = this.newFileMedia.getPath().substring(i + 1);
                     }
 
                     TypeMedia typeMedia;
                     if (extension.equals("mp4")) {
                         typeMedia = TypeMedia.VIDEO;
-                    }
-                    else {
+                    } else {
                         typeMedia = TypeMedia.PICTURE;
                     }
 
@@ -372,15 +397,15 @@ public class addMediaPopUp {
                                 TypeMedia.PICTURE,
                                 null
                         );
+                        newInterstim.setIsInterstim(true); // Indicate that the new media is an interstim
 
                         newMedia.setInterStim(newInterstim);
                     }
 
                     this.sequence.addMedia(newMedia);
                 }
-            }
-            else {
-                Media copiedMedia = new Media((Media) this.nameListMedias.getSelectionModel().getSelectedItem());
+            } else {
+                Media copiedMedia = new Media(this.nameListMedias.getSelectionModel().getSelectedItem());
                 if (copiedMedia.getInterStim() != null) {
                     copiedMedia.setInterStim(new Media(copiedMedia.getInterStim()));
                 }
@@ -393,7 +418,7 @@ public class addMediaPopUp {
     }
 
     /**
-     * Méthode de fermeture de la pop-up
+     * Closes the popup.
      */
     private void cancelAddMedia() {
         this.popUpStage.close();

@@ -2,107 +2,118 @@ package fr.polytech.sircus.model;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
- * Objet permettant de représenter une sequence
+ * This class represents a sequence
  */
 public class Sequence implements Serializable {
 
-    /**
-     * Numéro de version de la classe, nécessaire pour l'interface Serializable
-     */
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Nom de la sequence
-     */
     @Getter @Setter
     private String name;
 
-    /**
-     * Duree de la sequence
-     */
-    @Setter
+    @Getter
     private Duration duration;
 
-    /**
-     * Liste des medias de la sequence
-     */
     @Getter @Setter
     private List<Media> listMedias;
 
-    /**
-     * Booleen verrouille
-     */
     @Getter @Setter
-    private Boolean verr;
+    private Boolean lock;
+
 
     /**
-     * Constructeur de l'objet sequence
-     * @param name nom de la sequence
+     * The constructor
+     *
+     * @param name Sequence's name
      */
-    public Sequence(String name){
+    public Sequence(String name) {
         this.name = name;
         this.duration = Duration.ZERO;
         this.listMedias = new ArrayList<>();
-        this.verr = true;
+        this.lock = true;
     }
 
     /**
-     * Constructeur de l'objet sequence par copie
-     * @param sequence Sequence a copier
+     * The copy constructor
+     *
+     * @param sequence Sequence to copy
      */
-    public Sequence(Sequence sequence){
+    public Sequence(Sequence sequence) {
         this.name = sequence.getName();
         this.duration = sequence.getDuration();
         this.listMedias = sequence.getListMedias();
-        this.verr = sequence.getVerr();
+        this.lock = sequence.getLock();
     }
 
     /**
-     * Retourne la duree de la sequence
-     * @return duration la duree
+     * Add a media to this sequence
+     *
+     * @param media Media to add
      */
-    public Duration getDuration() {
+    public void addMedia(Media media) {
+        this.listMedias.add(media);
+        this.duration = this.duration.plus(media.getDuration());
+        //computeDuration();
+    }
+
+    /**
+     * To remove a media from this sequence
+     *
+     * @param media Media to remove
+     */
+    public void removeMedia(Media media) {
+        if (this.listMedias.remove(media)) {
+            //computeDuration();
+            this.duration = this.duration.minus(media.getDuration());
+        }
+    }
+
+
+    /**
+     *  Compute the duration of the sequence.
+     */
+    public void computeDuration(){
         Duration duration = Duration.ofSeconds(0);
-        for(int index = 0; index < listMedias.size(); index++){
-            duration = duration.plus(listMedias.get(index).getDuration());
-            if(listMedias.get(index).getInterStim() != null){
-                duration = duration.plus(listMedias.get(index).getInterStim().getDuration());
+        for (Media listMedia : listMedias) {
+            duration = duration.plus(listMedia.getDuration());
+            if (listMedia.getInterStim() != null) {
+                duration = duration.plus(listMedia.getInterStim().getDuration());
             }
         }
-        return duration;
+
+        this.duration = duration;
     }
 
-    /**
-     * Ajoute un media a la liste des medias de la sequence
-     * @param media le media a ajouter
-     */
-    public void addMedia(Media media)
-    {
-        this.listMedias.add ( media );
-        this.setDuration(this.getDuration());
-    }
 
     /**
-     * Supprime un media a la liste des medias de la sequence
-     * @param media le media a supprimer
+     * Override the method toString to display only the name
+     *
+     * @return Sequence's name
      */
-    public void remMedia(Media media)
-    {
-        if ( this.listMedias.remove ( media ) ) {
-            this.setDuration(this.getDuration());
-        }
+    @Override
+    public String toString() {
+        return name;
     }
 
+
     /**
-     * Surcharge de la methode toString
-     * @return name le nom
+     * Checks if two sequences are equals.
+     *
+     * @param o the sequence to compare with.
+     * @return boolean true if the sequences are the same, false otherwise.
      */
-    public String toString() { return name; }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Sequence)) return false;
+        Sequence sequence = (Sequence) o;
+        return Objects.equals(getName(), sequence.getName()) && Objects.equals(getDuration(), sequence.getDuration()) && Objects.equals(getListMedias(), sequence.getListMedias());
+    }
 }
