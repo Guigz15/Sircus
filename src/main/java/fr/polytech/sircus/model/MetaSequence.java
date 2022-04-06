@@ -65,7 +65,7 @@ public class MetaSequence implements Serializable {
      *
      * @param sequence The sequence to remove.
      */
-    public void remSequence(Sequence sequence) {
+    public void removeSequence(Sequence sequence) {
         if (this.sequencesList.remove(sequence)) {
             this.duration = this.duration.minus(sequence.getDuration());
         }

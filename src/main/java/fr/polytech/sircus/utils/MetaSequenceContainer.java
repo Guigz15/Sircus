@@ -42,7 +42,7 @@ public class MetaSequenceContainer implements Serializable {
         metaSequence2.addSequence(sequence2);
         metaSequence2.addSequence(sequence3);
         metaSequence3.addSequence(sequence1);
-        metaSequence3.remSequence(sequence3);
+        metaSequence3.removeSequence(sequence3);
 
         metaSequences.add(metaSequence1);
         metaSequences.add(metaSequence2);
