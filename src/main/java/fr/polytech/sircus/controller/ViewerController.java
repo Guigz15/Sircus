@@ -24,6 +24,7 @@ import javafx.util.Duration;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -40,6 +41,7 @@ public class ViewerController {
     // The MetaSequence that id passed to the viewer
     private final MetaSequence playingMetaSequence;
 
+    // TODO: remove this attribute
     // The list containing the start times of the media of the current meta-sequence
     ArrayList<Integer> listBeginningTimeMedia;
 
@@ -61,6 +63,13 @@ public class ViewerController {
     // Boolean indicating if the meta-sequence has already been started once or not
     private boolean metaSequenceStarted;
 
+    // Stores the start time of each sequence to be able to move between sequences.
+    private final ArrayList<Integer> sequencesStartTime = new ArrayList<>();
+
+    private int currentSequenceIndex;
+
+    private final int numberOfSequences;
+
     /**
      * Constructor of ViewerController class.
      *
@@ -69,6 +78,7 @@ public class ViewerController {
     public ViewerController(Window owner, MetaSequence metaSequence, MetaSequenceController metaSequenceController) {
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/viewer.fxml")));
         fxmlLoader.setController(this);
+        numberOfSequences = metaSequence.getSequencesList().size();
 
         try {
             Scene viewerScene = new Scene(fxmlLoader.load(), 1280, 720);
@@ -213,17 +223,35 @@ public class ViewerController {
 
         // Counter to count the total duration of the medias already played.
         int counterDuration = 0;
+        int sequenceIndex = -1;
 
         for (Sequence sequence : metaSequence.getSequencesList()) {
+            sequenceIndex++;
+            sequencesStartTime.add(counterDuration);
+            boolean addSequenceIndex = true;
+
             // For each Media in the sequence.
             for (fr.polytech.sircus.model.Media media : sequence.getListMedias()) {
                 // If the media is an image.
                 if (media.getType() == TypeMedia.PICTURE) {
-                    timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
-                            event -> {
-                                removeMedia();
-                                showImageFromName(media.getName());
-                            }));
+                    if (addSequenceIndex) {
+                        int finalSequenceIndex = sequenceIndex;
+                        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                                event -> {
+                                    removeMedia();
+                                    showImageFromName(media.getName());
+                                    currentSequenceIndex = finalSequenceIndex;
+                                }));
+                    } else {
+                        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                                event -> {
+                                    removeMedia();
+                                    showImageFromName(media.getName());
+                                }));
+                    }
+
+                    addSequenceIndex = false;
+
                     // The second at which the image starts is added to listBeginningTimeMedia.
                     listBeginningTimeMedia.add(counterDuration);
 
@@ -232,11 +260,24 @@ public class ViewerController {
                 }
                 // If the media is a video
                 else if (media.getType() == TypeMedia.VIDEO) {
-                    timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
-                            event -> {
-                                removeImage();
-                                showMediaFromName(media.getName());
-                            }));
+                    if (addSequenceIndex) {
+                        int finalSequenceIndex = sequenceIndex;
+                        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                                event -> {
+                                    removeImage();
+                                    showMediaFromName(media.getName());
+                                    currentSequenceIndex = finalSequenceIndex;
+                                }));
+                    } else {
+                        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                                event -> {
+                                    removeImage();
+                                    showMediaFromName(media.getName());
+                                }));
+                    }
+
+                    addSequenceIndex = false;
+
                     // The second at which the video starts is added to listBeginningTimeMedia.
                     listBeginningTimeMedia.add(counterDuration);
                     // We add to the counterDuration the duration of the media currently read.
@@ -259,6 +300,7 @@ public class ViewerController {
             }
         }
 
+
         // We add an event that removes the image or video at the end of the playback.
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
                 event -> {
@@ -270,6 +312,7 @@ public class ViewerController {
         // This allows the button passing a media to trigger the end of the playback of the meta-sequence
         // if we are playing the last media.
         listBeginningTimeMedia.add(counterDuration);
+        sequencesStartTime.add(counterDuration);
 
         // We start the timeline's stopwatch so that the events we have just created are triggered
         timeline.play();
@@ -304,6 +347,7 @@ public class ViewerController {
         }
     }
 
+    // TODO: remove this method
     /**
      * Display the next media
      */
@@ -326,6 +370,19 @@ public class ViewerController {
         }
     }
 
+    /**
+     * Jumps the timeline to the next sequence.
+     */
+    public void nextSequence() {
+        if (currentSequenceIndex < numberOfSequences - 1) {
+            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex + 1) * 1000));
+            currentSequenceIndex++;
+        } else {
+            timeline.jumpTo(new Duration(sequencesStartTime.get(sequencesStartTime.size() - 1) * 1000));
+        }
+    }
+
+    // TODO: remove this method
     /**
      * Display the previous media
      */
@@ -351,6 +408,18 @@ public class ViewerController {
 
             // javafx.util.Duration takes milliseconds in parameter of constructor, so we multiply by 1000 seconds
             timeline.jumpTo(new Duration(startDateFound * 1000));
+        }
+    }
+
+    /**
+     * Jumps the timeline to the previous sequence.
+     */
+    public void previousSequence() {
+        if (currentSequenceIndex > 0) {
+            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex - 1) * 1000));
+            currentSequenceIndex--;
+        } else {
+            timeline.jumpTo(new Duration(0));
         }
     }
 
