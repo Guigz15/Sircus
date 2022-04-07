@@ -16,7 +16,7 @@
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="player_monitor" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PlayerMonitorController">
+<GridPane id="playerMonitor" fx:id="playerMonitor" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PlayerMonitorController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="315.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="685.0" />
@@ -47,7 +47,7 @@
             <Insets />
          </opaqueInsets>
       </VBox>
-      <TextArea id="CommentaryText" prefHeight="200.0" prefWidth="200.0" promptText="Commentaires..." GridPane.rowIndex="1">
+      <TextArea id="commentTextArea" fx:id="commentTextArea" prefHeight="200.0" prefWidth="200.0" promptText="Commentaires..." GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </GridPane.margin></TextArea>
@@ -101,7 +101,7 @@
             </VBox>
          </children>
       </StackPane>
-      <Button id="AddCommButton" fx:id="AddCommButton" alignment="TOP_LEFT" mnemonicParsing="false" onMouseClicked="#addComment" text="+" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+      <Button id="addCommButton" fx:id="addCommButton" alignment="TOP_LEFT" mnemonicParsing="false" onMouseClicked="#addComment" text="+" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
          <GridPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>
@@ -119,7 +119,7 @@
          <children>
             <StackPane maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-border-color: black; -fx-border-width: 1; -fx-border-style: solid;" GridPane.rowIndex="1">
                <children>
-                  <MediaView id="CameraMedia" fx:id="CameraMedia" fitHeight="300.0" fitWidth="300.0">
+                  <MediaView id="cameraMedia" fx:id="cameraMedia" fitHeight="300.0" fitWidth="300.0">
                      <viewport>
                         <Rectangle2D />
                      </viewport>
@@ -131,8 +131,8 @@
             </StackPane>
             <StackPane maxHeight="-Infinity" maxWidth="-Infinity" style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <MediaView id="ViewerMedia" fx:id="ViewerMedia" fitHeight="300.0" fitWidth="300.0" style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;" />
-                  <ImageView id="ViewerImage" fx:id="ViewerImage" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER" />
+                  <MediaView id="viewerMedia" fx:id="viewerMedia" fitHeight="300.0" fitWidth="300.0" style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;" />
+                  <ImageView id="viewerImage" fx:id="viewerImage" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER" />
                </children>
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" />
@@ -153,22 +153,22 @@
                   <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                </GridPane.margin>
                <children>
-                  <Button id="BackButton" fx:id="BackButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false" prefWidth="55.0" text="◁◁" textAlignment="CENTER">
+                  <Button id="backButton" fx:id="backButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false" prefWidth="55.0" text="◁◁" textAlignment="CENTER">
                      <font>
                         <Font size="22.0" />
                      </font>
                   </Button>
-                  <Button id="StopButton" fx:id="StopButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false" prefWidth="55.0" text="■">
+                  <Button id="stopButton" fx:id="stopButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false" prefWidth="55.0" text="■">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Button>
-                  <Button id="PlayButton" fx:id="PlayButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false" prefWidth="55.0" text="▶" textAlignment="CENTER">
+                  <Button id="playButton" fx:id="playButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false" prefWidth="55.0" text="▶" textAlignment="CENTER">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Button>
-                  <Button id="ForwardButton" fx:id="ForwardButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false" prefWidth="55.0" text="▷▷" textAlignment="CENTER">
+                  <Button id="forwardButton" fx:id="forwardButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false" prefWidth="55.0" text="▷▷" textAlignment="CENTER">
                      <font>
                         <Font size="22.0" />
                      </font>

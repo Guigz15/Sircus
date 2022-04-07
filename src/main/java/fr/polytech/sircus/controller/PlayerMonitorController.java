@@ -3,43 +3,55 @@ package fr.polytech.sircus.controller;
 import fr.polytech.sircus.SircusApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * Manages the interface used when the exam is in progress (player_monitor)
  */
 public class PlayerMonitorController {
 
-    // Manage the stage of the media
-    private Stage monitorStage = null;
+    @FXML
+    private GridPane playerMonitor;
+
+    @FXML
+    private TextArea commentTextArea;
+
+
+    /**
+     * Default constructor
+     */
+    public PlayerMonitorController(){}
 
     /**
      * Constructor of PlayerMonitorController
      *
      * @param owner the window which created the monitor
      */
-    public PlayerMonitorController(Window owner){
-        FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/player_monitor.fxml")));
-        fxmlLoader.setController(this);
-
+    public PlayerMonitorController(Window owner) {
         try {
-            Scene monitorScene = new Scene(fxmlLoader.load(), 920, 620);
-            monitorStage = new Stage();
-            monitorStage.initOwner(owner);
+            FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/player_monitor.fxml"));
+            Parent rootParent = fxmlLoader.load();
+            Stage monitorStage = new Stage();
             monitorStage.setMinWidth(920);
             monitorStage.setMinHeight(620);
-            monitorStage.setScene(monitorScene);
             monitorStage.setTitle("Moniteur");
+            monitorStage.initOwner(owner);
+            monitorStage.setScene(new Scene(rootParent));
             monitorStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -47,6 +59,6 @@ public class PlayerMonitorController {
      */
     @FXML
     private void addComment(){
-
+        System.out.println(this.commentTextArea.getText());
     }
 }
