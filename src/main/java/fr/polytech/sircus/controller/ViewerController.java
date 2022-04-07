@@ -41,10 +41,6 @@ public class ViewerController {
     // The MetaSequence that id passed to the viewer
     private final MetaSequence playingMetaSequence;
 
-    // TODO: remove this attribute
-    // The list containing the start times of the media of the current meta-sequence
-    ArrayList<Integer> listBeginningTimeMedia;
-
     @FXML
     private MediaView mediaView;
 
@@ -64,7 +60,7 @@ public class ViewerController {
     private boolean metaSequenceStarted;
 
     // Stores the start time of each sequence to be able to move between sequences.
-    private final ArrayList<Integer> sequencesStartTime = new ArrayList<>();
+    private final ArrayList<Integer> sequencesStartTime;
 
     private int currentSequenceIndex;
 
@@ -111,7 +107,7 @@ public class ViewerController {
         playingMetaSequence = metaSequence;
         metaSequenceStarted = false;
         this.metaSequenceController = metaSequenceController;
-        listBeginningTimeMedia = new ArrayList<>();
+        sequencesStartTime = new ArrayList<>();
         closingManager();
     }
 
@@ -252,9 +248,6 @@ public class ViewerController {
 
                     addSequenceIndex = false;
 
-                    // The second at which the image starts is added to listBeginningTimeMedia.
-                    listBeginningTimeMedia.add(counterDuration);
-
                     // We add to the counterDuration the duration of the media currently read.
                     counterDuration += media.getDuration().getSeconds();
                 }
@@ -278,8 +271,6 @@ public class ViewerController {
 
                     addSequenceIndex = false;
 
-                    // The second at which the video starts is added to listBeginningTimeMedia.
-                    listBeginningTimeMedia.add(counterDuration);
                     // We add to the counterDuration the duration of the media currently read.
                     counterDuration += media.getDuration().getSeconds();
                 }
@@ -290,10 +281,7 @@ public class ViewerController {
                                 removeMedia();
                                 showImageFromName(media.getInterStim().getName());
                             }));
-                    // The second at which the "inter-stim" starts is added to listBeginningTimeMedia.
-                    // We could comment this line if we don't want to go through the inter-stim with the buttons
-                    // allowing to skip a media or to return to the previous media.
-                    listBeginningTimeMedia.add(counterDuration);
+
                     // We add to the counterDuration the duration of the "inter-stim" currently read.
                     counterDuration += media.getInterStim().getDuration().getSeconds();
                 }
@@ -311,7 +299,6 @@ public class ViewerController {
         // The end of the playback is added to the listBeginningTimeMedia
         // This allows the button passing a media to trigger the end of the playback of the meta-sequence
         // if we are playing the last media.
-        listBeginningTimeMedia.add(counterDuration);
         sequencesStartTime.add(counterDuration);
 
         // We start the timeline's stopwatch so that the events we have just created are triggered
@@ -347,29 +334,6 @@ public class ViewerController {
         }
     }
 
-    // TODO: remove this method
-    /**
-     * Display the next media
-     */
-    public void nextMedia() {
-        if (listBeginningTimeMedia.size() > 0) {
-            // We define a buffer start date, at the first start date of the listBeginningTimeMedia (probably 0)
-            Integer startDateFound = listBeginningTimeMedia.get(0);
-
-            // For each start date of media
-            for (Integer integer : listBeginningTimeMedia) {
-                // We check if the starting date is higher than the current date of the timeline
-                if (integer > timeline.getCurrentTime().toSeconds()) {
-                    // We found the media
-                    startDateFound = integer;
-                    break;
-                }
-            }
-            // javafx.util.Duration takes milliseconds in parameter of constructor, so we multiply by 1000 seconds
-            timeline.jumpTo(new Duration(startDateFound * 1000));
-        }
-    }
-
     /**
      * Jumps the timeline to the next sequence.
      */
@@ -379,35 +343,6 @@ public class ViewerController {
             currentSequenceIndex++;
         } else {
             timeline.jumpTo(new Duration(sequencesStartTime.get(sequencesStartTime.size() - 1) * 1000));
-        }
-    }
-
-    // TODO: remove this method
-    /**
-     * Display the previous media
-     */
-    public void prevMedia() {
-        if (listBeginningTimeMedia.size() > 0) {
-            // We define a buffer start date, at the first start date of the listBeginningTimeMedia (probably 0)
-            Integer startDateFound = listBeginningTimeMedia.get(0);
-
-            // For each start date of media
-            int i = 0;
-            // This loop allows to find the index of the first media which will be launched after the current media
-            while (i < listBeginningTimeMedia.size() && listBeginningTimeMedia.get(i) < timeline.getCurrentTime().toSeconds()) {
-                i++;
-            }
-
-            // If "i" is greater than 0, the index "i-1" corresponds to the current media.
-            // The media at index "i" corresponds to the next media.
-            // So the previous media is at index "i-2".
-            if (i > 1) {
-                i -= 2;
-                startDateFound = listBeginningTimeMedia.get(i);
-            }
-
-            // javafx.util.Duration takes milliseconds in parameter of constructor, so we multiply by 1000 seconds
-            timeline.jumpTo(new Duration(startDateFound * 1000));
         }
     }
 

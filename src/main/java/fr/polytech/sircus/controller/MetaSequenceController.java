@@ -412,7 +412,7 @@ public class MetaSequenceController {
     @FXML
     private void backward() {
         if (viewer != null) {
-            viewer.prevMedia();
+            viewer.previousSequence();
         }
     }
 
@@ -422,7 +422,7 @@ public class MetaSequenceController {
     @FXML
     private void forward() {
         if (viewer != null) {
-            viewer.nextMedia();
+            viewer.nextSequence();
         }
     }
 
