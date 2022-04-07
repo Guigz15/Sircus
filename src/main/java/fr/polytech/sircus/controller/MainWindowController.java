@@ -45,7 +45,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private TextField lateral;
     @FXML
-    private ComboBox<Location> location;
+    private ComboBox<String> location;
     @FXML
     private ComboBox<Method> method;
 
@@ -56,7 +56,7 @@ public class MainWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Location Combobox
-        ObservableList<Location> locationsList = FXCollections.observableArrayList(SircusApplication.dataSircus.getLocationsList());
+        ObservableList<String> locationsList = FXCollections.observableArrayList("Coucou");
         location.setItems(locationsList);
 
         // Method Combobox

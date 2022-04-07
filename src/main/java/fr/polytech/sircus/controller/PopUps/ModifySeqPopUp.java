@@ -97,9 +97,6 @@ public class ModifySeqPopUp {
     /** List of media and cross-stimulus media */
     private List<Media> listMediaPlusInterstim = null;
 
-    /** Temporary object used to store media (useful when creating media by copying) */
-    private Media tempMedia = null;
-
     /**
      * Constructor of the controller of the sequence modification pop-up and its components
      *
