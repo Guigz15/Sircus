@@ -22,6 +22,12 @@ public class SircusApplication extends Application {
 	 */
 	private MainWindowController mainWindowController;
 
+    /**
+     * boolean for administrator connection
+     */
+    public static boolean adminConnected = false;
+
+
     public static void main(String[] args) {
         launch();
     }

@@ -1,8 +1,24 @@
 package fr.polytech.sircus.controller.PopUps;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 
 public class LoginPopupController {
 
+    @FXML
+    private TextField userName;
+    @FXML
+    private TextField password;
+
+    public LoginPopupController() {
+
+    }
+
+    public boolean checkUserName() {
+        return userName.getText().equals("root");
+    }
+
+    public boolean checkPassword() {
+        return password.getText().equals("password");
+    }
 }
