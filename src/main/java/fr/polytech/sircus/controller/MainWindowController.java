@@ -2,18 +2,23 @@ package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.controller.PopUps.AddLocationPopup;
-import fr.polytech.sircus.model.Location;
-import fr.polytech.sircus.model.Method;
-import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.stage.Popup;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -22,10 +27,9 @@ import java.util.ResourceBundle;
 public class MainWindowController implements Initializable {
 
     @FXML
-    private Tab metaSeqTab;
+    private ComboBox<String> eyeTracker;
     @FXML
-    private Tab resultTab;
-
+    private Button admin;
     @FXML
     private TextField id;
     @FXML
@@ -35,19 +39,17 @@ public class MainWindowController implements Initializable {
     @FXML
     private TextField age;
     @FXML
-    private TextField ocularDom;
-    @FXML
     private TextField name;
+    @FXML
+    private TextField forename;
     @FXML
     private Button locationAdd;
     @FXML
-    private Button methodAdd;
+    private ComboBox<String> location;
     @FXML
-    private TextField lateral;
+    private ComboBox<String> method;
     @FXML
-    private ComboBox<Location> location;
-    @FXML
-    private ComboBox<Method> method;
+    private Button next;
 
 
     public MainWindowController() {
@@ -55,13 +57,25 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // EyeTracker Combobox
+        ObservableList<String> eyeTrackersList = FXCollections.observableArrayList(SircusApplication.dataSircus.getEyeTrackerList());
+        eyeTracker.setItems(eyeTrackersList);
+
         // Location Combobox
-        ObservableList<Location> locationsList = FXCollections.observableArrayList(SircusApplication.dataSircus.getLocationsList());
+        ObservableList<String> locationsList = FXCollections.observableArrayList(SircusApplication.dataSircus.getLocationsList());
         location.setItems(locationsList);
 
         // Method Combobox
-        ObservableList<Method> methodsList = FXCollections.observableArrayList();
+        ObservableList<String> methodsList = FXCollections.observableArrayList();
         method.setItems(methodsList);
+
+        next.disableProperty().bind(Bindings.createBooleanBinding(() -> id.getText().trim().isEmpty(), id.textProperty())
+                .or(Bindings.createBooleanBinding(() -> gender.getSelectedToggle() == null, gender.selectedToggleProperty()))
+                .or(Bindings.createBooleanBinding(() -> birthDate.getValue() == null, birthDate.valueProperty()))
+                .or(Bindings.createBooleanBinding(() -> name.getText().trim().isEmpty(), name.textProperty()))
+                .or(Bindings.createBooleanBinding(() -> forename.getText().trim().isEmpty(), forename.textProperty()))
+                .or(Bindings.createBooleanBinding(() -> location.getValue() == null, location.valueProperty()))
+        );
     }
 
     @FXML
@@ -71,41 +85,26 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    private void checkContent() {
-        boolean genderChecked = false;
-        boolean birthDateChecked = false;
-        boolean nameChecked = false;
-        boolean locationChecked = false;
-
-        try {
-            genderChecked = gender.getSelectedToggle().isSelected();
-        } catch (NullPointerException e) {
-            System.out.println("None of gender selected");
-        }
-
-        if (birthDate.getValue() != null)
-            birthDateChecked = true;
-
-        if (!name.getText().isEmpty())
-            nameChecked = true;
-
-        if (!location.getSelectionModel().isEmpty())
-            locationChecked = true;
-
-
-        if (genderChecked && birthDateChecked && nameChecked && locationChecked) {
-            metaSeqTab.setDisable(false);
-            resultTab.setDisable(false);
-        } else {
-            Platform.runLater(() -> {
-                Alert dialog = new Alert(Alert.AlertType.ERROR, "Tous les champs obligatoires (*) n'ont pas été remplis correctement.", ButtonType.OK);
-                dialog.show();
-            });
-        }
+    private void addLocation() {
+        new AddLocationPopup(this.locationAdd.getScene().getWindow());
     }
 
     @FXML
-    private void addLocation() {
-        new AddLocationPopup(this.locationAdd.getScene().getWindow());
+    private void handleConnection(Event event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/login_popup.fxml"));
+            DialogPane dialogPane = fxmlLoader.load();
+
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setDialogPane(dialogPane);
+            dialog.setTitle("Connexion administrateur");
+
+            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            if (clickedButton.get() == ButtonType.FINISH) {
+                System.out.println("Connexion réussie");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

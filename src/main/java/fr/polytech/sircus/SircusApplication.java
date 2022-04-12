@@ -57,7 +57,8 @@ public class SircusApplication extends Application {
 
         stage.setTitle("Application Sircus");
         stage.setScene(scene);
-        stage.setResizable(false);
+        stage.setMinWidth(scene.getWidth());
+        stage.setMinHeight(650);
         stage.show();
     }
 }
