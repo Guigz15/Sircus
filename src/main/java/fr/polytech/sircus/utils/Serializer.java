@@ -1,8 +1,6 @@
 package fr.polytech.sircus.utils;
 
-import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.model.DataSircus;
-import fr.polytech.sircus.model.Location;
 import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Sequence;
 
@@ -51,11 +49,19 @@ public final class Serializer {
         stubData.saveMetaSeq(stubMetaSeq1);
         stubData.saveMetaSeq(stubMetaSeq2);
 
-        Location location1 = new Location("France", "Tours", 37044, "Boulevard Tonnellé", 2);
-        Location location2 = new Location("France", "Chambray-lès-Tours", 37170, "Avenue de la République", 0);
+        String location1 = "Hôpital Bretonneau";
+        String location2 = "Hôpital Trousseau";
 
         stubData.addLocationToList(location1);
         stubData.addLocationToList(location2);
+
+        String eyeTracker1 = "Tobii 1";
+        String eyeTracker2 = "Tobii 2";
+        String eyeTracker3 = "Tobii 3";
+
+        stubData.addEyeTrackerToList(eyeTracker1);
+        stubData.addEyeTrackerToList(eyeTracker2);
+        stubData.addEyeTrackerToList(eyeTracker3);
     }
 
     /**

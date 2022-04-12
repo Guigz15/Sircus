@@ -22,6 +22,12 @@ public class SircusApplication extends Application {
 	 */
 	private MainWindowController mainWindowController;
 
+    /**
+     * boolean for administrator connection
+     */
+    public static boolean adminConnected = false;
+
+
     public static void main(String[] args) {
         launch();
     }
@@ -57,7 +63,8 @@ public class SircusApplication extends Application {
 
         stage.setTitle("Application Sircus");
         stage.setScene(scene);
-        stage.setResizable(false);
+        stage.setMinWidth(scene.getWidth());
+        stage.setMinHeight(650);
         stage.show();
     }
 }

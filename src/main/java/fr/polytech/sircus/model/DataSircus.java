@@ -16,7 +16,9 @@ public class DataSircus implements Serializable {
     @Getter @Setter
     private List<MetaSequence> metaSequencesList;
     @Getter @Setter
-    private List<Location> locationsList;
+    private List<String> locationsList;
+    @Getter @Setter
+    private List<String> eyeTrackerList;
     @Getter @Setter
     private PathMedia path;
 
@@ -25,18 +27,9 @@ public class DataSircus implements Serializable {
      */
     public DataSircus() {
         this.metaSequencesList = new ArrayList<>();
-        this.path = new PathMedia();
         this.locationsList = new ArrayList<>();
-    }
-
-    /**
-     * Add a location to the list of locations
-     * @param location new location to add
-     */
-    public void addLocationToList(Location location) {
-        if(!this.locationsList.contains(location)){
-            this.locationsList.add(location);
-        }
+        this.eyeTrackerList = new ArrayList<>();
+        this.path = new PathMedia();
     }
 
     /**
@@ -45,5 +38,19 @@ public class DataSircus implements Serializable {
      */
     public void saveMetaSeq(MetaSequence metaSequence) {
         this.metaSequencesList.add(metaSequence);
+    }
+
+    /**
+     * Add a location to the list of locations
+     * @param location new location to add
+     */
+    public void addLocationToList(String location) {
+        if(!this.locationsList.contains(location))
+            this.locationsList.add(location);
+    }
+
+    public void addEyeTrackerToList(String eyeTrackerName) {
+        if (!this.eyeTrackerList.contains(eyeTrackerName))
+            this.eyeTrackerList.add(eyeTrackerName);
     }
 }

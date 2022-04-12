@@ -26,7 +26,7 @@ class DataSircusTest {
 
         @Test
         void setLocationsList() {
-            ArrayList<Location> newListLocations = new ArrayList<>(List.of(new Location[]{new Location("testCountry", "testCity", 37000, "testStreet", 1)}));
+            ArrayList<String> newListLocations = new ArrayList<>(List.of(new String[]{"LocationTest1", "LocationTest2"}));
             testDataSircus.setLocationsList(newListLocations);
             assertEquals(testDataSircus.getLocationsList(),newListLocations);
         }
@@ -57,8 +57,7 @@ class DataSircusTest {
 
     @Test
     void addLocationToList() {
-        Location newLocation = new Location();
-        newLocation.setStreet("test of new location");
+        String newLocation = "LocationTest";
         dataSircusTest.addLocationToList(newLocation);
         assertEquals(dataSircusTest.getLocationsList().get(0),newLocation);
     }
