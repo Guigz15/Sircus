@@ -346,7 +346,7 @@
             <fx:include source="meta_seq_tab.fxml" />
         </Tab>
         <Tab fx:id="resultTab" disable="true" text="Résultats">
-            <fx:include source="resultat_tab.fxml" />
+            <fx:include source="result_tab.fxml" />
         </Tab>
     </TabPane>
 </AnchorPane>

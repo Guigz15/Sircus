@@ -1,9 +1,9 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.model.Result;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
@@ -12,9 +12,6 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.Objects;
-import java.util.ResourceBundle;
 
 /**
  * Manages the interface used when the exam is in progress (player_monitor)
@@ -27,18 +24,26 @@ public class PlayerMonitorController {
     @FXML
     private TextArea commentTextArea;
 
+    /**
+     * The Result to fill
+     */
+    private Result result;
 
     /**
      * Default constructor
      */
-    public PlayerMonitorController(){}
+    public PlayerMonitorController(){
+        this.result = new Result();
+    }
 
     /**
      * Constructor of PlayerMonitorController
      *
      * @param owner the window which created the monitor
+     * @param result the result object to be filled
      */
-    public PlayerMonitorController(Window owner) {
+    public PlayerMonitorController(Window owner, Result result) {
+        this.result = result;
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/player_monitor.fxml"));
             Parent rootParent = fxmlLoader.load();
@@ -55,10 +60,11 @@ public class PlayerMonitorController {
     }
 
     /**
-     * Save a comment written in the comment section with the date
+     * Save a comment written in the comment section with the time
      */
     @FXML
     private void addComment(){
-        System.out.println(this.commentTextArea.getText());
+        this.result.addComment(this.commentTextArea.getText());
+        this.commentTextArea.clear();
     }
 }
