@@ -1,18 +1,23 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.controller.PopUps.AddLocationPopup;
-import fr.polytech.sircus.controller.PopUps.LoginPopupController;
+import fr.polytech.sircus.controller.PopUps.AddMethodPopup;
+import fr.polytech.sircus.controller.PopUps.LoginPopup;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -51,11 +56,31 @@ public class MainWindowController implements Initializable {
     @FXML
     private TextField forename;
     @FXML
-    private Button locationAdd;
+    private HBox locationFullBox;
     @FXML
-    private ComboBox<String> location;
+    private ComboBox<String> locations;
     @FXML
-    private ComboBox<String> method;
+    private Button locationUpdate;
+    @FXML
+    private Button locationRemove;
+    @FXML
+    private HBox locationBox;
+    @FXML
+    private TextField locationField;
+    private String location = null;
+    @FXML
+    private HBox methodFullBox;
+    @FXML
+    private ComboBox<String> methods;
+    @FXML
+    private Button methodUpdate;
+    @FXML
+    private Button methodRemove;
+    @FXML
+    private HBox methodBox;
+    @FXML
+    private TextField methodField;
+    private String method = null;
     @FXML
     private Button importButton;
     @FXML
@@ -69,20 +94,35 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Location Combobox
-        ObservableList<String> locationsList = FXCollections.observableArrayList(SircusApplication.dataSircus.getLocationsList());
-        location.setItems(locationsList);
+        // EyeTracker Combobox
+        ObservableList<String> eyeTrackersList = FXCollections.observableArrayList(SircusApplication.dataSircus.getEyeTrackerList());
+        eyeTracker.setItems(eyeTrackersList);
+        eyeTracker.getSelectionModel().select(SircusApplication.dataSircus.getEyeTrackerSaved());
+        eyeTracker.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldName, String newName) {
+                SircusApplication.dataSircus.saveEyeTracker(newName);
+            }
+        });
 
-        // Method Combobox
-        ObservableList<String> methodsList = FXCollections.observableArrayList();
-        method.setItems(methodsList);
+        // Location
+        ObservableList<String> locationsList = FXCollections.observableArrayList(SircusApplication.dataSircus.getLocationsList());
+        locations.setItems(locationsList);
+        locationUpdate.disableProperty().bind(Bindings.createBooleanBinding(() -> locations.getValue() == null, locations.valueProperty()));
+        locationRemove.disableProperty().bind(Bindings.createBooleanBinding(() -> locations.getValue() == null, locations.valueProperty()));
+
+        // Method
+        ObservableList<String> methodsList = FXCollections.observableArrayList(SircusApplication.dataSircus.getMethodsList());
+        methods.setItems(methodsList);
+        methodUpdate.disableProperty().bind(Bindings.createBooleanBinding(() -> methods.getValue() == null, methods.valueProperty()));
+        methodRemove.disableProperty().bind(Bindings.createBooleanBinding(() -> methods.getValue() == null, methods.valueProperty()));
 
         next.disableProperty().bind(Bindings.createBooleanBinding(() -> id.getText().trim().isEmpty(), id.textProperty())
                 .or(Bindings.createBooleanBinding(() -> sex.getSelectedToggle() == null, sex.selectedToggleProperty()))
                 .or(Bindings.createBooleanBinding(() -> birthDate.getValue() == null, birthDate.valueProperty()))
                 .or(Bindings.createBooleanBinding(() -> name.getText().trim().isEmpty(), name.textProperty()))
                 .or(Bindings.createBooleanBinding(() -> forename.getText().trim().isEmpty(), forename.textProperty()))
-                .or(Bindings.createBooleanBinding(() -> location.getValue() == null, location.valueProperty()))
+                .or(Bindings.createBooleanBinding(() -> locations.getValue() == null, locations.valueProperty()))
         );
 
         exportButton.setVisible(SircusApplication.adminConnected);
@@ -96,15 +136,127 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void addLocation() {
-        new AddLocationPopup(this.locationAdd.getScene().getWindow());
+        locationFullBox.setVisible(false);
+        locationBox.setVisible(true);
     }
 
     @FXML
-    private void handleConnection(Event event) {
+    private void updateLocation() {
+        locationFullBox.setVisible(false);
+        locationBox.setVisible(true);
+        location = locations.getSelectionModel().getSelectedItem();
+        locationField.setText(location);
+    }
+
+    @FXML
+    private void validateLocation() {
+        if (!locationField.getText().isEmpty()) {
+            if (location != null) {
+                String newlocation = locationField.getText();
+                locations.getItems().set(locations.getItems().indexOf(location), newlocation);
+                SircusApplication.dataSircus.updateLocation(location, newlocation);
+                locations.getSelectionModel().select(newlocation);
+            } else {
+                String locationToAdd = locationField.getText();
+                locations.getItems().add(locationToAdd);
+                SircusApplication.dataSircus.addLocationToList(locationToAdd);
+                locations.getSelectionModel().select(locationToAdd);
+            }
+            resetLocation();
+        } else {
+            Platform.runLater(() -> {
+                Alert dialog = new Alert(Alert.AlertType.ERROR, "Vous devez renseigner un lieu.", ButtonType.OK);
+                dialog.show();
+            });
+        }
+    }
+
+    @FXML
+    private void cancelLocation() {
+        resetLocation();
+    }
+
+    private void resetLocation() {
+        location = null;
+        locationBox.setVisible(false);
+        locationField.clear();
+        locationFullBox.setVisible(true);
+    }
+
+    @FXML
+    private void removeLocation() {
+        if (locations.getValue() != null) {
+            String locationToRemove = locations.getValue();
+            locations.getItems().remove(locationToRemove);
+            SircusApplication.dataSircus.removeLocationFromList(locationToRemove);
+            locations.getSelectionModel().select(0);
+        }
+    }
+
+    @FXML
+    private void addMethod() {
+        methodFullBox.setVisible(false);
+        methodBox.setVisible(true);
+    }
+
+    @FXML
+    private void updateMethod() {
+        methodFullBox.setVisible(false);
+        methodBox.setVisible(true);
+        method = methods.getSelectionModel().getSelectedItem();
+        methodField.setText(method);
+    }
+
+    @FXML
+    private void validateMethod() {
+        if (!methodField.getText().isEmpty()) {
+            if (method != null) {
+                String newMethod = methodField.getText();
+                methods.getItems().set(methods.getItems().indexOf(method), newMethod);
+                SircusApplication.dataSircus.updateMethod(method, newMethod);
+                methods.getSelectionModel().select(newMethod);
+            } else {
+                String methodToAdd = methodField.getText();
+                methods.getItems().add(methodToAdd);
+                SircusApplication.dataSircus.addMethodToList(methodToAdd);
+                methods.getSelectionModel().select(methodToAdd);
+            }
+            resetMethod();
+        } else {
+            Platform.runLater(() -> {
+                Alert dialog = new Alert(Alert.AlertType.ERROR, "Vous devez renseigner une méthode.", ButtonType.OK);
+                dialog.show();
+            });
+        }
+    }
+
+    @FXML
+    private void cancelMethod() {
+        resetMethod();
+    }
+
+    private void resetMethod() {
+        method = null;
+        methodBox.setVisible(false);
+        methodField.clear();
+        methodFullBox.setVisible(true);
+    }
+
+    @FXML
+    private void removeMethod() {
+        if (methods.getValue() != null) {
+            String methodToRemove = methods.getValue();
+            methods.getItems().remove(methodToRemove);
+            SircusApplication.dataSircus.removeMethodFromList(methodToRemove);
+            methods.getSelectionModel().select(0);
+        }
+    }
+    @FXML
+    private void handleConnection() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/login_popup.fxml"));
             DialogPane dialogPane = fxmlLoader.load();
-            LoginPopupController controller = fxmlLoader.getController();
+            LoginPopup controller = fxmlLoader.getController();
 
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
@@ -112,11 +264,8 @@ public class MainWindowController implements Initializable {
 
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.get() == ButtonType.FINISH && controller.checkUserName() && controller.checkPassword()) {
-                System.out.println("Connexion réussie");
                 SircusApplication.adminConnected = true;
                 exportButton.setVisible(true);
-            } else {
-                System.out.println("Connexion échouée");
             }
         } catch (IOException e) {
             e.printStackTrace();

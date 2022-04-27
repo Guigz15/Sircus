@@ -8,7 +8,7 @@
 <?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
-<BorderPane minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.MainWindowController">
+<BorderPane minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.MainWindowController">
    <top>
       <BorderPane maxHeight="-Infinity" prefHeight="64.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <left>
@@ -19,7 +19,7 @@
             </ComboBox>
          </left>
          <right>
-            <Button fx:id="admin" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" onAction="#handleConnection" BorderPane.alignment="CENTER_RIGHT">
+            <Button fx:id="admin" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleConnection" prefHeight="40.0" prefWidth="40.0" BorderPane.alignment="CENTER_RIGHT">
                <BorderPane.margin>
                   <Insets right="15.0" />
                </BorderPane.margin>
@@ -43,7 +43,7 @@
                   <Insets bottom="30.0" top="20.0" />
                </VBox.margin>
             </Text>
-            <VBox prefHeight="34.0" prefWidth="329.0">
+            <VBox prefHeight="34.0" prefWidth="400.0">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
@@ -71,7 +71,7 @@
                   </font>
                </TextField>
             </VBox>
-            <VBox id="gender_selection" prefHeight="34.0" prefWidth="329.0">
+            <VBox id="gender_selection" prefHeight="34.0" prefWidth="400.0">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
@@ -99,7 +99,7 @@
                         <ToggleGroup fx:id="sex" />
                      </toggleGroup>
                      <HBox.margin>
-                        <Insets left="40.0" right="70.0" />
+                        <Insets left="30.0" right="90.0" />
                      </HBox.margin>
                      <font>
                         <Font size="14.0" />
@@ -115,13 +115,13 @@
                   </RadioButton>
                </HBox>
             </VBox>
-            <HBox prefHeight="40.0" prefWidth="329.0">
+            <HBox prefHeight="40.0" prefWidth="400.0">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
                <VBox prefHeight="79.0" prefWidth="114.0">
                   <HBox.margin>
-                     <Insets right="82.0" />
+                     <Insets right="120.0" />
                   </HBox.margin>
                   <HBox prefHeight="16.0" prefWidth="114.0">
                      <VBox.margin>
@@ -143,7 +143,7 @@
                   </HBox>
                   <DatePicker fx:id="birthDate" onAction="#computeAge" />
                </VBox>
-               <VBox prefHeight="68.0" prefWidth="100.0">
+               <VBox prefHeight="68.0" prefWidth="133.0">
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Âge">
                      <font>
                         <Font size="18.0" />
@@ -162,7 +162,7 @@
                   </TextField>
                </VBox>
             </HBox>
-            <VBox prefHeight="39.0" prefWidth="329.0">
+            <VBox prefHeight="39.0" prefWidth="400.0">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
@@ -182,13 +182,13 @@
                   </RadioButton>
                   <RadioButton mnemonicParsing="false" text="Gauche" toggleGroup="$ocularDominance">
                      <HBox.margin>
-                        <Insets left="20.0" right="20.0" />
+                        <Insets left="40.0" right="40.0" />
                      </HBox.margin>
                   </RadioButton>
                   <RadioButton mnemonicParsing="false" text="Indéfini" toggleGroup="$ocularDominance" />
                </HBox>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="329.0">
+            <VBox prefHeight="200.0" prefWidth="400.0">
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Latéralité manuelle">
                   <font>
                      <Font size="18.0" />
@@ -202,15 +202,18 @@
                      <toggleGroup>
                         <ToggleGroup fx:id="laterality" />
                      </toggleGroup>
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin>
                   </RadioButton>
                   <RadioButton mnemonicParsing="false" text="Gaucher" toggleGroup="$laterality">
                      <HBox.margin>
-                        <Insets left="10.0" right="10.0" />
+                        <Insets left="25.0" right="25.0" />
                      </HBox.margin>
                   </RadioButton>
                   <RadioButton mnemonicParsing="false" text="Ambidextre" toggleGroup="$laterality">
                      <HBox.margin>
-                        <Insets right="10.0" />
+                        <Insets right="25.0" />
                      </HBox.margin>
                   </RadioButton>
                   <RadioButton mnemonicParsing="false" text="Indéfini" toggleGroup="$laterality" />
@@ -226,7 +229,7 @@
                   <Insets bottom="30.0" top="20.0" />
                </VBox.margin>
             </Text>
-            <HBox id="type_selection" alignment="TOP_CENTER" prefHeight="38.0" prefWidth="208.0">
+            <HBox id="type_selection" alignment="TOP_CENTER" prefHeight="38.0" prefWidth="250.0">
                <VBox.margin>
                   <Insets bottom="20.0" />
                </VBox.margin>
@@ -263,7 +266,7 @@
                   <RadioButton mnemonicParsing="false" toggleGroup="$type" />
                </VBox>
             </HBox>
-            <VBox prefHeight="40.0" prefWidth="329.0">
+            <VBox prefHeight="40.0" prefWidth="400.0">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
@@ -291,7 +294,7 @@
                   </font>
                </TextField>
             </VBox>
-            <VBox prefHeight="40.0" prefWidth="329.0">
+            <VBox prefHeight="40.0" prefWidth="400.0">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
@@ -319,7 +322,7 @@
                   </font>
                </TextField>
             </VBox>
-            <VBox prefHeight="40.0" prefWidth="329.0">
+            <VBox prefHeight="40.0" prefWidth="400.0">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
@@ -341,37 +344,116 @@
                      </font>
                   </Text>
                </HBox>
-               <HBox prefHeight="100.0" prefWidth="200.0">
-                  <ComboBox fx:id="location" prefHeight="25.0" prefWidth="275.0" promptText="Sélectionner un lieu">
-                     <HBox.margin>
-                        <Insets right="16.0" />
-                     </HBox.margin>
-                  </ComboBox>
-                  <Button fx:id="locationAdd" mnemonicParsing="false" onMouseClicked="#addLocation" prefHeight="25.0" prefWidth="39.0">
-                     <graphic>
-                        <FontIcon iconLiteral="fa-plus" iconSize="15" />
-                     </graphic>
-                  </Button>
-               </HBox>
+               <StackPane prefHeight="100.0" prefWidth="200.0">
+                  <HBox fx:id="locationFullBox" prefHeight="100.0" prefWidth="200.0">
+                     <ComboBox fx:id="locations" prefHeight="25.0" prefWidth="250.0" promptText="Sélectionner un lieu">
+                        <HBox.margin>
+                           <Insets right="16.0" />
+                        </HBox.margin>
+                     </ComboBox>
+                     <Button mnemonicParsing="false" onMouseClicked="#addLocation" prefHeight="25.0" prefWidth="39.0">
+                        <graphic>
+                           <FontIcon iconLiteral="fa-plus" iconSize="15" />
+                        </graphic>
+                        <HBox.margin>
+                           <Insets right="16.0" />
+                        </HBox.margin>
+                     </Button>
+                     <Button fx:id="locationUpdate" mnemonicParsing="false" onMouseClicked="#updateLocation" prefHeight="25.0" prefWidth="39.0">
+                        <graphic>
+                           <FontIcon iconLiteral="fa-pencil" iconSize="15" />
+                        </graphic>
+                        <HBox.margin>
+                           <Insets right="16.0" />
+                        </HBox.margin>
+                     </Button>
+                     <Button fx:id="locationRemove" mnemonicParsing="false" onMouseClicked="#removeLocation" prefHeight="25.0" prefWidth="39.0">
+                        <graphic>
+                           <FontIcon iconLiteral="fa-minus" iconSize="15" />
+                        </graphic>
+                     </Button>
+                  </HBox>
+                  <HBox fx:id="locationBox" prefHeight="100.0" prefWidth="200.0" visible="false">
+                     <TextField fx:id="locationField" prefHeight="25.0" prefWidth="250.0">
+                        <HBox.margin>
+                           <Insets right="35.0" />
+                        </HBox.margin>
+                     </TextField>
+                     <Button mnemonicParsing="false" onAction="#validateLocation" prefWidth="40.0">
+                        <graphic>
+                           <FontIcon iconLiteral="fa-check" iconSize="15" />
+                        </graphic>
+                        <HBox.margin>
+                           <Insets right="16.0" />
+                        </HBox.margin>
+                     </Button>
+                     <Button mnemonicParsing="false" onAction="#cancelLocation" prefWidth="40.0">
+                        <graphic>
+                           <FontIcon iconLiteral="fa-close" iconSize="15" />
+                        </graphic>
+                     </Button>
+                  </HBox>
+               </StackPane>
             </VBox>
-            <VBox prefHeight="40.0" prefWidth="329.0">
+            <VBox prefHeight="40.0" prefWidth="400.0">
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Méthode de classification">
                   <font>
                      <Font size="18.0" />
                   </font>
                </Text>
-               <HBox prefHeight="100.0" prefWidth="200.0">
-                  <ComboBox fx:id="method" prefHeight="25.0" prefWidth="275.0" promptText="Sélectionner une méthode">
-                     <HBox.margin>
-                        <Insets right="16.0" />
-                     </HBox.margin>
-                  </ComboBox>
-                  <Button fx:id="methodAdd" mnemonicParsing="false" prefHeight="25.0" prefWidth="39.0">
-                     <graphic>
-                        <FontIcon iconLiteral="fa-plus" iconSize="15" />
-                     </graphic>
-                  </Button>
-               </HBox>
+               <StackPane>
+                  <HBox fx:id="methodFullBox" prefHeight="100.0" prefWidth="200.0">
+                     <ComboBox fx:id="methods" prefHeight="25.0" prefWidth="250.0"
+                               promptText="Sélectionner une méthode">
+                        <HBox.margin>
+                           <Insets right="16.0"/>
+                        </HBox.margin>
+                     </ComboBox>
+                     <Button mnemonicParsing="false" onMouseClicked="#addMethod" prefHeight="25.0" prefWidth="39.0">
+                        <graphic>
+                           <FontIcon iconLiteral="fa-plus" iconSize="15"/>
+                        </graphic>
+                        <HBox.margin>
+                           <Insets right="16.0"/>
+                        </HBox.margin>
+                     </Button>
+                     <Button fx:id="methodUpdate" mnemonicParsing="false" onMouseClicked="#updateMethod"
+                             prefHeight="25.0" prefWidth="39.0">
+                        <graphic>
+                           <FontIcon iconLiteral="fa-pencil" iconSize="15"/>
+                        </graphic>
+                        <HBox.margin>
+                           <Insets right="16.0"/>
+                        </HBox.margin>
+                     </Button>
+                     <Button fx:id="methodRemove" mnemonicParsing="false" onMouseClicked="#removeMethod"
+                             prefHeight="25.0" prefWidth="39.0">
+                        <graphic>
+                           <FontIcon iconLiteral="fa-minus" iconSize="15"/>
+                        </graphic>
+                     </Button>
+                  </HBox>
+                  <HBox fx:id="methodBox" prefHeight="100.0" prefWidth="200.0" visible="false">
+                     <TextField fx:id="methodField" prefHeight="25.0" prefWidth="250.0">
+                        <HBox.margin>
+                           <Insets right="35.0" />
+                        </HBox.margin>
+                     </TextField>
+                     <Button mnemonicParsing="false" onAction="#validateMethod" prefWidth="40.0">
+                        <graphic>
+                           <FontIcon iconLiteral="fa-check" iconSize="15" />
+                        </graphic>
+                        <HBox.margin>
+                           <Insets right="16.0" />
+                        </HBox.margin>
+                     </Button>
+                     <Button mnemonicParsing="false" onAction="#cancelMethod" prefWidth="40.0">
+                        <graphic>
+                           <FontIcon iconLiteral="fa-close" iconSize="15" />
+                        </graphic>
+                     </Button>
+                  </HBox>
+               </StackPane>
             </VBox>
          </VBox>
       </SplitPane>
@@ -380,7 +462,7 @@
       <BorderPane maxHeight="-Infinity" prefHeight="64.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <left>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" BorderPane.alignment="CENTER">
-               <Button fx:id="importButton" mnemonicParsing="false" text="Importer" onMouseClicked="#importing">
+               <Button fx:id="importButton" mnemonicParsing="false" onMouseClicked="#importing" text="Importer">
                   <HBox.margin>
                      <Insets left="30.0" right="30.0" />
                   </HBox.margin>
@@ -388,7 +470,7 @@
                      <Font size="16.0" />
                   </font>
                </Button>
-               <Button fx:id="exportButton" mnemonicParsing="false" text="Exporter" onMouseClicked="#exporting">
+               <Button fx:id="exportButton" mnemonicParsing="false" onMouseClicked="#exporting" text="Exporter">
                   <font>
                      <Font size="16.0" />
                   </font>

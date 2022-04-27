@@ -49,19 +49,12 @@ public final class Serializer {
         stubData.saveMetaSeq(stubMetaSeq1);
         stubData.saveMetaSeq(stubMetaSeq2);
 
-        String location1 = "Hôpital Bretonneau";
-        String location2 = "Hôpital Trousseau";
+        stubData.addLocationToList("Hôpital Bretonneau");
+        stubData.addLocationToList("Hôpital Trousseau");
 
-        stubData.addLocationToList(location1);
-        stubData.addLocationToList(location2);
-
-        String eyeTracker1 = "Tobii 1";
-        String eyeTracker2 = "Tobii 2";
-        String eyeTracker3 = "Tobii 3";
-
-        stubData.addEyeTrackerToList(eyeTracker1);
-        stubData.addEyeTrackerToList(eyeTracker2);
-        stubData.addEyeTrackerToList(eyeTracker3);
+        stubData.addEyeTrackerToList("Tobii 1");
+        stubData.addEyeTrackerToList("Tobii 2");
+        stubData.addEyeTrackerToList("Tobii 3");
     }
 
     /**

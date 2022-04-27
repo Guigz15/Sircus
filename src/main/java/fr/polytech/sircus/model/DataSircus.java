@@ -18,7 +18,11 @@ public class DataSircus implements Serializable {
     @Getter @Setter
     private List<String> locationsList;
     @Getter @Setter
+    private List<String> methodsList;
+    @Getter @Setter
     private List<String> eyeTrackerList;
+    @Getter @Setter
+    private String eyeTrackerSaved;
     @Getter @Setter
     private PathMedia path;
 
@@ -28,6 +32,7 @@ public class DataSircus implements Serializable {
     public DataSircus() {
         this.metaSequencesList = new ArrayList<>();
         this.locationsList = new ArrayList<>();
+        this.methodsList = new ArrayList<>();
         this.eyeTrackerList = new ArrayList<>();
         this.path = new PathMedia();
     }
@@ -42,15 +47,50 @@ public class DataSircus implements Serializable {
 
     /**
      * Add a location to the list of locations
-     * @param location new location to add
+     * @param locationToAdd new location to add
      */
-    public void addLocationToList(String location) {
-        if(!this.locationsList.contains(location))
-            this.locationsList.add(location);
+    public void addLocationToList(String locationToAdd) {
+        if(!this.locationsList.contains(locationToAdd))
+            this.locationsList.add(locationToAdd);
     }
 
+    public void updateLocation(String oldLocation, String newLocation) {
+        if(this.locationsList.contains(oldLocation))
+            this.locationsList.set(this.locationsList.indexOf(oldLocation), newLocation);
+    }
+
+    public void removeLocationFromList(String locationToRemove) {
+        this.locationsList.remove(locationToRemove);
+    }
+
+    /**
+     * Add a method to the list of methods
+     * @param methodToAdd new method to add
+     */
+    public void addMethodToList(String methodToAdd) {
+        if(!this.methodsList.contains(methodToAdd))
+            this.methodsList.add(methodToAdd);
+    }
+
+    public void updateMethod(String oldMethod, String newMethod) {
+        if(this.methodsList.contains(oldMethod))
+            this.methodsList.set(this.methodsList.indexOf(oldMethod), newMethod);
+    }
+    public void removeMethodFromList(String methodToRemove) {
+        this.methodsList.remove(methodToRemove);
+    }
+
+    /**
+     * Add an eyeTracker to list of eyeTrackers
+     * @param eyeTrackerName new eyeTracker to add
+     */
     public void addEyeTrackerToList(String eyeTrackerName) {
         if (!this.eyeTrackerList.contains(eyeTrackerName))
             this.eyeTrackerList.add(eyeTrackerName);
+    }
+
+    public void saveEyeTracker(String eyeTrackerName) {
+        if (eyeTrackerName != null)
+            this.eyeTrackerSaved = eyeTrackerName;
     }
 }
