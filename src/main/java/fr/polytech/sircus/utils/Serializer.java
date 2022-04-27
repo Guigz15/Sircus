@@ -1,10 +1,9 @@
 package fr.polytech.sircus.utils;
 
-import fr.polytech.sircus.model.DataSircus;
-import fr.polytech.sircus.model.MetaSequence;
-import fr.polytech.sircus.model.Sequence;
+import fr.polytech.sircus.model.*;
 
 import java.io.*;
+import java.time.Duration;
 
 /**
  * Class that allow the serialization et deserialization of objects easily
@@ -41,10 +40,18 @@ public final class Serializer {
         Sequence stubSeq3 = new Sequence("Sequence 3");
         Sequence stubSeq4 = new Sequence("Sequence 4");
 
+        Media stubMedia1 = new Media("mos01.jpg", "mos01.jpg", Duration.ofSeconds(3), TypeMedia.PICTURE, null);
+        Media stubMedia2 = new Media("vis01.jpg", "vis01.jpg", Duration.ofSeconds(3), TypeMedia.PICTURE, null);
+        Media stubMedia3 = new Media("ob01.jpg", "ob01.jpg", Duration.ofSeconds(3), TypeMedia.PICTURE, null);
+
         stubMetaSeq1.addSequence(stubSeq1);
         stubMetaSeq1.addSequence(stubSeq2);
         stubMetaSeq2.addSequence(stubSeq3);
         stubMetaSeq2.addSequence(stubSeq4);
+
+        stubSeq1.addMedia(stubMedia1);
+        stubSeq1.addMedia(stubMedia2);
+        stubSeq1.addMedia(stubMedia3);
 
         stubData.saveMetaSeq(stubMetaSeq1);
         stubData.saveMetaSeq(stubMetaSeq2);
