@@ -4,13 +4,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import lombok.Getter;
 
-public class AddLocationPopup {
-
+public class AddMethodPopup {
     @FXML
     @Getter
-    private TextField locationField;
+    private TextField methodField;
 
-    public AddLocationPopup() {
+    public AddMethodPopup() {
 
     }
 }
