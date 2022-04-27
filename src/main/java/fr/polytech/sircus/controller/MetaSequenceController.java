@@ -7,6 +7,7 @@ import fr.polytech.sircus.controller.PopUps.ModifySeqPopUp;
 import fr.polytech.sircus.model.Internals.ObservableMetaSequenceSet;
 import fr.polytech.sircus.model.Media;
 import fr.polytech.sircus.model.MetaSequence;
+import fr.polytech.sircus.model.Result;
 import fr.polytech.sircus.model.Sequence;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -82,6 +83,8 @@ public class MetaSequenceController {
     // Viewer manager
     private ViewerController viewer;
     private Boolean viewerPlayingState;
+
+    private PlayerMonitorController monitor;
 
     // Methods
 
@@ -403,6 +406,12 @@ public class MetaSequenceController {
             viewer.playViewer();
             metaSeqPlay.setGraphic(pauseIcon);
             viewerPlayingState = false;
+
+            // Prepare the Result
+            Result result = new Result();
+
+            // Creates also the monitoring window
+            this.monitor = new PlayerMonitorController(this.metaSeqComboBox.getScene().getWindow(), result);
         }
     }
 

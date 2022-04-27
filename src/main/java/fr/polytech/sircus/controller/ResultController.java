@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ResultatController implements Initializable {
+public class ResultController implements Initializable {
 
     /**
      * List of results
@@ -60,9 +60,9 @@ public class ResultatController implements Initializable {
      * Initializes list of results
      */
     private List<Result> initResults() {
-        List<MetaSequence> metaSequences = new ArrayList<MetaSequence>();
+        List<MetaSequence> metaSequences = new ArrayList<>();
         metaSequences.add(SircusApplication.dataSircus.getMetaSequencesList().get(0));
-        List<Result> results = new ArrayList<Result>();
+        List<Result> results = new ArrayList<>();
         for (MetaSequence metaSequence : metaSequences) {
             Result result = new Result();
             result.setMetaSequenceName(metaSequence.getName());

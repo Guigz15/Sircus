@@ -69,10 +69,6 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // EyeTracker Combobox
-        ObservableList<String> eyeTrackersList = FXCollections.observableArrayList(SircusApplication.dataSircus.getEyeTrackerList());
-        eyeTracker.setItems(eyeTrackersList);
-
         // Location Combobox
         ObservableList<String> locationsList = FXCollections.observableArrayList(SircusApplication.dataSircus.getLocationsList());
         location.setItems(locationsList);
