@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
-<BorderPane minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.MainWindowController">
+<BorderPane minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.MainWindowController">
    <top>
       <BorderPane maxHeight="-Infinity" prefHeight="64.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <left>
@@ -68,7 +68,7 @@
                   </font>
                </TextField>
             </VBox>
-            <VBox id="gender_selection" prefHeight="34.0" prefWidth="400.0">
+            <VBox prefHeight="34.0" prefWidth="400.0">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
@@ -90,7 +90,7 @@
                      </font>
                   </Text>
                </HBox>
-               <HBox id="combobox_gender" alignment="CENTER" prefHeight="100.0">
+               <HBox id="sex" alignment="CENTER" prefHeight="100.0">
                   <RadioButton mnemonicParsing="false" text="M">
                      <toggleGroup>
                         <ToggleGroup fx:id="sex" />
@@ -159,7 +159,7 @@
                   </TextField>
                </VBox>
             </HBox>
-            <VBox prefHeight="39.0" prefWidth="400.0">
+            <VBox id="ocularDom" prefHeight="39.0" prefWidth="400.0">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
@@ -185,7 +185,7 @@
                   <RadioButton mnemonicParsing="false" text="Indéfini" toggleGroup="$ocularDominance" />
                </HBox>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="400.0">
+            <VBox id="manualLateral" prefHeight="200.0" prefWidth="400.0">
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Latéralité manuelle">
                   <font>
                      <Font size="18.0" />
@@ -226,7 +226,7 @@
                   <Insets bottom="30.0" top="20.0" />
                </VBox.margin>
             </Text>
-            <HBox id="type_selection" alignment="TOP_CENTER" prefHeight="38.0" prefWidth="250.0">
+            <HBox id="type" alignment="TOP_CENTER" prefHeight="38.0" prefWidth="250.0">
                <VBox.margin>
                   <Insets bottom="20.0" />
                </VBox.margin>
@@ -348,7 +348,7 @@
                            <Insets right="16.0" />
                         </HBox.margin>
                      </ComboBox>
-                     <Button mnemonicParsing="false" onMouseClicked="#addLocation" prefHeight="25.0" prefWidth="39.0">
+                     <Button id="locationAdd" mnemonicParsing="false" onMouseClicked="#addLocation" prefHeight="25.0" prefWidth="39.0">
                         <graphic>
                            <FontIcon iconLiteral="fa-plus" iconSize="15" />
                         </graphic>
