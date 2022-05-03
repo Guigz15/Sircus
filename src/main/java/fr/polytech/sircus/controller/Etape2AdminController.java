@@ -1,6 +1,7 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.utils.MetaSequenceContainer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -54,6 +55,8 @@ public class Etape2AdminController implements Initializable {
     private Button previous;
     @FXML
     private Button next;
+    @FXML
+    private PreviewTimeline previewTimeline;
 
 
 
@@ -74,6 +77,8 @@ public class Etape2AdminController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         /* initialize metasequences listView */
         metaListView.getItems().addAll(metasequences);
+
+        previewTimeline.addMetaSequence(new MetaSequenceContainer().getMetaSequences().get(0));
         metaListView.setStyle("-fx-font-size: 14pt;");
         metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
