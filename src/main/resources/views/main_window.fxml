@@ -3,7 +3,6 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.*?>
@@ -24,9 +23,7 @@
                   <Insets right="15.0" />
                </BorderPane.margin>
                <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" preserveRatio="true">
-                     <Image url="@../images/private-account.png" />
-                  </ImageView>
+                  <FontIcon iconLiteral="fa-user-md" iconSize="35" />
                </graphic>
             </Button>
          </right>
@@ -379,7 +376,7 @@
                            <Insets right="35.0" />
                         </HBox.margin>
                      </TextField>
-                     <Button mnemonicParsing="false" onAction="#validateLocation" prefWidth="40.0">
+                     <Button fx:id="validLocButton" mnemonicParsing="false" onAction="#validateLocation" prefWidth="40.0">
                         <graphic>
                            <FontIcon iconLiteral="fa-check" iconSize="15" />
                         </graphic>
@@ -387,7 +384,7 @@
                            <Insets right="16.0" />
                         </HBox.margin>
                      </Button>
-                     <Button mnemonicParsing="false" onAction="#cancelLocation" prefWidth="40.0">
+                     <Button fx:id="cancelLocButton" mnemonicParsing="false" onAction="#cancelLocation" prefWidth="40.0">
                         <graphic>
                            <FontIcon iconLiteral="fa-close" iconSize="15" />
                         </graphic>
@@ -403,33 +400,30 @@
                </Text>
                <StackPane>
                   <HBox fx:id="methodFullBox" prefHeight="100.0" prefWidth="200.0">
-                     <ComboBox fx:id="methods" prefHeight="25.0" prefWidth="250.0"
-                               promptText="Sélectionner une méthode">
+                     <ComboBox fx:id="methods" prefHeight="25.0" prefWidth="250.0" promptText="Sélectionner une méthode">
                         <HBox.margin>
-                           <Insets right="16.0"/>
+                           <Insets right="16.0" />
                         </HBox.margin>
                      </ComboBox>
                      <Button mnemonicParsing="false" onMouseClicked="#addMethod" prefHeight="25.0" prefWidth="39.0">
                         <graphic>
-                           <FontIcon iconLiteral="fa-plus" iconSize="15"/>
+                           <FontIcon iconLiteral="fa-plus" iconSize="15" />
                         </graphic>
                         <HBox.margin>
-                           <Insets right="16.0"/>
+                           <Insets right="16.0" />
                         </HBox.margin>
                      </Button>
-                     <Button fx:id="methodUpdate" mnemonicParsing="false" onMouseClicked="#updateMethod"
-                             prefHeight="25.0" prefWidth="39.0">
+                     <Button fx:id="methodUpdate" mnemonicParsing="false" onMouseClicked="#updateMethod" prefHeight="25.0" prefWidth="39.0">
                         <graphic>
-                           <FontIcon iconLiteral="fa-pencil" iconSize="15"/>
+                           <FontIcon iconLiteral="fa-pencil" iconSize="15" />
                         </graphic>
                         <HBox.margin>
-                           <Insets right="16.0"/>
+                           <Insets right="16.0" />
                         </HBox.margin>
                      </Button>
-                     <Button fx:id="methodRemove" mnemonicParsing="false" onMouseClicked="#removeMethod"
-                             prefHeight="25.0" prefWidth="39.0">
+                     <Button fx:id="methodRemove" mnemonicParsing="false" onMouseClicked="#removeMethod" prefHeight="25.0" prefWidth="39.0">
                         <graphic>
-                           <FontIcon iconLiteral="fa-minus" iconSize="15"/>
+                           <FontIcon iconLiteral="fa-minus" iconSize="15" />
                         </graphic>
                      </Button>
                   </HBox>
@@ -439,7 +433,7 @@
                            <Insets right="35.0" />
                         </HBox.margin>
                      </TextField>
-                     <Button mnemonicParsing="false" onAction="#validateMethod" prefWidth="40.0">
+                     <Button fx:id="validMethodButton" mnemonicParsing="false" onAction="#validateMethod" prefWidth="40.0">
                         <graphic>
                            <FontIcon iconLiteral="fa-check" iconSize="15" />
                         </graphic>
@@ -447,7 +441,7 @@
                            <Insets right="16.0" />
                         </HBox.margin>
                      </Button>
-                     <Button mnemonicParsing="false" onAction="#cancelMethod" prefWidth="40.0">
+                     <Button fx:id="cancelMethodButton" mnemonicParsing="false" onAction="#cancelMethod" prefWidth="40.0">
                         <graphic>
                            <FontIcon iconLiteral="fa-close" iconSize="15" />
                         </graphic>
@@ -478,7 +472,7 @@
             </HBox>
          </left>
          <right>
-            <Button fx:id="next" mnemonicParsing="false" text="Suivant" BorderPane.alignment="CENTER">
+            <Button fx:id="next" mnemonicParsing="false" onAction="#nextPage" text="Suivant" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets left="114.0" right="30.0" />
                </BorderPane.margin>
@@ -489,13 +483,13 @@
          </right>
          <center>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*">
-                  <HBox.margin>
-                     <Insets right="3.0" />
-                  </HBox.margin>
+               <Text fill="RED" onMouseClicked="#enableNextButton" strokeType="OUTSIDE" strokeWidth="0.0" text="*">
                   <font>
                      <Font size="20.0" />
                   </font>
+                  <HBox.margin>
+                     <Insets right="3.0" />
+                  </HBox.margin>
                </Text>
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text=": Champs obligatoires">
                   <font>

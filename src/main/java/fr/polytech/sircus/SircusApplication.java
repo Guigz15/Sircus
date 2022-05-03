@@ -61,7 +61,7 @@ public class SircusApplication extends Application {
             }
         });
 
-        stage.setTitle("Application Sircus");
+        stage.setTitle("Application SIRCUS");
         stage.setScene(scene);
         stage.setMinWidth(scene.getWidth());
         stage.setMinHeight(650);

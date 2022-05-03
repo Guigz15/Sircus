@@ -11,9 +11,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -65,6 +67,10 @@ public class MainWindowController implements Initializable {
     private TextField locationField;
     private String location = null;
     @FXML
+    private Button validLocButton;
+    @FXML
+    private Button cancelLocButton;
+    @FXML
     private HBox methodFullBox;
     @FXML
     private ComboBox<String> methods;
@@ -78,6 +84,10 @@ public class MainWindowController implements Initializable {
     private TextField methodField;
     private String method = null;
     @FXML
+    private Button validMethodButton;
+    @FXML
+    private Button cancelMethodButton;
+    @FXML
     private Button importButton;
     @FXML
     private Button exportButton;
@@ -90,7 +100,7 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // EyeTracker Combobox
+        // EyeTracker
         ObservableList<String> eyeTrackersList = FXCollections.observableArrayList(SircusApplication.dataSircus.getEyeTrackerList());
         eyeTracker.setItems(eyeTrackersList);
         eyeTracker.getSelectionModel().select(SircusApplication.dataSircus.getEyeTrackerSaved());
@@ -134,6 +144,8 @@ public class MainWindowController implements Initializable {
     private void addLocation() {
         locationFullBox.setVisible(false);
         locationBox.setVisible(true);
+        validLocButton.setDefaultButton(true);
+        cancelLocButton.setCancelButton(true);
     }
 
     @FXML
@@ -142,6 +154,8 @@ public class MainWindowController implements Initializable {
         locationBox.setVisible(true);
         location = locations.getSelectionModel().getSelectedItem();
         locationField.setText(location);
+        validLocButton.setDefaultButton(true);
+        cancelLocButton.setCancelButton(true);
     }
 
     @FXML
@@ -177,6 +191,8 @@ public class MainWindowController implements Initializable {
         locationBox.setVisible(false);
         locationField.clear();
         locationFullBox.setVisible(true);
+        validLocButton.setDefaultButton(false);
+        cancelLocButton.setCancelButton(false);
     }
 
     @FXML
@@ -193,6 +209,8 @@ public class MainWindowController implements Initializable {
     private void addMethod() {
         methodFullBox.setVisible(false);
         methodBox.setVisible(true);
+        validMethodButton.setDefaultButton(true);
+        cancelMethodButton.setCancelButton(true);
     }
 
     @FXML
@@ -201,6 +219,8 @@ public class MainWindowController implements Initializable {
         methodBox.setVisible(true);
         method = methods.getSelectionModel().getSelectedItem();
         methodField.setText(method);
+        validMethodButton.setDefaultButton(true);
+        cancelMethodButton.setCancelButton(true);
     }
 
     @FXML
@@ -236,6 +256,8 @@ public class MainWindowController implements Initializable {
         methodBox.setVisible(false);
         methodField.clear();
         methodFullBox.setVisible(true);
+        validMethodButton.setDefaultButton(false);
+        cancelMethodButton.setCancelButton(false);
     }
 
     @FXML
@@ -323,5 +345,20 @@ public class MainWindowController implements Initializable {
                 return (RadioButton) toggle;
         }
         return null;
+    }
+
+    @FXML
+    private void nextPage() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/player_monitor.fxml")));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = (Stage) next.getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    private void enableNextButton() {
+        next.disableProperty().unbind();
+        next.setDisable(false);
     }
 }
