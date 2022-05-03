@@ -86,8 +86,6 @@ public class MetaSequenceController {
 
     private PlayerMonitorController monitor;
 
-    // Methods
-
     /**
      * Main constructor
      */

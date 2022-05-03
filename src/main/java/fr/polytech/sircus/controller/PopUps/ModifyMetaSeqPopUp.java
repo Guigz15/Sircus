@@ -18,7 +18,7 @@ import javafx.stage.Window;
 import java.io.IOException;
 
 /**
- * This class allows us to modify a meta sequence
+ * Controller managing the edit of meta-sequence
  */
 public class ModifyMetaSeqPopUp {
 
@@ -42,7 +42,7 @@ public class ModifyMetaSeqPopUp {
     private MetaSequence metaSequence = null;
 
     /**
-     * Pop up to add a sequence
+     * Popup to add a sequence
      */
     private Stage popUpStage = null;
 
@@ -50,7 +50,7 @@ public class ModifyMetaSeqPopUp {
 
 
     /**
-     * Constructeur du controleur
+     * Main constructor
      *
      * @param owner The main window
      * @param metaSequences The meta sequences list
@@ -87,7 +87,6 @@ public class ModifyMetaSeqPopUp {
             e.printStackTrace();
         }
     }
-
 
     /**
      * Initialize the controller, its attributes and bind a controller to each component

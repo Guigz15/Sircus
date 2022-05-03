@@ -10,9 +10,7 @@ public class LoginPopup {
     @FXML
     private TextField password;
 
-    public LoginPopup() {
-
-    }
+    public LoginPopup() {}
 
     public boolean checkUserName() {
         return userName.getText().equals("root");

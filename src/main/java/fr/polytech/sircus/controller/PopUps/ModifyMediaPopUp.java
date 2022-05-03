@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Objects;
 
+/**
+ * Controller managing the edit media section
+ */
 public class ModifyMediaPopUp {
 
     /**

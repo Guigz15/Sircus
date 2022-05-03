@@ -163,7 +163,7 @@ public class ModifySeqPopUp {
     }
 
     /**
-     * Method of initializing the controller and its attributes, then adding functionality to each component.
+     * Initialize the controller and its attributes, then adding functionality to each component.
      */
     @FXML
     private void initialize() {
@@ -286,7 +286,7 @@ public class ModifySeqPopUp {
             }
         };
 
-        Callback<TableColumn<Media, String>, TableCell<Media, String>> cellFactoryVerr = new Callback<>() {
+        Callback<TableColumn<Media, String>, TableCell<Media, String>> cellFactoryLock = new Callback<>() {
             @Override
             public TableCell<Media, String> call(final TableColumn<Media, String> param) {
                 return new TableCell<>() {
@@ -316,7 +316,7 @@ public class ModifySeqPopUp {
             }
         };
 
-        this.mediaTableColumnVerrouillage.setCellFactory(cellFactoryVerr);
+        this.mediaTableColumnVerrouillage.setCellFactory(cellFactoryLock);
         this.mediaTableColumnOption.setCellFactory(cellFactoryOption);
 
         this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
@@ -333,7 +333,7 @@ public class ModifySeqPopUp {
     }
 
     /**
-     * Method of modifying the name of the sequence
+     * Method modifying the name of the sequence
      */
     private void modifySequenceName() {
         if (!Objects.equals(this.sequence.getName(), this.titleSequenceLabel.getText())) {
@@ -354,7 +354,7 @@ public class ModifySeqPopUp {
 
 
     /**
-     * Method of adding media to the sequence
+     * Method adding media to the sequence
      */
     @FXML
     private void addMediaToSeq() {
@@ -375,7 +375,7 @@ public class ModifySeqPopUp {
     }
 
     /**
-     * Method of modifying media in the sequence
+     * Method modifying media in the sequence
      *
      * @param media Media to be modified
      */
@@ -399,7 +399,7 @@ public class ModifySeqPopUp {
     }
 
     /**
-     * Method of closing the sequence modification pop-up
+     * Method closing the sequence modification pop-up
      */
     @FXML
     private void cancelAddSeq() {
@@ -407,7 +407,7 @@ public class ModifySeqPopUp {
     }
 
     /**
-     * Method to save any modifications made on the sequence and close the pop-up.
+     * Method saving any modification made on the sequence and close the pop-up
      */
     @FXML
     private void saveMediasToSeq() {

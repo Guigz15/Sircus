@@ -85,9 +85,16 @@ public class MainWindowController implements Initializable {
     private Button next;
 
 
-    public MainWindowController() {
-    }
+    /**
+     * Default constructor
+     */
+    public MainWindowController() {}
 
+    /**
+     * Initialize all the fields, buttons and visibility of each component
+     * @param url unused parameter
+     * @param resourceBundle unused parameter
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // EyeTracker Combobox
@@ -124,18 +131,27 @@ public class MainWindowController implements Initializable {
         exportButton.setVisible(SircusApplication.adminConnected);
     }
 
+    /**
+     * Deduct and set the age
+     */
     @FXML
     private void computeAge() {
         Period period = Period.between(birthDate.getValue(), LocalDate.now());
         age.setText(period.getYears() + "  ans");
     }
 
+    /**
+     * Show the components to add a new location
+     */
     @FXML
     private void addLocation() {
         locationFullBox.setVisible(false);
         locationBox.setVisible(true);
     }
 
+    /**
+     * Show the components to update a location
+     */
     @FXML
     private void updateLocation() {
         locationFullBox.setVisible(false);
@@ -144,6 +160,9 @@ public class MainWindowController implements Initializable {
         locationField.setText(location);
     }
 
+    /**
+     * Add or update a location when validate button is pressed
+     */
     @FXML
     private void validateLocation() {
         if (!locationField.getText().isEmpty()) {
@@ -167,11 +186,17 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * Cancel adding or editing of a location
+     */
     @FXML
     private void cancelLocation() {
         resetLocation();
     }
 
+    /**
+     * Go back to default display of the location field
+     */
     private void resetLocation() {
         location = null;
         locationBox.setVisible(false);
@@ -179,6 +204,9 @@ public class MainWindowController implements Initializable {
         locationFullBox.setVisible(true);
     }
 
+    /**
+     * Remove selected location when remove button is pressed
+     */
     @FXML
     private void removeLocation() {
         if (locations.getValue() != null) {
@@ -189,12 +217,18 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * Show the components to add a new classification method
+     */
     @FXML
     private void addMethod() {
         methodFullBox.setVisible(false);
         methodBox.setVisible(true);
     }
 
+    /**
+     * Show the components to update a classification method
+     */
     @FXML
     private void updateMethod() {
         methodFullBox.setVisible(false);
@@ -203,6 +237,9 @@ public class MainWindowController implements Initializable {
         methodField.setText(method);
     }
 
+    /**
+     * Add or update a classification method when validate button is pressed
+     */
     @FXML
     private void validateMethod() {
         if (!methodField.getText().isEmpty()) {
@@ -226,11 +263,17 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * Cancel adding or editing of a classification method
+     */
     @FXML
     private void cancelMethod() {
         resetMethod();
     }
 
+    /**
+     * Go back to default display of the classification method field
+     */
     private void resetMethod() {
         method = null;
         methodBox.setVisible(false);
@@ -238,6 +281,9 @@ public class MainWindowController implements Initializable {
         methodFullBox.setVisible(true);
     }
 
+    /**
+     * Remove selected classification method when remove button is pressed
+     */
     @FXML
     private void removeMethod() {
         if (methods.getValue() != null) {
@@ -247,6 +293,10 @@ public class MainWindowController implements Initializable {
             methods.getSelectionModel().select(0);
         }
     }
+
+    /**
+     * Show connection popup when admin button is pressed
+     */
     @FXML
     private void handleConnection() {
         try {
@@ -268,6 +318,9 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * Export the patient's information in a text file
+     */
     @FXML
     private void exporting() {
         FileChooser fileChooser = new FileChooser();
@@ -290,6 +343,9 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * Import the patient's information from a text file
+     */
     @FXML
     private void importing() {
         FileChooser fileChooser = new FileChooser();

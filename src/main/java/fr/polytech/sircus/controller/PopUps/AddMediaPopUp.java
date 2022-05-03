@@ -24,6 +24,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 
+/**
+ * Controller of the add media section
+ */
 public class AddMediaPopUp {
 
     private final String MEDIAS_PATH = "medias/";
@@ -157,7 +160,7 @@ public class AddMediaPopUp {
             this.listMedias = listMedias;
             this.listener = listener;
 
-            if(paths.isCustomPath() == true || paths.getLastPath() == null){
+            if(paths.isCustomPath() || paths.getLastPath() == null){
                 pathUse = paths.getDefaultPath();
             } else {
                 pathUse = paths.getLastPath();
@@ -240,7 +243,7 @@ public class AddMediaPopUp {
 
                 String newPath = Paths.get(newFileInterstim.getPath()).getParent().toString();
                 SircusApplication.dataSircus.getPath().setLastPath(newPath);
-                if(SircusApplication.dataSircus.getPath().isCustomPath() == false){
+                if(!SircusApplication.dataSircus.getPath().isCustomPath()){
                     this.fileChooserMedia.setInitialDirectory(
                             new File(newPath)
                     );
@@ -267,7 +270,7 @@ public class AddMediaPopUp {
 
                 String newPath = Paths.get(newFileMedia.getPath()).getParent().toString();
                 SircusApplication.dataSircus.getPath().setLastPath(newPath);
-                if(SircusApplication.dataSircus.getPath().isCustomPath() == false){
+                if(!SircusApplication.dataSircus.getPath().isCustomPath()){
                     this.fileChooserMedia.setInitialDirectory(
                             new File(newPath)
                     );

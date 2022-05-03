@@ -27,7 +27,7 @@ public class DataSircus implements Serializable {
     private PathMedia path;
 
     /**
-     * Constructor
+     * Main constructor
      */
     public DataSircus() {
         this.metaSequencesList = new ArrayList<>();
@@ -54,17 +54,26 @@ public class DataSircus implements Serializable {
             this.locationsList.add(locationToAdd);
     }
 
+    /**
+     * Change a location
+     * @param oldLocation the name of the old location
+     * @param newLocation the name of the new location
+     */
     public void updateLocation(String oldLocation, String newLocation) {
         if(this.locationsList.contains(oldLocation))
             this.locationsList.set(this.locationsList.indexOf(oldLocation), newLocation);
     }
 
+    /**
+     * Remove a location
+     * @param locationToRemove the location to be removed
+     */
     public void removeLocationFromList(String locationToRemove) {
         this.locationsList.remove(locationToRemove);
     }
 
     /**
-     * Add a method to the list of methods
+     * Add a classification method to the list of methods
      * @param methodToAdd new method to add
      */
     public void addMethodToList(String methodToAdd) {
@@ -72,16 +81,26 @@ public class DataSircus implements Serializable {
             this.methodsList.add(methodToAdd);
     }
 
+    /**
+     * Change a classification method
+     * @param oldMethod the name of the old method
+     * @param newMethod the name of the new method
+     */
     public void updateMethod(String oldMethod, String newMethod) {
         if(this.methodsList.contains(oldMethod))
             this.methodsList.set(this.methodsList.indexOf(oldMethod), newMethod);
     }
+
+    /**
+     * Remove a classification method
+     * @param methodToRemove the method to be removed
+     */
     public void removeMethodFromList(String methodToRemove) {
         this.methodsList.remove(methodToRemove);
     }
 
     /**
-     * Add an eyeTracker to list of eyeTrackers
+     * Add an eyeTracker to the list of eyeTrackers
      * @param eyeTrackerName new eyeTracker to add
      */
     public void addEyeTrackerToList(String eyeTrackerName) {
@@ -89,6 +108,10 @@ public class DataSircus implements Serializable {
             this.eyeTrackerList.add(eyeTrackerName);
     }
 
+    /**
+     * Serialize an eyeTracker to set it by default
+     * @param eyeTrackerName the name of the eyeTracker
+     */
     public void saveEyeTracker(String eyeTrackerName) {
         if (eyeTrackerName != null)
             this.eyeTrackerSaved = eyeTrackerName;
