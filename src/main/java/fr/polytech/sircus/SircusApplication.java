@@ -10,6 +10,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Main class
+ */
 public class SircusApplication extends Application {
 
 	/**

@@ -30,7 +30,6 @@ import java.util.Objects;
 
 /**
  * View window controller.
- * <p>
  * This class allows to manage the reading of the media and the view associated to this reading.
  */
 public class ViewerController {

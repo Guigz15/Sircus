@@ -27,7 +27,6 @@ public class Sequence implements Serializable {
     @Getter @Setter
     private Boolean lock;
 
-
     /**
      * The constructor
      *
@@ -64,7 +63,7 @@ public class Sequence implements Serializable {
     }
 
     /**
-     * To remove a media from this sequence
+     * Remove a media from this sequence
      *
      * @param media Media to remove
      */
@@ -74,7 +73,6 @@ public class Sequence implements Serializable {
             this.duration = this.duration.minus(media.getDuration());
         }
     }
-
 
     /**
      *  Compute the duration of the sequence.
@@ -91,7 +89,6 @@ public class Sequence implements Serializable {
         this.duration = duration;
     }
 
-
     /**
      * Override the method toString to display only the name
      *
@@ -101,7 +98,6 @@ public class Sequence implements Serializable {
     public String toString() {
         return name;
     }
-
 
     /**
      * Checks if two sequences are equals.

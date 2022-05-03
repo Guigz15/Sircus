@@ -5,6 +5,9 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.Period;
 
+/**
+ * Represent a patient with its information
+ */
 public class Patient {
 
     enum Sex { M, F }
@@ -22,10 +25,15 @@ public class Patient {
     @Getter @Setter
     private HandLaterality handLaterality;
 
-    public Patient() {
+    /**
+     * Default constructor
+     */
+    public Patient() {}
 
-    }
-
+    /**
+     * Copy constructor
+     * @param patient the patient to copy
+     */
     public Patient(Patient patient) {
         this.identifier = patient.identifier;
         this.sex = patient.sex;
@@ -34,6 +42,10 @@ public class Patient {
         this.handLaterality = patient.handLaterality;
     }
 
+    /**
+     * Give the age of the patient
+     * @return the gae of the patient
+     */
     public int computeAge() {
         Period period = Period.between(birthDate, LocalDate.now());
         return period.getYears();

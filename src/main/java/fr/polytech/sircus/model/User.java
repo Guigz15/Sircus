@@ -3,6 +3,9 @@ package fr.polytech.sircus.model;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Represent an user
+ */
 public class User {
 
     enum TypeUser { Praticien, Experimentateur }
