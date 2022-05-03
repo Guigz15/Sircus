@@ -403,9 +403,13 @@ public class MainWindowController implements Initializable {
         return null;
     }
 
+    /**
+     * Switch to the next page
+     * @throws IOException
+     */
     @FXML
     private void nextPage() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/player_monitor.fxml")));
+        FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) next.getScene().getWindow();
         stage.setScene(scene);
