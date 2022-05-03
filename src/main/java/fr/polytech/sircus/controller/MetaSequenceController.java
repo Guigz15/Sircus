@@ -404,12 +404,6 @@ public class MetaSequenceController {
             viewer.playViewer();
             metaSeqPlay.setGraphic(pauseIcon);
             viewerPlayingState = false;
-
-            // Prepare the Result
-            Result result = new Result();
-
-            // Creates also the monitoring window
-            this.monitor = new PlayerMonitorController(this.metaSeqComboBox.getScene().getWindow(), result);
         }
     }
 
