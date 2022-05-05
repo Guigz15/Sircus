@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 /**
- * This class manages the main window (information tab)
+ * This class manages the main window
  */
 public class MainWindowController implements Initializable {
 
