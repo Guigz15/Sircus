@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.*?>
 
 <GridPane fx:id="playerMonitor" alignment="CENTER" xmlns="http://javafx.com/javafx/14.0.2.1"
           xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PlayerMonitorController">
@@ -151,33 +152,25 @@
             <GridPane.margin>
                 <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
             </GridPane.margin>
-            <Button fx:id="backButton" alignment="CENTER" contentDisplay="CENTER"
-                    graphicTextGap="0.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false"
-                    prefWidth="55.0" text="◁◁" textAlignment="CENTER">
-                <font>
-                    <Font size="22.0"/>
-                </font>
+            <Button fx:id="backButton" alignment="CENTER" contentDisplay="CENTER">
+                <graphic>
+                    <FontIcon iconLiteral="fa-backward" iconSize="15" />
+                </graphic>
             </Button>
-            <Button fx:id="stopButton" alignment="CENTER" contentDisplay="CENTER"
-                    graphicTextGap="0.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false"
-                    prefWidth="55.0" text="■">
-                <font>
-                    <Font size="18.0"/>
-                </font>
+            <Button fx:id="stopButton" alignment="CENTER" contentDisplay="CENTER">
+                <graphic>
+                    <FontIcon iconLiteral="fa-stop" iconSize="15"/>
+                </graphic>
             </Button>
-            <Button fx:id="playButton" alignment="CENTER" contentDisplay="CENTER"
-                    graphicTextGap="0.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false"
-                    prefWidth="55.0" text="▶" textAlignment="CENTER">
-                <font>
-                    <Font size="24.0"/>
-                </font>
+            <Button fx:id="playButton" alignment="CENTER" contentDisplay="CENTER">
+                <graphic>
+                    <FontIcon iconLiteral="fa-play" iconSize="15"/>
+                </graphic>
             </Button>
-            <Button fx:id="forwardButton" alignment="CENTER" contentDisplay="CENTER"
-                    graphicTextGap="0.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false"
-                    prefWidth="55.0" text="▷▷" textAlignment="CENTER">
-                <font>
-                    <Font size="22.0"/>
-                </font>
+            <Button fx:id="forwardButton" alignment="CENTER" contentDisplay="CENTER">
+                <graphic>
+                    <FontIcon iconLiteral="fa-forward" iconSize="15"/>
+                </graphic>
             </Button>
         </HBox>
     </GridPane>
