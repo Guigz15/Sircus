@@ -17,7 +17,6 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -91,7 +90,6 @@ public class ViewerController {
             viewerStage.setX(bounds.getMinX());
             viewerStage.setY(bounds.getMinY());
 
-            //viewerStage.initModality(Modality.APPLICATION_MODAL);
             viewerStage.initOwner(owner);
             viewerStage.setScene(viewerScene);
             viewerStage.setResizable(true);

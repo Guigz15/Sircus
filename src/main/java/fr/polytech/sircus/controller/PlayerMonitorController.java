@@ -6,10 +6,8 @@ import fr.polytech.sircus.model.Result;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -17,11 +15,8 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import java.io.IOException;
 import java.util.Objects;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 /**
- * Manages the interface used when the exam is in progress (player_monitor)
+ * Manages the interface used when the exam is in progress (player_monitor).
  */
 public class PlayerMonitorController {
 
@@ -35,7 +30,7 @@ public class PlayerMonitorController {
     private Button playButton;
 
     /**
-     * The Result to fill
+     * The Result to fill.
      */
     private Result result;
 
@@ -47,7 +42,7 @@ public class PlayerMonitorController {
     private final MetaSequence metaSequence;
 
     /**
-     * Default constructor
+     * Default constructor.
      */
     public PlayerMonitorController(){
         this.result = new Result();
@@ -65,7 +60,7 @@ public class PlayerMonitorController {
     }
 
     /**
-     * Save a comment written in the comment section with the time
+     * Save a comment written in the comment section with the time.
      */
     @FXML
     private void addComment(){
@@ -74,7 +69,7 @@ public class PlayerMonitorController {
     }
 
     /**
-     * Go back to the previous page
+     * Go back to the previous page.
      */
     public void previousPage() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
@@ -84,18 +79,27 @@ public class PlayerMonitorController {
         stage.show();
     }
 
+    /**
+     * Go back to the previous sequence in the meta sequence.
+     */
     @FXML
-    public void previousSequence(MouseEvent mouseEvent) {
+    public void previousSequence() {
         viewer.previousSequence();
     }
 
+    /**
+     * Go to the next sequence in the meta sequence.
+     */
     @FXML
-    public void nextSequence(MouseEvent mouseEvent) {
+    public void nextSequence() {
         viewer.nextSequence();
     }
 
+    /**
+     * Starts/Pauses the viewer or creates one if none is opened.
+     */
     @FXML
-    public void playViewer(MouseEvent mouseEvent) {
+    public void playViewer() {
         if (viewer == null) {
             viewer = new ViewerController(this.playButton.getScene().getWindow(), this.metaSequence, this);
         } else {
@@ -115,13 +119,16 @@ public class PlayerMonitorController {
         }
     }
 
+    /**
+     * Stops the viewer and resets it.
+     */
     @FXML
-    public void stopViewer(MouseEvent mouseEvent) {
+    public void stopViewer() {
         // TODO: reset everything
     }
 
     /**
-     * Closes the viewer
+     * Closes the viewer.
      */
     public void closeViewer() {
         viewer = null;
