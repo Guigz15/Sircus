@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -33,8 +34,8 @@ import java.util.Objects;
  */
 public class ViewerController {
 
-    // The MetaSequenceController which create this controller
-    private final MetaSequenceController metaSequenceController;
+    // The PlayerMonitorController which create this controller
+    private final PlayerMonitorController playerMonitorController;
 
     // The MetaSequence that id passed to the viewer
     private final MetaSequence playingMetaSequence;
@@ -66,10 +67,8 @@ public class ViewerController {
 
     /**
      * Constructor of ViewerController class.
-     *
-     * @param owner the main Window.
      */
-    public ViewerController(Window owner, MetaSequence metaSequence, MetaSequenceController metaSequenceController) {
+    public ViewerController(Window owner, MetaSequence metaSequence, PlayerMonitorController playerMonitorController) {
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/viewer.fxml")));
         fxmlLoader.setController(this);
         numberOfSequences = metaSequence.getSequencesList().size();
@@ -92,7 +91,7 @@ public class ViewerController {
             viewerStage.setX(bounds.getMinX());
             viewerStage.setY(bounds.getMinY());
 
-            viewerStage.initModality(Modality.NONE);
+            //viewerStage.initModality(Modality.APPLICATION_MODAL);
             viewerStage.initOwner(owner);
             viewerStage.setScene(viewerScene);
             viewerStage.setResizable(true);
@@ -104,7 +103,7 @@ public class ViewerController {
 
         playingMetaSequence = metaSequence;
         metaSequenceStarted = false;
-        this.metaSequenceController = metaSequenceController;
+        this.playerMonitorController = playerMonitorController;
         sequencesStartTime = new ArrayList<>();
         closingManager();
     }
@@ -174,6 +173,9 @@ public class ViewerController {
             } else {
                 centerImage();
             }
+
+            // TODO: try to add background color
+            viewerStage.getScene().setFill(Color.RED);
         }
         // If the path is not found we display a message.
         catch (FileNotFoundException error) {
@@ -346,7 +348,7 @@ public class ViewerController {
      */
     @FXML
     private void quitViewer() {
-        metaSequenceController.closeViewer();
+        playerMonitorController.closeViewer();
         viewerStage.close();
     }
 
@@ -356,7 +358,7 @@ public class ViewerController {
      * reset some attributes to default attributes and restart the viewer correctly.
      */
     private void closingManager() {
-        viewerStage.setOnCloseRequest(event -> metaSequenceController.closeViewer());
+        viewerStage.setOnCloseRequest(event -> playerMonitorController.closeViewer());
     }
 
     /**
