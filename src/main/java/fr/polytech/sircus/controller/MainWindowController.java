@@ -2,7 +2,8 @@ package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.controller.PopUps.LoginPopup;
-import javafx.application.Platform;
+import fr.polytech.sircus.model.Patient;
+import fr.polytech.sircus.model.User;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -49,6 +50,8 @@ public class MainWindowController implements Initializable {
     private ToggleGroup ocularDominance;
     @FXML
     private ToggleGroup laterality;
+    @FXML
+    private ToggleGroup type;
     @FXML
     private TextField name;
     @FXML
@@ -139,6 +142,27 @@ public class MainWindowController implements Initializable {
         );
 
         exportButton.setVisible(SircusApplication.adminConnected);
+
+        // Initialize all components if they're already filled
+        if (SircusApplication.patient != null) {
+            id.setText(SircusApplication.patient.getIdentifier());
+            Objects.requireNonNull(getRadioButton(sex.getToggles(), SircusApplication.patient.getSex().name())).setSelected(true);
+            birthDate.setValue(SircusApplication.patient.getBirthDate());
+            age.setText(SircusApplication.patient.computeAge() + "  ans");
+            if (SircusApplication.patient.getEyeDominance() != null)
+                Objects.requireNonNull(getRadioButton(ocularDominance.getToggles(), SircusApplication.patient.getEyeDominance().name())).setSelected(true);
+            if (SircusApplication.patient.getHandLaterality() != null)
+                Objects.requireNonNull(getRadioButton(laterality.getToggles(), SircusApplication.patient.getHandLaterality().name())).setSelected(true);
+        }
+        if (SircusApplication.user != null) {
+            Objects.requireNonNull(getRadioButton(type.getToggles(), SircusApplication.user.getTypeUser().name())).setSelected(true);
+            name.setText(SircusApplication.user.getLastName());
+            forename.setText(SircusApplication.user.getFirstName());
+        }
+        if (SircusApplication.currentLocation != null)
+            locations.setValue(SircusApplication.currentLocation);
+        if (SircusApplication.currentMethod != null)
+            methods.setValue(SircusApplication.currentMethod);
     }
 
     /**
@@ -193,10 +217,8 @@ public class MainWindowController implements Initializable {
             }
             resetLocation();
         } else {
-            Platform.runLater(() -> {
-                Alert dialog = new Alert(Alert.AlertType.ERROR, "Vous devez renseigner un lieu.", ButtonType.OK);
-                dialog.show();
-            });
+            Alert dialog = new Alert(Alert.AlertType.ERROR, "Vous devez renseigner un lieu.", ButtonType.OK);
+            dialog.show();
         }
     }
 
@@ -226,10 +248,14 @@ public class MainWindowController implements Initializable {
     @FXML
     private void removeLocation() {
         if (locations.getValue() != null) {
-            String locationToRemove = locations.getValue();
-            locations.getItems().remove(locationToRemove);
-            SircusApplication.dataSircus.removeLocationFromList(locationToRemove);
-            locations.getSelectionModel().select(0);
+            Alert dialog = new Alert(Alert.AlertType.WARNING, "Voulez-vous supprimer le lieu " + locations.getValue() + " ?", ButtonType.OK, ButtonType.CANCEL);
+            dialog.showAndWait();
+            if (dialog.getResult() == ButtonType.OK) {
+                String locationToRemove = locations.getValue();
+                locations.getItems().remove(locationToRemove);
+                SircusApplication.dataSircus.removeLocationFromList(locationToRemove);
+                locations.getSelectionModel().select(0);
+            }
         }
     }
 
@@ -276,10 +302,8 @@ public class MainWindowController implements Initializable {
             }
             resetMethod();
         } else {
-            Platform.runLater(() -> {
-                Alert dialog = new Alert(Alert.AlertType.ERROR, "Vous devez renseigner une méthode.", ButtonType.OK);
-                dialog.show();
-            });
+            Alert dialog = new Alert(Alert.AlertType.ERROR, "Vous devez renseigner une méthode.", ButtonType.OK);
+            dialog.show();
         }
     }
 
@@ -309,10 +333,14 @@ public class MainWindowController implements Initializable {
     @FXML
     private void removeMethod() {
         if (methods.getValue() != null) {
-            String methodToRemove = methods.getValue();
-            methods.getItems().remove(methodToRemove);
-            SircusApplication.dataSircus.removeMethodFromList(methodToRemove);
-            methods.getSelectionModel().select(0);
+            Alert dialog = new Alert(Alert.AlertType.WARNING, "Voulez-vous supprimer la méthode " + methods.getValue() + " ?", ButtonType.OK, ButtonType.CANCEL);
+            dialog.showAndWait();
+            if (dialog.getResult() == ButtonType.OK) {
+                String methodToRemove = methods.getValue();
+                methods.getItems().remove(methodToRemove);
+                SircusApplication.dataSircus.removeMethodFromList(methodToRemove);
+                methods.getSelectionModel().select(0);
+            }
         }
     }
 
@@ -409,11 +437,36 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     private void nextPage() throws IOException {
+        saveInfos();
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) next.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
+    }
+
+
+    private void saveInfos() {
+        // Save patient infos
+        SircusApplication.patient = new Patient();
+        SircusApplication.patient.setIdentifier(id.getText());
+        SircusApplication.patient.setSex(Patient.Sex.valueOf(((RadioButton)this.sex.getSelectedToggle()).getText()));
+        SircusApplication.patient.setBirthDate(birthDate.getValue());
+        if (ocularDominance.getSelectedToggle() != null)
+            SircusApplication.patient.setEyeDominance(Patient.EyeDominance.valueOf(((RadioButton)this.ocularDominance.getSelectedToggle()).getText()));
+        if (laterality.getSelectedToggle() != null)
+            SircusApplication.patient.setHandLaterality(Patient.HandLaterality.valueOf(((RadioButton)this.laterality.getSelectedToggle()).getText()));
+
+        // Save practitioner infos
+        SircusApplication.user = new User();
+        SircusApplication.user.setTypeUser(User.TypeUser.valueOf(((RadioButton)this.type.getSelectedToggle()).getText()));
+        SircusApplication.user.setLastName(name.getText());
+        SircusApplication.user.setFirstName(forename.getText());
+
+        // Save location and method
+        SircusApplication.currentLocation = locations.getValue();
+        if (methods.getValue() != null)
+            SircusApplication.currentMethod = methods.getValue();
     }
 
     @FXML

@@ -1,22 +1,16 @@
 package fr.polytech.sircus.controller;
 
-
 import fr.polytech.sircus.SircusApplication;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import org.junit.jupiter.api.*;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.matcher.base.NodeMatchers;
-
 import java.time.LocalDate;
 import java.time.Period;
-
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -34,13 +28,13 @@ public class MainWindowTest{
 
     @AfterEach
     public void cleanup() {
-        ((DatePicker) robot.lookup("#birthDate").query()).getEditor().clear();
-        ComboBox<String> location = robot.lookup("#location").query();
-        robot.interact(() -> location.getSelectionModel().select(null));
         ((TextField) robot.lookup("#id").query()).clear();
-        ((TextField) robot.lookup("#name").query()).clear();
         ((RadioButton) robot.lookup("M").query()).setSelected(false);
-
+        ((DatePicker) robot.lookup("#birthDate").query()).getEditor().clear();
+        ((TextField) robot.lookup("#name").query()).clear();
+        ((TextField) robot.lookup("#forename").query()).clear();
+        ComboBox<String> locations = robot.lookup("#locations").query();
+        robot.interact(() -> locations.getSelectionModel().select(null));
     }
 
 
@@ -49,21 +43,16 @@ public class MainWindowTest{
     public void test1_all_component_are_defined() {
         System.out.println("Testing if all components are initialized");
         verifyThat("#id", NodeMatchers.isNotNull());
-        verifyThat("#gender_selection", NodeMatchers.isNotNull());
+        verifyThat("#sex", NodeMatchers.isNotNull());
         verifyThat("#birthDate", NodeMatchers.isNotNull());
         verifyThat("#age", NodeMatchers.isNotNull());
         verifyThat("#ocularDom", NodeMatchers.isNotNull());
-        verifyThat("#type_selection", NodeMatchers.isNotNull());
+        verifyThat("#manualLateral", NodeMatchers.isNotNull());
+        verifyThat("#type", NodeMatchers.isNotNull());
         verifyThat("#name", NodeMatchers.isNotNull());
-        verifyThat("#location", NodeMatchers.isNotNull());
-        verifyThat("#location_selection", NodeMatchers.isNotNull());
-        verifyThat("#locationAdd", NodeMatchers.isNotNull());
-        verifyThat("#method_selection", NodeMatchers.isNotNull());
-        verifyThat("#method", NodeMatchers.isNotNull());
-        verifyThat("#methodAdd", NodeMatchers.isNotNull());
-        verifyThat("#lateral", NodeMatchers.isNotNull());
-        verifyThat("#metaSeqTab", NodeMatchers.isNotNull());
-        verifyThat("#resultTab", NodeMatchers.isNotNull());
+        verifyThat("#forename", NodeMatchers.isNotNull());
+        verifyThat("#locations", NodeMatchers.isNotNull());
+        verifyThat("#methods", NodeMatchers.isNotNull());
     }
 
     @Test
@@ -81,7 +70,6 @@ public class MainWindowTest{
         ((DatePicker) robot.lookup("#birthDate").query()).getEditor().clear();
     }
 
-    /*
     @Test
     @Order(3)
     public void test3_add_location_cancel() {
@@ -90,17 +78,14 @@ public class MainWindowTest{
         //click to add new location
         robot.clickOn("#locationAdd");
 
-        robot.clickOn("#city").write("Tours");
-        robot.clickOn("#street").write("test to cancel");
-        robot.clickOn("#streetNumber").write("64");
-        robot.clickOn("#postCode").write("37000");
+        robot.clickOn("#locationField").write("Test location to cancel");
 
-        robot.clickOn("#cancelButton");
+        robot.clickOn("#cancelLocButton");
 
         //we verify that the new location was not added.
-        ComboBox<String> location = robot.lookup("#location").query();
-        for (String loca : location.getItems()) {
-            assertNotEquals(loca.getStreet(),"test to cancel");
+        ComboBox<String> locations = robot.lookup("#locations").query();
+        for (String location : locations.getItems()) {
+            assertNotEquals(location,"Test location to cancel");
         }
     }
 
@@ -111,84 +96,197 @@ public class MainWindowTest{
         //click to add new location
         robot.clickOn("#locationAdd");
 
-        ComboBox<String> location = robot.lookup("#country").query();
-        robot.interact(() -> location.getSelectionModel().select("France"));
+        robot.clickOn("#locationField").write("Test location to add");
 
-        //We fill the city
-        robot.clickOn("#city").write("Tours");
-        //We fill the street
-        robot.clickOn("#street").write("Portalis");
-        //We fill the number street
-        robot.clickOn("#streetNumber").write("64");
-        //We fill the post code
-        robot.clickOn("#postCode").write("37000");
+        robot.clickOn("#validLocButton");
 
-        //We click on the add button
-        robot.clickOn("#addButton");
-
-        robot.clickOn("#cancelButton");
-        //TODO finish the test of add button of location. Remove the click to cancel
-
-
+        // we verify that the new location was added.
+        ComboBox<String> locations = robot.lookup("#locations").query();
+        assertTrue(locations.getItems().contains("Test location to add"));
     }
 
     @Test
     @Order(5)
-    public void test5_try_to_switch_other_tab_without_fill_correctly_form() {
+    public void test5_update_location_cancel() {
+        System.out.println("Testing to update a location and cancel");
 
-        System.out.println("Testing to switch to other view without fill correctly the form : ");
-        //write the identifiant
-        robot.clickOn("#id").write("identifiant");
-        System.out.println("-- Test without fill anythings");
-        //click on save button
-        robot.clickOn("#button_save");
-        //need to click on Ok for quit popup alert
-        robot.clickOn("OK");
+        robot.clickOn("#locations");
+        robot.type(KeyCode.DOWN);
+        robot.type(KeyCode.ENTER);
+        robot.clickOn("#locationUpdate");
+        robot.clickOn("#locationField").doubleClickOn(MouseButton.PRIMARY);
+        robot.clickOn("#locationField").write("Test location update to cancel");
+        robot.clickOn("#cancelLocButton");
 
-        //check if we can't click on the other view
-        if (!robot.lookup("#meta_seq_tab_view").query().isDisabled() || !robot.lookup("#resultat_tab_view").query().isDisabled() ) {
-            fail("We can switch to other view whereas we should not.");
-        }
-        System.out.println("-- Fill Gender field");
-        robot.clickOn((RadioButton) robot.lookup("M").query());
-
-        robot.clickOn("#button_save");
-        //need to click on Ok for 3 popup alert
-        robot.clickOn("OK");
-
-        System.out.println("-- Fill birthDate field");
-        robot.clickOn("#birthDate").write("03/05/2010").press(KeyCode.ENTER).release((KeyCode.ENTER));
-        //click on save button
-        robot.clickOn("#button_save");
-
-        //need to click on Ok for quit popup alert
-        robot.clickOn("OK");
-
-        //check if we can't click on the other view
-        if (!robot.lookup("#meta_seq_tab_view").query().isDisabled() || !robot.lookup("#resultat_tab_view").query().isDisabled() ) {
-            fail("We can switch to other view whereas we should not.");
-        }
-
-        System.out.println("-- Fill Name field");
-        robot.clickOn("#name").write("Name_Patient_Test");
-        //click on save button
-        robot.clickOn("#button_save");
-        //need to click on Ok for quit popup alert
-        robot.clickOn("OK");
-
-        //check if we can't click on the other view
-        if (!robot.lookup("#meta_seq_tab_view").query().isDisabled() || !robot.lookup("#resultat_tab_view").query().isDisabled() ) {
-            fail("We can switch to other view whereas we should not.");
-        }
-
-        ComboBox<Location> location = robot.lookup("#location").query();
-        robot.interact(() -> location.getSelectionModel().select(0));
-        //click on save button
-        robot.clickOn("#button_save");
-        //check if we can click on the other view
-        if (robot.lookup("#meta_seq_tab_view").query().isDisabled() || robot.lookup("#resultat_tab_view").query().isDisabled() ) {
-            fail("We can't switch to other view.");
+        //we verify that the location was not updated.
+        ComboBox<String> locations = robot.lookup("#locations").query();
+        for (String location : locations.getItems()) {
+            assertNotEquals(location,"Test location update to cancel");
         }
     }
-    */
+
+    @Test
+    @Order(6)
+    public void test6_update_location() {
+        System.out.println("Testing to update a location");
+
+        robot.clickOn("#locations");
+        robot.type(KeyCode.DOWN);
+        robot.type(KeyCode.ENTER);
+        robot.clickOn("#locationUpdate");
+        robot.clickOn("#locationField").doubleClickOn(MouseButton.PRIMARY);
+        robot.clickOn("#locationField").write("Test location to update");
+        robot.clickOn("#validLocButton");
+
+        // we verify that the location was updated.
+        ComboBox<String> locations = robot.lookup("#locations").query();
+        assertTrue(locations.getItems().contains("Test location to update"));
+    }
+
+
+    @Test
+    @Order(7)
+    public void test7_remove_location_cancel() {
+        System.out.println("Testing to remove a location and cancel");
+
+        ComboBox<String> locations = robot.lookup("#locations").query();
+        int size = locations.getItems().size();
+
+        robot.clickOn("#locations");
+        robot.type(KeyCode.DOWN);
+        robot.type(KeyCode.ENTER);
+        robot.clickOn("#locationRemove");
+        robot.type(KeyCode.ESCAPE);
+
+        // we verify that the location wasn't be removed.
+        assertEquals(size, locations.getItems().size());
+    }
+
+    @Test
+    @Order(8)
+    public void test8_remove_location() {
+        System.out.println("Testing to remove a location");
+
+        ComboBox<String> locations = robot.lookup("#locations").query();
+        int size = locations.getItems().size();
+
+        robot.clickOn("#locations");
+        robot.type(KeyCode.DOWN);
+        robot.type(KeyCode.ENTER);
+        robot.clickOn("#locationRemove");
+        robot.type(KeyCode.ENTER);
+
+        // we verify that the location wasn't be removed.
+        assertNotEquals(size, locations.getItems().size());
+    }
+
+    @Test
+    @Order(9)
+    public void test9_add_method_cancel() {
+        //test to add a method and cancel
+        System.out.println("Testing to add a new method and cancel");
+        //click to add new method
+        robot.clickOn("#methodAdd");
+
+        robot.clickOn("#methodField").write("Test method to cancel");
+
+        robot.clickOn("#cancelMethodButton");
+
+        //we verify that the new method was not added.
+        ComboBox<String> methods = robot.lookup("#methods").query();
+        for (String method : methods.getItems()) {
+            assertNotEquals(method,"Test method to cancel");
+        }
+    }
+
+    @Test
+    @Order(10)
+    public void test10_add_method() {
+        System.out.println("Testing to add a new method");
+        //click to add new method
+        robot.clickOn("#methodAdd");
+
+        robot.clickOn("#methodField").write("Test method to add");
+
+        robot.clickOn("#validMethodButton");
+
+        // we verify that the new method was added.
+        ComboBox<String> methods = robot.lookup("#methods").query();
+        assertTrue(methods.getItems().contains("Test method to add"));
+    }
+
+    @Test
+    @Order(11)
+    public void test11_update_method_cancel() {
+        System.out.println("Testing to update a method and cancel");
+
+        robot.clickOn("#methods");
+        robot.type(KeyCode.DOWN);
+        robot.type(KeyCode.ENTER);
+        robot.clickOn("#methodUpdate");
+        robot.clickOn("#methodField").doubleClickOn(MouseButton.PRIMARY);
+        robot.clickOn("#methodField").write("Test method update to cancel");
+        robot.clickOn("#cancelMethodButton");
+
+        //we verify that the method was not updated.
+        ComboBox<String> methods = robot.lookup("#methods").query();
+        for (String method : methods.getItems()) {
+            assertNotEquals(method,"Test method update to cancel");
+        }
+    }
+
+    @Test
+    @Order(12)
+    public void test12_update_method() {
+        System.out.println("Testing to update a method");
+
+        robot.clickOn("#methods");
+        robot.type(KeyCode.DOWN);
+        robot.type(KeyCode.ENTER);
+        robot.clickOn("#methodUpdate");
+        robot.clickOn("#methodField").doubleClickOn(MouseButton.PRIMARY);
+        robot.clickOn("#methodField").write("Test method to update");
+        robot.clickOn("#validMethodButton");
+
+        // we verify that the method was updated.
+        ComboBox<String> methods = robot.lookup("#methods").query();
+        assertTrue(methods.getItems().contains("Test method to update"));
+    }
+
+
+    @Test
+    @Order(13)
+    public void test13_remove_method_cancel() {
+        System.out.println("Testing to remove a method and cancel");
+
+        ComboBox<String> methods = robot.lookup("#methods").query();
+        int size = methods.getItems().size();
+
+        robot.clickOn("#methods");
+        robot.type(KeyCode.DOWN);
+        robot.type(KeyCode.ENTER);
+        robot.clickOn("#methodRemove");
+        robot.type(KeyCode.ESCAPE);
+
+        // we verify that the method wasn't be removed.
+        assertEquals(size, methods.getItems().size());
+    }
+
+    @Test
+    @Order(14)
+    public void test14_remove_method() {
+        System.out.println("Testing to remove a method");
+
+        ComboBox<String> methods = robot.lookup("#methods").query();
+        int size = methods.getItems().size();
+
+        robot.clickOn("#methods");
+        robot.type(KeyCode.DOWN);
+        robot.type(KeyCode.ENTER);
+        robot.clickOn("#methodRemove");
+        robot.type(KeyCode.ENTER);
+
+        // we verify that the method wasn't be removed.
+        assertNotEquals(size, methods.getItems().size());
+    }
 }

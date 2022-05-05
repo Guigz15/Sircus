@@ -2,6 +2,8 @@ package fr.polytech.sircus;
 
 import fr.polytech.sircus.controller.MainWindowController;
 import fr.polytech.sircus.model.DataSircus;
+import fr.polytech.sircus.model.Patient;
+import fr.polytech.sircus.model.User;
 import fr.polytech.sircus.utils.Serializer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -29,6 +31,27 @@ public class SircusApplication extends Application {
      * boolean for administrator connection
      */
     public static boolean adminConnected = false;
+
+    /**
+     * The patient to be diagnostic
+     */
+    public static Patient patient = null;
+
+    /**
+     * The practitioner do the diagnostic
+     */
+    public static User user = null;
+
+    /**
+     * Diagnostic location
+     */
+    public static String currentLocation = null;
+
+    /**
+     * Classification method used
+     */
+    public static String currentMethod = null;
+
 
 
     public static void main(String[] args) {

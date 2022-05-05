@@ -10,9 +10,9 @@ import java.time.Period;
  */
 public class Patient {
 
-    enum Sex { M, F }
-    enum EyeDominance { Droit, Gauche, Indefini }
-    enum HandLaterality { Droitier, Gaucher, Ambidextre, Indefini }
+    public enum Sex { M, F }
+    public enum EyeDominance { Droit, Gauche, Indéfini }
+    public enum HandLaterality { Droitier, Gaucher, Ambidextre, Indéfini }
 
     @Getter @Setter
     private String identifier;

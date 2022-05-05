@@ -8,7 +8,7 @@ import lombok.Setter;
  */
 public class User {
 
-    enum TypeUser { Praticien, Experimentateur }
+    public enum TypeUser { Praticien, Expérimentateur }
 
     @Getter @Setter
     private TypeUser typeUser;
