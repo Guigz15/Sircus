@@ -34,6 +34,9 @@ public class Media implements Serializable {
     @Getter @Setter
     private Boolean lock;
 
+    @Getter @Setter
+    private boolean isResizable;
+
     /**
      * The default constructor
      */
@@ -55,6 +58,7 @@ public class Media implements Serializable {
         this.interStim = interStim;
         this.isInterstim = false;
         this.lock = true;
+        this.isResizable = false;
     }
 
     /**
@@ -69,6 +73,7 @@ public class Media implements Serializable {
         this.type = media.getType();
         this.interStim = media.getInterStim();
         this.lock = media.getLock();
+        this.isResizable = media.isResizable();
     }
 
     /**
@@ -82,7 +87,13 @@ public class Media implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Media)) return false;
         Media media = (Media) o;
-        return getName().equals(media.getName()) && getFilename().equals(media.getFilename()) && getDuration().equals(media.getDuration()) && getType() == media.getType() && getInterStim().equals(media.getInterStim()) && Objects.equals(getLock(), media.getLock());
+        return getName().equals(media.getName()) &&
+                getFilename().equals(media.getFilename()) &&
+                getDuration().equals(media.getDuration()) &&
+                getType() == media.getType() &&
+                getInterStim().equals(media.getInterStim()) &&
+                Objects.equals(getLock(), media.getLock()) &&
+                isResizable() == media.isResizable();
     }
 
     /**
