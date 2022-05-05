@@ -160,7 +160,7 @@
             </children>
          </StackPane>
       </children></VBox>
-   <Button mnemonicParsing="false" text="Précédent" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+   <Button mnemonicParsing="false" onMouseClicked="#previousPage" text="Précédent" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
       <GridPane.margin>
          <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
       </GridPane.margin>
