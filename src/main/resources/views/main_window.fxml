@@ -242,10 +242,13 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <RadioButton mnemonicParsing="false" selected="true">
+                  <RadioButton mnemonicParsing="false" prefHeight="18.0" prefWidth="8.0" selected="true" text="Praticien" textFill="TRANSPARENT">
                      <toggleGroup>
                         <ToggleGroup fx:id="type" />
                      </toggleGroup>
+                     <VBox.margin>
+                        <Insets left="15.0" />
+                     </VBox.margin>
                   </RadioButton>
                </VBox>
                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
@@ -260,7 +263,10 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <RadioButton mnemonicParsing="false" toggleGroup="$type" />
+                  <RadioButton mnemonicParsing="false" prefHeight="18.0" prefWidth="0.0" text="Expérimentateur" textFill="TRANSPARENT" toggleGroup="$type">
+                     <VBox.margin>
+                        <Insets left="15.0" />
+                     </VBox.margin></RadioButton>
                </VBox>
             </HBox>
             <VBox prefHeight="40.0" prefWidth="400.0">
@@ -405,7 +411,7 @@
                            <Insets right="16.0" />
                         </HBox.margin>
                      </ComboBox>
-                     <Button mnemonicParsing="false" onMouseClicked="#addMethod" prefHeight="25.0" prefWidth="39.0">
+                     <Button id="methodAdd" mnemonicParsing="false" onMouseClicked="#addMethod" prefHeight="25.0" prefWidth="39.0">
                         <graphic>
                            <FontIcon iconLiteral="fa-plus" iconSize="15" />
                         </graphic>
