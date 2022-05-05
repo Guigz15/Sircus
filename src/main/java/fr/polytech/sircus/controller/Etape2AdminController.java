@@ -67,7 +67,7 @@ public class Etape2AdminController implements Initializable {
             "Séquence 6", "Séquence 7", "Séquence 8", "Séquence 9", "Séquence 10", "Séquence 11"};
 
     /**
-     * function initialize which dynamically ends the listViews initialization
+     * Function initialize which dynamically ends the listViews initialization
      * and enable corresponding buttons when metasequences or sequences are selected
      *
      * @param url
