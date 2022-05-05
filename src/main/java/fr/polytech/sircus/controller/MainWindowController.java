@@ -143,7 +143,9 @@ public class MainWindowController implements Initializable {
 
         exportButton.setVisible(SircusApplication.adminConnected);
 
-        // Initialize all components if they're already filled
+        // Initialize all components if they have been already filled
+        /** Commenter sinon pose des problèmes si aucun des champs n'a été rempli, en cliquant sur l'étoile rouge, ce qui n'arrivera plus dans la version finale **/
+        /*
         if (SircusApplication.patient != null) {
             id.setText(SircusApplication.patient.getIdentifier());
             Objects.requireNonNull(getRadioButton(sex.getToggles(), SircusApplication.patient.getSex().name())).setSelected(true);
@@ -162,7 +164,7 @@ public class MainWindowController implements Initializable {
         if (SircusApplication.currentLocation != null)
             locations.setValue(SircusApplication.currentLocation);
         if (SircusApplication.currentMethod != null)
-            methods.setValue(SircusApplication.currentMethod);
+            methods.setValue(SircusApplication.currentMethod);*/
     }
 
     /**
@@ -449,9 +451,12 @@ public class MainWindowController implements Initializable {
     private void saveInfos() {
         // Save patient infos
         SircusApplication.patient = new Patient();
-        SircusApplication.patient.setIdentifier(id.getText());
-        SircusApplication.patient.setSex(Patient.Sex.valueOf(((RadioButton)this.sex.getSelectedToggle()).getText()));
-        SircusApplication.patient.setBirthDate(birthDate.getValue());
+        if (!id.getText().isEmpty())
+            SircusApplication.patient.setIdentifier(id.getText());
+        if (sex.getSelectedToggle() != null)
+            SircusApplication.patient.setSex(Patient.Sex.valueOf(((RadioButton)this.sex.getSelectedToggle()).getText()));
+        if (birthDate.getValue() != null)
+            SircusApplication.patient.setBirthDate(birthDate.getValue());
         if (ocularDominance.getSelectedToggle() != null)
             SircusApplication.patient.setEyeDominance(Patient.EyeDominance.valueOf(((RadioButton)this.ocularDominance.getSelectedToggle()).getText()));
         if (laterality.getSelectedToggle() != null)
@@ -460,11 +465,14 @@ public class MainWindowController implements Initializable {
         // Save practitioner infos
         SircusApplication.user = new User();
         SircusApplication.user.setTypeUser(User.TypeUser.valueOf(((RadioButton)this.type.getSelectedToggle()).getText()));
-        SircusApplication.user.setLastName(name.getText());
-        SircusApplication.user.setFirstName(forename.getText());
+        if (!name.getText().isEmpty())
+            SircusApplication.user.setLastName(name.getText());
+        if (!forename.getText().isEmpty())
+            SircusApplication.user.setFirstName(forename.getText());
 
         // Save location and method
-        SircusApplication.currentLocation = locations.getValue();
+        if (locations.getValue() != null)
+            SircusApplication.currentLocation = locations.getValue();
         if (methods.getValue() != null)
             SircusApplication.currentMethod = methods.getValue();
     }
