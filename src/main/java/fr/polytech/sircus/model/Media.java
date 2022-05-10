@@ -1,5 +1,6 @@
 package fr.polytech.sircus.model;
 
+import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
 import java.io.Serializable;
@@ -37,6 +38,10 @@ public class Media implements Serializable {
     @Getter @Setter
     private boolean isResizable;
 
+    @Getter @Setter
+    private Color backgroundColor;
+
+
     /**
      * The default constructor
      */
@@ -59,6 +64,7 @@ public class Media implements Serializable {
         this.isInterstim = false;
         this.lock = true;
         this.isResizable = false;
+        this.backgroundColor = Color.WHITE;
     }
 
     /**
@@ -74,6 +80,7 @@ public class Media implements Serializable {
         this.interStim = media.getInterStim();
         this.lock = media.getLock();
         this.isResizable = media.isResizable();
+        this.backgroundColor = media.getBackgroundColor();
     }
 
     /**
@@ -93,7 +100,8 @@ public class Media implements Serializable {
                 getType() == media.getType() &&
                 getInterStim().equals(media.getInterStim()) &&
                 Objects.equals(getLock(), media.getLock()) &&
-                isResizable() == media.isResizable();
+                isResizable() == media.isResizable() &&
+                getBackgroundColor() == media.getBackgroundColor();
     }
 
     /**

@@ -1,6 +1,7 @@
 package fr.polytech.sircus.utils;
 
 import fr.polytech.sircus.model.*;
+import javafx.scene.paint.Color;
 
 import java.io.*;
 import java.time.Duration;
@@ -43,6 +44,9 @@ public final class Serializer {
         Media stubMedia1 = new Media("mos01.jpg", "mos01.jpg", Duration.ofSeconds(3), TypeMedia.PICTURE, null);
         Media stubMedia2 = new Media("vis01.jpg", "vis01.jpg", Duration.ofSeconds(3), TypeMedia.PICTURE, null);
         Media stubMedia3 = new Media("ob01.jpg", "ob01.jpg", Duration.ofSeconds(3), TypeMedia.PICTURE, null);
+
+        stubMedia2.setBackgroundColor(Color.AQUA);
+        stubMedia3.setBackgroundColor(Color.GREENYELLOW);
 
         stubMetaSeq1.addSequence(stubSeq1);
         stubMetaSeq1.addSequence(stubSeq2);
