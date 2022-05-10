@@ -50,8 +50,8 @@ public final class Serializer {
         Media media7 = new Media("Media 7", "croix.jpg", Duration.ofSeconds(4), TypeMedia.PICTURE, null);
         Media media8 = new Media("Media 8", "ob01.jpg", Duration.ofSeconds(10), TypeMedia.PICTURE, null);
 
-//        stubMedia2.setBackgroundColor(Color.AQUA);
-//        stubMedia3.setBackgroundColor(Color.GREENYELLOW);
+        media1.setBackgroundColor(Color.AQUA);
+        media2.setBackgroundColor(Color.GREENYELLOW);
 
         sequence1.addMedia(media1);
         sequence1.addMedia(media2);

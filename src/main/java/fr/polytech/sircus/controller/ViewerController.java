@@ -161,7 +161,7 @@ public class ViewerController {
     private void showImage(fr.polytech.sircus.model.Media media) {
         // Try to create an InputStream with the path of the image.
         try {
-            InputStream is = new FileInputStream("medias/" + media.getName());
+            InputStream is = new FileInputStream("medias/" + media.getFilename());
             Image image = new Image(is);
 
             imageView.setFitWidth(image.getWidth());
