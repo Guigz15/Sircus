@@ -42,7 +42,7 @@ public final class Serializer {
         Sequence sequence3 = new Sequence("Sequence 3");
 
         Media media1 = new Media("Media 1", "mos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE, null);
-        Media media2 = new Media("Media 2", "mos02.jpg", Duration.ofSeconds(2), TypeMedia.VIDEO, null);
+        Media media2 = new Media("Media 2", "mos02.jpg", Duration.ofSeconds(2), TypeMedia.PICTURE, null);
         Media media3 = new Media("Media 3", "mosob01.jpg", Duration.ofSeconds(1), TypeMedia.PICTURE, null);
         Media media4 = new Media("Media 4", "vis03.jpg", Duration.ofSeconds(7), TypeMedia.PICTURE, null);
         Media media5 = new Media("Media 5", "vismos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE, null);
@@ -52,6 +52,7 @@ public final class Serializer {
 
         media1.setBackgroundColor(Color.AQUA);
         media2.setBackgroundColor(Color.GREENYELLOW);
+        media2.setResizable(true);
 
         sequence1.addMedia(media1);
         sequence1.addMedia(media2);
