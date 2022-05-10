@@ -6,7 +6,9 @@ import fr.polytech.sircus.model.Result;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -14,6 +16,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Manages the interface used when the exam is in progress (player_monitor).
@@ -84,7 +87,20 @@ public class PlayerMonitorController {
      */
     @FXML
     public void previousSequence() {
-        viewer.previousSequence();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Passer à la séquence précédente");
+        alert.setHeaderText("Êtes-vous sûr de vouloir passer à la séquence précédente ?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            viewer.previousSequence();
+
+            if (viewerPlayingState) {
+                viewer.pauseViewer();
+                playButton.setGraphic(playIcon);
+                viewerPlayingState = false;
+            }
+        }
     }
 
     /**
@@ -92,7 +108,20 @@ public class PlayerMonitorController {
      */
     @FXML
     public void nextSequence() {
-        viewer.nextSequence();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Passer à la séquence suivante");
+        alert.setHeaderText("Êtes-vous sûr de vouloir passer à la séquence suivante ?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            viewer.nextSequence();
+
+            if (viewerPlayingState) {
+                viewer.pauseViewer();
+                playButton.setGraphic(playIcon);
+                viewerPlayingState = false;
+            }
+        }
     }
 
     /**
@@ -103,15 +132,20 @@ public class PlayerMonitorController {
         if (viewer == null) {
             viewer = new ViewerController(this.playButton.getScene().getWindow(), this.metaSequence, this);
         } else {
-            // If Pause button is displayed, clicking it calls appropriate function of ViewerController
-            // Also change displayed icon and state variable
+            // We are playing something, so the pause button is displayed, so we must pause the sequence
             if (viewerPlayingState) {
-                viewer.pauseViewer();
-                playButton.setGraphic(playIcon);
-                viewerPlayingState = false;
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Mettre en pause");
+                alert.setHeaderText("Êtes-vous sûr de vouloir mettre la lecture en pause ?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    viewer.pauseViewer();
+                    playButton.setGraphic(playIcon);
+                    viewerPlayingState = false;
+                }
             } else {
-                // If Play button is displayed, click it calls appropriate function of ViewerController
-                // Also change displayed icon and state variable
+                // We aren't playing something, so the play button is displayed, so we must start the sequence
                 viewer.playViewer();
                 playButton.setGraphic(pauseIcon);
                 viewerPlayingState = true;
@@ -124,7 +158,21 @@ public class PlayerMonitorController {
      */
     @FXML
     public void stopViewer() {
-        // TODO: reset everything
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Réinitialiser la méta-séquence");
+        alert.setHeaderText("Êtes-vous sûr de vouloir arrêter la méta-séquence et la réinitialiser ?");
+
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            viewer.resetMetaSequence();
+
+            if (viewerPlayingState) {
+                viewer.pauseViewer();
+                playButton.setGraphic(playIcon);
+                viewerPlayingState = false;
+            }
+        }
     }
 
     /**
