@@ -15,19 +15,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.stage.FileChooser;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 /**
  * This class manages the main window
@@ -91,9 +87,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private Button cancelMethodButton;
     @FXML
-    private Button importButton;
-    @FXML
-    private Button exportButton;
+    private Text adminLabel;
     @FXML
     private Button next;
 
@@ -141,7 +135,7 @@ public class MainWindowController implements Initializable {
                 .or(Bindings.createBooleanBinding(() -> locations.getValue() == null, locations.valueProperty()))
         );
 
-        exportButton.setVisible(SircusApplication.adminConnected);
+        adminLabel.setVisible(SircusApplication.adminConnected);
 
         // Initialize all components if they have been already filled
         /** Commenter sinon pose des problèmes si aucun des champs n'a été rempli, en cliquant sur l'étoile rouge, ce qui n'arrivera plus dans la version finale **/
@@ -363,7 +357,7 @@ public class MainWindowController implements Initializable {
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.get() == ButtonType.FINISH && controller.checkUserName() && controller.checkPassword()) {
                 SircusApplication.adminConnected = true;
-                exportButton.setVisible(true);
+                adminLabel.setVisible(true);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -373,6 +367,7 @@ public class MainWindowController implements Initializable {
     /**
      * Export the patient's information in a text file
      */
+    /* Not use anymore but it might be reused later
     @FXML
     private void exporting() {
         FileChooser fileChooser = new FileChooser();
@@ -394,10 +389,12 @@ public class MainWindowController implements Initializable {
             }
         }
     }
+    */
 
     /**
      * Import the patient's information from a text file
      */
+    /* Not use anymore but it might be reused later
     @FXML
     private void importing() {
         FileChooser fileChooser = new FileChooser();
@@ -418,6 +415,7 @@ public class MainWindowController implements Initializable {
             }
         }
     }
+    */
 
     /**
      * Get the radioButton that has been saved in file.
