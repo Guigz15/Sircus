@@ -13,6 +13,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -44,6 +45,9 @@ public class ViewerController {
 
     @FXML
     private ImageView imageView;
+
+    @FXML
+    private AnchorPane anchorPane;
 
     // This allows the playing of media
     private MediaPlayer mediaPlayer;
@@ -172,8 +176,13 @@ public class ViewerController {
                 centerImage();
             }
 
-            // TODO: try to add background color
-            viewerStage.getScene().setFill(Color.RED);
+            Color color = media.getBackgroundColor();
+            String hexColor = String.format( "-fx-background-color: #%02X%02X%02X;",
+                    (int)( color.getRed() * 255 ),
+                    (int)( color.getGreen() * 255 ),
+                    (int)( color.getBlue() * 255 ) );
+
+            anchorPane.setStyle(hexColor);
         }
         // If the path is not found we display a message.
         catch (FileNotFoundException error) {
