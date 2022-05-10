@@ -8,6 +8,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -18,15 +19,17 @@ import lombok.Setter;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
  * Manages the interface used when the exam is in progress (player_monitor).
  */
-public class PlayerMonitorController {
+public class PlayerMonitorController implements Initializable {
 
     @FXML
     private GridPane playerMonitor;
@@ -95,7 +98,10 @@ public class PlayerMonitorController {
 
         this.pauseIcon = new FontIcon("fa-pause");
         this.pauseIcon.setIconSize(15);
+    }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         initTimers();
     }
 
@@ -180,12 +186,14 @@ public class PlayerMonitorController {
                     viewer.pauseViewer();
                     playButton.setGraphic(playIcon);
                     viewerPlayingState = false;
+                    duration.pause();
                 }
             } else {
                 // We aren't playing something, so the play button is displayed, so we must start the sequence
                 viewer.playViewer();
                 playButton.setGraphic(pauseIcon);
                 viewerPlayingState = true;
+                duration.play();
             }
         }
     }
@@ -226,15 +234,12 @@ public class PlayerMonitorController {
      */
     public void initTimers(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
-        metaSeqDurationLabel est nul et je ne comprends pas pourquoi
-        metaSeqDurationLabel.setText("test");
         metaSeqDuration  = new TimelineClock(metaSeqDurationLabel, dtf, 0, 0, 0);
-        metaSeqRemaining = new TimelineClock(metaSeqDurationLabel, dtf, 0, 0, 0);
-        seqDuration      = new TimelineClock(metaSeqDurationLabel, dtf, 0, 0, 0);
-        seqRemaining     = new TimelineClock(metaSeqDurationLabel, dtf, 0, 0, 0);
-        duration         = new TimelineClock(metaSeqDurationLabel, dtf, 0, 0, 0);
-        remaining        = new TimelineClock(metaSeqDurationLabel, dtf, 0, 0, 0);
-
+        metaSeqRemaining = new TimelineClock(metaSeqRemainingLabel, dtf, 0, 0, 0);
+        seqDuration      = new TimelineClock(seqDurationLabel, dtf, 0, 0, 0);
+        seqRemaining     = new TimelineClock(seqRemainingLabel, dtf, 0, 0, 0);
+        duration         = new TimelineClock(durationLabel, dtf, 0, 0, 0);
+        remaining        = new TimelineClock(remainingLabel, dtf, 0, 0, 0);
     }
 }
 
@@ -268,6 +273,19 @@ class TimelineClock{
         }));
 
         timeline.setCycleCount(Animation.INDEFINITE);
+    }
+
+    /**
+     * Pause the clock
+     */
+    public void pause(){
+        timeline.pause();
+    }
+
+    /**
+     * Play or resume the clock
+     */
+    public void play(){
         timeline.play();
     }
 }

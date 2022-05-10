@@ -17,6 +17,7 @@
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.Font?>
 
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <GridPane fx:id="playerMonitor" alignment="CENTER" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PlayerMonitorController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="402.0" minWidth="10.0" prefWidth="347.0" />
@@ -190,9 +191,9 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <Label text="Durée totale" />
-                    <Label id="TotalDurationLabel" fx:id="durationLabel" text="00:00:00" GridPane.columnIndex="1" />
+                    <Label fx:id="durationLabel" text="00:00:00" GridPane.columnIndex="1" />
                     <Label text="Temps restant total" GridPane.rowIndex="1" />
-                    <Label id="TotalRemainingLabel" fx:id="remainingLabel" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label fx:id="remainingLabel" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 </GridPane>
                 <Label alignment="CENTER" text="Luminosité">
                     <VBox.margin>
