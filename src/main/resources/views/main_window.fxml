@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import org.kordamp.ikonli.javafx.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <BorderPane minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.MainWindowController">
    <top>
@@ -40,7 +50,7 @@
                   <Insets bottom="30.0" top="20.0" />
                </VBox.margin>
             </Text>
-            <VBox prefHeight="34.0" prefWidth="400.0">
+            <VBox prefWidth="400.0">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
@@ -68,50 +78,63 @@
                   </font>
                </TextField>
             </VBox>
-            <VBox prefHeight="34.0" prefWidth="400.0">
+            <HBox prefWidth="400.0">
                <VBox.margin>
-                  <Insets bottom="30.0" />
+                  <Insets bottom="30.0"/>
                </VBox.margin>
-               <HBox prefHeight="12.0" prefWidth="100.0">
-                  <VBox.margin>
-                     <Insets bottom="2.0" />
-                  </VBox.margin>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sexe">
+               <VBox prefWidth="200.0">
+                  <HBox prefHeight="12.0" prefWidth="100.0">
+                     <VBox.margin>
+                        <Insets bottom="2.0"/>
+                     </VBox.margin>
+                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sexe">
+                        <font>
+                           <Font size="18.0"/>
+                        </font>
+                        <HBox.margin>
+                           <Insets right="1.0"/>
+                        </HBox.margin>
+                     </Text>
+                     <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*">
+                        <font>
+                           <Font size="18.0"/>
+                        </font>
+                     </Text>
+                  </HBox>
+                  <HBox id="sex" alignment="TOP_CENTER" prefHeight="21.0" prefWidth="200.0">
+                     <RadioButton mnemonicParsing="false" text="M">
+                        <toggleGroup>
+                           <ToggleGroup fx:id="sex"/>
+                        </toggleGroup>
+                        <HBox.margin>
+                           <Insets left="30.0" right="50.0"/>
+                        </HBox.margin>
+                        <font>
+                           <Font size="14.0"/>
+                        </font>
+                     </RadioButton>
+                     <RadioButton mnemonicParsing="false" text="F" toggleGroup="$sex">
+                        <HBox.margin>
+                           <Insets right="40.0"/>
+                        </HBox.margin>
+                        <font>
+                           <Font size="14.0"/>
+                        </font>
+                     </RadioButton>
+                  </HBox>
+                  <HBox.margin>
+                     <Insets right="21.0"/>
+                  </HBox.margin>
+               </VBox>
+               <VBox prefWidth="180.0">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre de visite(s)">
                      <font>
-                        <Font size="18.0" />
+                        <Font size="18.0"/>
                      </font>
-                     <HBox.margin>
-                        <Insets right="1.0" />
-                     </HBox.margin>
                   </Text>
-                  <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-               </HBox>
-               <HBox id="sex" alignment="CENTER" prefHeight="100.0">
-                  <RadioButton mnemonicParsing="false" text="M">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="sex" />
-                     </toggleGroup>
-                     <HBox.margin>
-                        <Insets left="30.0" right="90.0" />
-                     </HBox.margin>
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </RadioButton>
-                  <RadioButton mnemonicParsing="false" text="F" toggleGroup="$sex">
-                     <HBox.margin>
-                        <Insets right="40.0" />
-                     </HBox.margin>
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </RadioButton>
-               </HBox>
-            </VBox>
+                  <TextField prefWidth="161.0" alignment="CENTER_RIGHT" editable="false" mouseTransparent="true"/>
+               </VBox>
+            </HBox>
             <HBox prefHeight="40.0" prefWidth="400.0">
                <VBox.margin>
                   <Insets bottom="30.0" />
@@ -171,15 +194,23 @@
                      <Insets bottom="5.0" />
                   </VBox.margin>
                </Text>
-               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <HBox prefHeight="100.0" prefWidth="200.0">
                   <RadioButton mnemonicParsing="false" text="Droit">
                      <toggleGroup>
                         <ToggleGroup fx:id="ocularDominance" />
                      </toggleGroup>
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin>
                   </RadioButton>
                   <RadioButton mnemonicParsing="false" text="Gauche" toggleGroup="$ocularDominance">
                      <HBox.margin>
-                        <Insets left="40.0" right="40.0" />
+                        <Insets left="39.0" right="28.0" />
+                     </HBox.margin>
+                  </RadioButton>
+                  <RadioButton mnemonicParsing="false" text="Ambidextre" toggleGroup="$ocularDominance">
+                     <HBox.margin>
+                        <Insets right="25.0" />
                      </HBox.margin>
                   </RadioButton>
                   <RadioButton mnemonicParsing="false" text="Indéfini" toggleGroup="$ocularDominance" />
@@ -228,7 +259,7 @@
             </Text>
             <HBox id="type" alignment="TOP_CENTER" prefHeight="38.0" prefWidth="250.0">
                <VBox.margin>
-                  <Insets bottom="20.0" />
+                  <Insets bottom="30.0" />
                </VBox.margin>
                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                   <HBox.margin>
@@ -460,27 +491,10 @@
    </center>
    <bottom>
       <BorderPane maxHeight="-Infinity" prefHeight="64.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <left>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" BorderPane.alignment="CENTER">
-               <Button fx:id="importButton" mnemonicParsing="false" onMouseClicked="#importing" text="Importer">
-                  <HBox.margin>
-                     <Insets left="30.0" right="30.0" />
-                  </HBox.margin>
-                  <font>
-                     <Font size="16.0" />
-                  </font>
-               </Button>
-               <Button fx:id="exportButton" mnemonicParsing="false" onMouseClicked="#exporting" text="Exporter">
-                  <font>
-                     <Font size="16.0" />
-                  </font>
-               </Button>
-            </HBox>
-         </left>
          <right>
             <Button fx:id="next" mnemonicParsing="false" onAction="#nextPage" text="Suivant" BorderPane.alignment="CENTER">
                <BorderPane.margin>
-                  <Insets left="114.0" right="30.0" />
+                  <Insets left="135.0" right="30.0" />
                </BorderPane.margin>
                <font>
                   <Font size="16.0" />
@@ -488,7 +502,7 @@
             </Button>
          </right>
          <center>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="536.0" BorderPane.alignment="CENTER">
                <Text fill="RED" onMouseClicked="#enableNextButton" strokeType="OUTSIDE" strokeWidth="0.0" text="*">
                   <font>
                      <Font size="20.0" />
@@ -504,6 +518,16 @@
                </Text>
             </HBox>
          </center>
+         <left>
+            <Text fx:id="adminLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Mode Administrateur activé" visible="false" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+               <BorderPane.margin>
+                  <Insets left="30.0" />
+               </BorderPane.margin>
+            </Text>
+         </left>
       </BorderPane>
    </bottom>
 </BorderPane>
