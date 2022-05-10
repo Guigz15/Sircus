@@ -342,6 +342,13 @@ public class ViewerController {
     }
 
     /**
+     * Returns to the beginning of the meta sequence.
+     */
+    public void resetMetaSequence() {
+        timeline.jumpTo(new Duration(0));
+    }
+
+    /**
      * Quit the viewer
      */
     @FXML
