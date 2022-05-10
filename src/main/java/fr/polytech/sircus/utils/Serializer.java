@@ -24,7 +24,7 @@ public final class Serializer {
     /**
      * Boolean to know if we use a stub object
      */
-    public static boolean useStub = false;
+    public static boolean useStub = true;
 
     /**
      * Generation of stub data
@@ -35,30 +35,52 @@ public final class Serializer {
 
         MetaSequence stubMetaSeq1 = new MetaSequence("Meta sequence 1");
         MetaSequence stubMetaSeq2 = new MetaSequence("Meta sequence 2");
+        MetaSequence stubMetaSeq3 = new MetaSequence("Meta sequence 3");
 
-        Sequence stubSeq1 = new Sequence("Sequence 1");
-        Sequence stubSeq2 = new Sequence("Sequence 2");
-        Sequence stubSeq3 = new Sequence("Sequence 3");
-        Sequence stubSeq4 = new Sequence("Sequence 4");
+        Sequence sequence1 = new Sequence("Sequence 1");
+        Sequence sequence2 = new Sequence("Sequence 2");
+        Sequence sequence3 = new Sequence("Sequence 3");
 
-        Media stubMedia1 = new Media("mos01.jpg", "mos01.jpg", Duration.ofSeconds(3), TypeMedia.PICTURE, null);
-        Media stubMedia2 = new Media("vis01.jpg", "vis01.jpg", Duration.ofSeconds(3), TypeMedia.PICTURE, null);
-        Media stubMedia3 = new Media("ob01.jpg", "ob01.jpg", Duration.ofSeconds(3), TypeMedia.PICTURE, null);
+        Media media1 = new Media("Media 1", "mos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE, null);
+        Media media2 = new Media("Media 2", "mos02.jpg", Duration.ofSeconds(2), TypeMedia.VIDEO, null);
+        Media media3 = new Media("Media 3", "mosob01.jpg", Duration.ofSeconds(1), TypeMedia.PICTURE, null);
+        Media media4 = new Media("Media 4", "vis03.jpg", Duration.ofSeconds(7), TypeMedia.PICTURE, null);
+        Media media5 = new Media("Media 5", "vismos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE, null);
+        Media media6 = new Media("Media 6", "visob02.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE, null);
+        Media media7 = new Media("Media 7", "croix.jpg", Duration.ofSeconds(4), TypeMedia.PICTURE, null);
+        Media media8 = new Media("Media 8", "ob01.jpg", Duration.ofSeconds(10), TypeMedia.PICTURE, null);
 
-        stubMedia2.setBackgroundColor(Color.AQUA);
-        stubMedia3.setBackgroundColor(Color.GREENYELLOW);
+//        stubMedia2.setBackgroundColor(Color.AQUA);
+//        stubMedia3.setBackgroundColor(Color.GREENYELLOW);
 
-        stubMetaSeq1.addSequence(stubSeq1);
-        stubMetaSeq1.addSequence(stubSeq2);
-        stubMetaSeq2.addSequence(stubSeq3);
-        stubMetaSeq2.addSequence(stubSeq4);
+        sequence1.addMedia(media1);
+        sequence1.addMedia(media2);
+        sequence2.addMedia(media1);
+        sequence2.addMedia(media2);
+        sequence2.addMedia(media3);
+        sequence2.addMedia(media4);
+        sequence2.addMedia(media5);
+        sequence2.addMedia(media6);
+        sequence2.addMedia(media7);
+        sequence2.addMedia(media8);
+        sequence3.addMedia(media1);
+        sequence3.addMedia(media3);
+        sequence1.addMedia(media1);
+        sequence1.addMedia(media2);
+        sequence1.addMedia(media3);
+        sequence2.addMedia(media4);
+        sequence2.addMedia(media5);
 
-        stubSeq1.addMedia(stubMedia1);
-        stubSeq1.addMedia(stubMedia2);
-        stubSeq1.addMedia(stubMedia3);
+        stubMetaSeq1.addSequence(sequence1);
+        stubMetaSeq2.addSequence(sequence2);
+        stubMetaSeq3.addSequence(sequence1);
+        stubMetaSeq3.addSequence(sequence2);
+        stubMetaSeq3.addSequence(sequence2);
+        stubMetaSeq3.addSequence(sequence2);
 
         stubData.saveMetaSeq(stubMetaSeq1);
         stubData.saveMetaSeq(stubMetaSeq2);
+        stubData.saveMetaSeq(stubMetaSeq3);
 
         stubData.addLocationToList("Hôpital Bretonneau");
         stubData.addLocationToList("Hôpital Trousseau");
