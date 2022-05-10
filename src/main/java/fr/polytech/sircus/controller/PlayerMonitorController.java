@@ -142,6 +142,7 @@ public class PlayerMonitorController implements Initializable {
                 viewer.pauseViewer();
                 playButton.setGraphic(playIcon);
                 viewerPlayingState = false;
+                duration.pause();
             }
         }
     }
@@ -163,6 +164,9 @@ public class PlayerMonitorController implements Initializable {
                 viewer.pauseViewer();
                 playButton.setGraphic(playIcon);
                 viewerPlayingState = false;
+                duration.pause();
+
+                seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
             }
         }
     }
@@ -194,6 +198,7 @@ public class PlayerMonitorController implements Initializable {
                 playButton.setGraphic(pauseIcon);
                 viewerPlayingState = true;
                 duration.play();
+                seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
             }
         }
     }
@@ -207,10 +212,10 @@ public class PlayerMonitorController implements Initializable {
         alert.setTitle("Réinitialiser la méta-séquence");
         alert.setHeaderText("Êtes-vous sûr de vouloir arrêter la méta-séquence et la réinitialiser ?");
 
-
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             viewer.resetMetaSequence();
+            duration.reset();
 
             if (viewerPlayingState) {
                 viewer.pauseViewer();
@@ -226,6 +231,7 @@ public class PlayerMonitorController implements Initializable {
     public void closeViewer() {
         viewer = null;
         viewerPlayingState = false;
+        duration.pause();
         playButton.setGraphic(playIcon);
     }
 
@@ -234,14 +240,28 @@ public class PlayerMonitorController implements Initializable {
      */
     public void initTimers(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
-        metaSeqDuration  = new TimelineClock(metaSeqDurationLabel, dtf, 0, 0, 0);
-        metaSeqRemaining = new TimelineClock(metaSeqRemainingLabel, dtf, 0, 0, 0);
-        seqDuration      = new TimelineClock(seqDurationLabel, dtf, 0, 0, 0);
-        seqRemaining     = new TimelineClock(seqRemainingLabel, dtf, 0, 0, 0);
-        duration         = new TimelineClock(durationLabel, dtf, 0, 0, 0);
-        remaining        = new TimelineClock(remainingLabel, dtf, 0, 0, 0);
+        metaSeqDuration  = new TimelineClock(metaSeqDurationLabel, dtf,
+                0, 0, 0, ClockType.INCREMENTAL);
+        metaSeqRemaining = new TimelineClock(metaSeqRemainingLabel, dtf,
+                0, 0, 0, ClockType.INCREMENTAL);
+        seqDuration      = new TimelineClock(seqDurationLabel, dtf,
+                0, 0, 0, ClockType.INCREMENTAL);
+        seqRemaining     = new TimelineClock(seqRemainingLabel, dtf,
+                0, 0, 0, ClockType.INCREMENTAL);
+        duration         = new TimelineClock(durationLabel, dtf,
+                0, 0, 0, ClockType.INCREMENTAL);
+        remaining        = new TimelineClock(remainingLabel, dtf,
+                0, 0, 0, ClockType.INCREMENTAL);
     }
 }
+
+/**
+ * Indicate the type of TimelineClock
+ */
+enum ClockType {
+    INCREMENTAL,
+    DECREMENTAL;
+};
 
 /**
  * Independent controllable clock with its label
@@ -253,6 +273,7 @@ class TimelineClock{
     private Timeline timeline;
     @Getter @Setter
     private Label timeLabel;
+    private final DateTimeFormatter dtf;
 
     /**
      * Constructor with init values
@@ -261,14 +282,19 @@ class TimelineClock{
      * @param hours starting hours value
      * @param minutes starting minutes value
      * @param seconds starting seconds value
+     * @param type indicates if the clock is incremental or decremental
      */
-    public TimelineClock(Label label, DateTimeFormatter dtf, int hours, int minutes, int seconds){
+    public TimelineClock(Label label, DateTimeFormatter dtf, int hours, int minutes, int seconds, ClockType type){
         timeLabel = label;
         time = LocalTime.of(hours, minutes, seconds);
+        this.dtf = dtf;
 
         // Thread executed every second
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            time = time.plusSeconds(1);
+            if (type == ClockType.INCREMENTAL)
+                time = time.plusSeconds(1);
+            else if (type == ClockType.DECREMENTAL)
+                time = time.plusSeconds(-1);
             timeLabel.setText(time.format(dtf));
         }));
 
@@ -287,5 +313,38 @@ class TimelineClock{
      */
     public void play(){
         timeline.play();
+    }
+
+    /**
+     * reset the clock and its label
+     */
+    public void reset(){
+        timeline.pause();
+        time = LocalTime.of(0, 0, 0);
+        timeLabel.setText(time.format(dtf));
+    }
+
+    /**
+     * Set the clock at a defined time in seconds
+     * @param seconds amount of seconds
+     */
+    public void setTime(long seconds){
+        time = LocalTime.of((int)(seconds / 3600),
+                (int)((seconds % 3600) / 60),
+                (int)(seconds % 60));
+        timeLabel.setText(time.format(dtf));
+    }
+
+    /**
+     * Set the clock to the remaining time from a reference and a deadline
+     * @param reference the reference clock
+     * @param deadLine the moment when the clock will reach zero
+     */
+    public void setRemaining(LocalTime reference, long deadLine){
+        long seconds = deadLine - reference.getSecond();
+        time = LocalTime.of((int)(seconds / 3600),
+                (int)((seconds % 3600) / 60),
+                (int)(seconds % 60));
+        timeLabel.setText(time.format(dtf));
     }
 }
