@@ -143,6 +143,8 @@ public class PlayerMonitorController implements Initializable {
                 playButton.setGraphic(playIcon);
                 viewerPlayingState = false;
                 duration.pause();
+                seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+                metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
             }
         }
     }
@@ -165,8 +167,8 @@ public class PlayerMonitorController implements Initializable {
                 playButton.setGraphic(playIcon);
                 viewerPlayingState = false;
                 duration.pause();
-
                 seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+                metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
             }
         }
     }
@@ -190,15 +192,16 @@ public class PlayerMonitorController implements Initializable {
                     viewer.pauseViewer();
                     playButton.setGraphic(playIcon);
                     viewerPlayingState = false;
-                    duration.pause();
+                    pauseAllClocks();
                 }
             } else {
                 // We aren't playing something, so the play button is displayed, so we must start the sequence
                 viewer.playViewer();
                 playButton.setGraphic(pauseIcon);
                 viewerPlayingState = true;
-                duration.play();
                 seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+                metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
+                playAllClocks();
             }
         }
     }
@@ -231,27 +234,81 @@ public class PlayerMonitorController implements Initializable {
     public void closeViewer() {
         viewer = null;
         viewerPlayingState = false;
-        duration.pause();
         playButton.setGraphic(playIcon);
+        resetAllClocks();
     }
 
     /**
-     * Create all the timers of the information tab
+     * Give the remaining time before finishing the meta-sequence
+     * @return the duration in seconds
+     */
+    private long getRemainingTimeInMetaSeq(){
+        long seconds = 0;
+        MetaSequence metaSeq = viewer.getPlayingMetaSequence();
+
+        // Sum all the next sequences including the current one
+        for (int seqIndex=viewer.getCurrentSequenceIndex() ; seqIndex<metaSeq.getSequencesList().size() ; seqIndex++){
+            seconds += metaSeq.getSequencesList().get(seqIndex).getDuration().getSeconds();
+        }
+        // Minus what we already played in the current sequence
+        seconds -= seqDuration.getTime().getSecond();
+
+        return seconds;
+    }
+
+    /**
+     * Create all the timers of the information section
      */
     public void initTimers(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
         metaSeqDuration  = new TimelineClock(metaSeqDurationLabel, dtf,
                 0, 0, 0, ClockType.INCREMENTAL);
         metaSeqRemaining = new TimelineClock(metaSeqRemainingLabel, dtf,
-                0, 0, 0, ClockType.INCREMENTAL);
+                0, 0, 0, ClockType.DECREMENTAL);
         seqDuration      = new TimelineClock(seqDurationLabel, dtf,
                 0, 0, 0, ClockType.INCREMENTAL);
         seqRemaining     = new TimelineClock(seqRemainingLabel, dtf,
-                0, 0, 0, ClockType.INCREMENTAL);
+                0, 0, 0, ClockType.DECREMENTAL);
         duration         = new TimelineClock(durationLabel, dtf,
                 0, 0, 0, ClockType.INCREMENTAL);
         remaining        = new TimelineClock(remainingLabel, dtf,
-                0, 0, 0, ClockType.INCREMENTAL);
+                0, 0, 0, ClockType.DECREMENTAL);
+    }
+
+    /**
+     * Pause all the clocks of the information section
+     */
+    private void pauseAllClocks(){
+        duration.pause();
+        remaining.pause();
+        seqDuration.pause();
+        metaSeqDuration.pause();
+        seqRemaining.pause();
+        metaSeqRemaining.pause();
+    }
+
+    /**
+     * Reset all the clocks of the information section
+     */
+    private void resetAllClocks(){
+        duration.reset();
+        remaining.reset();
+        seqDuration.reset();
+        metaSeqDuration.reset();
+        seqRemaining.reset();
+        metaSeqRemaining.reset();
+    }
+
+    /**
+     * Play or resume all the clocks of the information section
+     */
+    private void playAllClocks(){
+        duration.play();
+        remaining.play();
+        seqDuration.play();
+        metaSeqDuration.play();
+        seqRemaining.play();
+        metaSeqRemaining.play();
     }
 }
 
@@ -260,14 +317,14 @@ public class PlayerMonitorController implements Initializable {
  */
 enum ClockType {
     INCREMENTAL,
-    DECREMENTAL;
-};
+    DECREMENTAL
+}
 
 /**
  * Independent controllable clock with its label
  */
 class TimelineClock{
-    @Getter @Setter
+    @Getter
     private LocalTime time;
     @Getter @Setter
     private Timeline timeline;
