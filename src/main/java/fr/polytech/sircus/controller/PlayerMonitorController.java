@@ -10,11 +10,19 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.MediaView;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -31,6 +39,15 @@ public class PlayerMonitorController {
 
     @FXML
     private Button playButton;
+
+    @FXML
+    private StackPane previewPane;
+
+    @FXML
+    private MediaView mediaView;
+
+    @FXML
+    private ImageView imageView;
 
     /**
      * The Result to fill.
@@ -182,5 +199,47 @@ public class PlayerMonitorController {
         viewer = null;
         viewerPlayingState = false;
         playButton.setGraphic(playIcon);
+    }
+
+    public void loadImage(fr.polytech.sircus.model.Media media) throws FileNotFoundException {
+        InputStream is = new FileInputStream("medias/" + media.getFilename());
+        Image image = new Image(is);
+
+        imageView.setFitWidth(image.getWidth());
+        imageView.setFitHeight(image.getHeight());
+
+        imageView.setImage(image);
+        imageView.setCache(true);
+
+        resizeImage();
+
+        Color color = media.getBackgroundColor();
+        String hexColor = String.format( "-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid; -fx-background-color: #%02X%02X%02X;",
+                (int)( color.getRed() * 255 ),
+                (int)( color.getGreen() * 255 ),
+                (int)( color.getBlue() * 255 ) );
+
+        previewPane.setStyle(hexColor);
+    }
+
+    /**
+     * Method to resize the imageview in order to set a correct size in the preview.
+     */
+    private void resizeImage() {
+        if (imageView.getImage() != null) {
+            double ratio = Math.min(previewPane.getWidth() / imageView.getFitWidth(), previewPane.getHeight() / imageView.getFitHeight());
+
+            imageView.setFitWidth(imageView.getFitWidth() * ratio);
+            imageView.setFitHeight(imageView.getFitHeight() * ratio);
+        }
+    }
+
+    /**
+     * Clears the image section.
+     */
+    public void clearImage() {
+        imageView.setImage(null);
+        String hexColor ="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid; -fx-background-color: transparent;";
+        previewPane.setStyle(hexColor);
     }
 }
