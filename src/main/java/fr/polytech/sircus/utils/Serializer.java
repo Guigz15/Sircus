@@ -41,10 +41,10 @@ public final class Serializer {
         Sequence sequence2 = new Sequence("Sequence 2");
         Sequence sequence3 = new Sequence("Sequence 3");
 
-        Media media1 = new Media("Media 1", "mos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE, null);
-        Media media2 = new Media("Media 2", "mos02.jpg", Duration.ofSeconds(2), TypeMedia.VIDEO, null);
+        Media media1 = new Media("Media 1", "mos01.jpg", Duration.ofSeconds(1), TypeMedia.PICTURE, null);
+        Media media2 = new Media("Media 2", "mos02.jpg", Duration.ofSeconds(1), TypeMedia.PICTURE, null);
         Media media3 = new Media("Media 3", "mosob01.jpg", Duration.ofSeconds(1), TypeMedia.PICTURE, null);
-        Media media4 = new Media("Media 4", "vis03.jpg", Duration.ofSeconds(7), TypeMedia.PICTURE, null);
+        Media media4 = new Media("Media 4", "vis03.jpg", Duration.ofSeconds(1), TypeMedia.PICTURE, null);
         Media media5 = new Media("Media 5", "vismos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE, null);
         Media media6 = new Media("Media 6", "visob02.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE, null);
         Media media7 = new Media("Media 7", "croix.jpg", Duration.ofSeconds(4), TypeMedia.PICTURE, null);
