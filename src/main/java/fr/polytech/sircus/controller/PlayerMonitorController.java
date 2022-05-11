@@ -32,6 +32,14 @@ import java.util.ResourceBundle;
 public class PlayerMonitorController implements Initializable {
 
     @FXML
+    private ProgressBar seqProgressBarFX;
+    private TimelineProgressBar seqProgressBar;
+
+    @FXML
+    private ProgressBar metaSeqProgressBarFX;
+    private TimelineProgressBar metaSeqProgressBar;
+
+    @FXML
     private GridPane playerMonitor;
 
     @FXML
@@ -103,6 +111,12 @@ public class PlayerMonitorController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initTimers();
+        metaSeqProgressBar = new TimelineProgressBar(metaSeqProgressBarFX,
+                metaSeqRemaining,
+                0);
+        seqProgressBar = new TimelineProgressBar(seqProgressBarFX,
+                seqRemaining,
+                0);
     }
 
     /**
@@ -148,6 +162,10 @@ public class PlayerMonitorController implements Initializable {
             seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
             metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
             setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
+
+            // progress bars
+            metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
+            seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
         }
     }
 
@@ -170,10 +188,15 @@ public class PlayerMonitorController implements Initializable {
                 viewerPlayingState = false;
             }
 
+            // Clocks
             duration.pause();
             seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
             metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
             setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
+
+            // progress bars
+            metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
+            seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
         }
     }
 
@@ -204,10 +227,15 @@ public class PlayerMonitorController implements Initializable {
                 playButton.setGraphic(pauseIcon);
                 viewerPlayingState = true;
 
+                // Clocks
                 seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
                 metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
                 setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
                 playAllClocks();
+
+                // progress bars
+                metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
+                seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
             }
         }
     }
@@ -242,24 +270,6 @@ public class PlayerMonitorController implements Initializable {
         viewerPlayingState = false;
         playButton.setGraphic(playIcon);
         resetAllClocks();
-    }
-
-    /**
-     * Give the remaining time before finishing the meta-sequence
-     * @return the duration in seconds
-     */
-    private long getRemainingTimeInMetaSeq(){
-        long seconds = 0;
-        MetaSequence metaSeq = viewer.getPlayingMetaSequence();
-
-        // Sum all the next sequences including the current one
-        for (int seqIndex=viewer.getCurrentSequenceIndex() ; seqIndex<metaSeq.getSequencesList().size() ; seqIndex++){
-            seconds += metaSeq.getSequencesList().get(seqIndex).getDuration().getSeconds();
-        }
-        // Minus what we already played in the current sequence
-        seconds -= seqDuration.getTime().getSecond();
-
-        return seconds;
     }
 
     /**
@@ -315,6 +325,24 @@ public class PlayerMonitorController implements Initializable {
         metaSeqDuration.play();
         seqRemaining.play();
         metaSeqRemaining.play();
+    }
+
+    /**
+     * Give the remaining time before finishing the meta-sequence
+     * @return the duration in seconds
+     */
+    private long getRemainingTimeInMetaSeq(){
+        long seconds = 0;
+        MetaSequence metaSeq = viewer.getPlayingMetaSequence();
+
+        // Sum all the next sequences including the current one
+        for (int seqIndex=viewer.getCurrentSequenceIndex() ; seqIndex<metaSeq.getSequencesList().size() ; seqIndex++){
+            seconds += metaSeq.getSequencesList().get(seqIndex).getDuration().getSeconds();
+        }
+        // Minus what we already played in the current sequence
+        seconds -= seqDuration.getTime().getSecond();
+
+        return seconds;
     }
 
     /**
@@ -419,5 +447,50 @@ class TimelineClock{
                 (int)((seconds % 3600) / 60),
                 (int)(seconds % 60));
         timeLabel.setText(time.format(dtf));
+    }
+}
+
+/**
+ * Independent controllable ProgressBar
+ */
+class TimelineProgressBar{
+    @Getter @Setter
+    private ProgressBar progressBar;
+    @Getter @Setter
+    private Timeline timeline;
+    @Getter @Setter
+    private double progress;
+    @Setter
+    private long totalDuration;
+
+    /**
+     * Main constructor
+     * @param pb progress bar to assign
+     * @param clock clock of remaining time
+     * @param totalDuration time when the progressbar should be full
+     */
+    public TimelineProgressBar(ProgressBar pb, TimelineClock clock, long totalDuration){
+        progressBar = pb;
+        progress = 0.0;
+        this.totalDuration = totalDuration;
+
+        // Update progress bar and progress attribute depending on clock parameter twice a second
+        timeline = new Timeline(new KeyFrame(Duration.millis(500), event -> {
+            progress = getCompletionRate(clock.getTime().getSecond(), this.totalDuration);
+            progressBar.setProgress(progress);
+        }));
+
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+
+    /**
+     * Give a completion rate between 0 and 1 (1 is complete)
+     * @param remaining time remaining in seconds
+     * @param total total amount of time
+     * @return completion rate between 0 and 1
+     */
+    public double getCompletionRate(long remaining, long total){
+        return (total - remaining) / (double)total;
     }
 }
