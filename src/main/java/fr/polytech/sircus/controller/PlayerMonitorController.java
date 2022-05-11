@@ -142,10 +142,12 @@ public class PlayerMonitorController implements Initializable {
                 viewer.pauseViewer();
                 playButton.setGraphic(playIcon);
                 viewerPlayingState = false;
-                duration.pause();
-                seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
-                metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
             }
+
+            duration.pause();
+            seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+            metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
+            setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
         }
     }
 
@@ -166,10 +168,12 @@ public class PlayerMonitorController implements Initializable {
                 viewer.pauseViewer();
                 playButton.setGraphic(playIcon);
                 viewerPlayingState = false;
-                duration.pause();
-                seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
-                metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
             }
+
+            duration.pause();
+            seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+            metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
+            setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
         }
     }
 
@@ -199,8 +203,10 @@ public class PlayerMonitorController implements Initializable {
                 viewer.playViewer();
                 playButton.setGraphic(pauseIcon);
                 viewerPlayingState = true;
+
                 seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
                 metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
+                setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
                 playAllClocks();
             }
         }
@@ -309,6 +315,16 @@ public class PlayerMonitorController implements Initializable {
         metaSeqDuration.play();
         seqRemaining.play();
         metaSeqRemaining.play();
+    }
+
+    /**
+     * Set a counter label
+     * @param label concerned label
+     * @param current actual number of the counter
+     * @param total total number
+     */
+    private void setCounterLabel(Label label, int current, int total){
+        label.setText(current + " / " + total);
     }
 }
 
