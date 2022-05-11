@@ -3,6 +3,10 @@ package fr.polytech.sircus.model;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.Objects;
@@ -39,8 +43,7 @@ public class Media implements Serializable {
     private boolean isResizable;
 
     @Getter @Setter
-    private Color backgroundColor;
-
+    private transient Color backgroundColor;
 
     /**
      * The default constructor
@@ -54,6 +57,7 @@ public class Media implements Serializable {
      * @param filename File's name
      * @param duration Media's duration
      * @param type Media's type
+     * @param interStim Another media as interstim. Can be null
      */
     public Media(String name, String filename, Duration duration, TypeMedia type, Media interStim) {
         this.name = name;
@@ -111,5 +115,39 @@ public class Media implements Serializable {
      */
     public String toString() {
         return name;
+    }
+
+    /**
+     * Override of the writeObject method to handle the background color attribute which is not serializable.
+     */
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeUTF(name);
+        oos.writeUTF(filename);
+        oos.writeObject(duration);
+        oos.writeObject(type);
+        oos.writeObject(interStim);
+        oos.writeBoolean(isInterstim);
+        oos.writeBoolean(lock);
+        oos.writeBoolean(isResizable);
+
+        oos.writeDouble(backgroundColor.getRed());
+        oos.writeDouble(backgroundColor.getGreen());
+        oos.writeDouble(backgroundColor.getBlue());
+        oos.writeDouble(backgroundColor.getOpacity());
+    }
+
+    /**
+     * Override of the readObject method to handle the background color attribute which is not serializable.
+     */
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        name = ois.readUTF();
+        filename = ois.readUTF();
+        duration = (Duration) ois.readObject();
+        type = (TypeMedia) ois.readObject();
+        interStim = (Media) ois.readObject();
+        isInterstim = ois.readBoolean();
+        lock = ois.readBoolean();
+        isResizable = ois.readBoolean();
+        backgroundColor = new Color(ois.readDouble(), ois.readDouble(), ois.readDouble(), ois.readDouble());
     }
 }

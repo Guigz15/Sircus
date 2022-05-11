@@ -128,7 +128,7 @@ public class ViewerController {
      */
     @FXML
     private void showVideo(fr.polytech.sircus.model.Media video) {
-        File mediaFile = new File("medias/" + video.getName());
+        File mediaFile = new File("medias/" + video.getFilename());
         try {
             Media media = new Media(mediaFile.toURI().toURL().toString());
             mediaPlayer = new MediaPlayer(media);
