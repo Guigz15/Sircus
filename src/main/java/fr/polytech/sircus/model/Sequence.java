@@ -112,4 +112,18 @@ public class Sequence implements Serializable {
         Sequence sequence = (Sequence) o;
         return Objects.equals(getName(), sequence.getName()) && Objects.equals(getDuration(), sequence.getDuration()) && Objects.equals(getListMedias(), sequence.getListMedias());
     }
+
+    public String toXML(){
+        String XML = "<sequence>\n" +
+                "<name>" + name + "</name>\n" +
+                "<duration>" + duration + "</duration>\n" +
+                "<lock>" + lock + "</lock>\n" +
+                "<listMedia>\n";
+        for(int i=0; i<listMedias.size(); i++){
+            XML += listMedias.get(i).toXML();
+        }
+        XML += "</listMedia>\n" +
+                "</sequence>\n";
+        return XML;
+    }
 }

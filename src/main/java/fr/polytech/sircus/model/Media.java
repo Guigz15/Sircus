@@ -112,4 +112,23 @@ public class Media implements Serializable {
     public String toString() {
         return name;
     }
+
+    /**
+     * Convert a media to XML
+     * @return
+     */
+    public String toXML(){
+        String XML = "<media>\n" +
+                "<name>" + name + "</name>\n" +
+                "<filename>" + filename + "</filename>\n" +
+                "<duration>" + duration + "</duration>\n" +
+                "<type>" + type + "</type>\n" +
+                "<isInterstim>" + isInterstim + "</isInterstim>\n" +
+                "<interstim>" + interStim + "</interstim>\n" +
+                "<lock>" + lock + "</lock>\n" +
+                "<isResizable>" + isResizable + "</isResizable>\n" +
+                "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
+                "</media>\n";
+        return XML;
+    }
 }

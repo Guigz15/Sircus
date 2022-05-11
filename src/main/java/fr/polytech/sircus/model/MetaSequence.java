@@ -1,8 +1,12 @@
 package fr.polytech.sircus.model;
 
+import fr.polytech.sircus.SircusApplication;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -120,5 +124,27 @@ public class MetaSequence implements Serializable {
         if (!(o instanceof MetaSequence)) return false;
         MetaSequence that = (MetaSequence) o;
         return Objects.equals(getName(), that.getName()) && Objects.equals(getDuration(), that.getDuration()) && Objects.equals(getSequencesList(), that.getSequencesList());
+    }
+
+    public String toXML(){
+        String XML = "<metaSequence>\n" +
+                "<name>" + name + "</name>\n" +
+                "<duration>" + duration + "</duration>\n" +
+                "<listSequence>\n";
+        for(int i=0; i<sequencesList.size(); i++){
+            XML += "<sequence>Sequence" + sequencesList.get(i).getName() + ".xml</sequence>\n";
+
+            File file = new File(SircusApplication.dataSircus.getPath().getSeqPath() + "Sequence" + sequencesList.get(i).getName() + ".xml");
+            try {
+                PrintWriter writer = new PrintWriter(file);
+                writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + sequencesList.get(i).toXML());
+                writer.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        XML += "</listSequence>\n" +
+                "</metaSequence>\n";
+        return XML;
     }
 }

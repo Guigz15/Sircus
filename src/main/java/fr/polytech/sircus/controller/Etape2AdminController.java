@@ -1,6 +1,7 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.model.DataSircus;
 import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Sequence;
 import javafx.beans.value.ChangeListener;
@@ -22,7 +23,10 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,8 +92,12 @@ public class Etape2AdminController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 renameMetaButton.setDisable(false);
-                exportMetaButton.setDisable(false);
                 removeMetaButton.setDisable(false);
+
+                if(SircusApplication.adminConnected){
+                    exportMetaButton.setDisable(false);
+                }
+
                 //get the new medias lists to display it on screen
                 int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
                 MetaSequence currentMetaSequence = listMetaSequence.get(index_Selected_MetaSequence);
@@ -114,8 +122,11 @@ public class Etape2AdminController implements Initializable {
             public void changed(ObservableValue<? extends Sequence> observableValue, Sequence s, Sequence t1) {
                 //allow the buttons to change Sequence
                 modifySeqButton.setDisable(false);
-                exportSeqButton.setDisable(false);
                 removeSeqButton.setDisable(false);
+
+                if(SircusApplication.adminConnected){
+                    exportSeqButton.setDisable(false);
+                }
 
                 //get the new medias lists to display it on screen
                 int index_Selected_Sequence = seqListView.getSelectionModel().getSelectedIndex();
@@ -198,6 +209,39 @@ public class Etape2AdminController implements Initializable {
             }
         });
 
+    }
+
+    @FXML
+    private void exportSeq(){
+        // export is only available for admin
+        if(SircusApplication.adminConnected){
+            Sequence seq = seqListView.getSelectionModel().getSelectedItem();
+            File file = new File(SircusApplication.dataSircus.getPath().getSeqPath() + "Sequence" + seq.getName() + ".xml");
+            try {
+                PrintWriter writer = new PrintWriter(file);
+                writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + seq.toXML());
+                writer.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    private void exportMeta(){
+        // export is only available for admin
+        if(SircusApplication.adminConnected){
+            int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
+            MetaSequence meta = listMetaSequence.get(index_Selected_MetaSequence);
+            File file = new File(SircusApplication.dataSircus.getPath().getMetaPath() + "MetaSequence" + meta.getName() + ".xml");
+            try {
+                PrintWriter writer = new PrintWriter(file);
+                writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + meta.toXML());
+                writer.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
