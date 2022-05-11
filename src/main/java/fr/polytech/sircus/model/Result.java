@@ -11,14 +11,13 @@ import java.util.List;
  * Class used to store the results gathered by a meta sequence.
  */
 public class Result {
-    @Getter @Setter
-    private String metaSequenceName;
 
+    //The duration of the whole experiment. Corresponds to the sum of all the duration of the Meta-Sequences
     @Getter @Setter
     private Duration duration;
 
     @Getter @Setter
-    private List<Sequence> sequencesList;
+    private List<MetaSequence> metaSequencesList;
 
     @Getter @Setter
     private List<Comment> comments;
@@ -33,14 +32,12 @@ public class Result {
     /**
      * Full constructor of the Result class.
      *
-     * @param metaSequenceName of the use meta sequence.
-     * @param duration of the used meta sequence.
-     * @param sequencesList of the used sequences.
+     * @param duration of the whole experiment.
+     * @param metaSequencesList of the used meta sequence.
      */
-    public Result(String metaSequenceName, Duration duration, List<Sequence> sequencesList) {
-        this.metaSequenceName = metaSequenceName;
+    public Result(Duration duration, List<MetaSequence> metaSequencesList) {
         this.duration = duration;
-        this.sequencesList = sequencesList;
+        this.metaSequencesList = metaSequencesList;
         this.comments = new ArrayList<>();
     }
 

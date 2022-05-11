@@ -68,9 +68,7 @@ public class ResultController implements Initializable {
         List<Result> results = new ArrayList<>();
         for (MetaSequence metaSequence : metaSequences) {
             Result result = new Result();
-            result.setMetaSequenceName(metaSequence.getName());
             result.setDuration(metaSequence.getDuration());
-            result.setSequencesList(metaSequence.getSequencesList());
             results.add(result);
         }
         return results;
@@ -101,13 +99,10 @@ public class ResultController implements Initializable {
             table_cell = new PdfPCell(new Phrase("List des séquences"));
             my_report_table.addCell(table_cell);
             for (Result result : list) {
-                String nomMetaSequence = result.getMetaSequenceName();
-                table_cell = new PdfPCell(new Phrase(nomMetaSequence));
                 my_report_table.addCell(table_cell);
                 Duration duration = result.getDuration();
                 table_cell = new PdfPCell(new Phrase(String.valueOf(duration)));
                 my_report_table.addCell(table_cell);
-                List<Sequence> listSequences = result.getSequencesList();
                 table_cell = new PdfPCell(new Phrase(String.valueOf((listSequences))));
                 my_report_table.addCell(table_cell);
 
