@@ -1,6 +1,7 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.controller.PopUps.ModifySeqPopUp;
 import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Sequence;
 import javafx.beans.value.ChangeListener;
@@ -12,9 +13,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -24,10 +25,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Class Etape2AdminController : manages the metasequences settings page of the Admin
@@ -198,6 +196,28 @@ public class Etape2AdminController implements Initializable {
             }
         });
 
+        modifySeqButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_seq_popup.fxml"));
+                    DialogPane dialogPane = fxmlLoader.load();
+                    ModifySeqPopUp controller = fxmlLoader.getController();
+
+                    Dialog<ButtonType> dialog = new Dialog<>();
+                    dialog.setDialogPane(dialogPane);
+                    dialog.setTitle("Modification de séquence");
+                    dialog.initModality(Modality.WINDOW_MODAL);
+                    dialog.initOwner(modifySeqButton.getScene().getWindow());
+
+                    Optional<ButtonType> clickedButton = dialog.showAndWait();
+                    if (clickedButton.get() == ButtonType.FINISH) {
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @FXML
