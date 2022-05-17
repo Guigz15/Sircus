@@ -41,6 +41,15 @@ public class PlayerMonitorController {
     private Button playButton;
 
     @FXML
+    private Button stopButton;
+
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private Button forwardButton;
+
+    @FXML
     private StackPane previewPane;
 
     @FXML
@@ -57,14 +66,12 @@ public class PlayerMonitorController {
     // Viewer manager
     private ViewerController viewer;
     private Boolean viewerPlayingState;
-    private final FontIcon playIcon;
-    private final FontIcon pauseIcon;
-    private final MetaSequence metaSequence;
+    private FontIcon playIcon;
+    private FontIcon pauseIcon;
+    private MetaSequence metaSequence;
 
-    /**
-     * Default constructor.
-     */
-    public PlayerMonitorController(){
+    @FXML
+    public void initialize() {
         this.result = new Result();
         // TODO: replace the used meta sequence by the one selected during the previous step
         this.metaSequence = SircusApplication.dataSircus.getMetaSequencesList().get(0);
@@ -77,6 +84,10 @@ public class PlayerMonitorController {
 
         this.pauseIcon = new FontIcon("fa-pause");
         this.pauseIcon.setIconSize(15);
+
+        this.stopButton.setDisable(true);
+        this.forwardButton.setDisable(true);
+        this.backButton.setDisable(true);
     }
 
     /**
@@ -163,6 +174,13 @@ public class PlayerMonitorController {
                 }
             } else {
                 // We aren't playing something, so the play button is displayed, so we must start the sequence
+
+                if (stopButton.disableProperty().get()) {
+                    this.stopButton.setDisable(false);
+                    this.forwardButton.setDisable(false);
+                    this.backButton.setDisable(false);
+                }
+
                 viewer.playViewer();
                 playButton.setGraphic(pauseIcon);
                 viewerPlayingState = true;
@@ -178,7 +196,6 @@ public class PlayerMonitorController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Réinitialiser la méta-séquence");
         alert.setHeaderText("Êtes-vous sûr de vouloir arrêter la méta-séquence et la réinitialiser ?");
-
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -199,6 +216,10 @@ public class PlayerMonitorController {
         viewer = null;
         viewerPlayingState = false;
         playButton.setGraphic(playIcon);
+
+        this.stopButton.setDisable(true);
+        this.forwardButton.setDisable(true);
+        this.backButton.setDisable(true);
     }
 
     public void loadImage(fr.polytech.sircus.model.Media media) throws FileNotFoundException {
