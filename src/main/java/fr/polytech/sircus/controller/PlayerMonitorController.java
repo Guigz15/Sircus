@@ -142,6 +142,13 @@ public class PlayerMonitorController{
         this.forwardButton.setDisable(true);
         this.backButton.setDisable(true);
 
+        metaSeqProgressBar = new TimelineProgressBar(metaSeqProgressBarFX,
+                metaSeqRemaining,
+                0);
+        seqProgressBar = new TimelineProgressBar(seqProgressBarFX,
+                seqRemaining,
+                0);
+
         firstPlay = true;
     }
 
