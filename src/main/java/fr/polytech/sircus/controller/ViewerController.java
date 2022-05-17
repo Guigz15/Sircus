@@ -331,8 +331,8 @@ public class ViewerController {
      */
     public void nextSequence() {
         if (currentSequenceIndex < numberOfSequences - 1) {
-            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex + 1) * 1000));
             currentSequenceIndex++;
+            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex) * 1000));
         } else {
             timeline.jumpTo(new Duration(sequencesStartTime.get(sequencesStartTime.size() - 1) * 1000));
         }
@@ -343,8 +343,8 @@ public class ViewerController {
      */
     public void previousSequence() {
         if (currentSequenceIndex > 0) {
-            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex - 1) * 1000));
             currentSequenceIndex--;
+            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex) * 1000));
         } else {
             timeline.jumpTo(new Duration(0));
         }
