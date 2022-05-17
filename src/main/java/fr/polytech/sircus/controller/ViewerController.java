@@ -22,6 +22,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
+import lombok.Getter;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ public class ViewerController {
     private final PlayerMonitorController playerMonitorController;
 
     // The MetaSequence that id passed to the viewer
+    @Getter
     private final MetaSequence playingMetaSequence;
 
     @FXML
@@ -64,6 +67,8 @@ public class ViewerController {
     // Stores the start time of each sequence to be able to move between sequences.
     private final ArrayList<Integer> sequencesStartTime;
 
+    // Index of the current sequence index in the meta-sequence
+    @Getter
     private int currentSequenceIndex;
 
     private final int numberOfSequences;
@@ -279,7 +284,6 @@ public class ViewerController {
                 }
             }
         }
-
 
         // We add an event that removes the image or video at the end of the playback.
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
