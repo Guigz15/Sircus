@@ -1,8 +1,11 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.utils.MetaSequenceContainer;
+import fr.polytech.sircus.controller.PopUps.ModifySeqPopUp;
+import fr.polytech.sircus.model.MetaSequence;
+import fr.polytech.sircus.model.Sequence;
 import javafx.beans.value.ChangeListener;
+
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,9 +13,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -22,8 +25,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Class Etape2AdminController : manages the metasequences settings page of the Admin
@@ -32,7 +34,7 @@ public class Etape2AdminController implements Initializable {
     @FXML
     private ListView<String> metaListView;
     @FXML
-    public ListView<String> seqListView;
+    public ListView<Sequence> seqListView;
     @FXML
     private Button renameMetaButton;
     @FXML
@@ -58,13 +60,9 @@ public class Etape2AdminController implements Initializable {
     @FXML
     private PreviewTimeline previewTimeline;
 
+    //list of meta-sequences storage
+    private List<MetaSequence> listMetaSequence;
 
-
-    /* initialize listViews */
-    String [] metasequences = {"Metaséquence 1", "Metaséquence 2", "Metaséquence 3", "Metaséquence 4", "Metaséquence 5",
-            "Metaséquence 6", "Metaséquence 7", "Metaséquence 8", "Metaséquence 9", "Metaséquence 10", "Metaséquence 11"};
-    String [] sequences = {"Séquence 1", "Séquence 2", "Séquence 3", "Séquence 4", "Séquence 5",
-            "Séquence 6", "Séquence 7", "Séquence 8", "Séquence 9", "Séquence 10", "Séquence 11"};
 
     /**
      * Function initialize which dynamically ends the listViews initialization
@@ -76,42 +74,87 @@ public class Etape2AdminController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         /* initialize metasequences listView */
-        metaListView.getItems().addAll(metasequences);
+        this.listMetaSequence = SircusApplication.dataSircus.getMetaSequencesList();
+        for (MetaSequence metaSequence : listMetaSequence) {
+            metaListView.getItems().add(metaSequence.getName());
+        }
 
-        previewTimeline.addMetaSequence(new MetaSequenceContainer().getMetaSequences().get(0));
         metaListView.setStyle("-fx-font-size: 14pt;");
+
+        //Defined action when the MetaSequence element selected is changed.
         metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 renameMetaButton.setDisable(false);
                 exportMetaButton.setDisable(false);
                 removeMetaButton.setDisable(false);
+                //get the new medias lists to display it on screen
+                int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
+                MetaSequence currentMetaSequence = listMetaSequence.get(index_Selected_MetaSequence);
+                previewTimeline.removeAllMedia();
+                previewTimeline.addMetaSequence(currentMetaSequence);
+
+                //Defined the list of sequences.
+                seqListView.getItems().clear();
+                for (Sequence sequence : listMetaSequence.get(index_Selected_MetaSequence).getSequencesList()) {
+                    seqListView.getItems().add(sequence);
+                }
             }
 
         });
 
         /* initialize sequences listView */
-        seqListView.getItems().addAll(sequences);
         seqListView.setStyle("-fx-font-size: 14pt;");
-        seqListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+
+        //Defined action when the Sequence element selected is changed.
+        seqListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Sequence>() {
             @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+            public void changed(ObservableValue<? extends Sequence> observableValue, Sequence s, Sequence t1) {
+                //allow the buttons to change Sequence
                 modifySeqButton.setDisable(false);
                 exportSeqButton.setDisable(false);
                 removeSeqButton.setDisable(false);
+
+                //get the new medias lists to display it on screen
+                int index_Selected_Sequence = seqListView.getSelectionModel().getSelectedIndex();
+                int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
+                if(index_Selected_MetaSequence >= 0 && index_Selected_Sequence >=0) {
+                    Sequence currentSequence = listMetaSequence.get(index_Selected_MetaSequence).getSequencesList().get(index_Selected_Sequence);
+                    previewTimeline.removeAllMedia();
+                    previewTimeline.addListMedia(currentSequence.getListMedias());
+                }
+
+
             }
 
         });
 
         //----------------------------------------------------------------------//
 
-        seqListView.setCellFactory(CheckBoxListCell.forListView((Callback<String, ObservableValue<Boolean>>) item -> {
-            BooleanProperty observable = new SimpleBooleanProperty();
-            observable.addListener((obs, wasSelected, isNowSelected) -> {
-                //TODO lock the selected sequences in order that they don't mix with others
-                // when you push the mix button
-            });
-            return observable;
+
+        //set action when checkboxe is clicked.
+        seqListView.setCellFactory(CheckBoxListCell.forListView(new Callback<Sequence, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(Sequence item) {
+                BooleanProperty observable = new SimpleBooleanProperty();
+                if(SircusApplication.adminConnected) {
+                    if(item.getLock()){
+                        observable.setValue(Boolean.TRUE);
+                    }
+                    observable.addListener((obs, wasSelected, isNowSelected) -> {
+                        //If user select the chechbox
+                        if (isNowSelected) {
+                            item.setLock(Boolean.TRUE);
+                            observable.setValue(Boolean.TRUE);
+                        } else {
+                            observable.setValue(Boolean.FALSE);
+                            item.setLock(Boolean.FALSE);
+                        }
+                    });
+                }
+                return observable;
+            }
+            
         }));
 
         /* set doMixButton proprieties */
@@ -153,6 +196,28 @@ public class Etape2AdminController implements Initializable {
             }
         });
 
+        modifySeqButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_seq_popup.fxml"));
+                    DialogPane dialogPane = fxmlLoader.load();
+                    ModifySeqPopUp controller = fxmlLoader.getController();
+
+                    Dialog<ButtonType> dialog = new Dialog<>();
+                    dialog.setDialogPane(dialogPane);
+                    dialog.setTitle("Modification de séquence");
+                    dialog.initModality(Modality.WINDOW_MODAL);
+                    dialog.initOwner(modifySeqButton.getScene().getWindow());
+
+                    Optional<ButtonType> clickedButton = dialog.showAndWait();
+                    if (clickedButton.get() == ButtonType.FINISH) {
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @FXML

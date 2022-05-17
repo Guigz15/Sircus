@@ -13,7 +13,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -50,7 +50,7 @@ public class ViewerController {
     private ImageView imageView;
 
     @FXML
-    private AnchorPane anchorPane;
+    private StackPane stackPane;
 
     // This allows the playing of media
     private MediaPlayer mediaPlayer;
@@ -112,7 +112,7 @@ public class ViewerController {
         metaSequenceStarted = false;
         this.playerMonitorController = playerMonitorController;
         sequencesStartTime = new ArrayList<>();
-        closingManager();
+        viewerStage.setOnCloseRequest(event -> quitViewer());
     }
 
 
@@ -133,7 +133,7 @@ public class ViewerController {
      */
     @FXML
     private void showVideo(fr.polytech.sircus.model.Media video) {
-        File mediaFile = new File("medias/" + video.getName());
+        File mediaFile = new File("medias/" + video.getFilename());
         try {
             Media media = new Media(mediaFile.toURI().toURL().toString());
             mediaPlayer = new MediaPlayer(media);
@@ -166,7 +166,7 @@ public class ViewerController {
     private void showImage(fr.polytech.sircus.model.Media media) {
         // Try to create an InputStream with the path of the image.
         try {
-            InputStream is = new FileInputStream("medias/" + media.getName());
+            InputStream is = new FileInputStream("medias/" + media.getFilename());
             Image image = new Image(is);
 
             imageView.setFitWidth(image.getWidth());
@@ -176,9 +176,7 @@ public class ViewerController {
             imageView.setCache(true);
 
             if (media.isResizable()) {
-                centerImageAndResize();
-            } else {
-                centerImage();
+                resizeImage();
             }
 
             Color color = media.getBackgroundColor();
@@ -187,7 +185,9 @@ public class ViewerController {
                     (int)( color.getGreen() * 255 ),
                     (int)( color.getBlue() * 255 ) );
 
-            anchorPane.setStyle(hexColor);
+            stackPane.setStyle(hexColor);
+
+            playerMonitorController.loadImage(media);
         }
         // If the path is not found we display a message.
         catch (FileNotFoundException error) {
@@ -335,8 +335,8 @@ public class ViewerController {
      */
     public void nextSequence() {
         if (currentSequenceIndex < numberOfSequences - 1) {
-            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex + 1) * 1000));
             currentSequenceIndex++;
+            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex) * 1000));
         } else {
             timeline.jumpTo(new Duration(sequencesStartTime.get(sequencesStartTime.size() - 1) * 1000));
         }
@@ -347,8 +347,8 @@ public class ViewerController {
      */
     public void previousSequence() {
         if (currentSequenceIndex > 0) {
-            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex - 1) * 1000));
             currentSequenceIndex--;
+            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex) * 1000));
         } else {
             timeline.jumpTo(new Duration(0));
         }
@@ -366,45 +366,21 @@ public class ViewerController {
      */
     @FXML
     private void quitViewer() {
+        playerMonitorController.clearImage();
         playerMonitorController.closeViewer();
+        timeline.stop();
         viewerStage.close();
     }
 
     /**
-     * The handle of this method is called when the user closes the viewer window.
-     * It calls the appropriate method of the MetaSequence controller in order to
-     * reset some attributes to default attributes and restart the viewer correctly.
+     * Method to resize the imageview in order to maximize width and/or height.
      */
-    private void closingManager() {
-        viewerStage.setOnCloseRequest(event -> playerMonitorController.closeViewer());
-    }
-
-    /**
-     * Method to center the imageview in the viewer.
-     */
-    private void centerImage() {
-        double w = (viewerStage.getWidth() - imageView.getFitWidth()) / 2;
-        double h = (viewerStage.getHeight() - imageView.getFitHeight()) / 2;
-
-        imageView.setTranslateX(w);
-        imageView.setTranslateY(h);
-    }
-
-    /**
-     * Method to center the imageview in the viewer and resize it to maximize width and/or height.
-     */
-    private void centerImageAndResize() {
+    private void resizeImage() {
         if (imageView.getImage() != null) {
             double ratio = Math.min(viewerStage.getWidth() / imageView.getFitWidth(), viewerStage.getHeight() / imageView.getFitHeight());
 
             imageView.setFitWidth(imageView.getFitWidth() * ratio);
             imageView.setFitHeight(imageView.getFitHeight() * ratio);
-
-            double w = (viewerStage.getWidth() - imageView.getFitWidth()) / 2;
-            double h = (viewerStage.getHeight() - imageView.getFitHeight()) / 2;
-
-            imageView.setTranslateX(w);
-            imageView.setTranslateY(h);
         }
     }
 }

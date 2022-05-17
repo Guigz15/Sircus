@@ -111,6 +111,7 @@ public class PreviewTimeline extends AnchorPane implements Initializable {
     public void removeAllMedia(){
         listPreviewItemController.clear();
         timelineContent.getChildren().clear();
+        duration = Duration.ZERO;
     }
 
 
