@@ -79,6 +79,11 @@ public class PlayerMonitorController implements Initializable {
     private TimelineClock remaining;
 
     /**
+     * indicates if it's the first lecture or after a reset
+     */
+    private boolean firstPlay;
+
+    /**
      * The Result to fill.
      */
     private Result result;
@@ -117,6 +122,7 @@ public class PlayerMonitorController implements Initializable {
         seqProgressBar = new TimelineProgressBar(seqProgressBarFX,
                 seqRemaining,
                 0);
+        firstPlay = true;
     }
 
     /**
@@ -227,15 +233,23 @@ public class PlayerMonitorController implements Initializable {
                 playButton.setGraphic(pauseIcon);
                 viewerPlayingState = true;
 
-                // Clocks
-                seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
-                metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
-                setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
-                playAllClocks();
+                // If it's the first lecture or after a reset
+                if (firstPlay){
+                    // Clocks
+                    seqDuration.setTime(0);
+                    seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+                    metaSeqDuration.setTime(0);
+                    metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
+                    setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
 
-                // progress bars
-                metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
-                seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+                    // progress bars
+                    metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
+                    seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+                    firstPlay = false;
+                }
+
+                // Clocks
+                playAllClocks();
             }
         }
     }
@@ -253,6 +267,7 @@ public class PlayerMonitorController implements Initializable {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             viewer.resetMetaSequence();
             duration.reset();
+            firstPlay = true;
 
             if (viewerPlayingState) {
                 viewer.pauseViewer();
@@ -266,10 +281,10 @@ public class PlayerMonitorController implements Initializable {
      * Closes the viewer.
      */
     public void closeViewer() {
+        pauseAllClocks();
         viewer = null;
         viewerPlayingState = false;
         playButton.setGraphic(playIcon);
-        resetAllClocks();
     }
 
     /**
@@ -430,6 +445,8 @@ class TimelineClock{
      * @param seconds amount of seconds
      */
     public void setTime(long seconds){
+        if (seconds < 0)
+            seconds = 0;
         time = LocalTime.of((int)(seconds / 3600),
                 (int)((seconds % 3600) / 60),
                 (int)(seconds % 60));
@@ -443,6 +460,8 @@ class TimelineClock{
      */
     public void setRemaining(LocalTime reference, long deadLine){
         long seconds = deadLine - reference.getSecond();
+        if (seconds < 0)
+            seconds = 0;
         time = LocalTime.of((int)(seconds / 3600),
                 (int)((seconds % 3600) / 60),
                 (int)(seconds % 60));
