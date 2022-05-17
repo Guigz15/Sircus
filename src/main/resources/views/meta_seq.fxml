@@ -53,7 +53,7 @@
                      <VBox.margin>
                          <Insets top="5.0" />
                      </VBox.margin>
-                     <Button fx:id="importMetaButton" mnemonicParsing="false" prefHeight="25.0" text="Importer" textAlignment="CENTER" />
+                     <Button fx:id="importMetaButton" mnemonicParsing="false" onAction="#importMeta" prefHeight="25.0" text="Importer" textAlignment="CENTER" />
                      <Pane prefHeight="25.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
                      <Button fx:id="exportMetaButton" alignment="CENTER" disable="true" onAction="#exportMeta" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Exporter" HBox.hgrow="ALWAYS" />
                  </HBox>
@@ -88,7 +88,7 @@
                      <VBox.margin>
                          <Insets top="5.0" />
                      </VBox.margin>
-                     <Button fx:id="importSeqButton" mnemonicParsing="false" prefHeight="25.0" text="Importer" textAlignment="CENTER" />
+                     <Button fx:id="importSeqButton" mnemonicParsing="false" onAction="#importSeq" prefHeight="25.0" text="Importer" textAlignment="CENTER" />
                      <Pane prefHeight="25.0" prefWidth="31.0" HBox.hgrow="ALWAYS" />
                      <Button fx:id="exportSeqButton" disable="true" mnemonicParsing="false" onAction="#exportSeq" prefHeight="25.0" text="Exporter" textAlignment="CENTER" />
                  </HBox>

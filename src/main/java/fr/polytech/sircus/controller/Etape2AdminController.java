@@ -1,9 +1,9 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.model.DataSircus;
 import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Sequence;
+import fr.polytech.sircus.utils.ImportSeqXML;
 import javafx.beans.value.ChangeListener;
 
 import javafx.beans.value.ObservableValue;
@@ -16,19 +16,22 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import org.xml.sax.SAXException;
 
-
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -46,9 +49,13 @@ public class Etape2AdminController implements Initializable {
     @FXML
     private Button exportMetaButton;
     @FXML
+    private Button importMetaButton;
+    @FXML
     private Button modifySeqButton;
     @FXML
     private Button exportSeqButton;
+    @FXML
+    private Button importSeqButton;
     @FXML
     private Button removeMetaButton;
     @FXML
@@ -211,12 +218,15 @@ public class Etape2AdminController implements Initializable {
 
     }
 
+    /**
+     * Export a sequence to XML format, for admin only
+     */
     @FXML
     private void exportSeq(){
         // export is only available for admin
         if(SircusApplication.adminConnected){
             Sequence seq = seqListView.getSelectionModel().getSelectedItem();
-            File file = new File(SircusApplication.dataSircus.getPath().getSeqPath() + "Sequence" + seq.getName() + ".xml");
+            File file = new File(SircusApplication.dataSircus.getPath().getSeqPath() + seq.getName() + ".xml");
             try {
                 PrintWriter writer = new PrintWriter(file);
                 writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + seq.toXML());
@@ -227,13 +237,16 @@ public class Etape2AdminController implements Initializable {
         }
     }
 
+    /**
+     * Export a metaSequence to XML format, for admin only
+     */
     @FXML
     private void exportMeta(){
         // export is only available for admin
         if(SircusApplication.adminConnected){
             int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
             MetaSequence meta = listMetaSequence.get(index_Selected_MetaSequence);
-            File file = new File(SircusApplication.dataSircus.getPath().getMetaPath() + "MetaSequence" + meta.getName() + ".xml");
+            File file = new File(SircusApplication.dataSircus.getPath().getMetaPath() + meta.getName() + ".xml");
             try {
                 PrintWriter writer = new PrintWriter(file);
                 writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + meta.toXML());
@@ -241,6 +254,41 @@ public class Etape2AdminController implements Initializable {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @FXML
+    private void importSeq(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Importer sequence");
+        fileChooser.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getSeqPath()));
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml"));
+        File file = fileChooser.showOpenDialog(importSeqButton.getScene().getWindow());
+        if (file != null) {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            try {
+                SAXParser saxParser = factory.newSAXParser();
+                ImportSeqXML handler = new ImportSeqXML();
+                saxParser.parse(file, handler);
+                int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
+                listMetaSequence.get(index_Selected_MetaSequence).addSequence(handler.getSeq());
+            }
+            catch (ParserConfigurationException | SAXException | IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    private void importMeta(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Importer metaSequence");
+        fileChooser.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getMetaPath()));
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml"));
+        File file = fileChooser.showOpenDialog(importMetaButton.getScene().getWindow());
+        if (file != null) {
+
         }
     }
 

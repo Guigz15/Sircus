@@ -45,7 +45,7 @@ public class Media implements Serializable {
     /**
      * The default constructor
      */
-    public Media(){};
+    public Media(){}
 
     /**
      * The constructor
@@ -115,20 +115,29 @@ public class Media implements Serializable {
 
     /**
      * Convert a media to XML
-     * @return
+     * @return XML
      */
     public String toXML(){
+        //TODO replace the space in string by %20
         String XML = "<media>\n" +
                 "<name>" + name + "</name>\n" +
                 "<filename>" + filename + "</filename>\n" +
                 "<duration>" + duration + "</duration>\n" +
                 "<type>" + type + "</type>\n" +
-                "<isInterstim>" + isInterstim + "</isInterstim>\n" +
-                "<interstim>" + interStim + "</interstim>\n" +
-                "<lock>" + lock + "</lock>\n" +
-                "<isResizable>" + isResizable + "</isResizable>\n" +
-                "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
-                "</media>\n";
+                "<isInterstim>" + isInterstim + "</isInterstim>\n";
+        if(interStim == null){
+            XML += "<interstim>null</interstim>\n" +
+                    "<lock>" + lock + "</lock>\n" +
+                    "<isResizable>" + isResizable + "</isResizable>\n" +
+                    "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
+                    "</media>\n";
+        } else {
+            XML += "<interstim>" + interStim.getName() + "</interstim>\n" +
+                    "<lock>" + lock + "</lock>\n" +
+                    "<isResizable>" + isResizable + "</isResizable>\n" +
+                    "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
+                    "</media>\n";
+        }
         return XML;
     }
 }

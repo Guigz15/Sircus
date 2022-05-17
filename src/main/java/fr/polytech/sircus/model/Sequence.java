@@ -113,12 +113,14 @@ public class Sequence implements Serializable {
         return Objects.equals(getName(), sequence.getName()) && Objects.equals(getDuration(), sequence.getDuration()) && Objects.equals(getListMedias(), sequence.getListMedias());
     }
 
+    /**
+     * Convert a sequence to XML
+     * @return XML
+     */
     public String toXML(){
-        String XML = "<sequence>\n" +
-                "<name>" + name + "</name>\n" +
-                "<duration>" + duration + "</duration>\n" +
-                "<lock>" + lock + "</lock>\n" +
-                "<listMedia>\n";
+        //TODO replace the space in string by %20
+        String XML = "<sequence name=\"" + name + "\" duration=\"" + duration
+                + "\" lock=\"" + lock + "\">\n" + "<listMedia>\n";
         for(int i=0; i<listMedias.size(); i++){
             XML += listMedias.get(i).toXML();
         }

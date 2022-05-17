@@ -126,18 +126,23 @@ public class MetaSequence implements Serializable {
         return Objects.equals(getName(), that.getName()) && Objects.equals(getDuration(), that.getDuration()) && Objects.equals(getSequencesList(), that.getSequencesList());
     }
 
+    /**
+     * Convert a metaSequence to XML
+     * @return XML
+     */
     public String toXML(){
+        //TODO replace the space in string by %20
         String XML = "<metaSequence>\n" +
                 "<name>" + name + "</name>\n" +
                 "<duration>" + duration + "</duration>\n" +
                 "<listSequence>\n";
-        for(int i=0; i<sequencesList.size(); i++){
-            XML += "<sequence>Sequence" + sequencesList.get(i).getName() + ".xml</sequence>\n";
+        for (Sequence sequence : sequencesList) {
+            XML += "<sequence>" + sequence.getName() + ".xml</sequence>\n";
 
-            File file = new File(SircusApplication.dataSircus.getPath().getSeqPath() + "Sequence" + sequencesList.get(i).getName() + ".xml");
+            File file = new File(SircusApplication.dataSircus.getPath().getSeqPath() + sequence.getName() + ".xml");
             try {
                 PrintWriter writer = new PrintWriter(file);
-                writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + sequencesList.get(i).toXML());
+                writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + sequence.toXML());
                 writer.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

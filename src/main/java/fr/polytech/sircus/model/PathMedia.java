@@ -34,7 +34,7 @@ public class PathMedia  implements Serializable {
     public PathMedia() {
         String osName = System.getProperty("os.name");
         // windows
-        if(osName.indexOf("win") >= 0){
+        if(osName.contains("win")){
             defaultPath = System.getProperty("user.dir") + "\\medias";
             seqPath = System.getProperty("user.dir") + "\\sequences\\";
             metaPath = System.getProperty("user.dir") + "\\metaSequence\\";
