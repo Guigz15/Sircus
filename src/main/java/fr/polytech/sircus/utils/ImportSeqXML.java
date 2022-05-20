@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class ImportSeqXML extends DefaultHandler {
     @Getter @Setter
     private Sequence seq;
-    private StringBuilder currentValue = new StringBuilder();
+    private final StringBuilder currentValue = new StringBuilder();
 
     private Boolean name = false;
     private Boolean filename = false;
@@ -38,10 +38,13 @@ public class ImportSeqXML extends DefaultHandler {
 
         if (qName.equalsIgnoreCase("sequence")) {
             String name = attributes.getValue("name");
+            name = name.replace("%20", " ");
             Duration duration = Duration.parse(attributes.getValue("duration"));
             Boolean lock = Boolean.valueOf(attributes.getValue("lock"));
 
             seq = new Sequence(name);
+            seq.setDuration(duration);
+            seq.setLock(lock);
         }
         else if (qName.equalsIgnoreCase("listMedia")) {
             seq.setListMedias(new ArrayList<>());
@@ -96,11 +99,11 @@ public class ImportSeqXML extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName) {
         if (name) {
-            seq.getListMedias().get(seq.getListMedias().size() - 1).setName(currentValue.toString());
+            seq.getListMedias().get(seq.getListMedias().size() - 1).setName(currentValue.toString().replace("%20", " "));
             name = false;
         }
         else if(filename) {
-            seq.getListMedias().get(seq.getListMedias().size() - 1).setFilename(currentValue.toString());
+            seq.getListMedias().get(seq.getListMedias().size() - 1).setFilename(currentValue.toString().replace("%20", " "));
             filename = false;
         }
         else if(duration) {
@@ -116,7 +119,7 @@ public class ImportSeqXML extends DefaultHandler {
             isInterstim = false;
         }
         else if(interstim) {
-            Media inter = null;
+            Media inter;
             if(seq.getListMedias().size() == 1){
                 inter = seq.getListMedias().get(1);
             } else {
@@ -130,7 +133,7 @@ public class ImportSeqXML extends DefaultHandler {
             lock = false;
         }
         else if(isResizable) {
-            seq.getListMedias().get(seq.getListMedias().size() - 1).setResizable(Boolean.valueOf(currentValue.toString()));
+            seq.getListMedias().get(seq.getListMedias().size() - 1).setResizable(Boolean.parseBoolean(currentValue.toString()));
             isResizable = false;
         }
         else if(backgroundColor) {

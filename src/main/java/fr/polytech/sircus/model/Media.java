@@ -120,8 +120,8 @@ public class Media implements Serializable {
     public String toXML(){
         //TODO replace the space in string by %20
         String XML = "<media>\n" +
-                "<name>" + name + "</name>\n" +
-                "<filename>" + filename + "</filename>\n" +
+                "<name>" + name.replace(" ", "%20") + "</name>\n" +
+                "<filename>" + filename.replace(" ", "%20") + "</filename>\n" +
                 "<duration>" + duration + "</duration>\n" +
                 "<type>" + type + "</type>\n" +
                 "<isInterstim>" + isInterstim + "</isInterstim>\n";
@@ -132,7 +132,7 @@ public class Media implements Serializable {
                     "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
                     "</media>\n";
         } else {
-            XML += "<interstim>" + interStim.getName() + "</interstim>\n" +
+            XML += "<interstim>" + interStim.getName().replace(" ", "%20") + "</interstim>\n" +
                     "<lock>" + lock + "</lock>\n" +
                     "<isResizable>" + isResizable + "</isResizable>\n" +
                     "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +

@@ -118,8 +118,7 @@ public class Sequence implements Serializable {
      * @return XML
      */
     public String toXML(){
-        //TODO replace the space in string by %20
-        String XML = "<sequence name=\"" + name + "\" duration=\"" + duration
+        String XML = "<sequence name=\"" + name.replace(" ", "%20") + "\" duration=\"" + duration
                 + "\" lock=\"" + lock + "\">\n" + "<listMedia>\n";
         for(int i=0; i<listMedias.size(); i++){
             XML += listMedias.get(i).toXML();

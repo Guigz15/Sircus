@@ -296,6 +296,9 @@ public class Etape2AdminController implements Initializable {
         }
     }
 
+    /**
+     * Import a metaSequence from a XML file
+     */
     @FXML
     private void importMeta(){
         FileChooser fileChooser = new FileChooser();

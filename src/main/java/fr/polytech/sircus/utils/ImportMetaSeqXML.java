@@ -55,7 +55,7 @@ public class ImportMetaSeqXML extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName) {
         if (name) {
-            meta.setName(currentValue.toString());
+            meta.setName(currentValue.toString().replace("%20", " "));
             name = false;
         } else if(duration) {
             meta.setDuration(Duration.parse(currentValue.toString()));
@@ -65,7 +65,7 @@ public class ImportMetaSeqXML extends DefaultHandler {
             try {
                 SAXParser saxParser = factory.newSAXParser();
                 ImportSeqXML handler = new ImportSeqXML();
-                File file = new File(SircusApplication.dataSircus.getPath().getSeqPath() + currentValue.toString());
+                File file = new File(SircusApplication.dataSircus.getPath().getSeqPath() + currentValue.toString().replace("%20", " "));
                 saxParser.parse(file, handler);
                 meta.getSequencesList().add(handler.getSeq());
             } catch (ParserConfigurationException | SAXException | IOException e) {

@@ -131,13 +131,12 @@ public class MetaSequence implements Serializable {
      * @return XML
      */
     public String toXML(){
-        //TODO replace the space in string by %20
         String XML = "<metaSequence>\n" +
-                "<name>" + name + "</name>\n" +
+                "<name>" + name.replace(" ", "%20") + "</name>\n" +
                 "<duration>" + duration + "</duration>\n" +
                 "<listSequence>\n";
         for (Sequence sequence : sequencesList) {
-            XML += "<sequence>" + sequence.getName() + ".xml</sequence>\n";
+            XML += "<sequence>" + sequence.getName().replace(" ", "%20") + ".xml</sequence>\n";
 
             File file = new File(SircusApplication.dataSircus.getPath().getSeqPath() + sequence.getName() + ".xml");
             try {
