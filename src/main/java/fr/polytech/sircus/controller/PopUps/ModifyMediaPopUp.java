@@ -71,8 +71,8 @@ public class ModifyMediaPopUp {
     /**
      *  Event listener that comes from the controller modifySeqPopUp
      */
-    private ModifySeqPopUp.SequenceModificationListener listener1 = null;
-    private ModifySeqPopUp.MediaModificationListener listener2 = null;
+    //private ModifySeqPopUp.SequenceModificationListener listener1 = null;
+    //private ModifySeqPopUp.MediaModificationListener listener2 = null;
 
 
     /**
@@ -84,7 +84,7 @@ public class ModifyMediaPopUp {
      * @param listener1 event listener that comes from the controller modifySeqPopUp
      * @param listener2 event listener that comes from the controller modifySeqPopUp
      */
-    public ModifyMediaPopUp(Window owner, Sequence sequence, Media media,
+    /*public ModifyMediaPopUp(Window owner, Sequence sequence, Media media,
                             ModifySeqPopUp.SequenceModificationListener listener1,
                             ModifySeqPopUp.MediaModificationListener listener2) {
 
@@ -115,7 +115,7 @@ public class ModifyMediaPopUp {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 
     /**
@@ -160,7 +160,7 @@ public class ModifyMediaPopUp {
             try {
                 this.media.setName(this.newMediaNameField.getText());
                 this.media.setDuration(Duration.ofSeconds(Integer.parseInt(this.newMediaDurationField.getText())));
-                this.listener2.onModified(this.media);
+                //this.listener2.onModified(this.media);
                 this.popUpStage.close();
             } catch (Exception e) {
                 this.newMediaDurationField.setText("Incorrect duration value");
@@ -182,7 +182,7 @@ public class ModifyMediaPopUp {
 
         if (alert.getResult() == ButtonType.YES) {
             this.sequence.removeMedia(this.media);
-            this.listener1.onModified(this.sequence);
+            //this.listener1.onModified(this.sequence);
             this.popUpStage.close();
         }
     }

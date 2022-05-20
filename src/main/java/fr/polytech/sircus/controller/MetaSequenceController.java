@@ -302,13 +302,13 @@ public class MetaSequenceController {
         ModificationSequenceListener listener = seq ->
                 this.metaSeqTable.refresh();
 
-        new ModifySeqPopUp(
+        /*new ModifySeqPopUp(
                 this.metaSeqComboBox.getScene().getWindow(),
                 FXCollections.observableList(sequence.getListMedias()),
                 sequence,
                 listener,
                 this.fileChooserMedia,
-                this.fileChooserInterstim);
+                this.fileChooserInterstim);*/
     }
 
     /**
