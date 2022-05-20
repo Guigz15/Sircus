@@ -3,6 +3,7 @@ package fr.polytech.sircus.controller;
 import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Sequence;
+import fr.polytech.sircus.utils.ImportMetaSeqXML;
 import fr.polytech.sircus.utils.ImportSeqXML;
 import javafx.beans.value.ChangeListener;
 
@@ -257,6 +258,9 @@ public class Etape2AdminController implements Initializable {
         }
     }
 
+    /**
+     * Import a sequence from a XML file
+     */
     @FXML
     private void importSeq(){
         FileChooser fileChooser = new FileChooser();
@@ -267,11 +271,23 @@ public class Etape2AdminController implements Initializable {
         if (file != null) {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             try {
+                // import and parse the file
                 SAXParser saxParser = factory.newSAXParser();
                 ImportSeqXML handler = new ImportSeqXML();
                 saxParser.parse(file, handler);
                 int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
                 listMetaSequence.get(index_Selected_MetaSequence).addSequence(handler.getSeq());
+
+                // refresh list of sequence
+                seqListView.getItems().clear();
+                for (Sequence sequence : listMetaSequence.get(index_Selected_MetaSequence).getSequencesList()) {
+                    seqListView.getItems().add(sequence);
+                }
+
+                // refresh preview timeline
+                MetaSequence currentMetaSequence = listMetaSequence.get(index_Selected_MetaSequence);
+                previewTimeline.removeAllMedia();
+                previewTimeline.addMetaSequence(currentMetaSequence);
             }
             catch (ParserConfigurationException | SAXException | IOException e)
             {
@@ -288,7 +304,25 @@ public class Etape2AdminController implements Initializable {
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml"));
         File file = fileChooser.showOpenDialog(importMetaButton.getScene().getWindow());
         if (file != null) {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            try {
+                // import and parse the file
+                SAXParser saxParser = factory.newSAXParser();
+                ImportMetaSeqXML handler = new ImportMetaSeqXML();
+                saxParser.parse(file, handler);
+                SircusApplication.dataSircus.getMetaSequencesList().add(handler.getMeta());
 
+                // refresh list of metaSequence
+                this.listMetaSequence = SircusApplication.dataSircus.getMetaSequencesList();
+                metaListView.getItems().clear();
+                for (MetaSequence metaSequence : listMetaSequence) {
+                    metaListView.getItems().add(metaSequence.getName());
+                }
+            }
+            catch (ParserConfigurationException | SAXException | IOException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -18,7 +18,7 @@ public class Sequence implements Serializable {
     @Getter @Setter
     private String name;
 
-    @Getter
+    @Getter @Setter
     private Duration duration;
 
     @Getter @Setter

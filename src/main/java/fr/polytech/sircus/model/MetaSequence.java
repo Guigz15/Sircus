@@ -26,7 +26,7 @@ public class MetaSequence implements Serializable {
     @Setter
     private String name;
 
-    @Getter
+    @Getter @Setter
     private Duration duration;
 
     @Getter
