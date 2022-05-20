@@ -1,6 +1,7 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.model.MediaDeprecated;
 import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.model.TypeMedia;
@@ -132,7 +133,7 @@ public class ViewerController {
      * @param video the media containing the video that we want to display.
      */
     @FXML
-    private void showVideo(fr.polytech.sircus.model.Media video) {
+    private void showVideo(MediaDeprecated video) {
         File mediaFile = new File("medias/" + video.getFilename());
         try {
             Media media = new Media(mediaFile.toURI().toURL().toString());
@@ -163,7 +164,7 @@ public class ViewerController {
      * @param media the media containing the image that we want to display.
      */
     @FXML
-    private void showImage(fr.polytech.sircus.model.Media media) {
+    private void showImage(MediaDeprecated media) {
         // Try to create an InputStream with the path of the image.
         try {
             InputStream is = new FileInputStream("medias/" + media.getFilename());
@@ -224,7 +225,7 @@ public class ViewerController {
             boolean addSequenceIndex = true;
 
             // For each Media in the sequence.
-            for (fr.polytech.sircus.model.Media media : sequence.getListMedias()) {
+            for (MediaDeprecated media : sequence.getListMedias()) {
                 // If the media is an image.
                 if (media.getType() == TypeMedia.PICTURE) {
                     if (addSequenceIndex) {

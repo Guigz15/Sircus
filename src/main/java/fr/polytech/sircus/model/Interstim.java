@@ -12,27 +12,28 @@ import java.time.Duration;
 import java.util.Objects;
 
 /**
- * This class represents a media (picture or video).
+ * This class represents an interstim.
+ * An interstim is a neutral image used to recalibrate the patient's view.
  */
-public class Media extends AbstractMedia implements Serializable {
+public class Interstim extends AbstractMedia implements Serializable {
 
     /**
-     * The interstim to be displayed before the media.
+     * The media to which the interstim is linked to.
      */
     @Getter @Setter
-    private Interstim interstim;
+    private Media media;
 
-    public Media(String filename, Duration duration) {
-        this(filename, duration, true, false, Color.WHITE, null);
+    public Interstim(String filename, Duration duration, Media media) {
+        this(filename, duration, false, Color.WHITE, media);
     }
 
-    public Media(String filename, Duration duration, boolean isLocked, boolean isResizable, Color backgroundColor, Interstim interstim) {
+    public Interstim(String filename, Duration duration, boolean isResizable, Color backgroundColor, Media media) {
         this.filename = filename;
         this.duration = duration;
-        this.isLocked = isLocked;
+        this.isLocked = true;
         this.isResizable = isResizable;
         this.backgroundColor = backgroundColor;
-        this.interstim = interstim;
+        this.media = media;
     }
 
     @Override
@@ -40,8 +41,8 @@ public class Media extends AbstractMedia implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        Media media = (Media) o;
-        return Objects.equals(interstim, media.interstim);
+        Interstim interstim = (Interstim) o;
+        return Objects.equals(media, interstim.media);
     }
 
     /**
@@ -49,7 +50,7 @@ public class Media extends AbstractMedia implements Serializable {
      */
     protected void writeObject(ObjectOutputStream oos) throws IOException {
         super.writeObject(oos);
-        oos.writeObject(interstim);
+        oos.writeObject(media);
     }
 
     /**
@@ -57,6 +58,6 @@ public class Media extends AbstractMedia implements Serializable {
      */
     protected void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
         super.readObject(ois);
-        interstim = (Interstim) ois.readObject();
+        media = (Media) ois.readObject();
     }
 }

@@ -8,21 +8,21 @@ import org.junit.jupiter.api.TestInstance;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MediaTest {
+class MediaDeprecatedTest {
 
-    private static Media mediaTest;
+    private static MediaDeprecated mediaTest;
 
     @Nested
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class TestGetter {
 
-        private Media mediaTest;
+        private MediaDeprecated mediaTest;
 
         @BeforeAll
         void initialisation() {
             System.out.println("Tests sur les getters de la classe Media");
             Duration duration = Duration.ofSeconds(15);
-            mediaTest = new Media("mediaTest", "filename", duration, TypeMedia.PICTURE, null);
+            mediaTest = new MediaDeprecated("mediaTest", "filename", duration, TypeMedia.PICTURE, null);
         }
 
         @Test
@@ -60,12 +60,12 @@ class MediaTest {
     @Nested
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class TestSetter{
-        private Media mediaTest;
+        private MediaDeprecated mediaTest;
 
         @BeforeAll
         void initialisation() {
             System.out.println("Tests sur les setters de la classe Media");
-            mediaTest = new Media();
+            mediaTest = new MediaDeprecated();
         }
 
         @Test
@@ -97,7 +97,7 @@ class MediaTest {
 
         @Test
         void setInterStim() {
-            Media testInterStim = new Media("stim","testPath\\inter_stim",Duration.ofSeconds(15),TypeMedia.PICTURE,null);
+            MediaDeprecated testInterStim = new MediaDeprecated("stim","testPath\\inter_stim",Duration.ofSeconds(15),TypeMedia.PICTURE,null);
             mediaTest.setInterStim(testInterStim);
             assertEquals(testInterStim,mediaTest.getInterStim());
         }
