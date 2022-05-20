@@ -2,7 +2,7 @@ package fr.polytech.sircus.controller.PopUps;
 
 import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.controller.MetaSequenceController;
-import fr.polytech.sircus.model.Media;
+import fr.polytech.sircus.model.MediaDeprecated;
 import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.model.TypeMedia;
 import javafx.beans.property.SimpleStringProperty;
@@ -67,23 +67,23 @@ public class ModifySeqPopUp {
 
     /** Media table */
     @FXML
-    private TableView<Media> mediaTable;
+    private TableView<MediaDeprecated> mediaTable;
 
     /** Media table: column for locking */
     @FXML
-    private TableColumn<Media, String> mediaTableColumnVerrouillage;
+    private TableColumn<MediaDeprecated, String> mediaTableColumnVerrouillage;
 
     /** Media table: name column */
     @FXML
-    private TableColumn<Media, String> mediaTableColumnName;
+    private TableColumn<MediaDeprecated, String> mediaTableColumnName;
 
     /** Media table: duration column */
     @FXML
-    private TableColumn<Media, String> mediaTableColumnDuration;
+    private TableColumn<MediaDeprecated, String> mediaTableColumnDuration;
 
     /** Media table: options column (edit buttons) */
     @FXML
-    private TableColumn<Media, String> mediaTableColumnOption;
+    private TableColumn<MediaDeprecated, String> mediaTableColumnOption;
 
     /** Sequence to be modified */
     private Sequence sequence = null;
@@ -95,7 +95,7 @@ public class ModifySeqPopUp {
     private MetaSequenceController.ModificationSequenceListener listener;
 
     /** List of media and cross-stimulus media */
-    private List<Media> listMediaPlusInterstim = null;
+    private List<MediaDeprecated> listMediaPlusInterstim = null;
 
     /**
      * Constructor of the controller of the sequence modification pop-up and its components
@@ -105,7 +105,7 @@ public class ModifySeqPopUp {
      * @param sequence   The sequence to be modified
      * @param listener   The event listener of sequence modification from MetaSequenceController
      */
-    public ModifySeqPopUp(Window owner, ObservableList<Media> listMedias, Sequence sequence,
+    public ModifySeqPopUp(Window owner, ObservableList<MediaDeprecated> listMedias, Sequence sequence,
                           MetaSequenceController.ModificationSequenceListener listener, FileChooser fileChooserMedia,
                           FileChooser fileChooserInterstim) {
 
@@ -179,9 +179,9 @@ public class ModifySeqPopUp {
             return new SimpleStringProperty(formattedDuration);
         });
 
-        Callback<TableColumn<Media, String>, TableCell<Media, String>> cellFactoryOption = new Callback<>() {
+        Callback<TableColumn<MediaDeprecated, String>, TableCell<MediaDeprecated, String>> cellFactoryOption = new Callback<>() {
             @Override
-            public TableCell<Media, String> call(final TableColumn<Media, String> param) {
+            public TableCell<MediaDeprecated, String> call(final TableColumn<MediaDeprecated, String> param) {
                 return new TableCell<>() {
                     final Button tableViewOptionButton = new Button("");
                     final Button tableViewDeleteButton = new Button("");
@@ -209,7 +209,7 @@ public class ModifySeqPopUp {
                             // Option button
                             tableViewOptionButton.setOnMouseClicked(event ->
                             {
-                                Media media = getTableView().getItems().get(getIndex());
+                                MediaDeprecated media = getTableView().getItems().get(getIndex());
                                 modifyMediaInSeq(media);
                             });
 
@@ -248,7 +248,7 @@ public class ModifySeqPopUp {
                                             Files.copy(path, os);
                                         }
 
-                                        Media newMedia = new Media(
+                                        MediaDeprecated newMedia = new MediaDeprecated(
                                                 newInterstim.getName(),
                                                 newInterstim.getName(),
                                                 Duration.ofSeconds(1),
@@ -286,9 +286,9 @@ public class ModifySeqPopUp {
             }
         };
 
-        Callback<TableColumn<Media, String>, TableCell<Media, String>> cellFactoryLock = new Callback<>() {
+        Callback<TableColumn<MediaDeprecated, String>, TableCell<MediaDeprecated, String>> cellFactoryLock = new Callback<>() {
             @Override
-            public TableCell<Media, String> call(final TableColumn<Media, String> param) {
+            public TableCell<MediaDeprecated, String> call(final TableColumn<MediaDeprecated, String> param) {
                 return new TableCell<>() {
                     final CheckBox tableViewVerrCheckBox = new CheckBox("");
                     final HBox hBox = new HBox(tableViewVerrCheckBox);
@@ -301,7 +301,7 @@ public class ModifySeqPopUp {
                         } else {
                             hBox.setAlignment(Pos.CENTER);
                             hBox.setSpacing(20);
-                            Media media = getTableView().getItems().get(getIndex());
+                            MediaDeprecated media = getTableView().getItems().get(getIndex());
 
                             tableViewVerrCheckBox.setSelected(media.getLock());
 
@@ -380,7 +380,7 @@ public class ModifySeqPopUp {
      * @param media Media to be modified
      */
     @FXML
-    private void modifyMediaInSeq(Media media) {
+    private void modifyMediaInSeq(MediaDeprecated media) {
         SequenceModificationListener listener1 = sequence -> {
             constructMediaInterstimList();
             this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
@@ -437,6 +437,6 @@ public class ModifySeqPopUp {
      * Event listener of a media modification
      */
     public interface MediaModificationListener extends EventListener {
-        void onModified(Media media);
+        void onModified(MediaDeprecated media);
     }
 }

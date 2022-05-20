@@ -1,6 +1,7 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.model.MediaDeprecated;
 import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Result;
 import javafx.animation.Animation;
@@ -325,7 +326,7 @@ public class PlayerMonitorController{
         this.backButton.setDisable(true);
     }
 
-    public void loadImage(fr.polytech.sircus.model.Media media) throws FileNotFoundException {
+    public void loadImage(MediaDeprecated media) throws FileNotFoundException {
         InputStream is = new FileInputStream("medias/" + media.getFilename());
         Image image = new Image(is);
 

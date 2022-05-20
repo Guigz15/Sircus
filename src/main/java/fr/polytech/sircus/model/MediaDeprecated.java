@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * This class represents a media (picture or video)
  */
-public class Media implements Serializable {
+public class MediaDeprecated implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class Media implements Serializable {
     private TypeMedia type;
 
     @Getter @Setter
-    private Media interStim;
+    private MediaDeprecated interStim;
 
     @Getter @Setter
     private Boolean isInterstim;
@@ -48,7 +48,7 @@ public class Media implements Serializable {
     /**
      * The default constructor
      */
-    public Media(){};
+    public MediaDeprecated(){};
 
     /**
      * The constructor
@@ -59,7 +59,7 @@ public class Media implements Serializable {
      * @param type Media's type
      * @param interStim Another media as interstim. Can be null
      */
-    public Media(String name, String filename, Duration duration, TypeMedia type, Media interStim) {
+    public MediaDeprecated(String name, String filename, Duration duration, TypeMedia type, MediaDeprecated interStim) {
         this.name = name;
         this.filename = filename;
         this.duration = duration;
@@ -76,7 +76,7 @@ public class Media implements Serializable {
      *
      * @param media Media to copy
      */
-    public Media(Media media) {
+    public MediaDeprecated(MediaDeprecated media) {
         this.name = media.getName();
         this.filename = media.getFilename();
         this.duration = media.getDuration();
@@ -96,8 +96,8 @@ public class Media implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Media)) return false;
-        Media media = (Media) o;
+        if (!(o instanceof MediaDeprecated)) return false;
+        MediaDeprecated media = (MediaDeprecated) o;
         return getName().equals(media.getName()) &&
                 getFilename().equals(media.getFilename()) &&
                 getDuration().equals(media.getDuration()) &&
@@ -144,7 +144,7 @@ public class Media implements Serializable {
         filename = ois.readUTF();
         duration = (Duration) ois.readObject();
         type = (TypeMedia) ois.readObject();
-        interStim = (Media) ois.readObject();
+        interStim = (MediaDeprecated) ois.readObject();
         isInterstim = ois.readBoolean();
         lock = ois.readBoolean();
         isResizable = ois.readBoolean();

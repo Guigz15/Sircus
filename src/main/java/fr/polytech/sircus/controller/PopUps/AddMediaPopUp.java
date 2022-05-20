@@ -1,7 +1,7 @@
 package fr.polytech.sircus.controller.PopUps;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.model.Media;
+import fr.polytech.sircus.model.MediaDeprecated;
 import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.model.TypeMedia;
 import fr.polytech.sircus.model.PathMedia;
@@ -113,12 +113,12 @@ public class AddMediaPopUp {
      * ComboBox containing all the existing medias.
      */
     @FXML
-    private ComboBox<Media> nameListMedias;
+    private ComboBox<MediaDeprecated> nameListMedias;
 
     /**
      * List of the medias of the mother sequence.
      */
-    private ObservableList<Media> listMedias = null;
+    private ObservableList<MediaDeprecated> listMedias = null;
 
     /**
      * Sequence in which the media will be added.
@@ -143,7 +143,7 @@ public class AddMediaPopUp {
      * @param sequence   the sequence in which the media will be added.
      * @param listener   vent listener checking for sequence's modification from the modifySeqPopUp controller.
      */
-    public AddMediaPopUp(Window owner, ObservableList<Media> listMedias, Sequence sequence,
+    public AddMediaPopUp(Window owner, ObservableList<MediaDeprecated> listMedias, Sequence sequence,
                          ModifySeqPopUp.SequenceModificationListener listener, FileChooser fileChooserMedia,
                          FileChooser fileChooserInterstim) {
 
@@ -384,7 +384,7 @@ public class AddMediaPopUp {
                         typeMedia = TypeMedia.PICTURE;
                     }
 
-                    Media newMedia = new Media(
+                    MediaDeprecated newMedia = new MediaDeprecated(
                             this.nameNewMedia.getText(),
                             this.nameNewMedia.getText(),
                             Duration.ofSeconds(Integer.parseInt(this.durationField.getText())),
@@ -393,7 +393,7 @@ public class AddMediaPopUp {
                     );
 
                     if (this.newFileInterstim != null) {
-                        Media newInterstim = new Media(
+                        MediaDeprecated newInterstim = new MediaDeprecated(
                                 this.nameNewInterstim.getText(),
                                 this.nameNewInterstim.getText(),
                                 Duration.ofSeconds(1),
@@ -408,9 +408,9 @@ public class AddMediaPopUp {
                     this.sequence.addMedia(newMedia);
                 }
             } else {
-                Media copiedMedia = new Media(this.nameListMedias.getSelectionModel().getSelectedItem());
+                MediaDeprecated copiedMedia = new MediaDeprecated(this.nameListMedias.getSelectionModel().getSelectedItem());
                 if (copiedMedia.getInterStim() != null) {
-                    copiedMedia.setInterStim(new Media(copiedMedia.getInterStim()));
+                    copiedMedia.setInterStim(new MediaDeprecated(copiedMedia.getInterStim()));
                 }
                 this.sequence.addMedia(copiedMedia);
             }
