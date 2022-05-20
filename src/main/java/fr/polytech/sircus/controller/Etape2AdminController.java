@@ -226,9 +226,11 @@ public class Etape2AdminController implements Initializable {
     private void exportSeq(){
         // export is only available for admin
         if(SircusApplication.adminConnected){
+            // get selected sequence
             Sequence seq = seqListView.getSelectionModel().getSelectedItem();
             File file = new File(SircusApplication.dataSircus.getPath().getSeqPath() + seq.getName() + ".xml");
             try {
+                // the sequence is transform to xml in the class by toXML()
                 PrintWriter writer = new PrintWriter(file);
                 writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + seq.toXML());
                 writer.close();
@@ -245,10 +247,12 @@ public class Etape2AdminController implements Initializable {
     private void exportMeta(){
         // export is only available for admin
         if(SircusApplication.adminConnected){
+            // get selected metaSequence
             int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
             MetaSequence meta = listMetaSequence.get(index_Selected_MetaSequence);
             File file = new File(SircusApplication.dataSircus.getPath().getMetaPath() + meta.getName() + ".xml");
             try {
+                // the metaSequence is transform to xml in the class by toXML()
                 PrintWriter writer = new PrintWriter(file);
                 writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + meta.toXML());
                 writer.close();
@@ -271,10 +275,11 @@ public class Etape2AdminController implements Initializable {
         if (file != null) {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             try {
-                // import and parse the file
+                // the custom parse is handled by ImportSeqXML class
                 SAXParser saxParser = factory.newSAXParser();
                 ImportSeqXML handler = new ImportSeqXML();
                 saxParser.parse(file, handler);
+                // add the new sequence in the list
                 int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
                 listMetaSequence.get(index_Selected_MetaSequence).addSequence(handler.getSeq());
 
@@ -309,10 +314,11 @@ public class Etape2AdminController implements Initializable {
         if (file != null) {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             try {
-                // import and parse the file
+                // the custom parse is handled by ImportMetaSeqXML class
                 SAXParser saxParser = factory.newSAXParser();
                 ImportMetaSeqXML handler = new ImportMetaSeqXML();
                 saxParser.parse(file, handler);
+                // add the new metaSequence in the list
                 SircusApplication.dataSircus.getMetaSequencesList().add(handler.getMeta());
 
                 // refresh list of metaSequence

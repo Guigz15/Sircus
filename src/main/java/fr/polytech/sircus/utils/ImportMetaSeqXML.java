@@ -17,7 +17,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 
 public class ImportMetaSeqXML extends DefaultHandler {
-    @Getter @Setter
+    @Getter
+    @Setter
     private MetaSequence meta;
     private final StringBuilder currentValue = new StringBuilder();
 
@@ -30,51 +31,61 @@ public class ImportMetaSeqXML extends DefaultHandler {
         super();
     }
 
+    /**
+     * Read the name in the tags of xml and the potential attributes in them
+     */
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         // reset the tag value
         currentValue.setLength(0);
 
+        // read the name in the tag, one at the time
         if (qName.equalsIgnoreCase("metaSequence")) {
             meta = new MetaSequence();
-        }
-        else if(qName.equalsIgnoreCase("name")){
+        } else if (qName.equalsIgnoreCase("name")) {
             name = true;
-        }
-        else if(qName.equalsIgnoreCase("duration")){
+        } else if (qName.equalsIgnoreCase("duration")) {
             duration = true;
-        }
-        else if(qName.equalsIgnoreCase("listSequence")){
+        } else if (qName.equalsIgnoreCase("listSequence")) {
             meta.setSequencesList(new ArrayList<>());
-        }
-        else if (qName.equalsIgnoreCase("sequence")) {
+        } else if (qName.equalsIgnoreCase("sequence")) {
             sequence = true;
         }
     }
 
+    /**
+     * Read the element in between the tags of xml
+     */
     @Override
     public void endElement(String uri, String localName, String qName) {
+        // name is true if we determine in startElement that name was read
         if (name) {
             meta.setName(currentValue.toString().replace("%20", " "));
             name = false;
-        } else if(duration) {
+        } else if (duration) {
             meta.setDuration(Duration.parse(currentValue.toString()));
             duration = false;
-        } else if(sequence) {
+        } else if (sequence) {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             try {
+                // read and parse the xml file of the sequence reference
                 SAXParser saxParser = factory.newSAXParser();
                 ImportSeqXML handler = new ImportSeqXML();
                 File file = new File(SircusApplication.dataSircus.getPath().getSeqPath() + currentValue.toString().replace("%20", " "));
                 saxParser.parse(file, handler);
+                // add the new sequence in the metaSequence
                 meta.getSequencesList().add(handler.getSeq());
             } catch (ParserConfigurationException | SAXException | IOException e) {
                 e.printStackTrace();
             }
             sequence = false;
+            // TODO: if the sequence file doesn't exist (see specif)
         }
     }
 
+    /**
+     * Is needed for the parsing of the file
+     */
     @Override
     public void characters(char ch[], int start, int length) {
         currentValue.append(ch, start, length);
