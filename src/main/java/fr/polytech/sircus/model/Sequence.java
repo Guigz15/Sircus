@@ -22,6 +22,7 @@ public class Sequence implements Serializable {
     private Duration duration;
 
     @Getter @Setter
+    // TODO: replace this with the new medias
     private List<MediaDeprecated> listMedias;
 
     @Getter @Setter

@@ -29,6 +29,12 @@ public abstract class AbstractMedia implements Serializable {
     protected Duration duration;
 
     /**
+     * The type of the media (picture or video).
+     */
+    @Getter @Setter
+    protected TypeMedia typeMedia;
+
+    /**
      * If isLocked == true, then it will stay in place in the sequence it belongs to.
      * If isLocked == false, then it's position will be randomized in the sequence with other unlocked medias.
      */
@@ -54,6 +60,7 @@ public abstract class AbstractMedia implements Serializable {
         AbstractMedia media = (AbstractMedia) o;
         return getFilename().equals(media.getFilename()) &&
                 getDuration().equals(media.getDuration()) &&
+                getTypeMedia().equals(media.getTypeMedia()) &&
                 Objects.equals(isLocked(), media.isLocked()) &&
                 isResizable() == media.isResizable() &&
                 getBackgroundColor() == media.getBackgroundColor();
@@ -69,6 +76,7 @@ public abstract class AbstractMedia implements Serializable {
     protected void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeUTF(filename);
         oos.writeObject(duration);
+        oos.writeObject(typeMedia);
         oos.writeBoolean(isLocked);
         oos.writeBoolean(isResizable);
 
@@ -84,6 +92,7 @@ public abstract class AbstractMedia implements Serializable {
     protected void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
         filename = ois.readUTF();
         duration = (Duration) ois.readObject();
+        typeMedia = (TypeMedia) ois.readObject();
         isLocked = ois.readBoolean();
         isResizable = ois.readBoolean();
         backgroundColor = new Color(ois.readDouble(), ois.readDouble(), ois.readDouble(), ois.readDouble());

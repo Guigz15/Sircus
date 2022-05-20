@@ -23,13 +23,14 @@ public class Interstim extends AbstractMedia implements Serializable {
     @Getter @Setter
     private Media media;
 
-    public Interstim(String filename, Duration duration, Media media) {
-        this(filename, duration, false, Color.WHITE, media);
+    public Interstim(String filename, Duration duration, TypeMedia typeMedia, Media media) {
+        this(filename, duration, typeMedia, false, Color.WHITE, media);
     }
 
-    public Interstim(String filename, Duration duration, boolean isResizable, Color backgroundColor, Media media) {
+    public Interstim(String filename, Duration duration, TypeMedia typeMedia, boolean isResizable, Color backgroundColor, Media media) {
         this.filename = filename;
         this.duration = duration;
+        this.typeMedia = typeMedia;
         this.isLocked = true;
         this.isResizable = isResizable;
         this.backgroundColor = backgroundColor;

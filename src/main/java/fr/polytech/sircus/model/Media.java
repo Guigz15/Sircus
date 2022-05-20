@@ -22,13 +22,14 @@ public class Media extends AbstractMedia implements Serializable {
     @Getter @Setter
     private Interstim interstim;
 
-    public Media(String filename, Duration duration) {
-        this(filename, duration, true, false, Color.WHITE, null);
+    public Media(String filename, Duration duration, TypeMedia typeMedia) {
+        this(filename, duration, typeMedia, true, false, Color.WHITE, null);
     }
 
-    public Media(String filename, Duration duration, boolean isLocked, boolean isResizable, Color backgroundColor, Interstim interstim) {
+    public Media(String filename, Duration duration, TypeMedia typeMedia, boolean isLocked, boolean isResizable, Color backgroundColor, Interstim interstim) {
         this.filename = filename;
         this.duration = duration;
+        this.typeMedia = typeMedia;
         this.isLocked = isLocked;
         this.isResizable = isResizable;
         this.backgroundColor = backgroundColor;
