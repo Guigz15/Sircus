@@ -112,7 +112,7 @@ public class ViewerController {
         metaSequenceStarted = false;
         this.playerMonitorController = playerMonitorController;
         sequencesStartTime = new ArrayList<>();
-        viewerStage.setOnCloseRequest(event -> quitViewer());
+        viewerStage.setOnCloseRequest(event -> closeViewer());
     }
 
 
@@ -290,7 +290,7 @@ public class ViewerController {
                 event -> {
                     removeVideo();
                     removeImage();
-                    quitViewer();
+                    closeViewer();
                 }));
         // The end of the playback is added to the listBeginningTimeMedia
         // This allows the button passing a media to trigger the end of the playback of the meta-sequence
@@ -365,7 +365,7 @@ public class ViewerController {
      * Quit the viewer
      */
     @FXML
-    private void quitViewer() {
+    public void closeViewer() {
         playerMonitorController.clearImage();
         playerMonitorController.closeViewer();
         timeline.stop();
