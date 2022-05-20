@@ -203,12 +203,15 @@ public class Etape2AdminController implements Initializable {
                     FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_seq_popup.fxml"));
                     DialogPane dialogPane = fxmlLoader.load();
                     ModifySeqPopUp controller = fxmlLoader.getController();
+                    controller.setSequence(seqListView.getSelectionModel().getSelectedItem());
+                    controller.init();
 
                     Dialog<ButtonType> dialog = new Dialog<>();
                     dialog.setDialogPane(dialogPane);
                     dialog.setTitle("Modification de séquence");
                     dialog.initModality(Modality.WINDOW_MODAL);
                     dialog.initOwner(modifySeqButton.getScene().getWindow());
+
 
                     Optional<ButtonType> clickedButton = dialog.showAndWait();
                     if (clickedButton.get() == ButtonType.FINISH) {

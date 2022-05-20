@@ -6,13 +6,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<DialogPane maxHeight="600.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<DialogPane maxHeight="600.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PopUps.ModifySeqPopUp">
    <content>
       <BorderPane minHeight="552.0" minWidth="1000.0" prefHeight="552.0" prefWidth="1000.0">
          <top>
             <BorderPane minHeight="50.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
                <left>
-                  <TextField promptText="Séquence" BorderPane.alignment="CENTER">
+                  <TextField fx:id="sequenceName" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
                         <Insets left="40.0" />
                      </BorderPane.margin>
@@ -38,12 +38,12 @@
          </top>
          <center>
             <VBox alignment="TOP_CENTER" prefWidth="979.0" BorderPane.alignment="CENTER">
-               <TableView maxHeight="350.0" maxWidth="900.0" prefWidth="900.0">
+               <TableView fx:id="mediaTable" maxHeight="350.0" maxWidth="900.0" prefWidth="900.0">
                   <columns>
-                     <TableColumn minWidth="200.0" prefWidth="200.0" resizable="false" text="Positionnement fixe" />
-                     <TableColumn minWidth="250.0" prefWidth="250.0" resizable="false" text="Nom" />
-                     <TableColumn minWidth="200.0" prefWidth="200.0" resizable="false" text="Durée" />
-                     <TableColumn minWidth="250.0" prefWidth="250.0" resizable="false" text="Options" />
+                     <TableColumn fx:id="mediaTableColumnLock" minWidth="200.0" prefWidth="200.0" resizable="false" text="Positionnement fixe" />
+                     <TableColumn fx:id="mediaTableColumnName" minWidth="250.0" prefWidth="250.0" resizable="false" text="Nom" />
+                     <TableColumn fx:id="mediaTableColumnDuration" minWidth="200.0" prefWidth="200.0" resizable="false" text="Durée" />
+                     <TableColumn fx:id="mediaTableColumnOptions" minWidth="250.0" prefWidth="250.0" resizable="false" text="Options" />
                   </columns>
                   <VBox.margin>
                      <Insets bottom="15.0" />
