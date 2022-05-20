@@ -1,9 +1,7 @@
 package fr.polytech.sircus.controller;
 
-import fr.polytech.sircus.model.Media;
+import fr.polytech.sircus.model.MediaDeprecated;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -12,12 +10,9 @@ import javafx.scene.text.Text;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.net.URL;
 import java.time.Duration;
-import java.util.ResourceBundle;
 
 /**
  * Sample Skeleton for 'previsualisation.fxml' Controller Class
@@ -75,7 +70,7 @@ public class PreviewTimelineItemController {
     }
 
     @FXML
-    public void setFromMedia(Media media){
+    public void setFromMedia(MediaDeprecated media){
         String file = media.getFilename();
         setImage(MEDIAS_PATH+file);
         filename.setText(file);

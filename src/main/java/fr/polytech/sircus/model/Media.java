@@ -3,114 +3,62 @@ package fr.polytech.sircus.model;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.Objects;
 
 /**
- * This class represents a media (picture or video)
+ * This class represents a media (picture or video).
  */
-public class Media implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @Getter @Setter
-    private String name;
-
-    @Getter @Setter
-    private String filename;
-
-    @Getter @Setter
-    private Duration duration;
-
-    @Getter @Setter
-    private TypeMedia type;
-
-    @Getter @Setter
-    private Media interStim;
-
-    @Getter @Setter
-    private Boolean isInterstim;
-
-    @Getter @Setter
-    private Boolean lock;
-
-    @Getter @Setter
-    private boolean isResizable;
-
-    @Getter @Setter
-    private Color backgroundColor;
-
+public class Media extends AbstractMedia implements Serializable {
 
     /**
-     * The default constructor
+     * The interstim to be displayed before the media.
      */
-    public Media(){}
+    @Getter @Setter
+    private Interstim interstim;
 
-    /**
-     * The constructor
-     *
-     * @param name Media's name
-     * @param filename File's name
-     * @param duration Media's duration
-     * @param type Media's type
-     */
-    public Media(String name, String filename, Duration duration, TypeMedia type, Media interStim) {
-        this.name = name;
+    public Media(String filename, Duration duration, TypeMedia typeMedia) {
+        this(filename, duration, typeMedia, true, false, Color.WHITE, null);
+    }
+
+    public Media(String filename, Duration duration, TypeMedia typeMedia, boolean isLocked, boolean isResizable, Color backgroundColor, Interstim interstim) {
         this.filename = filename;
         this.duration = duration;
-        this.type = type;
-        this.interStim = interStim;
-        this.isInterstim = false;
-        this.lock = true;
-        this.isResizable = false;
-        this.backgroundColor = Color.WHITE;
+        this.typeMedia = typeMedia;
+        this.isLocked = isLocked;
+        this.isResizable = isResizable;
+        this.backgroundColor = backgroundColor;
+        this.interstim = interstim;
     }
 
-    /**
-     * The copy constructor
-     *
-     * @param media Media to copy
-     */
-    public Media(Media media) {
-        this.name = media.getName();
-        this.filename = media.getFilename();
-        this.duration = media.getDuration();
-        this.type = media.getType();
-        this.interStim = media.getInterStim();
-        this.lock = media.getLock();
-        this.isResizable = media.isResizable();
-        this.backgroundColor = media.getBackgroundColor();
-    }
-
-    /**
-     * Equals method that compare two media objet.
-     *
-     * @param o the media objet to compare.
-     * @return boolean if the current media is equal to o.
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Media)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Media media = (Media) o;
-        return getName().equals(media.getName()) &&
-                getFilename().equals(media.getFilename()) &&
-                getDuration().equals(media.getDuration()) &&
-                getType() == media.getType() &&
-                getInterStim().equals(media.getInterStim()) &&
-                Objects.equals(getLock(), media.getLock()) &&
-                isResizable() == media.isResizable() &&
-                getBackgroundColor() == media.getBackgroundColor();
+        return Objects.equals(interstim, media.interstim);
     }
 
     /**
-     * Override the method toString to display only the name
-     *
-     * @return Media's name
+     * Override of the writeObject method to handle the background color attribute which is not serializable.
      */
-    public String toString() {
-        return name;
+    protected void writeObject(ObjectOutputStream oos) throws IOException {
+        super.writeObject(oos);
+        oos.writeObject(interstim);
+    }
+
+    /**
+     * Override of the readObject method to handle the background color attribute which is not serializable.
+     */
+    protected void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        super.readObject(ois);
+        interstim = (Interstim) ois.readObject();
     }
 
     /**

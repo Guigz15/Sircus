@@ -1,7 +1,7 @@
 package fr.polytech.sircus.controller.PopUps;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.model.Media;
+import fr.polytech.sircus.model.MediaDeprecated;
 import fr.polytech.sircus.model.Sequence;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -61,7 +61,7 @@ public class ModifyMediaPopUp {
     /**
      *  Media that is to be modified
      */
-    private Media media = null;
+    private MediaDeprecated media = null;
 
     /**
      *  Modification pop-up
@@ -84,7 +84,7 @@ public class ModifyMediaPopUp {
      * @param listener1 event listener that comes from the controller modifySeqPopUp
      * @param listener2 event listener that comes from the controller modifySeqPopUp
      */
-    public ModifyMediaPopUp(Window owner, Sequence sequence, Media media,
+    public ModifyMediaPopUp(Window owner, Sequence sequence, MediaDeprecated media,
                             ModifySeqPopUp.SequenceModificationListener listener1,
                             ModifySeqPopUp.MediaModificationListener listener2) {
 

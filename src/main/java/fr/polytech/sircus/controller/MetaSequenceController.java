@@ -5,9 +5,8 @@ import fr.polytech.sircus.controller.PopUps.AddSeqPopUp;
 import fr.polytech.sircus.controller.PopUps.ModifyMetaSeqPopUp;
 import fr.polytech.sircus.controller.PopUps.ModifySeqPopUp;
 import fr.polytech.sircus.model.Internals.ObservableMetaSequenceSet;
-import fr.polytech.sircus.model.Media;
+import fr.polytech.sircus.model.MediaDeprecated;
 import fr.polytech.sircus.model.MetaSequence;
-import fr.polytech.sircus.model.Result;
 import fr.polytech.sircus.model.Sequence;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -326,7 +325,7 @@ public class MetaSequenceController {
      * @return a randomized list of Media
      */
     @FXML
-    private ArrayList<Media> randomiseMetaSequence(String metaSeqName) {
+    private ArrayList<MediaDeprecated> randomiseMetaSequence(String metaSeqName) {
         MetaSequence Sequence = metaSequences.get(0);
         for (MetaSequence metaSequence : metaSequences) {
             if (metaSequence.getName().equals(metaSeqName)) {
@@ -334,7 +333,7 @@ public class MetaSequenceController {
             }
         }
 
-        ArrayList<Media> randomizedMediaList = new ArrayList<>();
+        ArrayList<MediaDeprecated> randomizedMediaList = new ArrayList<>();
         ArrayList<fr.polytech.sircus.model.Sequence> seqList = new ArrayList<>(Sequence.getSequencesList());
         int randInt;
 
@@ -355,7 +354,7 @@ public class MetaSequenceController {
         }
 
         for (fr.polytech.sircus.model.Sequence sequence : seqList) {
-            ArrayList<Media> cloneList = new ArrayList<>(sequence.getListMedias());
+            ArrayList<MediaDeprecated> cloneList = new ArrayList<>(sequence.getListMedias());
 
             for (int i = 0; i < cloneList.size(); i += 1) {
                 if (!sequence.getListMedias().get(i).getLock()) {
@@ -482,7 +481,7 @@ public class MetaSequenceController {
         MetaSequence metaSequence = this.metaSeqComboBox.getValue();
 
         for (Sequence sequence : metaSequence.getSequencesList()) {
-            for (Media media : sequence.getListMedias()) {
+            for (MediaDeprecated media : sequence.getListMedias()) {
                 totalTime += media.getDuration().getSeconds();
             }
         }

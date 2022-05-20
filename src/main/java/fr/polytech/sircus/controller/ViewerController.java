@@ -1,6 +1,7 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.model.MediaDeprecated;
 import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.model.TypeMedia;
@@ -13,7 +14,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -22,6 +23,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
+import lombok.Getter;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -38,6 +41,7 @@ public class ViewerController {
     private final PlayerMonitorController playerMonitorController;
 
     // The MetaSequence that id passed to the viewer
+    @Getter
     private final MetaSequence playingMetaSequence;
 
     @FXML
@@ -47,7 +51,7 @@ public class ViewerController {
     private ImageView imageView;
 
     @FXML
-    private AnchorPane anchorPane;
+    private StackPane stackPane;
 
     // This allows the playing of media
     private MediaPlayer mediaPlayer;
@@ -64,6 +68,8 @@ public class ViewerController {
     // Stores the start time of each sequence to be able to move between sequences.
     private final ArrayList<Integer> sequencesStartTime;
 
+    // Index of the current sequence index in the meta-sequence
+    @Getter
     private int currentSequenceIndex;
 
     private final int numberOfSequences;
@@ -107,7 +113,7 @@ public class ViewerController {
         metaSequenceStarted = false;
         this.playerMonitorController = playerMonitorController;
         sequencesStartTime = new ArrayList<>();
-        closingManager();
+        viewerStage.setOnCloseRequest(event -> closeViewer());
     }
 
 
@@ -127,8 +133,8 @@ public class ViewerController {
      * @param video the media containing the video that we want to display.
      */
     @FXML
-    private void showVideo(fr.polytech.sircus.model.Media video) {
-        File mediaFile = new File("medias/" + video.getName());
+    private void showVideo(MediaDeprecated video) {
+        File mediaFile = new File("medias/" + video.getFilename());
         try {
             Media media = new Media(mediaFile.toURI().toURL().toString());
             mediaPlayer = new MediaPlayer(media);
@@ -158,7 +164,7 @@ public class ViewerController {
      * @param media the media containing the image that we want to display.
      */
     @FXML
-    private void showImage(fr.polytech.sircus.model.Media media) {
+    private void showImage(MediaDeprecated media) {
         // Try to create an InputStream with the path of the image.
         try {
             InputStream is = new FileInputStream("medias/" + media.getFilename());
@@ -171,9 +177,7 @@ public class ViewerController {
             imageView.setCache(true);
 
             if (media.isResizable()) {
-                centerImageAndResize();
-            } else {
-                centerImage();
+                resizeImage();
             }
 
             Color color = media.getBackgroundColor();
@@ -182,7 +186,9 @@ public class ViewerController {
                     (int)( color.getGreen() * 255 ),
                     (int)( color.getBlue() * 255 ) );
 
-            anchorPane.setStyle(hexColor);
+            stackPane.setStyle(hexColor);
+
+            playerMonitorController.loadImage(media);
         }
         // If the path is not found we display a message.
         catch (FileNotFoundException error) {
@@ -219,7 +225,7 @@ public class ViewerController {
             boolean addSequenceIndex = true;
 
             // For each Media in the sequence.
-            for (fr.polytech.sircus.model.Media media : sequence.getListMedias()) {
+            for (MediaDeprecated media : sequence.getListMedias()) {
                 // If the media is an image.
                 if (media.getType() == TypeMedia.PICTURE) {
                     if (addSequenceIndex) {
@@ -280,13 +286,12 @@ public class ViewerController {
             }
         }
 
-
         // We add an event that removes the image or video at the end of the playback.
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
                 event -> {
                     removeVideo();
                     removeImage();
-                    quitViewer();
+                    closeViewer();
                 }));
         // The end of the playback is added to the listBeginningTimeMedia
         // This allows the button passing a media to trigger the end of the playback of the meta-sequence
@@ -331,8 +336,8 @@ public class ViewerController {
      */
     public void nextSequence() {
         if (currentSequenceIndex < numberOfSequences - 1) {
-            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex + 1) * 1000));
             currentSequenceIndex++;
+            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex) * 1000));
         } else {
             timeline.jumpTo(new Duration(sequencesStartTime.get(sequencesStartTime.size() - 1) * 1000));
         }
@@ -343,8 +348,8 @@ public class ViewerController {
      */
     public void previousSequence() {
         if (currentSequenceIndex > 0) {
-            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex - 1) * 1000));
             currentSequenceIndex--;
+            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex) * 1000));
         } else {
             timeline.jumpTo(new Duration(0));
         }
@@ -361,46 +366,22 @@ public class ViewerController {
      * Quit the viewer
      */
     @FXML
-    private void quitViewer() {
+    public void closeViewer() {
+        playerMonitorController.clearImage();
         playerMonitorController.closeViewer();
+        timeline.stop();
         viewerStage.close();
     }
 
     /**
-     * The handle of this method is called when the user closes the viewer window.
-     * It calls the appropriate method of the MetaSequence controller in order to
-     * reset some attributes to default attributes and restart the viewer correctly.
+     * Method to resize the imageview in order to maximize width and/or height.
      */
-    private void closingManager() {
-        viewerStage.setOnCloseRequest(event -> playerMonitorController.closeViewer());
-    }
-
-    /**
-     * Method to center the imageview in the viewer.
-     */
-    private void centerImage() {
-        double w = (viewerStage.getWidth() - imageView.getFitWidth()) / 2;
-        double h = (viewerStage.getHeight() - imageView.getFitHeight()) / 2;
-
-        imageView.setTranslateX(w);
-        imageView.setTranslateY(h);
-    }
-
-    /**
-     * Method to center the imageview in the viewer and resize it to maximize width and/or height.
-     */
-    private void centerImageAndResize() {
+    private void resizeImage() {
         if (imageView.getImage() != null) {
             double ratio = Math.min(viewerStage.getWidth() / imageView.getFitWidth(), viewerStage.getHeight() / imageView.getFitHeight());
 
             imageView.setFitWidth(imageView.getFitWidth() * ratio);
             imageView.setFitHeight(imageView.getFitHeight() * ratio);
-
-            double w = (viewerStage.getWidth() - imageView.getFitWidth()) / 2;
-            double h = (viewerStage.getHeight() - imageView.getFitHeight()) / 2;
-
-            imageView.setTranslateX(w);
-            imageView.setTranslateY(h);
         }
     }
 }
