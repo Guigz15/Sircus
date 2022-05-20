@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metaSequence>
+<name>Meta%20sequence%201</name>
+<duration>PT15S</duration>
+<listSequence>
+<sequence>Sequence%201.xml</sequence>
+</listSequence>
+</metaSequence>
+
