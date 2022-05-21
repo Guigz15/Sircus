@@ -112,4 +112,6 @@ public class Sequence implements Serializable {
         Sequence sequence = (Sequence) o;
         return Objects.equals(getName(), sequence.getName()) && Objects.equals(getDuration(), sequence.getDuration()) && Objects.equals(getListMedias(), sequence.getListMedias());
     }
+
+
 }
