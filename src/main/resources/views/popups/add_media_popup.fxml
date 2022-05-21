@@ -1,67 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="237.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/14.0.2.1">
-    <GridPane layoutX="217.0" layoutY="69.0" prefHeight="237.0" prefWidth="283.0" AnchorPane.bottomAnchor="0.0"
-              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="243.0" minWidth="160.0" prefWidth="195.0"/>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="357.0" minWidth="100.0" prefWidth="285.0"/>
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints maxHeight="188.0" minHeight="30.0" prefHeight="47.39999771118165" vgrow="SOMETIMES"/>
-            <RowConstraints maxHeight="195.0" minHeight="30.0" prefHeight="39.200006103515626" vgrow="SOMETIMES"/>
-            <RowConstraints maxHeight="205.0" minHeight="30.0" prefHeight="39.19998779296875" vgrow="SOMETIMES"/>
-            <RowConstraints maxHeight="205.0" minHeight="30.0" prefHeight="39.200012207031264" vgrow="SOMETIMES"/>
-            <RowConstraints maxHeight="205.0" minHeight="30.0" prefHeight="39.200012207031264" vgrow="SOMETIMES"/>
-        </rowConstraints>
-        <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-        </padding>
-        <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="2"
-              GridPane.rowIndex="4">
-            <Button fx:id="addMediaCancel" alignment="CENTER" minHeight="27.0" minWidth="58.0" mnemonicParsing="false"
-                    style="-fx-background-color: rgb(255,89,89);" text="Annuler" textFill="WHITE"/>
-            <Button fx:id="addMediaSave" alignment="CENTER" minHeight="27.0" minWidth="58.0" mnemonicParsing="false"
-                    style="-fx-background-color: #006380;" text="Ajouter" textFill="WHITE"/>
-        </HBox>
-        <RadioButton fx:id="addNewMedia" mnemonicParsing="false" text="Nouveau média" GridPane.rowIndex="1"/>
-        <RadioButton fx:id="addCopyMedia" mnemonicParsing="false" prefHeight="17.0" prefWidth="196.0"
-                     text="Copier un média existant"/>
-        <ComboBox fx:id="nameListMedias" prefHeight="25.0" prefWidth="385.0" GridPane.columnIndex="1"/>
-        <Label alignment="CENTER" ellipsisString="" prefHeight="25.0" prefWidth="119.0" text="Durée du média :"
-               GridPane.rowIndex="2"/>
-        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <children>
-                <Button fx:id="addMediaFile" minHeight="26.0" minWidth="64.0" mnemonicParsing="false" text="Parcourir"/>
-                <Label fx:id="nameNewMedia" prefHeight="18.0" prefWidth="221.0">
-                    <HBox.margin>
-                        <Insets left="10.0"/>
-                    </HBox.margin>
-                </Label>
-            </children>
-        </HBox>
-        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-            <children>
-                <TextField fx:id="durationField" prefHeight="26.0" prefWidth="340.0"/>
-            </children>
-        </HBox>
-        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="83.0" text="Interstim :"
-               GridPane.rowIndex="3"/>
-        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1"
-              GridPane.rowIndex="3">
-            <children>
-                <Button fx:id="addInterstimFile" minHeight="26.0" minWidth="64.0" mnemonicParsing="false"
-                        prefHeight="26.0" prefWidth="65.0" text="Parcourir"/>
-                <Label fx:id="nameNewInterstim" prefHeight="18.0" prefWidth="216.0">
-                    <HBox.margin>
-                        <Insets left="10.0"/>
-                    </HBox.margin>
-                </Label>
-            </children>
-        </HBox>
-    </GridPane>
-</AnchorPane>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<DialogPane xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PopUps.AddMediaPopUp">
+   <content>
+      <VBox prefWidth="480.0">
+         <HBox alignment="CENTER_LEFT">
+            <VBox.margin>
+               <Insets bottom="20.0"/>
+            </VBox.margin>
+            <RadioButton mnemonicParsing="false" text="Copie d'un média existant">
+               <padding>
+                  <Insets right="20.0"/>
+               </padding>
+            </RadioButton>
+            <ComboBox prefHeight="26.0" prefWidth="174.0" promptText="Sélectionner un média"/>
+         </HBox>
+         <VBox>
+            <RadioButton mnemonicParsing="false" text="Nouveau média">
+               <VBox.margin>
+                  <Insets bottom="10.0"/>
+               </VBox.margin>
+            </RadioButton>
+            <HBox prefHeight="100.0">
+               <VBox alignment="TOP_CENTER" prefHeight="200.0">
+                  <HBox.margin>
+                     <Insets/>
+                  </HBox.margin>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Interstim">
+                     <font>
+                        <Font name="System Bold" size="16.0"/>
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0"/>
+                     </VBox.margin>
+                  </Text>
+                  <HBox alignment="CENTER">
+                     <VBox.margin>
+                        <Insets bottom="10.0"/>
+                     </VBox.margin>
+                     <Button mnemonicParsing="false" text="Parcourir">
+                        <HBox.margin>
+                           <Insets/>
+                        </HBox.margin>
+                     </Button>
+                     <TextField prefHeight="26.0" prefWidth="130.0">
+                        <HBox.margin>
+                           <Insets left="10.0"/>
+                        </HBox.margin>
+                     </TextField>
+                  </HBox>
+                  <HBox alignment="CENTER">
+                     <VBox.margin>
+                        <Insets bottom="10.0"/>
+                     </VBox.margin>
+                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Durée :">
+                        <HBox.margin>
+                           <Insets/>
+                        </HBox.margin>
+                     </Text>
+                     <TextField prefHeight="26.0" prefWidth="80.0">
+                        <HBox.margin>
+                           <Insets left="10.0"/>
+                        </HBox.margin>
+                     </TextField>
+                  </HBox>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+               </VBox>
+               <Separator orientation="VERTICAL">
+                  <HBox.margin>
+                     <Insets left="20.0" right="20.0"/>
+                  </HBox.margin>
+               </Separator>
+               <VBox alignment="TOP_CENTER" prefHeight="200.0">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Média">
+                     <font>
+                        <Font size="16.0"/>
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0"/>
+                     </VBox.margin>
+                  </Text>
+                  <HBox alignment="CENTER">
+                     <VBox.margin>
+                        <Insets bottom="10.0"/>
+                     </VBox.margin>
+                     <Button mnemonicParsing="false" text="Parcourir"/>
+                     <TextField prefHeight="26.0" prefWidth="130.0">
+                        <HBox.margin>
+                           <Insets left="10.0"/>
+                        </HBox.margin>
+                     </TextField>
+                  </HBox>
+                  <HBox alignment="CENTER">
+                     <VBox.margin>
+                        <Insets bottom="10.0"/>
+                     </VBox.margin>
+                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Durée :"/>
+                     <TextField prefHeight="26.0" prefWidth="80.0">
+                        <HBox.margin>
+                           <Insets left="10.0"/>
+                        </HBox.margin>
+                     </TextField>
+                  </HBox>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+               </VBox>
+            </HBox>
+         </VBox>
+      </VBox>
+   </content>
+   <ButtonType fx:constant="FINISH"/>
+   <ButtonType fx:constant="CANCEL"/>
+</DialogPane>

@@ -22,7 +22,7 @@
                   </TextField>
                </left>
                <right>
-                  <Button mnemonicParsing="false" text="Ajouter média" BorderPane.alignment="CENTER">
+                  <Button fx:id="addMediaToSeq" mnemonicParsing="false" text="Ajouter média" onAction="#addMedia" BorderPane.alignment="CENTER">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -42,7 +42,7 @@
                   <columns>
                      <TableColumn fx:id="mediaTableColumnLock" minWidth="200.0" prefWidth="200.0" resizable="false" text="Positionnement fixe" />
                      <TableColumn fx:id="mediaTableColumnName" minWidth="250.0" prefWidth="250.0" resizable="false" text="Nom" />
-                     <TableColumn fx:id="mediaTableColumnDuration" minWidth="200.0" prefWidth="200.0" resizable="false" text="Durée" />
+                     <TableColumn fx:id="mediaTableColumnDuration" minWidth="200.0" prefWidth="200.0" resizable="false" text="Durée (s)" />
                      <TableColumn fx:id="mediaTableColumnOptions" minWidth="250.0" prefWidth="250.0" resizable="false" text="Options" />
                   </columns>
                   <VBox.margin>

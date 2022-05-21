@@ -1,45 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="142.0" prefWidth="501.0"
-            xmlns="http://javafx.com/javafx/14.0.2.1">
-    <GridPane layoutX="191.0" prefHeight="142.0" prefWidth="501.0" AnchorPane.bottomAnchor="0.0"
-              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <columnConstraints>
-            <ColumnConstraints maxWidth="117.60004119873045" minWidth="110.0" prefWidth="117.60004119873045"/>
-            <ColumnConstraints maxWidth="378.399951171875" minWidth="100.0" prefWidth="362.3999588012695"/>
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints minHeight="30.0" prefHeight="43.0"/>
-            <RowConstraints minHeight="30.0" prefHeight="43.0"/>
-            <RowConstraints maxHeight="195.0" minHeight="0.0" prefHeight="8.0"/>
-            <RowConstraints minHeight="30.0" prefHeight="31.0"/>
-        </rowConstraints>
-        <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-        </padding>
-        <Label text="Changer de nom :"/>
-        <TextField fx:id="newMediaNameField" prefHeight="26.0" prefWidth="366.0" GridPane.columnIndex="1"/>
-        <Label text="Changer la durée :" GridPane.rowIndex="1"/>
-        <TextField fx:id="newMediaDurationField" prefHeight="25.0" prefWidth="137.0" GridPane.columnIndex="1"
-                   GridPane.rowIndex="1"/>
-        <Separator prefHeight="16.0" prefWidth="480.0" GridPane.columnSpan="2" GridPane.rowIndex="2"/>
-        <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="481.0" spacing="20.0" GridPane.columnSpan="2"
-              GridPane.rowIndex="3">
-            <Button fx:id="modifyMediaDelete" alignment="CENTER" minHeight="27.0" minWidth="120.0"
-                    mnemonicParsing="false" prefHeight="25.0" prefWidth="174.0" style="-fx-background-color: red;"
-                    text="Supprimer le média" textFill="WHITE">
-                <HBox.margin>
-                    <Insets/>
-                </HBox.margin>
-            </Button>
-            <Button fx:id="modifyMediaCancel" alignment="CENTER" minHeight="27.0" minWidth="58.0"
-                    mnemonicParsing="false" style="-fx-background-color: rgb(255,89,89);" text="Annuler"
-                    textFill="WHITE"/>
-            <Button fx:id="modifyMediaSave" alignment="CENTER" minHeight="27.0" minWidth="75.0" mnemonicParsing="false"
-                    style="-fx-background-color: blue;" text="Enregistrer" textFill="WHITE"/>
-        </HBox>
-    </GridPane>
-</AnchorPane>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+
+<DialogPane xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="fr.polytech.sircus.controller.PopUps.ModifyMediaPopup">
+   <content>
+      <VBox>
+         <CheckBox mnemonicParsing="false" text="Image ajustée à la taille de l'écran">
+            <VBox.margin>
+               <Insets bottom="10.0"/>
+            </VBox.margin>
+         </CheckBox>
+         <VBox>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Couleur de l'arrière plan">
+               <VBox.margin>
+                  <Insets bottom="3.0"/>
+               </VBox.margin>
+            </Text>
+            <ColorPicker/>
+         </VBox>
+      </VBox>
+   </content>
+   <ButtonType fx:constant="FINISH"/>
+   <ButtonType fx:constant="CANCEL"/>
+</DialogPane>
