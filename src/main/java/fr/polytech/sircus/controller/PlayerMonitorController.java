@@ -1,6 +1,7 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.model.MediaDeprecated;
 import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Result;
 import javafx.animation.Animation;
@@ -165,11 +166,22 @@ public class PlayerMonitorController{
      * Go back to the previous page.
      */
     public void previousPage() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = (Stage) playerMonitor.getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Mettre en pause");
+        alert.setHeaderText("Êtes-vous sûr de vouloir mettre la lecture en pause ?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            viewer.closeViewer();
+            viewerPlayingState = false;
+            resetAllClocks();
+
+            FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = (Stage) playerMonitor.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     /**
@@ -300,8 +312,10 @@ public class PlayerMonitorController{
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             viewer.resetMetaSequence();
-            duration.reset();
+            resetAllClocks();
             firstPlay = true;
+
+            this.stopButton.setDisable(true);
 
             if (viewerPlayingState) {
                 viewer.pauseViewer();
@@ -325,7 +339,7 @@ public class PlayerMonitorController{
         this.backButton.setDisable(true);
     }
 
-    public void loadImage(fr.polytech.sircus.model.Media media) throws FileNotFoundException {
+    public void loadImage(MediaDeprecated media) throws FileNotFoundException {
         InputStream is = new FileInputStream("medias/" + media.getFilename());
         Image image = new Image(is);
 
@@ -575,7 +589,12 @@ class TimelineProgressBar{
 
         // Update progress bar and progress attribute depending on clock parameter twice a second
         timeline = new Timeline(new KeyFrame(Duration.millis(500), event -> {
-            progress = getCompletionRate(clock.getTime().getSecond(), this.totalDuration);
+            if (clock.getTime().getSecond() == 0){
+                progress = 0.0;
+            }
+            else{
+                progress = getCompletionRate(clock.getTime().getSecond(), this.totalDuration);
+            }
             progressBar.setProgress(progress);
         }));
 
