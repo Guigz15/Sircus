@@ -17,17 +17,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.stage.FileChooser;
 import javafx.scene.input.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
-import javafx.util.Callback;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -60,11 +56,15 @@ public class Etape2AdminController implements Initializable {
     @FXML
     private Button modifySeqButton;
     @FXML
+    private Button addSeqButton;
+    @FXML
     private Button exportSeqButton;
     @FXML
     private Button importSeqButton;
     @FXML
     private Button removeMetaButton;
+    @FXML
+    private Button addMetaButton;
     @FXML
     private Button removeSeqButton;
     @FXML
@@ -122,11 +122,11 @@ public class Etape2AdminController implements Initializable {
         metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                renameMetaButton.setDisable(false);
-                removeMetaButton.setDisable(false);
-
                 if(SircusApplication.adminConnected){
                     exportMetaButton.setDisable(false);
+                    renameMetaButton.setDisable(false);
+                    removeMetaButton.setDisable(false);
+                    addMetaButton.setDisable(false);
                 }
 
                 //get the new medias lists to display it on screen
@@ -148,12 +148,12 @@ public class Etape2AdminController implements Initializable {
         seqListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Item>() {
             @Override
             public void changed(ObservableValue<? extends Item> observableValue, Item s, Item t1) {
-                //allow the buttons to change Sequence
-                modifySeqButton.setDisable(false);
-                removeSeqButton.setDisable(false);
-
                 if(SircusApplication.adminConnected){
                     exportSeqButton.setDisable(false);
+                    //allow the buttons to change Sequence
+                    modifySeqButton.setDisable(false);
+                    removeSeqButton.setDisable(false);
+                    addSeqButton.setDisable(false);
                 }
 
                 //get the new medias lists to display it on screen
@@ -376,7 +376,7 @@ public class Etape2AdminController implements Initializable {
         // export is only available for admin
         if(SircusApplication.adminConnected){
             // get selected sequence
-            Sequence seq = seqListView.getSelectionModel().getSelectedItem();
+            Sequence seq = seqListView.getSelectionModel().getSelectedItem().getSequence();
             File file = new File(SircusApplication.dataSircus.getPath().getSeqPath() + seq.getName() + ".xml");
             try {
                 // the sequence is transform to xml in the class by toXML()
@@ -433,10 +433,7 @@ public class Etape2AdminController implements Initializable {
                 listMetaSequence.get(index_Selected_MetaSequence).addSequence(handler.getSeq());
 
                 // refresh list of sequence
-                seqListView.getItems().clear();
-                for (Sequence sequence : listMetaSequence.get(index_Selected_MetaSequence).getSequencesList()) {
-                    seqListView.getItems().add(sequence);
-                }
+                refreshPage();
 
                 // refresh preview timeline
                 MetaSequence currentMetaSequence = listMetaSequence.get(index_Selected_MetaSequence);

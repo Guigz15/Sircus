@@ -40,7 +40,7 @@
                      <VBox.margin>
                          <Insets top="5.0" />
                      </VBox.margin>
-                     <Button fx:id="addMetaButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="+" textAlignment="CENTER" />
+                     <Button fx:id="addMetaButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="+" textAlignment="CENTER" />
                      <Button fx:id="removeMetaButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="-" textAlignment="CENTER" />
                      <Pane prefHeight="22.0" prefWidth="109.0" HBox.hgrow="ALWAYS" />
                      <Button fx:id="renameMetaButton" disable="true" mnemonicParsing="false" prefHeight="25.0" text="Renommer" textAlignment="CENTER">
@@ -79,7 +79,7 @@
                      <VBox.margin>
                          <Insets top="5.0" />
                      </VBox.margin>
-                     <Button fx:id="addSeqButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="+" textAlignment="CENTER" />
+                     <Button fx:id="addSeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="+" textAlignment="CENTER" />
                      <Button fx:id="removeSeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="-" textAlignment="CENTER" />
                      <Pane prefHeight="25.0" prefWidth="1.0" HBox.hgrow="ALWAYS" />
                      <Button fx:id="modifySeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" text="Modifier" textAlignment="CENTER" />
