@@ -203,14 +203,14 @@ public class PlayerMonitorController{
                 viewerPlayingState = false;
             }
 
-            duration.pause();
-            seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+            // Clocks
+            pauseAllClocks();
+            sequenceChanged();
             metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
             setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
 
-            // progress bars
+            // progress bar
             metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
-            seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
         }
     }
 
@@ -234,14 +234,13 @@ public class PlayerMonitorController{
             }
 
             // Clocks
-            duration.pause();
-            seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+            pauseAllClocks();
+            sequenceChanged();
             metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
             setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
 
-            // progress bars
+            // progress bar
             metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
-            seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
         }
     }
 
@@ -281,16 +280,14 @@ public class PlayerMonitorController{
 
                 // If it's the first lecture or after a reset
                 if (firstPlay){
+
                     // Clocks
-                    seqDuration.setTime(0);
-                    seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+                    sequenceChanged();
                     metaSeqDuration.setTime(0);
                     metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
-                    setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
 
                     // progress bars
                     metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
-                    seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
                     firstPlay = false;
                 }
 
@@ -379,6 +376,17 @@ public class PlayerMonitorController{
         imageView.setImage(null);
         String hexColor ="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid; -fx-background-color: transparent;";
         previewPane.setStyle(hexColor);
+    }
+
+    /**
+     * Update the sequence information
+     */
+    public void sequenceChanged(){
+        seqDuration.setTime(0);
+        seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+
+        setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
+        seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
     }
 
     /**
