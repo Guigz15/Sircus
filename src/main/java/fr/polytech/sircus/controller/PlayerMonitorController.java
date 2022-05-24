@@ -384,9 +384,14 @@ public class PlayerMonitorController{
     public void sequenceChanged(){
         seqDuration.setTime(0);
         seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
-
         setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
         seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+
+        // TODO: Take the meta-sequences in count
+        // Disable if last sequence
+        forwardButton.setDisable(viewer.getCurrentSequenceIndex()+1 == viewer.getPlayingMetaSequence().getSequencesList().size());
+        // Disable if first sequence
+        backButton.setDisable(viewer.getCurrentSequenceIndex() == 0);
     }
 
     /**
