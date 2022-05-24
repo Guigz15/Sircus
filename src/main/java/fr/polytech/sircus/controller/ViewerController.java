@@ -341,6 +341,7 @@ public class ViewerController {
         } else {
             timeline.jumpTo(new Duration(sequencesStartTime.get(sequencesStartTime.size() - 1) * 1000));
         }
+        playerMonitorController.sequenceChanged();
     }
 
     /**
@@ -353,6 +354,7 @@ public class ViewerController {
         } else {
             timeline.jumpTo(new Duration(0));
         }
+        playerMonitorController.sequenceChanged();
     }
 
     /**
