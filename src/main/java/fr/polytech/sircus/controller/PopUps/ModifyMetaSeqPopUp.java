@@ -1,7 +1,6 @@
 package fr.polytech.sircus.controller.PopUps;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.controller.MetaSequenceController;
 import fr.polytech.sircus.model.Internals.ObservableMetaSequenceSet;
 import fr.polytech.sircus.model.MetaSequence;
 import javafx.fxml.FXML;
@@ -46,8 +45,6 @@ public class ModifyMetaSeqPopUp {
      */
     private Stage popUpStage = null;
 
-    private MetaSequenceController.ModificationMetaSeqListener modificationMetaSeqListener = null;
-
 
     /**
      * Main constructor
@@ -55,19 +52,16 @@ public class ModifyMetaSeqPopUp {
      * @param owner The main window
      * @param metaSequences The meta sequences list
      * @param metaSequence The meta sequence to modify
-     * @param modificationMetaSeqListener The listener about the modification
      */
     public ModifyMetaSeqPopUp(Window owner,
                               final ObservableMetaSequenceSet metaSequences,
-                              MetaSequence metaSequence,
-                              MetaSequenceController.ModificationMetaSeqListener modificationMetaSeqListener) {
+                              MetaSequence metaSequence) {
         FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_meta_seq_popup.fxml"));
         fxmlLoader.setController(this);
 
         try {
             this.metaSequences = metaSequences;
             this.metaSequence = metaSequence;
-            this.modificationMetaSeqListener = modificationMetaSeqListener;
 
             Scene dialogScene = new Scene(fxmlLoader.load(), 500, 100);
             Stage dialog = new Stage();
@@ -149,7 +143,6 @@ public class ModifyMetaSeqPopUp {
 
         if (alert.getResult() == ButtonType.YES) {
             this.metaSequence.setName(this.modifyMetaSeqName.getText());
-            this.modificationMetaSeqListener.onModified(this.metaSequence);
             this.popUpStage.close();
         }
     }

@@ -22,8 +22,7 @@ public class Sequence implements Serializable {
     private Duration duration;
 
     @Getter @Setter
-    // TODO: replace this with the new medias
-    private List<MediaDeprecated> listMedias;
+    private List<Media> listMedias;
 
     @Getter @Setter
     private Boolean lock;
@@ -57,7 +56,7 @@ public class Sequence implements Serializable {
      *
      * @param media Media to add
      */
-    public void addMedia(MediaDeprecated media) {
+    public void addMedia(Media media) {
         this.listMedias.add(media);
         this.duration = this.duration.plus(media.getDuration());
         //computeDuration();
@@ -68,7 +67,7 @@ public class Sequence implements Serializable {
      *
      * @param media Media to remove
      */
-    public void removeMedia(MediaDeprecated media) {
+    public void removeMedia(Media media) {
         if (this.listMedias.remove(media)) {
             //computeDuration();
             this.duration = this.duration.minus(media.getDuration());
@@ -80,10 +79,10 @@ public class Sequence implements Serializable {
      */
     public void computeDuration(){
         Duration duration = Duration.ofSeconds(0);
-        for (MediaDeprecated listMedia : listMedias) {
+        for (Media listMedia : listMedias) {
             duration = duration.plus(listMedia.getDuration());
-            if (listMedia.getInterStim() != null) {
-                duration = duration.plus(listMedia.getInterStim().getDuration());
+            if (listMedia.getInterstim() != null) {
+                duration = duration.plus(listMedia.getInterstim().getDuration());
             }
         }
 

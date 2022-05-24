@@ -1,10 +1,7 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.model.MediaDeprecated;
-import fr.polytech.sircus.model.MetaSequence;
-import fr.polytech.sircus.model.Sequence;
-import fr.polytech.sircus.model.TypeMedia;
+import fr.polytech.sircus.model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
@@ -133,7 +130,7 @@ public class ViewerController {
      * @param video the media containing the video that we want to display.
      */
     @FXML
-    private void showVideo(MediaDeprecated video) {
+    private void showVideo(AbstractMedia video) {
         File mediaFile = new File("medias/" + video.getFilename());
         try {
             Media media = new Media(mediaFile.toURI().toURL().toString());
@@ -164,7 +161,7 @@ public class ViewerController {
      * @param media the media containing the image that we want to display.
      */
     @FXML
-    private void showImage(MediaDeprecated media) {
+    private void showImage(AbstractMedia media) {
         // Try to create an InputStream with the path of the image.
         try {
             InputStream is = new FileInputStream("medias/" + media.getFilename());
@@ -225,9 +222,9 @@ public class ViewerController {
             boolean addSequenceIndex = true;
 
             // For each Media in the sequence.
-            for (MediaDeprecated media : sequence.getListMedias()) {
+            for (fr.polytech.sircus.model.Media media : sequence.getListMedias()) {
                 // If the media is an image.
-                if (media.getType() == TypeMedia.PICTURE) {
+                if (media.getTypeMedia() == TypeMedia.PICTURE) {
                     if (addSequenceIndex) {
                         int finalSequenceIndex = sequenceIndex;
                         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
@@ -250,7 +247,7 @@ public class ViewerController {
                     counterDuration += media.getDuration().getSeconds();
                 }
                 // If the media is a video
-                else if (media.getType() == TypeMedia.VIDEO) {
+                else if (media.getTypeMedia() == TypeMedia.VIDEO) {
                     if (addSequenceIndex) {
                         int finalSequenceIndex = sequenceIndex;
                         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
@@ -273,15 +270,15 @@ public class ViewerController {
                     counterDuration += media.getDuration().getSeconds();
                 }
                 // If the current media has a "inter-stim".
-                if (media.getInterStim() != null) {
+                if (media.getInterstim() != null) {
                     timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
                             event -> {
                                 removeVideo();
-                                showImage(media.getInterStim());
+                                showImage(media.getInterstim());
                             }));
 
                     // We add to the counterDuration the duration of the "inter-stim" currently read.
-                    counterDuration += media.getInterStim().getDuration().getSeconds();
+                    counterDuration += media.getInterstim().getDuration().getSeconds();
                 }
             }
         }
