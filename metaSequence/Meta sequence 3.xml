@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metaSequence>
+<name>Meta%20sequence%203</name>
+<duration>PT2M48S</duration>
+<listSequence>
+<sequence>Sequence%201.xml</sequence>
+<sequence>Sequence%202.xml</sequence>
+<sequence>Sequence%202.xml</sequence>
+<sequence>Sequence%202.xml</sequence>
+</listSequence>
+</metaSequence>
+

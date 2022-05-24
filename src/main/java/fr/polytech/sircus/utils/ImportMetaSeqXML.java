@@ -2,6 +2,8 @@ package fr.polytech.sircus.utils;
 
 import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.model.MetaSequence;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import lombok.Getter;
 import lombok.Setter;
 import org.xml.sax.Attributes;
@@ -15,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ImportMetaSeqXML extends DefaultHandler {
     @Getter
@@ -71,10 +74,26 @@ public class ImportMetaSeqXML extends DefaultHandler {
                 // read and parse the xml file of the sequence reference
                 SAXParser saxParser = factory.newSAXParser();
                 ImportSeqXML handler = new ImportSeqXML();
+
                 File file = new File(SircusApplication.dataSircus.getPath().getSeqPath() + currentValue.toString().replace("%20", " "));
-                saxParser.parse(file, handler);
-                // add the new sequence in the metaSequence
-                meta.getSequencesList().add(handler.getSeq());
+                if(!file.exists()) {
+                    // the filename reference an object that doesn't exist
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Attention");
+                    alert.setContentText("Le fichier " + currentValue.toString().replace("%20", " ") +
+                            " n'existe pas dans le dossier sequence.");
+                    alert.showAndWait().ifPresent(rs -> {
+                        if (rs == ButtonType.OK) {
+                            System.out.println("Pressed OK.");
+                        }
+                    });
+                    // TODO: in etape 2, the metaSequence need to be
+                    //  in red when it has a sequence that doesn't exist
+                } else{
+                    saxParser.parse(file, handler);
+                    // add the new sequence in the metaSequence
+                    meta.getSequencesList().add(handler.getSeq());
+                }
             } catch (ParserConfigurationException | SAXException | IOException e) {
                 e.printStackTrace();
             }

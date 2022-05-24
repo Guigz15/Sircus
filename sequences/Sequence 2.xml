@@ -16,11 +16,11 @@
 <name>Media%202</name>
 <filename>mos02.jpg</filename>
 <duration>PT2S</duration>
-<type>VIDEO</type>
+<type>PICTURE</type>
 <isInterstim>false</isInterstim>
 <interstim>null</interstim>
 <lock>true</lock>
-<isResizable>false</isResizable>
+<isResizable>true</isResizable>
 <backgroundColor>0xadff2fff</backgroundColor>
 </media>
 <media>

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 /**
  * Class to reprensent the path to a media
@@ -32,7 +33,7 @@ public class PathMedia  implements Serializable {
      * Constructor by default
      */
     public PathMedia() {
-        String osName = System.getProperty("os.name");
+        String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
         // windows
         if(osName.contains("win")){
             defaultPath = System.getProperty("user.dir") + "\\medias";

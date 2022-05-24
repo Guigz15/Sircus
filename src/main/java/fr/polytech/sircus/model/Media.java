@@ -66,22 +66,19 @@ public class Media extends AbstractMedia implements Serializable {
      * @return XML
      */
     public String toXML(){
-        //TODO replace the space in string by %20
         String XML = "<media>\n" +
-                "<name>" + name.replace(" ", "%20") + "</name>\n" +
                 "<filename>" + filename.replace(" ", "%20") + "</filename>\n" +
                 "<duration>" + duration + "</duration>\n" +
-                "<type>" + type + "</type>\n" +
-                "<isInterstim>" + isInterstim + "</isInterstim>\n";
-        if(interStim == null){
+                "<type>" + typeMedia + "</type>\n";
+        if(interstim == null){
             XML += "<interstim>null</interstim>\n" +
-                    "<lock>" + lock + "</lock>\n" +
+                    "<lock>" + isLocked + "</lock>\n" +
                     "<isResizable>" + isResizable + "</isResizable>\n" +
                     "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
                     "</media>\n";
         } else {
-            XML += "<interstim>" + interStim.getName().replace(" ", "%20") + "</interstim>\n" +
-                    "<lock>" + lock + "</lock>\n" +
+            XML += interstim.toXML() +
+                    "<lock>" + isLocked + "</lock>\n" +
                     "<isResizable>" + isResizable + "</isResizable>\n" +
                     "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
                     "</media>\n";

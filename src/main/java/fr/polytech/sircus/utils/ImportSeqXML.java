@@ -1,16 +1,19 @@
 package fr.polytech.sircus.utils;
 
-import fr.polytech.sircus.model.Media;
-import fr.polytech.sircus.model.Sequence;
-import fr.polytech.sircus.model.TypeMedia;
+import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.model.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ImportSeqXML extends DefaultHandler {
     @Getter
@@ -54,7 +57,7 @@ public class ImportSeqXML extends DefaultHandler {
         } else if (qName.equalsIgnoreCase("listMedia")) {
             seq.setListMedias(new ArrayList<>());
         } else if (qName.equalsIgnoreCase("media")) {
-            Media media = new Media();
+            MediaDeprecated media = new MediaDeprecated();
             seq.getListMedias().add(media);
         } else if (qName.equalsIgnoreCase("name")) {
             name = true;
@@ -101,9 +104,37 @@ public class ImportSeqXML extends DefaultHandler {
             seq.getListMedias().get(seq.getListMedias().size() - 1).setName(currentValue.toString().replace("%20", " "));
             name = false;
         } else if (filename) {
-            seq.getListMedias().get(seq.getListMedias().size() - 1).setFilename(currentValue.toString().replace("%20", " "));
-            filename = false;
-            // TODO: if the media file doesn't exist (see specif)
+            String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
+            // test if the filename exist in media
+            File file;
+            if(osName.contains("win")) {
+                file = new File(System.getProperty("user.dir") +"\\medias\\" + currentValue.toString().replace("%20", " "));
+            } else {
+                file = new File(System.getProperty("user.dir") +"/medias/" + currentValue.toString().replace("%20", " "));
+            }
+
+            if(!file.exists()){
+                // the filename reference an object that doesn't exist
+                seq.getListMedias().get(seq.getListMedias().size() - 1).setFilename("erreur.jpg");
+                filename = false;
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Attention");
+                alert.setContentText("Le fichier " + currentValue.toString().replace("%20", " ") +
+                        " n'existe pas dans le dossier media.");
+                alert.showAndWait().ifPresent(rs -> {
+                    if (rs == ButtonType.OK) {
+                        System.out.println("Pressed OK.");
+                    }
+                });
+
+                // TODO: in etape 2, the sequence and the metaSequence need to be
+                //  in red when they have an error
+            } else {
+                //everything is good
+                seq.getListMedias().get(seq.getListMedias().size() - 1).setFilename(currentValue.toString().replace("%20", " "));
+                filename = false;
+            }
         } else if (duration) {
             seq.getListMedias().get(seq.getListMedias().size() - 1).setDuration(Duration.parse(currentValue.toString()));
             duration = false;
@@ -116,11 +147,11 @@ public class ImportSeqXML extends DefaultHandler {
         } else if (interstim) {
             Media inter;
             if (seq.getListMedias().size() == 1) {
-                inter = seq.getListMedias().get(1);
+                //inter = seq.getListMedias().get(1);
             } else {
-                inter = seq.getListMedias().get(seq.getListMedias().size() - 2);
+                //inter = seq.getListMedias().get(seq.getListMedias().size() - 2);
             }
-            seq.getListMedias().get(seq.getListMedias().size() - 1).setInterStim(inter);
+            //seq.getListMedias().get(seq.getListMedias().size() - 1).setInterStim(inter);
             interstim = false;
         } else if (lock) {
             seq.getListMedias().get(seq.getListMedias().size() - 1).setLock(Boolean.valueOf(currentValue.toString()));

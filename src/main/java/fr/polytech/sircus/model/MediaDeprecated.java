@@ -150,4 +150,31 @@ public class MediaDeprecated implements Serializable {
         isResizable = ois.readBoolean();
         backgroundColor = new Color(ois.readDouble(), ois.readDouble(), ois.readDouble(), ois.readDouble());
     }
+
+    /**
+     * Convert a media to XML
+     * @return XML
+     */
+    public String toXML(){
+        String XML = "<media>\n" +
+                "<name>" + name.replace(" ", "%20") + "</name>\n" +
+                "<filename>" + filename.replace(" ", "%20") + "</filename>\n" +
+                "<duration>" + duration + "</duration>\n" +
+                "<type>" + type + "</type>\n" +
+                "<isInterstim>" + isInterstim + "</isInterstim>\n";
+        if(interStim == null){
+            XML += "<interstim>null</interstim>\n" +
+                    "<lock>" + lock + "</lock>\n" +
+                    "<isResizable>" + isResizable + "</isResizable>\n" +
+                    "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
+                    "</media>\n";
+        } else {
+            XML += "<interstim>" + interStim.getName().replace(" ", "%20") + "</interstim>\n" +
+                    "<lock>" + lock + "</lock>\n" +
+                    "<isResizable>" + isResizable + "</isResizable>\n" +
+                    "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
+                    "</media>\n";
+        }
+        return XML;
+    }
 }
