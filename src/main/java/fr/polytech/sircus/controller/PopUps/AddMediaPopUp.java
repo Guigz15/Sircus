@@ -1,7 +1,7 @@
 package fr.polytech.sircus.controller.PopUps;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.model.MediaDeprecated;
+import fr.polytech.sircus.model.Media;
 import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.model.TypeMedia;
 import fr.polytech.sircus.model.PathMedia;
@@ -34,14 +34,14 @@ public class AddMediaPopUp {
     /**
      * FileChooser to choose the file used as a media.
      */
-    @FXML
-    private final FileChooser fileChooserMedia;
+    /*@FXML
+    private final FileChooser fileChooserMedia;*/
 
     /**
      * FileChooser to choose the file shown after the media (interstim).
      */
-    @FXML
-    private final FileChooser fileChooserInterstim;
+    /*@FXML
+    private final FileChooser fileChooserInterstim;*/
 
     /**
      * Label of the name of the selected media.
@@ -113,12 +113,12 @@ public class AddMediaPopUp {
      * ComboBox containing all the existing medias.
      */
     @FXML
-    private ComboBox<MediaDeprecated> nameListMedias;
+    private ComboBox<Media> nameListMedias;
 
     /**
      * List of the medias of the mother sequence.
      */
-    private ObservableList<MediaDeprecated> listMedias = null;
+    private ObservableList<Media> listMedias = null;
 
     /**
      * Sequence in which the media will be added.
@@ -133,7 +133,7 @@ public class AddMediaPopUp {
     /**
      * Event listener checking for sequence's modification from the modifySeqPopUp controller.
      */
-    private ModifySeqPopUp.SequenceModificationListener listener = null;
+    //private ModifySeqPopUp.SequenceModificationListener listener = null;
 
     /**
      * Constructor of the popup's controller to add a media to a sequence.
@@ -143,7 +143,7 @@ public class AddMediaPopUp {
      * @param sequence   the sequence in which the media will be added.
      * @param listener   vent listener checking for sequence's modification from the modifySeqPopUp controller.
      */
-    public AddMediaPopUp(Window owner, ObservableList<MediaDeprecated> listMedias, Sequence sequence,
+    /*public AddMediaPopUp(Window owner, ObservableList<Media> listMedias, Sequence sequence,
                          ModifySeqPopUp.SequenceModificationListener listener, FileChooser fileChooserMedia,
                          FileChooser fileChooserInterstim) {
 
@@ -199,13 +199,13 @@ public class AddMediaPopUp {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     /**
      * Initializes the controller and its attributes.
      */
     @FXML
-    private void initialize() {
+    /*private void initialize() {
         this.nameListMedias.setItems(this.listMedias);
         this.nameListMedias.getSelectionModel().select(0);
         this.nameListMedias.setDisable(true);
@@ -229,12 +229,12 @@ public class AddMediaPopUp {
                 e.printStackTrace();
             }
         });
-    }
+    }*/
 
     /**
      * Allows to pick a file used as the interstim in the user's computer.
      */
-    private void selectInterstimFile() {
+    /*private void selectInterstimFile() {
         this.newFileInterstim = this.fileChooserInterstim.showOpenDialog(this.popUpStage);
 
         try {
@@ -255,12 +255,12 @@ public class AddMediaPopUp {
         } catch (Exception e) {
             System.out.print("Aucun média sélectionné.");
         }
-    }
+    }*/
 
     /**
      * Allows to pick a file used as the media in the user's computer.
      */
-    private void selectMediaFile() {
+    /*private void selectMediaFile() {
         this.newFileMedia = this.fileChooserMedia.showOpenDialog(this.popUpStage);
 
         try {
@@ -282,7 +282,7 @@ public class AddMediaPopUp {
         } catch (Exception e) {
             System.out.print("Aucun média sélectionné.");
         }
-    }
+    }*/
 
     /**
      * Checks if a file has been selected for the media and if a duration has been set.
@@ -336,7 +336,7 @@ public class AddMediaPopUp {
      *
      * @throws IOException if there is a problem relative to the file selection.
      */
-    private void addMediaToSeq() throws IOException {
+    /*private void addMediaToSeq() throws IOException {
         Alert alert = new Alert(
                 Alert.AlertType.CONFIRMATION,
                 "Etes-vous sûr de vouloir enregistrer les modifications de " + this.sequence.getName() + " ?",
@@ -384,7 +384,7 @@ public class AddMediaPopUp {
                         typeMedia = TypeMedia.PICTURE;
                     }
 
-                    MediaDeprecated newMedia = new MediaDeprecated(
+                    Media newMedia = new Media(
                             this.nameNewMedia.getText(),
                             this.nameNewMedia.getText(),
                             Duration.ofSeconds(Integer.parseInt(this.durationField.getText())),
@@ -393,7 +393,7 @@ public class AddMediaPopUp {
                     );
 
                     if (this.newFileInterstim != null) {
-                        MediaDeprecated newInterstim = new MediaDeprecated(
+                        Media newInterstim = new Media(
                                 this.nameNewInterstim.getText(),
                                 this.nameNewInterstim.getText(),
                                 Duration.ofSeconds(1),
@@ -408,17 +408,17 @@ public class AddMediaPopUp {
                     this.sequence.addMedia(newMedia);
                 }
             } else {
-                MediaDeprecated copiedMedia = new MediaDeprecated(this.nameListMedias.getSelectionModel().getSelectedItem());
+                Media copiedMedia = new Media(this.nameListMedias.getSelectionModel().getSelectedItem());
                 if (copiedMedia.getInterStim() != null) {
-                    copiedMedia.setInterStim(new MediaDeprecated(copiedMedia.getInterStim()));
+                    copiedMedia.setInterStim(new Media(copiedMedia.getInterStim()));
                 }
                 this.sequence.addMedia(copiedMedia);
             }
 
-            this.listener.onModified(this.sequence);
+            //this.listener.onModified(this.sequence);
             this.popUpStage.close();
         }
-    }
+    }*/
 
     /**
      * Closes the popup.

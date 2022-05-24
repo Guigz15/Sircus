@@ -47,14 +47,14 @@ public final class Serializer {
         Sequence sequence8 = new Sequence("Sequence 8");
         Sequence sequence9 = new Sequence("Sequence 9");
 
-        MediaDeprecated media1 = new MediaDeprecated("Media 1", "mos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE, null);
-        MediaDeprecated media2 = new MediaDeprecated("Media 2", "mos02.jpg", Duration.ofSeconds(2), TypeMedia.PICTURE, null);
-        MediaDeprecated media3 = new MediaDeprecated("Media 3", "mosob01.jpg", Duration.ofSeconds(1), TypeMedia.PICTURE, null);
-        MediaDeprecated media4 = new MediaDeprecated("Media 4", "vis03.jpg", Duration.ofSeconds(7), TypeMedia.PICTURE, null);
-        MediaDeprecated media5 = new MediaDeprecated("Media 5", "vismos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE, null);
-        MediaDeprecated media6 = new MediaDeprecated("Media 6", "visob02.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE, null);
-        MediaDeprecated media7 = new MediaDeprecated("Media 7", "croix.jpg", Duration.ofSeconds(4), TypeMedia.PICTURE, null);
-        MediaDeprecated media8 = new MediaDeprecated("Media 8", "ob01.jpg", Duration.ofSeconds(10), TypeMedia.PICTURE, null);
+        Media media1 = new Media("mos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE);
+        Media media2 = new Media("mos02.jpg", Duration.ofSeconds(2), TypeMedia.PICTURE);
+        Media media3 = new Media("mosob01.jpg", Duration.ofSeconds(1), TypeMedia.PICTURE);
+        Media media4 = new Media("vis03.jpg", Duration.ofSeconds(7), TypeMedia.PICTURE);
+        Media media5 = new Media("vismos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE);
+        Media media6 = new Media("visob02.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE);
+        Media media7 = new Media("croix.jpg", Duration.ofSeconds(4), TypeMedia.PICTURE);
+        Media media8 = new Media("ob01.jpg", Duration.ofSeconds(10), TypeMedia.PICTURE);
 
         media1.setBackgroundColor(Color.AQUA);
         media2.setBackgroundColor(Color.GREENYELLOW);

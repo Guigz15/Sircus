@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import fr.polytech.sircus.model.MediaDeprecated;
+import fr.polytech.sircus.model.Media;
 import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Sequence;
 import javafx.fxml.FXML;
@@ -119,7 +119,7 @@ public class PreviewTimeline extends AnchorPane implements Initializable {
      * Method to add a media in the timeline
      * @param media The media to add
      */
-    public void addMedia(MediaDeprecated media){
+    public void addMedia(Media media){
 
         FXMLLoader itemLoader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("views/preview-item.fxml")));;
         VBox item;
@@ -165,8 +165,8 @@ public class PreviewTimeline extends AnchorPane implements Initializable {
      * Method to add a list of media
      * @param mediaList The list of media we want to add
      */
-    public void addListMedia(List<MediaDeprecated> mediaList){
-        for(MediaDeprecated media : mediaList){
+    public void addListMedia(List<Media> mediaList){
+        for(Media media : mediaList){
             addMedia(media);
         }
     }
@@ -196,7 +196,7 @@ public class PreviewTimeline extends AnchorPane implements Initializable {
      * Getter of the list of media
      * @param mediaList The list of media
      */
-    public void setMediaList(List<MediaDeprecated> mediaList){
+    public void setMediaList(List<Media> mediaList){
         removeAllMedia();
         addListMedia(mediaList);
     }

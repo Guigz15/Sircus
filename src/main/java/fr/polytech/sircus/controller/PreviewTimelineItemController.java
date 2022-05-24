@@ -1,6 +1,6 @@
 package fr.polytech.sircus.controller;
 
-import fr.polytech.sircus.model.MediaDeprecated;
+import fr.polytech.sircus.model.Media;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -70,7 +70,7 @@ public class PreviewTimelineItemController {
     }
 
     @FXML
-    public void setFromMedia(MediaDeprecated media){
+    public void setFromMedia(Media media){
         String file = media.getFilename();
         setImage(MEDIAS_PATH+file);
         filename.setText(file);
