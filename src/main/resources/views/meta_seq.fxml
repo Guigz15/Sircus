@@ -40,10 +40,10 @@
                      <VBox.margin>
                          <Insets top="5.0" />
                      </VBox.margin>
-                     <Button fx:id="addMetaButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="+" textAlignment="CENTER" />
-                     <Button fx:id="removeMetaButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="-" textAlignment="CENTER" />
+                     <Button fx:id="addMetaButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="+" textAlignment="CENTER" visible="false"/>
+                     <Button fx:id="removeMetaButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="-" textAlignment="CENTER" visible="false"/>
                      <Pane prefHeight="22.0" prefWidth="109.0" HBox.hgrow="ALWAYS" />
-                     <Button fx:id="renameMetaButton" disable="true" mnemonicParsing="false" prefHeight="25.0" text="Renommer" textAlignment="CENTER">
+                     <Button fx:id="renameMetaButton" disable="true" mnemonicParsing="false" prefHeight="25.0" text="Renommer" textAlignment="CENTER" visible="false">
                          <HBox.margin>
                              <Insets />
                          </HBox.margin>
@@ -55,7 +55,7 @@
                      </VBox.margin>
                      <Button fx:id="importMetaButton" mnemonicParsing="false" onAction="#importMeta" prefHeight="25.0" text="Importer" textAlignment="CENTER" />
                      <Pane prefHeight="25.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-                     <Button fx:id="exportMetaButton" alignment="CENTER" disable="true" onAction="#exportMeta" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Exporter" HBox.hgrow="ALWAYS" />
+                     <Button fx:id="exportMetaButton" alignment="CENTER" disable="true" onAction="#exportMeta" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Exporter" HBox.hgrow="ALWAYS" visible="false"/>
                  </HBox>
              </VBox>
              <VBox alignment="CENTER" prefHeight="375.0" prefWidth="250.0">
@@ -79,10 +79,10 @@
                      <VBox.margin>
                          <Insets top="5.0" />
                      </VBox.margin>
-                     <Button fx:id="addSeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="+" textAlignment="CENTER" />
-                     <Button fx:id="removeSeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="-" textAlignment="CENTER" />
+                     <Button fx:id="addSeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="+" textAlignment="CENTER" visible="false"/>
+                     <Button fx:id="removeSeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="-" textAlignment="CENTER" visible="false"/>
                      <Pane prefHeight="25.0" prefWidth="1.0" HBox.hgrow="ALWAYS" />
-                     <Button fx:id="modifySeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" text="Modifier" textAlignment="CENTER" />
+                     <Button fx:id="modifySeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" text="Modifier" textAlignment="CENTER" visible="false"/>
                  </HBox>
                  <HBox prefWidth="250.0">
                      <VBox.margin>
@@ -90,7 +90,7 @@
                      </VBox.margin>
                      <Button fx:id="importSeqButton" mnemonicParsing="false" onAction="#importSeq" prefHeight="25.0" text="Importer" textAlignment="CENTER" />
                      <Pane prefHeight="25.0" prefWidth="31.0" HBox.hgrow="ALWAYS" />
-                     <Button fx:id="exportSeqButton" disable="true" mnemonicParsing="false" onAction="#exportSeq" prefHeight="25.0" text="Exporter" textAlignment="CENTER" />
+                     <Button fx:id="exportSeqButton" disable="true" mnemonicParsing="false" onAction="#exportSeq" prefHeight="25.0" text="Exporter" textAlignment="CENTER" visible="false"/>
                  </HBox>
              </VBox>
              <VBox alignment="CENTER" prefHeight="375.0" prefWidth="250.0">

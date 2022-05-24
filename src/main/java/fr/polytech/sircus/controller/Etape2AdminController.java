@@ -127,6 +127,11 @@ public class Etape2AdminController implements Initializable {
                     renameMetaButton.setDisable(false);
                     removeMetaButton.setDisable(false);
                     addMetaButton.setDisable(false);
+
+                    exportMetaButton.setVisible(true);
+                    renameMetaButton.setVisible(true);
+                    removeMetaButton.setVisible(true);
+                    addMetaButton.setVisible(true);
                 }
 
                 //get the new medias lists to display it on screen
@@ -150,10 +155,14 @@ public class Etape2AdminController implements Initializable {
             public void changed(ObservableValue<? extends Item> observableValue, Item s, Item t1) {
                 if(SircusApplication.adminConnected){
                     exportSeqButton.setDisable(false);
-                    //allow the buttons to change Sequence
                     modifySeqButton.setDisable(false);
                     removeSeqButton.setDisable(false);
                     addSeqButton.setDisable(false);
+
+                    exportSeqButton.setVisible(true);
+                    modifySeqButton.setVisible(true);
+                    removeSeqButton.setVisible(true);
+                    addSeqButton.setVisible(true);
                 }
 
                 //get the new medias lists to display it on screen

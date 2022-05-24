@@ -24,7 +24,7 @@ public final class Serializer {
     /**
      * Boolean to know if we use a stub object
      */
-    public static boolean useStub = true;
+    public static boolean useStub = false;
 
     /**
      * Generation of stub data

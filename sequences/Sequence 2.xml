@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sequence name="Sequence%202" duration="PT51S" lock="true">
+<sequence name="Sequence%202" duration="PT41S" lock="true">
 <listMedia>
 <media>
 <name>Media%201</name>
@@ -71,17 +71,6 @@
 <name>Media%207</name>
 <filename>croix.jpg</filename>
 <duration>PT4S</duration>
-<type>PICTURE</type>
-<isInterstim>false</isInterstim>
-<interstim>null</interstim>
-<lock>true</lock>
-<isResizable>false</isResizable>
-<backgroundColor>0xffffffff</backgroundColor>
-</media>
-<media>
-<name>Media%208</name>
-<filename>ob01.jpg</filename>
-<duration>PT10S</duration>
 <type>PICTURE</type>
 <isInterstim>false</isInterstim>
 <interstim>null</interstim>
