@@ -481,152 +481,155 @@ public class PlayerMonitorController{
     private void setCounterLabel(Label label, int current, int total){
         label.setText(current + " / " + total);
     }
-}
-
-/**
- * Indicate the type of TimelineClock
- */
-enum ClockType {
-    INCREMENTAL,
-    DECREMENTAL
-}
-
-/**
- * Independent controllable clock with its label
- */
-class TimelineClock{
-    @Getter
-    private LocalTime time;
-    @Getter @Setter
-    private Timeline timeline;
-    @Getter @Setter
-    private Label timeLabel;
-    private final DateTimeFormatter dtf;
 
     /**
-     * Constructor with init values
-     * @param label label to update
-     * @param dtf format of teh clock
-     * @param hours starting hours value
-     * @param minutes starting minutes value
-     * @param seconds starting seconds value
-     * @param type indicates if the clock is incremental or decremental
+     * Indicate the type of TimelineClock
      */
-    public TimelineClock(Label label, DateTimeFormatter dtf, int hours, int minutes, int seconds, ClockType type){
-        timeLabel = label;
-        time = LocalTime.of(hours, minutes, seconds);
-        this.dtf = dtf;
+    enum ClockType {
+        INCREMENTAL,
+        DECREMENTAL
+    }
 
-        // Thread executed every second
-        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            if (type == ClockType.INCREMENTAL)
-                time = time.plusSeconds(1);
-            else if (type == ClockType.DECREMENTAL)
-                time = time.plusSeconds(-1);
+    /**
+     * Independent controllable clock with its label
+     * Inner class of PlayerMonitorController
+     */
+    static class TimelineClock{
+        @Getter
+        private LocalTime time;
+        @Getter @Setter
+        private Timeline timeline;
+        @Getter @Setter
+        private Label timeLabel;
+        private final DateTimeFormatter dtf;
+
+        /**
+         * Constructor with init values
+         * @param label label to update
+         * @param dtf format of teh clock
+         * @param hours starting hours value
+         * @param minutes starting minutes value
+         * @param seconds starting seconds value
+         * @param type indicates if the clock is incremental or decremental
+         */
+        public TimelineClock(Label label, DateTimeFormatter dtf, int hours, int minutes, int seconds, ClockType type){
+            timeLabel = label;
+            time = LocalTime.of(hours, minutes, seconds);
+            this.dtf = dtf;
+
+            // Thread executed every second
+            timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                if (type == ClockType.INCREMENTAL)
+                    time = time.plusSeconds(1);
+                else if (type == ClockType.DECREMENTAL)
+                    time = time.plusSeconds(-1);
+                timeLabel.setText(time.format(dtf));
+            }));
+
+            timeline.setCycleCount(Animation.INDEFINITE);
+        }
+
+        /**
+         * Pause the clock
+         */
+        public void pause(){
+            timeline.pause();
+        }
+
+        /**
+         * Play or resume the clock
+         */
+        public void play(){
+            timeline.play();
+        }
+
+        /**
+         * reset the clock and its label
+         */
+        public void reset(){
+            timeline.pause();
+            time = LocalTime.of(0, 0, 0);
             timeLabel.setText(time.format(dtf));
-        }));
+        }
 
-        timeline.setCycleCount(Animation.INDEFINITE);
+        /**
+         * Set the clock at a defined time in seconds
+         * @param seconds amount of seconds
+         */
+        public void setTime(long seconds){
+            if (seconds < 0)
+                seconds = 0;
+            time = LocalTime.of((int)(seconds / 3600),
+                    (int)((seconds % 3600) / 60),
+                    (int)(seconds % 60));
+            timeLabel.setText(time.format(dtf));
+        }
+
+        /**
+         * Set the clock to the remaining time from a reference and a deadline
+         * @param reference the reference clock
+         * @param deadLine the moment when the clock will reach zero
+         */
+        public void setRemaining(LocalTime reference, long deadLine){
+            long seconds = deadLine - reference.getSecond();
+            if (seconds < 0)
+                seconds = 0;
+            time = LocalTime.of((int)(seconds / 3600),
+                    (int)((seconds % 3600) / 60),
+                    (int)(seconds % 60));
+            timeLabel.setText(time.format(dtf));
+        }
     }
 
     /**
-     * Pause the clock
+     * Independent controllable ProgressBar
+     * Inner class of PlayerMonitorController
      */
-    public void pause(){
-        timeline.pause();
-    }
+    static class TimelineProgressBar{
+        @Getter @Setter
+        private ProgressBar progressBar;
+        @Getter @Setter
+        private Timeline timeline;
+        @Getter @Setter
+        private double progress;
+        @Setter
+        private long totalDuration;
 
-    /**
-     * Play or resume the clock
-     */
-    public void play(){
-        timeline.play();
-    }
+        /**
+         * Main constructor
+         * @param pb progress bar to assign
+         * @param clock clock of remaining time
+         * @param totalDuration time when the progressbar should be full
+         */
+        public TimelineProgressBar(ProgressBar pb, TimelineClock clock, long totalDuration){
+            progressBar = pb;
+            progress = 0.0;
+            this.totalDuration = totalDuration;
 
-    /**
-     * reset the clock and its label
-     */
-    public void reset(){
-        timeline.pause();
-        time = LocalTime.of(0, 0, 0);
-        timeLabel.setText(time.format(dtf));
-    }
+            // Update progress bar and progress attribute depending on clock parameter twice a second
+            timeline = new Timeline(new KeyFrame(Duration.millis(500), event -> {
+                if (clock.getTime().getSecond() == 0){
+                    progress = 0.0;
+                }
+                else{
+                    progress = getCompletionRate(clock.getTime().getSecond(), this.totalDuration);
+                }
+                progressBar.setProgress(progress);
+            }));
 
-    /**
-     * Set the clock at a defined time in seconds
-     * @param seconds amount of seconds
-     */
-    public void setTime(long seconds){
-        if (seconds < 0)
-            seconds = 0;
-        time = LocalTime.of((int)(seconds / 3600),
-                (int)((seconds % 3600) / 60),
-                (int)(seconds % 60));
-        timeLabel.setText(time.format(dtf));
-    }
+            timeline.setCycleCount(Animation.INDEFINITE);
+            timeline.play();
+        }
 
-    /**
-     * Set the clock to the remaining time from a reference and a deadline
-     * @param reference the reference clock
-     * @param deadLine the moment when the clock will reach zero
-     */
-    public void setRemaining(LocalTime reference, long deadLine){
-        long seconds = deadLine - reference.getSecond();
-        if (seconds < 0)
-            seconds = 0;
-        time = LocalTime.of((int)(seconds / 3600),
-                (int)((seconds % 3600) / 60),
-                (int)(seconds % 60));
-        timeLabel.setText(time.format(dtf));
+        /**
+         * Give a completion rate between 0 and 1 (1 is complete)
+         * @param remaining time remaining in seconds
+         * @param total total amount of time
+         * @return completion rate between 0 and 1
+         */
+        public double getCompletionRate(long remaining, long total){
+            return (total - remaining) / (double)total;
+        }
     }
 }
 
-/**
- * Independent controllable ProgressBar
- */
-class TimelineProgressBar{
-    @Getter @Setter
-    private ProgressBar progressBar;
-    @Getter @Setter
-    private Timeline timeline;
-    @Getter @Setter
-    private double progress;
-    @Setter
-    private long totalDuration;
-
-    /**
-     * Main constructor
-     * @param pb progress bar to assign
-     * @param clock clock of remaining time
-     * @param totalDuration time when the progressbar should be full
-     */
-    public TimelineProgressBar(ProgressBar pb, TimelineClock clock, long totalDuration){
-        progressBar = pb;
-        progress = 0.0;
-        this.totalDuration = totalDuration;
-
-        // Update progress bar and progress attribute depending on clock parameter twice a second
-        timeline = new Timeline(new KeyFrame(Duration.millis(500), event -> {
-            if (clock.getTime().getSecond() == 0){
-                progress = 0.0;
-            }
-            else{
-                progress = getCompletionRate(clock.getTime().getSecond(), this.totalDuration);
-            }
-            progressBar.setProgress(progress);
-        }));
-
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-    }
-
-    /**
-     * Give a completion rate between 0 and 1 (1 is complete)
-     * @param remaining time remaining in seconds
-     * @param total total amount of time
-     * @return completion rate between 0 and 1
-     */
-    public double getCompletionRate(long remaining, long total){
-        return (total - remaining) / (double)total;
-    }
-}
