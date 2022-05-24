@@ -336,7 +336,7 @@ public class AddMediaPopUp {
      *
      * @throws IOException if there is a problem relative to the file selection.
      */
-    private void addMediaToSeq() throws IOException {
+    /*private void addMediaToSeq() throws IOException {
         Alert alert = new Alert(
                 Alert.AlertType.CONFIRMATION,
                 "Etes-vous sûr de vouloir enregistrer les modifications de " + this.sequence.getName() + " ?",
@@ -418,7 +418,7 @@ public class AddMediaPopUp {
             //this.listener.onModified(this.sequence);
             this.popUpStage.close();
         }
-    }
+    }*/
 
     /**
      * Closes the popup.

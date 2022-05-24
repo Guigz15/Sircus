@@ -81,8 +81,8 @@ public class Sequence implements Serializable {
         Duration duration = Duration.ofSeconds(0);
         for (Media listMedia : listMedias) {
             duration = duration.plus(listMedia.getDuration());
-            if (listMedia.getInterStim() != null) {
-                duration = duration.plus(listMedia.getInterStim().getDuration());
+            if (listMedia.getInterstim() != null) {
+                duration = duration.plus(listMedia.getInterstim().getDuration());
             }
         }
 
@@ -112,4 +112,6 @@ public class Sequence implements Serializable {
         Sequence sequence = (Sequence) o;
         return Objects.equals(getName(), sequence.getName()) && Objects.equals(getDuration(), sequence.getDuration()) && Objects.equals(getListMedias(), sequence.getListMedias());
     }
+
+
 }

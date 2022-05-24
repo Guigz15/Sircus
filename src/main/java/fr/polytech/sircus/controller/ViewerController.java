@@ -1,9 +1,7 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.model.MetaSequence;
-import fr.polytech.sircus.model.Sequence;
-import fr.polytech.sircus.model.TypeMedia;
+import fr.polytech.sircus.model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
@@ -22,6 +20,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
+import lombok.Getter;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -38,6 +38,7 @@ public class ViewerController {
     private final PlayerMonitorController playerMonitorController;
 
     // The MetaSequence that id passed to the viewer
+    @Getter
     private final MetaSequence playingMetaSequence;
 
     @FXML
@@ -64,6 +65,8 @@ public class ViewerController {
     // Stores the start time of each sequence to be able to move between sequences.
     private final ArrayList<Integer> sequencesStartTime;
 
+    // Index of the current sequence index in the meta-sequence
+    @Getter
     private int currentSequenceIndex;
 
     private final int numberOfSequences;
@@ -107,7 +110,7 @@ public class ViewerController {
         metaSequenceStarted = false;
         this.playerMonitorController = playerMonitorController;
         sequencesStartTime = new ArrayList<>();
-        viewerStage.setOnCloseRequest(event -> quitViewer());
+        viewerStage.setOnCloseRequest(event -> closeViewer());
     }
 
 
@@ -127,7 +130,7 @@ public class ViewerController {
      * @param video the media containing the video that we want to display.
      */
     @FXML
-    private void showVideo(fr.polytech.sircus.model.Media video) {
+    private void showVideo(AbstractMedia video) {
         File mediaFile = new File("medias/" + video.getFilename());
         try {
             Media media = new Media(mediaFile.toURI().toURL().toString());
@@ -158,7 +161,7 @@ public class ViewerController {
      * @param media the media containing the image that we want to display.
      */
     @FXML
-    private void showImage(fr.polytech.sircus.model.Media media) {
+    private void showImage(AbstractMedia media) {
         // Try to create an InputStream with the path of the image.
         try {
             InputStream is = new FileInputStream("medias/" + media.getFilename());
@@ -221,7 +224,7 @@ public class ViewerController {
             // For each Media in the sequence.
             for (fr.polytech.sircus.model.Media media : sequence.getListMedias()) {
                 // If the media is an image.
-                if (media.getType() == TypeMedia.PICTURE) {
+                if (media.getTypeMedia() == TypeMedia.PICTURE) {
                     if (addSequenceIndex) {
                         int finalSequenceIndex = sequenceIndex;
                         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
@@ -244,7 +247,7 @@ public class ViewerController {
                     counterDuration += media.getDuration().getSeconds();
                 }
                 // If the media is a video
-                else if (media.getType() == TypeMedia.VIDEO) {
+                else if (media.getTypeMedia() == TypeMedia.VIDEO) {
                     if (addSequenceIndex) {
                         int finalSequenceIndex = sequenceIndex;
                         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
@@ -267,26 +270,25 @@ public class ViewerController {
                     counterDuration += media.getDuration().getSeconds();
                 }
                 // If the current media has a "inter-stim".
-                if (media.getInterStim() != null) {
+                if (media.getInterstim() != null) {
                     timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
                             event -> {
                                 removeVideo();
-                                showImage(media.getInterStim());
+                                showImage(media.getInterstim());
                             }));
 
                     // We add to the counterDuration the duration of the "inter-stim" currently read.
-                    counterDuration += media.getInterStim().getDuration().getSeconds();
+                    counterDuration += media.getInterstim().getDuration().getSeconds();
                 }
             }
         }
-
 
         // We add an event that removes the image or video at the end of the playback.
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
                 event -> {
                     removeVideo();
                     removeImage();
-                    quitViewer();
+                    closeViewer();
                 }));
         // The end of the playback is added to the listBeginningTimeMedia
         // This allows the button passing a media to trigger the end of the playback of the meta-sequence
@@ -331,8 +333,8 @@ public class ViewerController {
      */
     public void nextSequence() {
         if (currentSequenceIndex < numberOfSequences - 1) {
-            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex + 1) * 1000));
             currentSequenceIndex++;
+            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex) * 1000));
         } else {
             timeline.jumpTo(new Duration(sequencesStartTime.get(sequencesStartTime.size() - 1) * 1000));
         }
@@ -343,8 +345,8 @@ public class ViewerController {
      */
     public void previousSequence() {
         if (currentSequenceIndex > 0) {
-            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex - 1) * 1000));
             currentSequenceIndex--;
+            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex) * 1000));
         } else {
             timeline.jumpTo(new Duration(0));
         }
@@ -361,7 +363,7 @@ public class ViewerController {
      * Quit the viewer
      */
     @FXML
-    private void quitViewer() {
+    public void closeViewer() {
         playerMonitorController.clearImage();
         playerMonitorController.closeViewer();
         timeline.stop();

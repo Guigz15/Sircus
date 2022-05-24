@@ -1,15 +1,10 @@
 package fr.polytech.sircus.controller.PopUps;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.controller.MetaSequenceController;
 import fr.polytech.sircus.controller.PreviewTimeline;
-import fr.polytech.sircus.model.Media;
-import fr.polytech.sircus.model.Sequence;
-import fr.polytech.sircus.model.TypeMedia;
+import fr.polytech.sircus.model.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -22,7 +17,7 @@ import javafx.stage.Modality;
 import javafx.util.Callback;
 import lombok.Setter;
 import org.kordamp.ikonli.javafx.FontIcon;
-import java.awt.event.MouseEvent;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -48,26 +43,26 @@ public class ModifySeqPopUp {
 
     /** Media table */
     @FXML
-    private TableView<Media> mediaTable;
+    private TableView<AbstractMedia> mediaTable;
 
     /** Media table: column for locking */
     @FXML
-    private TableColumn<Media, String> mediaTableColumnLock;
+    private TableColumn<AbstractMedia, String> mediaTableColumnLock;
 
     /** Media table: name column */
     @FXML
-    private TableColumn<Media, String> mediaTableColumnName;
+    private TableColumn<AbstractMedia, String> mediaTableColumnName;
 
     /** Media table: duration column */
     @FXML
-    private TableColumn<Media, String> mediaTableColumnDuration;
+    private TableColumn<AbstractMedia, String> mediaTableColumnDuration;
 
     /** Media table: options column (edit buttons) */
     @FXML
-    private TableColumn<Media, String> mediaTableColumnOptions;
+    private TableColumn<AbstractMedia, String> mediaTableColumnOptions;
 
     /** List of media and cross-stimulus media */
-    private List<Media> listMediaPlusInterstim = new ArrayList<>();
+    private List<AbstractMedia> listMediaPlusInterstim = new ArrayList<>();
 
     private final String MEDIAS_PATH = "medias/";
 
@@ -86,10 +81,6 @@ public class ModifySeqPopUp {
     private Button cancelAddMediaSeq;
 
 
-    /** Object listener created in MetaSequenceController */
-    private MetaSequenceController.ModificationSequenceListener listener;
-
-
 
     /**
      * Initialize the controller and its attributes, then adding functionality to each component.
@@ -98,7 +89,7 @@ public class ModifySeqPopUp {
         this.mediaTable.setEditable(true);
         this.sequenceName.setText(this.sequence.getName());
 
-        this.mediaTableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        this.mediaTableColumnName.setCellValueFactory(new PropertyValueFactory<>("filename"));
         this.mediaTableColumnName.setStyle("-fx-alignment: CENTER;");
 
         this.mediaTableColumnDuration.setStyle("-fx-alignment: CENTER;");
@@ -111,9 +102,9 @@ public class ModifySeqPopUp {
         });
         this.mediaTableColumnDuration.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        Callback<TableColumn<Media, String>, TableCell<Media, String>> cellFactoryOption = new Callback<>() {
+        Callback<TableColumn<AbstractMedia, String>, TableCell<AbstractMedia, String>> cellFactoryOption = new Callback<>() {
             @Override
-            public TableCell<Media, String> call(final TableColumn<Media, String> param) {
+            public TableCell<AbstractMedia, String> call(final TableColumn<AbstractMedia, String> param) {
                 return new TableCell<>() {
                     final Button tableViewAddButton = new Button("");
                     final Button tableViewDeleteButton = new Button("");
@@ -141,8 +132,8 @@ public class ModifySeqPopUp {
 
                             // Add button
                             // If the media doesn't have an Interstim and isn't one
-                            if (getTableView().getItems().get(getIndex()).getInterStim() == null &&
-                                    !getTableView().getItems().get(getIndex()).getIsInterstim()) {
+                            Media parentMedia = (Media) getTableView().getItems().get(getIndex());
+                            if (parentMedia.getInterstim() == null) {
                                 tableViewAddButton.setOnMouseClicked(event ->
                                 {
                                     try {
@@ -151,32 +142,27 @@ public class ModifySeqPopUp {
                                         fileChooserInterstim.getExtensionFilters().addAll(
                                                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
                                         );
-                                        File newInterstim = fileChooserInterstim.showOpenDialog(tableViewAddButton.getScene().getWindow());
+                                        File interstimFile = fileChooserInterstim.showOpenDialog(tableViewAddButton.getScene().getWindow());
 
-                                        Path path = Paths.get(newInterstim.getPath());
+                                        Path path = Paths.get(interstimFile.getPath());
                                         String absoluteMediaPath = new File(MEDIAS_PATH).getAbsolutePath();
 
                                         // We compare the absolute path of the "medias" directory with the new media's one.
                                         // If they are not the same directory, we copy the new media to the application's "medias" directory.
-                                        if (!absoluteMediaPath.equals(path.toString().split("\\\\" + newInterstim.getName())[0])) {
-                                            OutputStream os = new FileOutputStream(MEDIAS_PATH + newInterstim.getName());
+                                        if (!absoluteMediaPath.equals(path.toString().split("\\\\" + interstimFile.getName())[0])) {
+                                            OutputStream os = new FileOutputStream(MEDIAS_PATH + interstimFile.getName());
                                             Files.copy(path, os);
                                         }
 
-                                        Media newMedia = new Media(
-                                                newInterstim.getName(),
-                                                newInterstim.getName(),
+                                        Interstim newInterstim = new Interstim(
+                                                interstimFile.getName(),
                                                 Duration.ofSeconds(1),
                                                 TypeMedia.PICTURE,
-                                                null
+                                                parentMedia
                                         );
-                                        newMedia.setIsInterstim(true); // Indicate that the new media is an interstim
 
-                                        getTableView().getItems().get(getIndex()).setInterStim(newMedia);
-
-                                        constructMediaInterstimList();
-                                        mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
-                                        mediaTable.refresh();
+                                        mediaTable.getItems().add(mediaTable.getItems().indexOf(parentMedia) - 1, newInterstim);
+                                        //mediaTable.refresh();
                                     } catch (Exception e) {
                                         System.out.print("Aucun fichier selectionné.");
                                     }
@@ -188,17 +174,24 @@ public class ModifySeqPopUp {
                             // Delete button
                             tableViewDeleteButton.setOnAction(event ->
                             {
-                                if (getTableView().getItems().get(getIndex()).getIsInterstim()) {
-                                    // +1 to get the parent media of the interstim
-                                    // I didn't find a better way to do it
-                                    getTableView().getItems().get(getIndex()+1).setInterStim(null);
+                                if (getTableView().getItems().get(getIndex()) instanceof Interstim) {
+                                    Interstim interstim = (Interstim) getTableView().getItems().get(getIndex());
+                                    getTableView().getItems().remove(interstim);
+                                    listMediaPlusInterstim.remove(interstim);
+                                    interstim.getMedia().setInterstim(null);
                                 }
                                 else {
-                                    sequence.removeMedia(getTableView().getItems().get(getIndex()));
+                                    Media media = (Media) getTableView().getItems().get(getIndex());
+                                    if (media.getInterstim() != null) {
+                                        getTableView().getItems().remove(media.getInterstim());
+                                        listMediaPlusInterstim.remove(media.getInterstim());
+                                        media.setInterstim(null);
+                                    }
+                                    getTableView().getItems().remove(media);
+                                    listMediaPlusInterstim.remove(media);
+                                    sequence.removeMedia(media);
                                 }
-                                constructMediaInterstimList();
-                                mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
-                                mediaTable.refresh();
+                                //mediaTable.refresh();
                             });
 
                             // Option button
@@ -207,7 +200,7 @@ public class ModifySeqPopUp {
                                 try {
                                     FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_media_popup.fxml"));
                                     DialogPane dialogPane = fxmlLoader.load();
-                                    ModifyMediaPopup controller = fxmlLoader.getController();
+                                    //ModifyMediaPopUp controller = fxmlLoader.getController();
 
                                     Dialog<ButtonType> dialog = new Dialog<>();
                                     dialog.setDialogPane(dialogPane);
@@ -223,18 +216,11 @@ public class ModifySeqPopUp {
                                 }
                             });
 
-                            try {
-                                if (getTableRow().getItem().getIsInterstim())
-                                    getTableRow().setStyle("-fx-background-color: #e6f2ff; -fx-text-background-color: black;");
-                            } catch (NullPointerException e) {
-                                getTableRow().setStyle("-fx-text-background-color: black;");
-                            }
-
-                            /*if (getTableRow().getItem().getIsInterstim()) {
+                            if (getTableRow().getItem() instanceof Interstim) {
                                 getTableRow().setStyle("-fx-background-color: #e6f2ff; -fx-text-background-color: black;");
                             } else {
-                                getTableRow().setStyle("-fx-background-color: #b3d9ff; -fx-text-background-color: black;");
-                            }*/
+                                getTableRow().setStyle("-fx-text-background-color: black;");
+                            }
 
                             setGraphic(hBox);
                         }
@@ -244,9 +230,9 @@ public class ModifySeqPopUp {
             }
         };
 
-        Callback<TableColumn<Media, String>, TableCell<Media, String>> cellFactoryLock = new Callback<>() {
+        Callback<TableColumn<AbstractMedia, String>, TableCell<AbstractMedia, String>> cellFactoryLock = new Callback<>() {
             @Override
-            public TableCell<Media, String> call(final TableColumn<Media, String> param) {
+            public TableCell<AbstractMedia, String> call(final TableColumn<AbstractMedia, String> param) {
                 return new TableCell<>() {
                     final CheckBox tableViewVerrCheckBox = new CheckBox("");
                     final HBox hBox = new HBox(tableViewVerrCheckBox);
@@ -259,11 +245,11 @@ public class ModifySeqPopUp {
                         } else {
                             hBox.setAlignment(Pos.CENTER);
                             hBox.setSpacing(20);
-                            Media media = getTableView().getItems().get(getIndex());
+                            Media media = (Media) getTableView().getItems().get(getIndex());
 
-                            tableViewVerrCheckBox.setSelected(media.getLock());
+                            tableViewVerrCheckBox.setSelected(media.isLocked());
 
-                            tableViewVerrCheckBox.setOnAction(event -> media.setLock(tableViewVerrCheckBox.isSelected()));
+                            tableViewVerrCheckBox.setOnAction(event -> media.setLocked(tableViewVerrCheckBox.isSelected()));
 
                             setGraphic(hBox);
                         }
@@ -300,8 +286,8 @@ public class ModifySeqPopUp {
         this.listMediaPlusInterstim.clear();
 
         for (int i = 0; i < this.sequence.getListMedias().size(); i++) {
-            if (this.sequence.getListMedias().get(i).getInterStim() != null) {
-                this.listMediaPlusInterstim.add(this.sequence.getListMedias().get(i).getInterStim());
+            if (this.sequence.getListMedias().get(i).getInterstim() != null) {
+                this.listMediaPlusInterstim.add(this.sequence.getListMedias().get(i).getInterstim());
             }
 
             this.listMediaPlusInterstim.add(this.sequence.getListMedias().get(i));

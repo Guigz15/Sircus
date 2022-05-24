@@ -10,7 +10,7 @@
 
 
 <DialogPane xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="fr.polytech.sircus.controller.PopUps.ModifyMediaPopup">
+            fx:controller="fr.polytech.sircus.controller.PopUps.ModifyMediaPopUp">
    <content>
       <VBox>
          <CheckBox mnemonicParsing="false" text="Image ajustée à la taille de l'écran">

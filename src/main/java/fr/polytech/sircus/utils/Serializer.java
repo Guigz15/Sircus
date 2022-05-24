@@ -40,15 +40,21 @@ public final class Serializer {
         Sequence sequence1 = new Sequence("Sequence 1");
         Sequence sequence2 = new Sequence("Sequence 2");
         Sequence sequence3 = new Sequence("Sequence 3");
+        Sequence sequence4 = new Sequence("Sequence 4");
+        Sequence sequence5 = new Sequence("Sequence 5");
+        Sequence sequence6 = new Sequence("Sequence 6");
+        Sequence sequence7 = new Sequence("Sequence 7");
+        Sequence sequence8 = new Sequence("Sequence 8");
+        Sequence sequence9 = new Sequence("Sequence 9");
 
-        Media media1 = new Media("Media 1", "mos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE, null);
-        Media media2 = new Media("Media 2", "mos02.jpg", Duration.ofSeconds(2), TypeMedia.PICTURE, null);
-        Media media3 = new Media("Media 3", "mosob01.jpg", Duration.ofSeconds(1), TypeMedia.PICTURE, null);
-        Media media4 = new Media("Media 4", "vis03.jpg", Duration.ofSeconds(7), TypeMedia.PICTURE, null);
-        Media media5 = new Media("Media 5", "vismos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE, null);
-        Media media6 = new Media("Media 6", "visob02.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE, null);
-        Media media7 = new Media("Media 7", "croix.jpg", Duration.ofSeconds(4), TypeMedia.PICTURE, null);
-        Media media8 = new Media("Media 8", "ob01.jpg", Duration.ofSeconds(10), TypeMedia.PICTURE, null);
+        Media media1 = new Media("mos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE);
+        Media media2 = new Media("mos02.jpg", Duration.ofSeconds(2), TypeMedia.PICTURE);
+        Media media3 = new Media("mosob01.jpg", Duration.ofSeconds(1), TypeMedia.PICTURE);
+        Media media4 = new Media("vis03.jpg", Duration.ofSeconds(7), TypeMedia.PICTURE);
+        Media media5 = new Media("vismos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE);
+        Media media6 = new Media("visob02.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE);
+        Media media7 = new Media("croix.jpg", Duration.ofSeconds(4), TypeMedia.PICTURE);
+        Media media8 = new Media("ob01.jpg", Duration.ofSeconds(10), TypeMedia.PICTURE);
 
         media1.setBackgroundColor(Color.AQUA);
         media2.setBackgroundColor(Color.GREENYELLOW);
@@ -63,7 +69,6 @@ public final class Serializer {
         sequence2.addMedia(media5);
         sequence2.addMedia(media6);
         sequence2.addMedia(media7);
-        sequence2.addMedia(media8);
         sequence3.addMedia(media1);
         sequence3.addMedia(media3);
         sequence1.addMedia(media1);
@@ -71,13 +76,38 @@ public final class Serializer {
         sequence1.addMedia(media3);
         sequence2.addMedia(media4);
         sequence2.addMedia(media5);
+        sequence4.addMedia(media1);
+        sequence4.addMedia(media5);
+        sequence4.addMedia(media3);
+        sequence5.addMedia(media1);
+        sequence5.addMedia(media5);
+        sequence6.addMedia(media3);
+        sequence6.addMedia(media8);
+        sequence7.addMedia(media7);
+        sequence7.addMedia(media3);
+        sequence7.addMedia(media4);
+        sequence8.addMedia(media5);
+        sequence8.addMedia(media6);
+        sequence8.addMedia(media5);
+        sequence9.addMedia(media7);
+        sequence9.addMedia(media8);
+        sequence9.addMedia(media8);
 
         stubMetaSeq1.addSequence(sequence1);
+        stubMetaSeq1.addSequence(sequence3);
+        stubMetaSeq1.addSequence(sequence4);
+        stubMetaSeq2.addSequence(sequence2);
+        stubMetaSeq2.addSequence(sequence1);
         stubMetaSeq2.addSequence(sequence2);
         stubMetaSeq3.addSequence(sequence1);
         stubMetaSeq3.addSequence(sequence2);
-        stubMetaSeq3.addSequence(sequence2);
-        stubMetaSeq3.addSequence(sequence2);
+        stubMetaSeq3.addSequence(sequence3);
+        stubMetaSeq3.addSequence(sequence4);
+        stubMetaSeq3.addSequence(sequence5);
+        stubMetaSeq3.addSequence(sequence6);
+        stubMetaSeq3.addSequence(sequence7);
+        stubMetaSeq3.addSequence(sequence8);
+        stubMetaSeq3.addSequence(sequence9);
 
         stubData.saveMetaSeq(stubMetaSeq1);
         stubData.saveMetaSeq(stubMetaSeq2);
