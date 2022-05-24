@@ -166,22 +166,27 @@ public class PlayerMonitorController{
      * Go back to the previous page.
      */
     public void previousPage() throws IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Mettre en pause");
-        alert.setHeaderText("Êtes-vous sûr de vouloir mettre la lecture en pause ?");
+        if (viewer != null)
+        {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Mettre en pause");
+            alert.setHeaderText("Êtes-vous sûr de vouloir mettre la lecture en pause ?");
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            viewer.closeViewer();
-            viewerPlayingState = false;
-            resetAllClocks();
-
-            FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
-            Scene scene = new Scene(fxmlLoader.load());
-            Stage stage = (Stage) playerMonitor.getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                viewer.closeViewer();
+                viewerPlayingState = false;
+                resetAllClocks();
+            } else {
+                return;
+            }
         }
+
+        FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = (Stage) playerMonitor.getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
     /**
