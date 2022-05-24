@@ -104,6 +104,7 @@ public class MainWindowController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         // EyeTracker
         ObservableList<String> eyeTrackersList = FXCollections.observableArrayList(SircusApplication.dataSircus.getEyeTrackerList());
         eyeTracker.setItems(eyeTrackersList);
@@ -439,8 +440,8 @@ public class MainWindowController implements Initializable {
     private void nextPage() throws IOException {
         saveInfos();
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
-        Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) next.getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.show();
     }

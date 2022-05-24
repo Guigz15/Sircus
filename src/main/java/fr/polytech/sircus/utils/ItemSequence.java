@@ -9,9 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Class create to make a list sequence. Is use for create a custome Cell of ListView. Cf Etape2AdminController.
+ * Class create to make a list sequence. Is use for create a custom Cell of ListView. Cf Etape2AdminController.
  */
-public class Item {
+public class ItemSequence {
     private final StringProperty name = new SimpleStringProperty();
     private final BooleanProperty on = new SimpleBooleanProperty();
 
@@ -19,7 +19,7 @@ public class Item {
     @Getter @Setter
     private final Sequence sequence;
 
-    public Item(String name, boolean on, Sequence sequence) {
+    public ItemSequence(String name, boolean on, Sequence sequence) {
         this.sequence = sequence;
         setName(name);
         setOn(on);
