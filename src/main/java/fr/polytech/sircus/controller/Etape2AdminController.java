@@ -2,27 +2,27 @@ package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.controller.PopUps.ModifySeqPopUp;
-import fr.polytech.sircus.model.*;
-import fr.polytech.sircus.utils.ItemSequence;
+import fr.polytech.sircus.model.AbstractMedia;
+import fr.polytech.sircus.model.Interstim;
+import fr.polytech.sircus.model.MetaSequence;
+import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.utils.ImportMetaSeqXML;
 import fr.polytech.sircus.utils.ImportSeqXML;
+import fr.polytech.sircus.utils.ItemSequence;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.FileChooser;
 import javafx.scene.input.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -34,9 +34,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.*;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.Map.Entry;
 
 /**
  * Class Etape2AdminController : manages the metasequences settings page of the Admin
@@ -90,7 +88,8 @@ public class Etape2AdminController implements Initializable {
     @FXML
     private Label totalDurationLabel;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean aboutToMix;
 
     //DataFormat use for drag and drop sequences in listView.
@@ -105,14 +104,11 @@ public class Etape2AdminController implements Initializable {
     /**
      * Function initialize which dynamically ends the listViews initialization
      * and enable corresponding buttons when metasequences or sequences are selected
-     *
-     * @param url
-     * @param resourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         /* initialize button to mix randomly the list of sequences depends if we are connected on admin mode */
-        if(!SircusApplication.adminConnected){
+        if (!SircusApplication.adminConnected) {
             doMixButton.setVisible(false);
             doMixButton.setDisable(true);
             //hide modification buttons
@@ -124,7 +120,7 @@ public class Etape2AdminController implements Initializable {
             modifySeqButton.setVisible(false);
             removeSeqButton.setVisible(false);
             addSeqButton.setVisible(false);
-        }else{
+        } else {
             doMixButton.setVisible(true);
             doMixButton.setDisable(false);
             addMetaButton.setDisable(false);
@@ -152,15 +148,15 @@ public class Etape2AdminController implements Initializable {
         metaListView.setCellFactory((ListView<MetaSequence> param) -> {
 
             /*For textField ListView check the link : https://stackoverflow.com/questions/35963888/how-to-create-a-listview-of-complex-objects-and-allow-editing-a-field-on-the-obj */
-            ListCell<MetaSequence> listCellForMetaSequence = new ListCell<>(){
+            ListCell<MetaSequence> listCellForMetaSequence = new ListCell<>() {
 
-                private TextField textField = new TextField() ;
+                private final TextField textField = new TextField();
 
                 {
                     //defined action when we click on textfield to edit meta-sequence name
                     textField.setOnAction(e -> {
                         //we commit the change only if we are connected as admin
-                        if(SircusApplication.adminConnected) commitEdit(getItem());
+                        if (SircusApplication.adminConnected) commitEdit(getItem());
                         else cancelEdit();
                     });
                     textField.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
@@ -178,7 +174,7 @@ public class Etape2AdminController implements Initializable {
                     if (empty) {
                         setText(null);
                         setGraphic(null);
-                    }else if (isEditing() && SircusApplication.adminConnected) {
+                    } else if (isEditing() && SircusApplication.adminConnected) {
                         textField.setText(metaSequence.getName());
                         setText(null);
                         setGraphic(textField);
@@ -217,7 +213,7 @@ public class Etape2AdminController implements Initializable {
 
 
             //defined OnDragDetected event :
-            listCellForMetaSequence.setOnDragDetected( ( MouseEvent event ) ->
+            listCellForMetaSequence.setOnDragDetected((MouseEvent event) ->
             {
                 int index_Selected_MetaSeq = listCellForMetaSequence.getIndex();
                 if (index_Selected_MetaSeq == -1 || !SircusApplication.adminConnected) {
@@ -235,7 +231,7 @@ public class Etape2AdminController implements Initializable {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
                     //if db has a serialized objet.
-                    if (listCellForMetaSequence.getIndex() != ((Integer)db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+                    if (listCellForMetaSequence.getIndex() != (Integer) db.getContent(SERIALIZED_MIME_TYPE)) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         event.consume();
                     }
@@ -260,7 +256,7 @@ public class Etape2AdminController implements Initializable {
                     }
                     // we add the new meta-sequence at the good place.
                     metaListView.getItems().add(dropIndex, draggedMetaSeq);
-                    SircusApplication.dataSircus.getMetaSequencesList().add(dropIndex,draggedMetaSeq);
+                    SircusApplication.dataSircus.getMetaSequencesList().add(dropIndex, draggedMetaSeq);
                     metaListView.getSelectionModel().select(dropIndex);
                     event.setDropCompleted(true);
                     event.consume();
@@ -277,34 +273,28 @@ public class Etape2AdminController implements Initializable {
         //-------------------------------------------------------------------------------------//
 
         /* set addMetaSequence proprieties to add meta-sequence */
-        addMetaButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                String newNameMetaSequence = "Nouvelle MetaSequence " + (metaListView.getItems().size() + 1);
-                MetaSequence newMetaSequence = new MetaSequence(newNameMetaSequence);
-                SircusApplication.dataSircus.getMetaSequencesList().add(newMetaSequence);
-                metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
-                //Defined action when the MetaSequence element selected is changed.
-                metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
-            }
+        addMetaButton.setOnAction(actionEvent -> {
+            String newNameMetaSequence = "Nouvelle MetaSequence " + (metaListView.getItems().size() + 1);
+            MetaSequence newMetaSequence = new MetaSequence(newNameMetaSequence);
+            SircusApplication.dataSircus.getMetaSequencesList().add(newMetaSequence);
+            metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
+            //Defined action when the MetaSequence element selected is changed.
+            metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
         });
 
         /* set removeMetaSequence proprieties to remove meta-sequence */
-        removeMetaButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                //if we have selected a meta-sequence
-                if(index_Selected_MetaSequence >=0){
-                    SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
-                    metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
-                }
+        removeMetaButton.setOnAction(actionEvent -> {
+            //if we have selected a meta-sequence
+            if (index_Selected_MetaSequence >= 0) {
+                SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
+                metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
             }
         });
 
         //Defined action when we pressed "delete" key. This delete current meta-sequence
         metaListView.setOnKeyReleased((KeyEvent keyEvent) -> {
             //if we pressed delete and we have selected a mete-sequence and only if we are connected as admin
-            if (keyEvent.getCode() == KeyCode.DELETE && SircusApplication.adminConnected && index_Selected_MetaSequence >=0) {
+            if ((keyEvent.getCode() == KeyCode.DELETE) && SircusApplication.adminConnected && (index_Selected_MetaSequence >= 0)) {
                 SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
                 metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
             }
@@ -316,22 +306,19 @@ public class Etape2AdminController implements Initializable {
 
         //Set the CellFactory we definied defined above. Moreover, we defined behaviours to do when we drag and drop a Sequence.
         seqListView.setCellFactory((ListView<ItemSequence> param) -> {
-            ListCell<ItemSequence> listCellForSequence = new ListCell<ItemSequence>() {
+            ListCell<ItemSequence> listCellForSequence = new ListCell<>() {
                 private CheckBox checkBox;
+
                 @Override
                 public void updateItem(ItemSequence item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!(empty || item == null)) {
-                        if(!SircusApplication.adminConnected){
+                        if (!SircusApplication.adminConnected) {
                             getCheckBox().setVisible(false);
-                        }else {
+                        } else {
                             getCheckBox().setVisible(true);
                             getCheckBox().setSelected(item.isOn());
-                            if (isAboutToMix()) {
-                                getCheckBox().setDisable(false);
-                            } else {
-                                getCheckBox().setDisable(true);
-                            }
+                            getCheckBox().setDisable(!isAboutToMix());
                             setGraphic(getCheckBox());
                         }
                         setText(item.getName());
@@ -348,21 +335,21 @@ public class Etape2AdminController implements Initializable {
                         checkBox.selectedProperty().addListener((obs, oldValue, newValue) -> {
                             if (getItem() != null) {
                                 //oldValue = false && newValue = true -> we set Items lock
-                                if(oldValue == false && newValue ==true) {
+                                if (!oldValue && newValue) {
                                     //if the item is not lock
                                     if (!getItem().getSequence().getLock()) {
-                                        getCheckBox().setSelected(newValue);
-                                        getItem().getSequence().setLock(newValue);
-                                        getItem().setOn(newValue);
+                                        getCheckBox().setSelected(true);
+                                        getItem().getSequence().setLock(true);
+                                        getItem().setOn(true);
                                     }
                                 }
                                 //oldValue = true && newValue = false -> we set Items unlock
-                                else if(oldValue == true && newValue == false){
+                                else if (oldValue && !newValue) {
                                     //if the item is lock
                                     if (getItem().getSequence().getLock()) {
-                                        getCheckBox().setSelected(newValue);
-                                        getItem().getSequence().setLock(newValue);
-                                        getItem().setOn(newValue);
+                                        getCheckBox().setSelected(false);
+                                        getItem().getSequence().setLock(false);
+                                        getItem().setOn(false);
                                     }
                                 }
                             }
@@ -373,7 +360,7 @@ public class Etape2AdminController implements Initializable {
             };
 
             //defined OnDragDetected event :
-            listCellForSequence.setOnDragDetected( ( MouseEvent event ) ->
+            listCellForSequence.setOnDragDetected((MouseEvent event) ->
             {
                 int index_Selected_Sequence = listCellForSequence.getIndex();
                 if (index_Selected_Sequence == -1 || !SircusApplication.adminConnected) {
@@ -391,7 +378,7 @@ public class Etape2AdminController implements Initializable {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
                     //if db has a serialized objet.
-                    if (listCellForSequence.getIndex() != ((Integer)db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+                    if (listCellForSequence.getIndex() != (Integer) db.getContent(SERIALIZED_MIME_TYPE)) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         event.consume();
                     }
@@ -399,38 +386,38 @@ public class Etape2AdminController implements Initializable {
             });
 
             listCellForSequence.setOnDragDropped(event -> {
-                        Dragboard db = event.getDragboard();
-                        if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-                            int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
-                            //we remove the old Seque to move to the new place.
-                            ItemSequence draggedSequence = seqListView.getItems().get(draggedIndex);
+                Dragboard db = event.getDragboard();
+                if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                    int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
+                    //we remove the old Seque to move to the new place.
+                    ItemSequence draggedSequence = seqListView.getItems().get(draggedIndex);
 
-                            seqListView.getItems().remove(draggedIndex);
-                            int dropIndex;
+                    seqListView.getItems().remove(draggedIndex);
+                    int dropIndex;
 
-                            if (listCellForSequence.isEmpty()) {
-                                dropIndex = seqListView.getItems().size();
-                            } else {
-                                dropIndex = listCellForSequence.getIndex();
-                            }
-                            // we add the new sequence at the good place.
-                            seqListView.getItems().add(dropIndex, draggedSequence);
+                    if (listCellForSequence.isEmpty()) {
+                        dropIndex = seqListView.getItems().size();
+                    } else {
+                        dropIndex = listCellForSequence.getIndex();
+                    }
+                    // we add the new sequence at the good place.
+                    seqListView.getItems().add(dropIndex, draggedSequence);
 
-                            //we swap the element in meta-sequence
-                            int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
-                            MetaSequence currentMetaSequence = metaListView.getItems().get(index_Selected_MetaSequence);
-                            //add new sequence to the right place
-                            currentMetaSequence.getSequencesList().remove(draggedIndex);
-                            currentMetaSequence.getSequencesList().add(dropIndex,draggedSequence.getSequence());
-                            event.setDropCompleted(true);
-                            seqListView.getSelectionModel().select(dropIndex);
-                            event.consume();
+                    //we swap the element in meta-sequence
+                    int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
+                    MetaSequence currentMetaSequence = metaListView.getItems().get(index_Selected_MetaSequence);
+                    //add new sequence to the right place
+                    currentMetaSequence.getSequencesList().remove(draggedIndex);
+                    currentMetaSequence.getSequencesList().add(dropIndex, draggedSequence.getSequence());
+                    event.setDropCompleted(true);
+                    seqListView.getSelectionModel().select(dropIndex);
+                    event.consume();
 
-                        }
+                }
             });
 
             listCellForSequence.setOnDragDone(DragEvent::consume);
-        return listCellForSequence;
+            return listCellForSequence;
         });
 
         //------------------------------------------------------------------//
@@ -438,122 +425,103 @@ public class Etape2AdminController implements Initializable {
         //------------------------------------------------------------------//
 
         /* set doMixButton proprieties */
-        doMixButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                setAboutToMix(true);
-                refreshPage();
-            }
+        doMixButton.setOnAction(event -> {
+            setAboutToMix(true);
+            refreshPage();
         });
 
         /* set cancelMixButton proprieties */
-        cancelMixButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                setAboutToMix(false);
-                refreshPage();
-            }
+        cancelMixButton.setOnAction(event -> {
+            setAboutToMix(false);
+            refreshPage();
         });
 
         /* set startMixButton proprieties */
-        startMixButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                setAboutToMix(false);
-                if(index_Selected_MetaSequence >= 0) {
-                    //get the current Meta-Sequence.
-                    MetaSequence currentMetaSequence = metaListView.getItems().get(index_Selected_MetaSequence);
-                    //copy the list
-                    List<Sequence> copySequence = new ArrayList<>(currentMetaSequence.getSequencesList());
-                    //create Map to store the fixed sequences.
-                    HashMap<Sequence,Integer> fixedSequence = new HashMap<>();
-                    //find fixed sequences
-                    for (int indiceSequence = 0; indiceSequence < copySequence.size(); indiceSequence++) {
-                        Sequence currentSequence = copySequence.get(indiceSequence);
-                        if (currentSequence.getLock()) {
-                            fixedSequence.put(currentSequence,indiceSequence);
-                            currentMetaSequence.getSequencesList().remove(currentSequence);
-                        }
+        startMixButton.setOnAction(event -> {
+            setAboutToMix(false);
+            if (index_Selected_MetaSequence >= 0) {
+                //get the current Meta-Sequence.
+                MetaSequence currentMetaSequence = metaListView.getItems().get(index_Selected_MetaSequence);
+                //copy the list
+                List<Sequence> copySequence = new ArrayList<>(currentMetaSequence.getSequencesList());
+                //create Map to store the fixed sequences.
+                HashMap<Sequence, Integer> fixedSequence = new HashMap<>();
+                //find fixed sequences
+                for (int indiceSequence = 0; indiceSequence < copySequence.size(); indiceSequence++) {
+                    Sequence currentSequence = copySequence.get(indiceSequence);
+                    if (currentSequence.getLock()) {
+                        fixedSequence.put(currentSequence, indiceSequence);
+                        currentMetaSequence.getSequencesList().remove(currentSequence);
                     }
-                    //Shuffle the list of sequences
-                    Collections.shuffle(currentMetaSequence.getSequencesList());
-
-                    //We sort the hashmap to insert elements in ascending order (on the index of insertion)
-                    fixedSequence = sortByValue(fixedSequence);
-                    //restore fixed sequences
-                    fixedSequence.forEach((sequence, integer) -> {
-                        currentMetaSequence.getSequencesList().add(integer,sequence);
-                    });
                 }
-                refreshPage();
+                //Shuffle the list of sequences
+                Collections.shuffle(currentMetaSequence.getSequencesList());
+
+                //We sort the hashmap to insert elements in ascending order (on the index of insertion)
+                fixedSequence = sortByValue(fixedSequence);
+                //restore fixed sequences
+                fixedSequence.forEach((sequence, integer) -> currentMetaSequence.getSequencesList().add(integer, sequence));
             }
+            refreshPage();
         });
 
         /*defined action to do when we update a sequence */
-        modifySeqButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_seq_popup.fxml"));
-                    DialogPane dialogPane = fxmlLoader.load();
-                    ModifySeqPopUp controller = fxmlLoader.getController();
-                    controller.setSequence(seqListView.getSelectionModel().getSelectedItem().getSequence());
-                    controller.init();
+        modifySeqButton.setOnAction(actionEvent -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_seq_popup.fxml"));
+                DialogPane dialogPane = fxmlLoader.load();
+                ModifySeqPopUp controller = fxmlLoader.getController();
+                controller.setSequence(seqListView.getSelectionModel().getSelectedItem().getSequence());
+                controller.init();
 
-                    Dialog<ButtonType> dialog = new Dialog<>();
-                    dialog.setDialogPane(dialogPane);
-                    dialog.setTitle("Modification de séquence");
-                    dialog.initModality(Modality.WINDOW_MODAL);
-                    dialog.initOwner(modifySeqButton.getScene().getWindow());
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setDialogPane(dialogPane);
+                dialog.setTitle("Modification de séquence");
+                dialog.initModality(Modality.WINDOW_MODAL);
+                dialog.initOwner(modifySeqButton.getScene().getWindow());
 
 
-                    Optional<ButtonType> clickedButton = dialog.showAndWait();
+                Optional<ButtonType> clickedButton = dialog.showAndWait();
 
-                    /*
-                    ATTENTION A DECOMMENTER APRES AVOIR FAIT LA MODIFICATION D'UNE SEQUENCE
-                    // the code below allows you to update listview.
-                    metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
-                    //Defined action when the MetaSequence element selected is changed.
-                    metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
-                     */
+                /*
+                ATTENTION A DECOMMENTER APRES AVOIR FAIT LA MODIFICATION D'UNE SEQUENCE
+                // the code below allows you to update listview.
+                metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
+                //Defined action when the MetaSequence element selected is changed.
+                metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
+                 */
 
-                    if (clickedButton.get() == ButtonType.FINISH) {
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (clickedButton.get() == ButtonType.FINISH) {
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
 
         /*defined action to do when we add a sequence */
-        addSeqButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                String newNameMetaSequence = "Nouvelle Sequence " + (seqListView.getItems().size() + 1);
-                Sequence newSequence = new Sequence(newNameMetaSequence);
-                if(index_Selected_MetaSequence >= 0) SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().add(newSequence);
-                seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
-                //Defined action when the MetaSequence element selected is changed.
-                seqListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerSequence());
-            }
+        addSeqButton.setOnAction(actionEvent -> {
+            String newNameMetaSequence = "Nouvelle Sequence " + (seqListView.getItems().size() + 1);
+            Sequence newSequence = new Sequence(newNameMetaSequence);
+            if (index_Selected_MetaSequence >= 0)
+                SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().add(newSequence);
+            seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
+            //Defined action when the MetaSequence element selected is changed.
+            seqListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerSequence());
         });
 
         /*defined action to do when we remove a sequence */
-        removeSeqButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                //if we have selected a meta-sequence
-                if(index_Selected_Sequence >=0 && index_Selected_MetaSequence >= 0){
-                    SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().remove(index_Selected_Sequence);
-                    seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
-                }
+        removeSeqButton.setOnAction(actionEvent -> {
+            //if we have selected a meta-sequence
+            if (index_Selected_Sequence >= 0 && index_Selected_MetaSequence >= 0) {
+                SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().remove(index_Selected_Sequence);
+                seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
             }
         });
 
         //Defined action when we pressed "delete" key. This delete current meta-sequence
         seqListView.setOnKeyReleased((KeyEvent keyEvent) -> {
             //if we pressed delete and we have selected a mete-sequence and only if we are connected as admin
-            if (keyEvent.getCode() == KeyCode.DELETE && SircusApplication.adminConnected && index_Selected_Sequence >=0 && index_Selected_MetaSequence>=0) {
+            if ((keyEvent.getCode() == KeyCode.DELETE) && SircusApplication.adminConnected && (index_Selected_Sequence >= 0) && (index_Selected_MetaSequence >= 0)) {
                 SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().remove(index_Selected_Sequence);
                 seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
             }
@@ -565,9 +533,9 @@ public class Etape2AdminController implements Initializable {
      * Export a sequence to XML format, for admin only
      */
     @FXML
-    private void exportSeq(){
+    private void exportSeq() {
         // export is only available for admin
-        if(SircusApplication.adminConnected){
+        if (SircusApplication.adminConnected) {
             // get selected sequence
             Sequence seq = seqListView.getSelectionModel().getSelectedItem().getSequence();
             File file = new File(SircusApplication.dataSircus.getPath().getSeqPath() + seq.getName() + ".xml");
@@ -586,9 +554,9 @@ public class Etape2AdminController implements Initializable {
      * Export a metaSequence to XML format, for admin only
      */
     @FXML
-    private void exportMeta(){
+    private void exportMeta() {
         // export is only available for admin
-        if(SircusApplication.adminConnected){
+        if (SircusApplication.adminConnected) {
             // get selected metaSequence
             int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
             MetaSequence meta = metaListView.getItems().get(index_Selected_MetaSequence);
@@ -608,7 +576,7 @@ public class Etape2AdminController implements Initializable {
      * Import a sequence from a XML file
      */
     @FXML
-    private void importSeq(){
+    private void importSeq() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Importer sequence");
         fileChooser.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getSeqPath()));
@@ -632,9 +600,7 @@ public class Etape2AdminController implements Initializable {
                 MetaSequence currentMetaSequence = metaListView.getItems().get(index_Selected_MetaSequence);
                 previewTimeline.removeAllMedia();
                 previewTimeline.addMetaSequence(currentMetaSequence);
-            }
-            catch (ParserConfigurationException | SAXException | IOException e)
-            {
+            } catch (ParserConfigurationException | SAXException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -644,7 +610,7 @@ public class Etape2AdminController implements Initializable {
      * Import a metaSequence from a XML file
      */
     @FXML
-    private void importMeta(){
+    private void importMeta() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Importer metaSequence");
         fileChooser.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getMetaPath()));
@@ -660,9 +626,7 @@ public class Etape2AdminController implements Initializable {
                 // add the new metaSequence in the list
                 SircusApplication.dataSircus.getMetaSequencesList().add(handler.getMeta());
                 metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
-            }
-            catch (ParserConfigurationException | SAXException | IOException e)
-            {
+            } catch (ParserConfigurationException | SAXException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -671,19 +635,16 @@ public class Etape2AdminController implements Initializable {
     /**
      * function that refreshes the page : refreshes mix buttons and the seqListView objects
      * to fix guidelines of the mix process
-     *
-     * @return
      */
-    public void refreshPage(){
-        if (isAboutToMix()){
+    public void refreshPage() {
+        if (isAboutToMix()) {
             cancelMixButton.setVisible(true);
             cancelMixButton.setDisable(false);
             startMixButton.setVisible(true);
             startMixButton.setDisable(false);
             doMixButton.setVisible(false);
             doMixButton.setDisable(true);
-        }
-        else {
+        } else {
             cancelMixButton.setVisible(false);
             cancelMixButton.setDisable(true);
             startMixButton.setVisible(false);
@@ -716,11 +677,12 @@ public class Etape2AdminController implements Initializable {
 
     /**
      * Get all itemsSequence storage in the current Meta Sequence which is selected
+     *
      * @return the itemsSequence of items
      */
-    private List<ItemSequence> getAllItemInCurrentMetaSequence(){
+    private List<ItemSequence> getAllItemInCurrentMetaSequence() {
         List<ItemSequence> allItemSequence = new ArrayList<>();
-        if(index_Selected_MetaSequence >= 0) {
+        if (index_Selected_MetaSequence >= 0) {
             for (Sequence sequence : metaListView.getItems().get(index_Selected_MetaSequence).getSequencesList()) {
                 ItemSequence newItemSequence = new ItemSequence(sequence.getName(), sequence.getLock(), sequence);
                 allItemSequence.add(newItemSequence);
@@ -731,59 +693,47 @@ public class Etape2AdminController implements Initializable {
 
     /**
      * Get all item storage in the current list of Meta-sequence
+     *
      * @return the list of itemsMetaSequence
      */
-    private List<MetaSequence> getAllItemMetaSequence(){
-        List<MetaSequence> allItemMetaSequence = new ArrayList<>();
+    private List<MetaSequence> getAllItemMetaSequence() {
 
-        for (MetaSequence metaSequence : SircusApplication.dataSircus.getMetaSequencesList()) {
-            allItemMetaSequence.add(metaSequence);
-        }
-
-        return allItemMetaSequence;
+        return new ArrayList<>(SircusApplication.dataSircus.getMetaSequencesList());
     }
 
     /**
      * Method which allow to sort a HashMap by values
-     * @param hm
-     * @return
+     *
+     * @param hm The HashMap that we want to sort by value
+     * @return HashMap sorted by value
      */
-    public static HashMap<Sequence, Integer>sortByValue(HashMap<Sequence, Integer> hm)
-    {
+    public static HashMap<Sequence, Integer> sortByValue(HashMap<Sequence, Integer> hm) {
         // Create a list from elements of HashMap
-        List<Map.Entry<Sequence, Integer> > list
-                = new LinkedList<Map.Entry<Sequence, Integer> >(
-                hm.entrySet());
+        LinkedList<Entry<Sequence, Integer>> list = new LinkedList<>(hm.entrySet());
 
         // Sort the list using lambda expression
-        Collections.sort(
-                list,
-                (i1,
-                 i2) -> i1.getValue().compareTo(i2.getValue()));
+        list.sort(Map.Entry.comparingByValue());
 
         // put data from sorted list to hashmap
-        HashMap<Sequence, Integer> temp
-                = new LinkedHashMap<Sequence, Integer>();
-        for (Map.Entry<Sequence, Integer> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
-        }
+        HashMap<Sequence, Integer> temp = new LinkedHashMap<>();
+        for (Map.Entry<Sequence, Integer> aa : list) temp.put(aa.getKey(), aa.getValue());
         return temp;
     }
 
     /**
      * Set the information section about the selected meta-sequence
      */
-    public void setMetaSeqStats(){
-        MetaSequence metaSeq = getAllItemMetaSequence().get(index_Selected_MetaSequence);
+    public void setMetaSeqStats() {
+        MetaSequence metaSeq = SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence);
         statsTitleLabel.setText("Statistiques de la méta-séquence");
 
         nbSeqLabel.setText(Integer.toString(metaSeq.getSequencesList().size()));
 
         int nbMedias = 0;
         int nbInterstims = 0;
-        for (Sequence seq : metaSeq.getSequencesList()){
+        for (Sequence seq : metaSeq.getSequencesList()) {
             nbMedias += seq.getListMedias().size();
-            for (AbstractMedia media : seq.getListMedias()){
+            for (AbstractMedia media : seq.getListMedias()) {
                 if (media instanceof Interstim)
                     nbInterstims++;
             }
@@ -826,16 +776,17 @@ public class Etape2AdminController implements Initializable {
         @Override
         public void changed(ObservableValue<? extends MetaSequence> observableValue, MetaSequence metaSequence, MetaSequence metaSequenceSelected) {
             //allow the buttons to change meta-sequence only if connect as admin
-            if(SircusApplication.adminConnected) {
-                renameMetaButton.setDisable(false);
+            if (SircusApplication.adminConnected) {
                 exportMetaButton.setDisable(false);
                 removeMetaButton.setDisable(false);
                 addMetaButton.setDisable(false);
                 addMetaButton.setVisible(true);
-                renameMetaButton.setVisible(true);
                 exportMetaButton.setVisible(true);
                 removeMetaButton.setVisible(true);
-            }else{
+                //TODO Voir si ce bouton est tjr necessaire ou si le fait de cliquer et d'écrire dans la meta-seq pour modifier suffit.
+                //renameMetaButton.setVisible(true);
+                //renameMetaButton.setDisable(false);
+            } else {
                 addMetaButton.setDisable(true);
                 renameMetaButton.setDisable(true);
                 exportMetaButton.setDisable(true);
@@ -847,12 +798,12 @@ public class Etape2AdminController implements Initializable {
 
             previewTimeline.removeAllMedia();
             //if the selected meta-sequence is not null we display the previewTimeLine
-            if(metaSequenceSelected != null)previewTimeline.addMetaSequence(metaSequenceSelected);
+            if (metaSequenceSelected != null) previewTimeline.addMetaSequence(metaSequenceSelected);
 
             //Defined the list of sequences.
             seqListView.getItems().clear();
             seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
-            if(index_Selected_MetaSequence >=0) {
+            if (index_Selected_MetaSequence >= 0) {
                 setMetaSeqStats();
             }
         }
@@ -867,7 +818,7 @@ public class Etape2AdminController implements Initializable {
         public void changed(ObservableValue<? extends ItemSequence> observableValue, ItemSequence s, ItemSequence t1) {
 
             //allow the buttons to change Sequence only if connect as admin
-            if(SircusApplication.adminConnected) {
+            if (SircusApplication.adminConnected) {
                 modifySeqButton.setDisable(false);
                 exportSeqButton.setDisable(false);
                 removeSeqButton.setDisable(false);
@@ -876,7 +827,7 @@ public class Etape2AdminController implements Initializable {
                 exportSeqButton.setVisible(true);
                 removeSeqButton.setVisible(true);
                 addSeqButton.setVisible(true);
-            }else{
+            } else {
                 modifySeqButton.setDisable(true);
                 exportSeqButton.setDisable(true);
                 removeSeqButton.setDisable(true);
@@ -884,8 +835,8 @@ public class Etape2AdminController implements Initializable {
             }
             //get the new medias lists to display it on screen
             index_Selected_Sequence = seqListView.getSelectionModel().getSelectedIndex();
-            MetaSequence currentMetaSeq = metaListView.getItems().get(index_Selected_MetaSequence);
-            if(index_Selected_MetaSequence >= 0 && index_Selected_Sequence >=0) {
+            if ((0 <= index_Selected_Sequence) && (0 <= index_Selected_MetaSequence)) {
+                MetaSequence currentMetaSeq = metaListView.getItems().get(index_Selected_MetaSequence);
                 Sequence currentSequence = currentMetaSeq.getSequencesList().get(index_Selected_Sequence);
                 previewTimeline.setMediaList(currentSequence.getListMedias());
                 setSeqStats();
