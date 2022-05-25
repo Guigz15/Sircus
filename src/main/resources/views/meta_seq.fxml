@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<SplitPane dividerPositions="0.6" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="675.0" orientation="VERTICAL" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.Etape2AdminController">
+<SplitPane dividerPositions="0.6" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="675.0" orientation="VERTICAL" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.Etape2AdminController">
      <AnchorPane minHeight="375.0" minWidth="1000" prefHeight="400.0">
          <HBox alignment="CENTER" layoutX="70.0" layoutY="22.0" minHeight="375.0" prefHeight="354.0" prefWidth="850.0" spacing="100.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
              <VBox alignment="CENTER" minHeight="375.0" prefHeight="375.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
