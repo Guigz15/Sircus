@@ -32,6 +32,7 @@ public class Etape2AdminController implements Initializable {
     private ListView<MetaSequence> metaListView;
     @FXML
     public ListView<ItemSequence> seqListView;
+    //TODO Demandé s'ils veulent garder le boutton modifier ou juste un click sur une meta-sequence pour la renommer suffit.
     @FXML
     private Button renameMetaButton;
     @FXML
@@ -186,10 +187,13 @@ public class Etape2AdminController implements Initializable {
                 private TextField textField = new TextField() ;
 
                 {
+
                     textField.setOnAction(e -> {
+                        //we commit the change only if we are connected as admin
                         if(SircusApplication.adminConnected) commitEdit(getItem());
                         else cancelEdit();
                     });
+                    //if we click on escape we cancel the editing
                     textField.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
                         if (e.getCode() == KeyCode.ESCAPE) {
                             cancelEdit();
@@ -420,6 +424,7 @@ public class Etape2AdminController implements Initializable {
             listCellForSequence.setOnDragDone(DragEvent::consume);
         return listCellForSequence;
         });
+
 
         /* set addMetaSequence proprieties to add meta-sequence */
         addMetaButton.setOnAction(new EventHandler<ActionEvent>() {
