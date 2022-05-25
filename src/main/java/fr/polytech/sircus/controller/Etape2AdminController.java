@@ -60,6 +60,8 @@ public class Etape2AdminController implements Initializable {
     @FXML
     private PreviewTimeline previewTimeline;
     @FXML
+    private Label statsTitleLabel;
+    @FXML
     private Label nbSeqLabel;
     @FXML
     private Label nbMediaLabel;
@@ -76,6 +78,9 @@ public class Etape2AdminController implements Initializable {
 
     //index of last meta-sequence selected. Is set with -1 if there are no selected meta-sequence
     int index_Selected_MetaSequence = -1;
+
+    //index of last sequence selected. Is set with -1 if there are no selected sequence
+    int index_Selected_Sequence = -1;
 
     /**
      * Function initialize which dynamically ends the listViews initialization
@@ -169,12 +174,14 @@ public class Etape2AdminController implements Initializable {
                     addSeqButton.setDisable(true);
                 }
                 //get the new medias lists to display it on screen
-                int index_Selected_Sequence = seqListView.getSelectionModel().getSelectedIndex();
+                index_Selected_Sequence = seqListView.getSelectionModel().getSelectedIndex();
                 int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
                 MetaSequence currentMetaSeq = metaListView.getItems().get(index_Selected_MetaSequence);
                 if(index_Selected_MetaSequence >= 0 && index_Selected_Sequence >=0) {
                     Sequence currentSequence = currentMetaSeq.getSequencesList().get(index_Selected_Sequence);
                     previewTimeline.setMediaList(currentSequence.getListMedias());
+
+                    setSeqStats();
                 }
             }
         });
@@ -627,6 +634,7 @@ public class Etape2AdminController implements Initializable {
      */
     public void setMetaSeqStats(){
         MetaSequence metaSeq = getAllItemMetaSequence().get(index_Selected_MetaSequence);
+        statsTitleLabel.setText("Statistiques de la méta-séquence");
 
         nbSeqLabel.setText(Integer.toString(metaSeq.getSequencesList().size()));
 
@@ -643,6 +651,28 @@ public class Etape2AdminController implements Initializable {
         nbInterstimLabel.setText(Integer.toString(nbInterstims));
 
         long seconds = metaSeq.getDuration().getSeconds();
+        totalDurationLabel.setText(
+                String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, (seconds % 60)));
+    }
+
+    /**
+     * Set the information section about the selected sequence
+     */
+    public void setSeqStats(){
+        Sequence sequence = getAllItemMetaSequence().get(index_Selected_MetaSequence).getSequencesList().get(index_Selected_Sequence);
+        statsTitleLabel.setText("Statistiques de la séquence");
+        nbSeqLabel.setText("NA");
+
+        int nbMedias = sequence.getListMedias().size();
+        int nbInterstims = 0;
+        for (AbstractMedia media : sequence.getListMedias()){
+            if (media instanceof Interstim)
+                nbInterstims++;
+        }
+        nbMediaLabel.setText(Integer.toString(nbMedias));
+        nbInterstimLabel.setText(Integer.toString(nbInterstims));
+
+        long seconds = sequence.getDuration().getSeconds();
         totalDurationLabel.setText(
                 String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, (seconds % 60)));
     }

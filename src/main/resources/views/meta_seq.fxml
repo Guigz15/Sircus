@@ -101,14 +101,11 @@
                  <HBox.margin>
                      <Insets />
                  </HBox.margin>
-                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Statistiques de la méta-séquence" textAlignment="CENTER" wrappingWidth="232.09637451171875">
-                     <font>
-                         <Font size="20.0" />
-                     </font>
-                     <VBox.margin>
-                         <Insets bottom="5.0" />
-                     </VBox.margin>
-                 </Text>
+            <Label fx:id="statsTitleLabel" alignment="CENTER" contentDisplay="CENTER" text="Statistiques de la méta-séquence" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
             <StackPane minHeight="250.0" prefHeight="150.0" prefWidth="200.0" style="-fx-border-color: black;">
                <children>
                   <GridPane alignment="CENTER" prefHeight="120.0" prefWidth="246.0">
