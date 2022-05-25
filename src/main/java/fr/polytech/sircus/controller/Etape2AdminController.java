@@ -74,10 +74,6 @@ public class Etape2AdminController implements Initializable {
     @FXML
     private Button cancelMixButton;
     @FXML
-    private Button addMetaButton;
-    @FXML
-    private Button addSeqButton;
-    @FXML
     private Button previous;
     @FXML
     private Button next;
@@ -174,7 +170,7 @@ public class Etape2AdminController implements Initializable {
                     addSeqButton.setDisable(true);
                 }
                 //get the new medias lists to display it on screen
-                int index_Selected_Sequence = seqListView.getSelectionModel().getSelectedIndex();
+                index_Selected_Sequence = seqListView.getSelectionModel().getSelectedIndex();
                 int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
                 MetaSequence currentMetaSeq = metaListView.getItems().get(index_Selected_MetaSequence);
                 if(index_Selected_MetaSequence >= 0 && index_Selected_Sequence >=0) {
@@ -305,8 +301,8 @@ public class Etape2AdminController implements Initializable {
                     }
                     // we add the new meta-sequence at the good place.
                     metaListView.getItems().add(dropIndex, draggedMetaSeq);
-                    metaListView.getSelectionModel().select(dropIndex);
                     SircusApplication.dataSircus.getMetaSequencesList().add(dropIndex,draggedMetaSeq);
+                    metaListView.getSelectionModel().select(dropIndex);
                     event.setDropCompleted(true);
                     event.consume();
 
@@ -644,12 +640,7 @@ public class Etape2AdminController implements Initializable {
                 saxParser.parse(file, handler);
                 // add the new metaSequence in the list
                 SircusApplication.dataSircus.getMetaSequencesList().add(handler.getMeta());
-
-                // refresh list of metaSequence
-                metaListView.getItems().clear();
-                for (MetaSequence metaSequence : metaListView.getItems()) {
-                    metaListView.getItems().add(metaSequence);
-                }
+                metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
             }
             catch (ParserConfigurationException | SAXException | IOException e)
             {
@@ -839,7 +830,9 @@ public class Etape2AdminController implements Initializable {
             //Defined the list of sequences.
             seqListView.getItems().clear();
             seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
-            setMetaSeqStats();
+            if(index_Selected_MetaSequence >=0) {
+                setMetaSeqStats();
+            }
         }
     }
 }
