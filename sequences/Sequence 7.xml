@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="Sequence%207" duration="PT12S" lock="true">
+<listMedia>
+<media>
+<filename>croix.jpg</filename>
+<duration>PT4S</duration>
+<type>PICTURE</type>
+<lock>true</lock>
+<isResizable>false</isResizable>
+<backgroundColor>0xffffffff</backgroundColor>
+</media>
+<media>
+<filename>mosob01.jpg</filename>
+<duration>PT1S</duration>
+<type>PICTURE</type>
+<lock>true</lock>
+<isResizable>false</isResizable>
+<backgroundColor>0xffffffff</backgroundColor>
+</media>
+<media>
+<filename>vis03.jpg</filename>
+<duration>PT7S</duration>
+<type>PICTURE</type>
+<lock>true</lock>
+<isResizable>false</isResizable>
+<backgroundColor>0xffffffff</backgroundColor>
+</media>
+</listMedia>
+</sequence>
+

@@ -61,4 +61,16 @@ public class Interstim extends AbstractMedia implements Serializable {
         super.readObject(ois);
         media = (Media) ois.readObject();
     }
+
+    /**
+     * Convert an interstim to XML
+     * @return XML
+     */
+    public String toXML(){
+        String XML = "<interstim filename=\"" + filename.replace(" ", "%20") +
+                "\" duration=\"" + duration + "\" type=\"" + typeMedia + "\" lock=\"" +
+                isLocked + "\" isResizable=\"" + isResizable + "\" backgroundColor=\"" +
+                backgroundColor + "\"></interstim>\n";
+        return XML;
+    }
 }

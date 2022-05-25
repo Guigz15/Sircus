@@ -22,6 +22,16 @@ public class Media extends AbstractMedia implements Serializable {
     @Getter @Setter
     private Interstim interstim;
 
+    public Media(){
+        filename = null;
+        duration = null;
+        typeMedia = null;
+        isLocked = false;
+        isResizable = false;
+        backgroundColor = Color.WHITE;
+        interstim = null;
+    }
+
     public Media(String filename, Duration duration, TypeMedia typeMedia) {
         this(filename, duration, typeMedia, true, false, Color.WHITE, null);
     }
@@ -59,5 +69,29 @@ public class Media extends AbstractMedia implements Serializable {
     protected void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
         super.readObject(ois);
         interstim = (Interstim) ois.readObject();
+    }
+
+    /**
+     * Convert a media to XML
+     * @return XML
+     */
+    public String toXML(){
+        String XML = "<media>\n" +
+                "<filename>" + filename.replace(" ", "%20") + "</filename>\n" +
+                "<duration>" + duration + "</duration>\n" +
+                "<type>" + typeMedia + "</type>\n";
+        if(interstim == null){
+            XML += "<lock>" + isLocked + "</lock>\n" +
+                    "<isResizable>" + isResizable + "</isResizable>\n" +
+                    "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
+                    "</media>\n";
+        } else {
+            XML += interstim.toXML() +
+                    "<lock>" + isLocked + "</lock>\n" +
+                    "<isResizable>" + isResizable + "</isResizable>\n" +
+                    "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
+                    "</media>\n";
+        }
+        return XML;
     }
 }

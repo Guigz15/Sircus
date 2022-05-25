@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="Sequence%206" duration="PT11S" lock="true">
+<listMedia>
+<media>
+<filename>mosob01.jpg</filename>
+<duration>PT1S</duration>
+<type>PICTURE</type>
+<lock>true</lock>
+<isResizable>false</isResizable>
+<backgroundColor>0xffffffff</backgroundColor>
+</media>
+<media>
+<filename>ob01.jpg</filename>
+<duration>PT10S</duration>
+<type>PICTURE</type>
+<lock>true</lock>
+<isResizable>false</isResizable>
+<backgroundColor>0xffffffff</backgroundColor>
+</media>
+</listMedia>
+</sequence>
+
