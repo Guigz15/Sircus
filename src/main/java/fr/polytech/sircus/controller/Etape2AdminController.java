@@ -560,7 +560,7 @@ public class Etape2AdminController implements Initializable {
         if(SircusApplication.adminConnected){
             // get selected metaSequence
             int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
-            MetaSequence meta = listMetaSequence.get(index_Selected_MetaSequence);
+            MetaSequence meta = metaListView.getItems().get(index_Selected_MetaSequence);
             File file = new File(SircusApplication.dataSircus.getPath().getMetaPath() + meta.getName() + ".xml");
             try {
                 // the metaSequence is transform to xml in the class by toXML()
@@ -592,13 +592,13 @@ public class Etape2AdminController implements Initializable {
                 saxParser.parse(file, handler);
                 // add the new sequence in the list
                 int index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
-                listMetaSequence.get(index_Selected_MetaSequence).addSequence(handler.getSeq());
+                metaListView.getItems().get(index_Selected_MetaSequence).addSequence(handler.getSeq());
 
                 // refresh list of sequence
                 refreshPage();
 
                 // refresh preview timeline
-                MetaSequence currentMetaSequence = listMetaSequence.get(index_Selected_MetaSequence);
+                MetaSequence currentMetaSequence = metaListView.getItems().get(index_Selected_MetaSequence);
                 previewTimeline.removeAllMedia();
                 previewTimeline.addMetaSequence(currentMetaSequence);
             }
@@ -630,10 +630,9 @@ public class Etape2AdminController implements Initializable {
                 SircusApplication.dataSircus.getMetaSequencesList().add(handler.getMeta());
 
                 // refresh list of metaSequence
-                this.listMetaSequence = SircusApplication.dataSircus.getMetaSequencesList();
                 metaListView.getItems().clear();
-                for (MetaSequence metaSequence : listMetaSequence) {
-                    metaListView.getItems().add(metaSequence.getName());
+                for (MetaSequence metaSequence : metaListView.getItems()) {
+                    metaListView.getItems().add(metaSequence);
                 }
             }
             catch (ParserConfigurationException | SAXException | IOException e)
