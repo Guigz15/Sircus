@@ -136,14 +136,6 @@ public class Etape2AdminController implements Initializable {
 
         //Defined action when the MetaSequence element selected is changed.
         metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
-        //Defined action when we pressed "delete" key. This delete current meta-sequence
-        metaListView.setOnKeyReleased((KeyEvent keyEvent) -> {
-            //if we pressed delete and we have selected a mete-sequence and only if we are connected as admin
-            if (keyEvent.getCode() == KeyCode.DELETE && SircusApplication.adminConnected && index_Selected_MetaSequence >=0) {
-                SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
-                metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
-            }
-        });
 
         /* initialize sequences listView */
         seqListView.setStyle("-fx-font-size: 14pt;");
@@ -306,6 +298,15 @@ public class Etape2AdminController implements Initializable {
                     SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
                     metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
                 }
+            }
+        });
+
+        //Defined action when we pressed "delete" key. This delete current meta-sequence
+        metaListView.setOnKeyReleased((KeyEvent keyEvent) -> {
+            //if we pressed delete and we have selected a mete-sequence and only if we are connected as admin
+            if (keyEvent.getCode() == KeyCode.DELETE && SircusApplication.adminConnected && index_Selected_MetaSequence >=0) {
+                SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
+                metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
             }
         });
 
@@ -546,6 +547,15 @@ public class Etape2AdminController implements Initializable {
                     SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().remove(index_Selected_Sequence);
                     seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
                 }
+            }
+        });
+
+        //Defined action when we pressed "delete" key. This delete current meta-sequence
+        seqListView.setOnKeyReleased((KeyEvent keyEvent) -> {
+            //if we pressed delete and we have selected a mete-sequence and only if we are connected as admin
+            if (keyEvent.getCode() == KeyCode.DELETE && SircusApplication.adminConnected && index_Selected_Sequence >=0 && index_Selected_MetaSequence>=0) {
+                SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().remove(index_Selected_Sequence);
+                seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
             }
         });
 
