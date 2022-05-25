@@ -22,6 +22,16 @@ public class Media extends AbstractMedia implements Serializable {
     @Getter @Setter
     private Interstim interstim;
 
+    public Media(){
+        filename = null;
+        duration = null;
+        typeMedia = null;
+        isLocked = false;
+        isResizable = false;
+        backgroundColor = Color.WHITE;
+        interstim = null;
+    }
+
     public Media(String filename, Duration duration, TypeMedia typeMedia) {
         this(filename, duration, typeMedia, true, false, Color.WHITE, null);
     }
@@ -71,8 +81,7 @@ public class Media extends AbstractMedia implements Serializable {
                 "<duration>" + duration + "</duration>\n" +
                 "<type>" + typeMedia + "</type>\n";
         if(interstim == null){
-            XML += "<interstim>null</interstim>\n" +
-                    "<lock>" + isLocked + "</lock>\n" +
+            XML += "<lock>" + isLocked + "</lock>\n" +
                     "<isResizable>" + isResizable + "</isResizable>\n" +
                     "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
                     "</media>\n";

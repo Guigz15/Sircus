@@ -24,7 +24,7 @@ public final class Serializer {
     /**
      * Boolean to know if we use a stub object
      */
-    public static boolean useStub = false;
+    public static boolean useStub = true;
 
     /**
      * Generation of stub data
@@ -55,6 +55,11 @@ public final class Serializer {
         Media media6 = new Media("visob02.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE);
         Media media7 = new Media("croix.jpg", Duration.ofSeconds(4), TypeMedia.PICTURE);
         Media media8 = new Media("ob01.jpg", Duration.ofSeconds(10), TypeMedia.PICTURE);
+
+        Interstim inter1 = new Interstim("white.jpg", Duration.ofSeconds(2), TypeMedia.PICTURE, media1);
+        media1.setInterstim(inter1);
+        inter1.setBackgroundColor(Color.WHITE);
+        inter1.setResizable(true);
 
         media1.setBackgroundColor(Color.AQUA);
         media2.setBackgroundColor(Color.GREENYELLOW);

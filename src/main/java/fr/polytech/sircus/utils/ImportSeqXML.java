@@ -1,7 +1,9 @@
 package fr.polytech.sircus.utils;
 
-import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.model.*;
+import fr.polytech.sircus.model.Interstim;
+import fr.polytech.sircus.model.Media;
+import fr.polytech.sircus.model.Sequence;
+import fr.polytech.sircus.model.TypeMedia;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.paint.Color;
@@ -21,12 +23,9 @@ public class ImportSeqXML extends DefaultHandler {
     private Sequence seq;
     private final StringBuilder currentValue = new StringBuilder();
 
-    private Boolean name = false;
     private Boolean filename = false;
     private Boolean duration = false;
     private Boolean type = false;
-    private Boolean isInterstim = false;
-    private Boolean interstim = false;
     private Boolean lock = false;
     private Boolean isResizable = false;
     private Boolean backgroundColor = false;
@@ -57,34 +56,28 @@ public class ImportSeqXML extends DefaultHandler {
         } else if (qName.equalsIgnoreCase("listMedia")) {
             seq.setListMedias(new ArrayList<>());
         } else if (qName.equalsIgnoreCase("media")) {
-            MediaDeprecated media = new MediaDeprecated();
+            Media media = new Media();
             seq.getListMedias().add(media);
-        } else if (qName.equalsIgnoreCase("name")) {
-            name = true;
         } else if (qName.equalsIgnoreCase("filename")) {
             filename = true;
         } else if (qName.equalsIgnoreCase("duration")) {
             duration = true;
         } else if (qName.equalsIgnoreCase("type")) {
             type = true;
-        } else if (qName.equalsIgnoreCase("isInterstim")) {
-            isInterstim = true;
         } else if (qName.equalsIgnoreCase("interstim")) {
-            if (seq.getListMedias().size() == 1) {
-                if (seq.getListMedias().get(0).getIsInterstim()) {
-                    // the media has an interstim, it is the previous one
-                    interstim = true;
-                } else {
-                    seq.getListMedias().get(seq.getListMedias().size() - 1).setInterStim(null);
-                }
-            } else {
-                if (seq.getListMedias().get(seq.getListMedias().size() - 2).getIsInterstim()) {
-                    // the media has an interstim, it is the previous one
-                    interstim = true;
-                } else {
-                    seq.getListMedias().get(seq.getListMedias().size() - 1).setInterStim(null);
-                }
-            }
+            // read the attributes in the tag
+            String filename = attributes.getValue("filename");
+            filename = filename.replace("%20", " ");
+            Duration duration = Duration.parse(attributes.getValue("duration"));
+            TypeMedia type = TypeMedia.valueOf(attributes.getValue("type"));
+            boolean isResizable = Boolean.parseBoolean(attributes.getValue("isResizable"));
+            Color backgroundColor = Color.valueOf(attributes.getValue("backgroundColor"));
+
+            // the media of the interstim is the last one in the list of the sequence
+            Media media = seq.getListMedias().get(seq.getListMedias().size() - 1);
+
+            Interstim inter = new Interstim(filename, duration, type, isResizable, backgroundColor, media);
+            media.setInterstim(inter);
         } else if (qName.equalsIgnoreCase("lock")) {
             lock = true;
         } else if (qName.equalsIgnoreCase("isResizable")) {
@@ -99,11 +92,8 @@ public class ImportSeqXML extends DefaultHandler {
      */
     @Override
     public void endElement(String uri, String localName, String qName) {
-        // name is true if we determine in startElement that name was read
-        if (name) {
-            seq.getListMedias().get(seq.getListMedias().size() - 1).setName(currentValue.toString().replace("%20", " "));
-            name = false;
-        } else if (filename) {
+        // filename is true if we determine in startElement that filename was read
+        if (filename) {
             String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
             // test if the filename exist in media
             File file;
@@ -139,28 +129,20 @@ public class ImportSeqXML extends DefaultHandler {
             seq.getListMedias().get(seq.getListMedias().size() - 1).setDuration(Duration.parse(currentValue.toString()));
             duration = false;
         } else if (type) {
-            seq.getListMedias().get(seq.getListMedias().size() - 1).setType(TypeMedia.valueOf(currentValue.toString()));
+            seq.getListMedias().get(seq.getListMedias().size() - 1).setTypeMedia(TypeMedia.valueOf(currentValue.toString()));
             type = false;
-        } else if (isInterstim) {
-            seq.getListMedias().get(seq.getListMedias().size() - 1).setIsInterstim(Boolean.valueOf(currentValue.toString()));
-            isInterstim = false;
-        } else if (interstim) {
-            Media inter;
-            if (seq.getListMedias().size() == 1) {
-                //inter = seq.getListMedias().get(1);
-            } else {
-                //inter = seq.getListMedias().get(seq.getListMedias().size() - 2);
-            }
-            //seq.getListMedias().get(seq.getListMedias().size() - 1).setInterStim(inter);
-            interstim = false;
         } else if (lock) {
-            seq.getListMedias().get(seq.getListMedias().size() - 1).setLock(Boolean.valueOf(currentValue.toString()));
+            seq.getListMedias().get(seq.getListMedias().size() - 1).setLocked(Boolean.parseBoolean(currentValue.toString()));
             lock = false;
         } else if (isResizable) {
             seq.getListMedias().get(seq.getListMedias().size() - 1).setResizable(Boolean.parseBoolean(currentValue.toString()));
             isResizable = false;
         } else if (backgroundColor) {
-            seq.getListMedias().get(seq.getListMedias().size() - 1).setBackgroundColor(Color.valueOf(currentValue.toString()));
+            if(currentValue.toString().equals("null")){
+                seq.getListMedias().get(seq.getListMedias().size() - 1).setBackgroundColor(null);
+            } else {
+                seq.getListMedias().get(seq.getListMedias().size() - 1).setBackgroundColor(Color.valueOf(currentValue.toString()));
+            }
             backgroundColor = false;
         }
     }

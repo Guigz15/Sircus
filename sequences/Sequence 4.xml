@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sequence name="Sequence%201" duration="PT15S" lock="true">
+<sequence name="Sequence%204" duration="PT11S" lock="true">
 <listMedia>
 <media>
 <filename>mos01.jpg</filename>
@@ -11,29 +11,12 @@
 <backgroundColor>0x00ffffff</backgroundColor>
 </media>
 <media>
-<filename>mos02.jpg</filename>
-<duration>PT2S</duration>
-<type>PICTURE</type>
-<lock>true</lock>
-<isResizable>true</isResizable>
-<backgroundColor>0xadff2fff</backgroundColor>
-</media>
-<media>
-<filename>mos01.jpg</filename>
+<filename>vismos01.jpg</filename>
 <duration>PT5S</duration>
 <type>PICTURE</type>
-<interstim filename="white.jpg" duration="PT2S" type="PICTURE" lock="true" isResizable="true" backgroundColor="0xffffffff"></interstim>
 <lock>true</lock>
 <isResizable>false</isResizable>
-<backgroundColor>0x00ffffff</backgroundColor>
-</media>
-<media>
-<filename>mos02.jpg</filename>
-<duration>PT2S</duration>
-<type>PICTURE</type>
-<lock>true</lock>
-<isResizable>true</isResizable>
-<backgroundColor>0xadff2fff</backgroundColor>
+<backgroundColor>0xffffffff</backgroundColor>
 </media>
 <media>
 <filename>mosob01.jpg</filename>
