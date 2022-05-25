@@ -2,8 +2,7 @@ package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.controller.PopUps.ModifySeqPopUp;
-import fr.polytech.sircus.model.MetaSequence;
-import fr.polytech.sircus.model.Sequence;
+import fr.polytech.sircus.model.*;
 import fr.polytech.sircus.utils.ItemSequence;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -60,6 +59,14 @@ public class Etape2AdminController implements Initializable {
     private Button next;
     @FXML
     private PreviewTimeline previewTimeline;
+    @FXML
+    private Label nbSeqLabel;
+    @FXML
+    private Label nbMediaLabel;
+    @FXML
+    private Label nbInterstimLabel;
+    @FXML
+    private Label totalDurationLabel;
 
     @Getter @Setter
     private boolean aboutToMix;
@@ -132,6 +139,8 @@ public class Etape2AdminController implements Initializable {
                 //Defined the list of sequences.
                 seqListView.getItems().clear();
                 seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
+
+                setMetaSeqStats();
             }
         });
 
@@ -611,5 +620,30 @@ public class Etape2AdminController implements Initializable {
             temp.put(aa.getKey(), aa.getValue());
         }
         return temp;
+    }
+
+    /**
+     * Set the information section about the selected meta-sequence
+     */
+    public void setMetaSeqStats(){
+        MetaSequence metaSeq = getAllItemMetaSequence().get(index_Selected_MetaSequence);
+
+        nbSeqLabel.setText(Integer.toString(metaSeq.getSequencesList().size()));
+
+        int nbMedias = 0;
+        int nbInterstims = 0;
+        for (Sequence seq : metaSeq.getSequencesList()){
+            nbMedias += seq.getListMedias().size();
+            for (AbstractMedia media : seq.getListMedias()){
+                if (media instanceof Interstim)
+                    nbInterstims++;
+            }
+        }
+        nbMediaLabel.setText(Integer.toString(nbMedias));
+        nbInterstimLabel.setText(Integer.toString(nbInterstims));
+
+        long seconds = metaSeq.getDuration().getSeconds();
+        totalDurationLabel.setText(
+                String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, (seconds % 60)));
     }
 }
