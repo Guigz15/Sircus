@@ -18,7 +18,7 @@ public class Sequence implements Serializable {
     @Getter @Setter
     private String name;
 
-    @Getter
+    @Getter @Setter
     private Duration duration;
 
     @Getter @Setter
@@ -113,5 +113,18 @@ public class Sequence implements Serializable {
         return Objects.equals(getName(), sequence.getName()) && Objects.equals(getDuration(), sequence.getDuration()) && Objects.equals(getListMedias(), sequence.getListMedias());
     }
 
-
+    /**
+     * Convert a sequence to XML
+     * @return XML
+     */
+    public String toXML(){
+        String XML = "<sequence name=\"" + name.replace(" ", "%20") + "\" duration=\"" + duration
+                + "\" lock=\"" + lock + "\">\n" + "<listMedia>\n";
+        for(int i=0; i<listMedias.size(); i++){
+            XML += listMedias.get(i).toXML();
+        }
+        XML += "</listMedia>\n" +
+                "</sequence>\n";
+        return XML;
+    }
 }
