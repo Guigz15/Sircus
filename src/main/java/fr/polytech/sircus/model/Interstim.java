@@ -35,6 +35,7 @@ public class Interstim extends AbstractMedia implements Serializable {
         this.isResizable = isResizable;
         this.backgroundColor = backgroundColor;
         this.media = media;
+        this.media.setInterstim(this);
     }
 
     @Override
