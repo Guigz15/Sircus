@@ -195,6 +195,7 @@ public class PlayerMonitorController{
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
+            pauseAllClocks();
             viewer.previousSequence();
 
             stopButton.setDisable(viewer.getCurrentSequenceIndex() == 0);
@@ -204,22 +205,10 @@ public class PlayerMonitorController{
                 playButton.setGraphic(playIcon);
                 viewerPlayingState = false;
             }
-
-            // Clocks
-            pauseAllClocks();
-            sequenceChanged();
-
-            // TODO: not working
-            duration.setTime(duration.getTime().toSecondOfDay() - seqDuration.getTime().toSecondOfDay());
-            remaining.setTime(remaining.getTime().toSecondOfDay() + seqDuration.getTime().toSecondOfDay());
-
-            metaSeqDuration.setTime(viewer.getPlayingMetaSequence().getDuration().getSeconds() - getRemainingTimeInMetaSeq());
-            metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
-            setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
-
-            // progress bar
-            metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
         }
+
+        // Will be already called but updates info without having to press play button
+        sequenceChanged();
     }
 
     /**
@@ -233,6 +222,7 @@ public class PlayerMonitorController{
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
+            pauseAllClocks();
             viewer.nextSequence();
             stopButton.setDisable(false);
 
@@ -241,24 +231,16 @@ public class PlayerMonitorController{
                 playButton.setGraphic(playIcon);
                 viewerPlayingState = false;
             }
-
-            // Clocks
-            pauseAllClocks();
-            sequenceChanged();
-
-            // TODO: not working
-            duration.setTime(duration.getTime().toSecondOfDay() - seqDuration.getTime().toSecondOfDay());
-            remaining.setTime(remaining.getTime().toSecondOfDay() + seqDuration.getTime().toSecondOfDay());
-
-            metaSeqDuration.setTime(viewer.getPlayingMetaSequence().getDuration().getSeconds() - getRemainingTimeInMetaSeq());
-            metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
-            setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
-
-            // progress bar
-            metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
         }
+
+        // Will be already called but updates info without having to press play button
+        sequenceChanged();
     }
 
+    /**
+     * Let the user choose if he wants to play the next meta-sequence or not
+     * @param isLastMetaSequence true if it's the last meta-sequence, false otherwise
+     */
     public void nextMetaSequence(boolean isLastMetaSequence) {
         Alert alert;
 
@@ -285,8 +267,10 @@ public class PlayerMonitorController{
 
             // If we clicked OK (close the viewer) or NO (wait for another user input) then we have nothing to do.
             if (result.isPresent()) {
-                if (result.get() == ButtonType.YES)
+                if (result.get() == ButtonType.YES) {
+                    metaSeqDuration.setTime(0);
                     playViewer();
+                }
                 else if (result.get() == ButtonType.OK)
                     viewer.closeViewer();
             }
@@ -331,14 +315,6 @@ public class PlayerMonitorController{
                 if (firstPlay){
                     stopButton.setDisable(false);
                     setCounterLabel(numMetaSeqLabel, viewer.getCurrentMetaSequenceIndex() + 1, SircusApplication.dataSircus.getMetaSequencesList().size());
-
-                    // Clocks
-                    sequenceChanged();
-                    metaSeqDuration.setTime(0);
-                    metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
-
-                    // progress bars
-                    metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
 
                     firstPlay = false;
                 }
@@ -431,15 +407,20 @@ public class PlayerMonitorController{
     }
 
     /**
-     * Update the sequence information
+     * Update the information when the sequence changes (and by extension when the meta-sequence changes)
      */
     public void sequenceChanged(){
+        remaining.setTime(getRemainingTime());
+
         seqDuration.setTime(0);
         seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
         setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
         seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
 
-        // TODO: Take the meta-sequences into account
+        metaSeqDuration.setTime(viewer.getPlayingMetaSequence().getDuration().getSeconds() - getRemainingTimeInMetaSeq());
+        metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
+        metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
+
         // Disable if last sequence
         forwardButton.setDisable(viewer.getCurrentSequenceIndex()+1 == viewer.getPlayingMetaSequence().getSequencesList().size());
         // Disable if first sequence
@@ -515,6 +496,23 @@ public class PlayerMonitorController{
         }
         // Minus what we already played in the current sequence
         seconds -= seqDuration.getTime().getSecond();
+
+        return seconds;
+    }
+
+    /**
+     * Give the remaining time before finishing all the meta-sequences
+     * @return the duration in seconds
+     */
+    private long getRemainingTime(){
+        long seconds = 0;
+
+        // Sum all the next sequences including the current one
+        for (int metaSeqIndex=viewer.getCurrentMetaSequenceIndex() ; metaSeqIndex<SircusApplication.dataSircus.getMetaSequencesList().size() ; metaSeqIndex++){
+            seconds += SircusApplication.dataSircus.getMetaSequencesList().get(metaSeqIndex).getDuration().getSeconds();
+        }
+        // Minus what we already played in the current sequence
+        seconds -= metaSeqDuration.getTime().getSecond();
 
         return seconds;
     }
@@ -655,11 +653,11 @@ public class PlayerMonitorController{
 
             // Update progress bar and progress attribute depending on clock parameter twice a second
             timeline = new Timeline(new KeyFrame(Duration.millis(500), event -> {
-                if (clock.getTime().getSecond() == 0){
+                if (clock.getTime().toSecondOfDay() == 0){
                     progress = 0.0;
                 }
                 else{
-                    progress = getCompletionRate(clock.getTime().getSecond(), this.totalDuration);
+                    progress = getCompletionRate(clock.getTime().toSecondOfDay(), this.totalDuration);
                 }
                 progressBar.setProgress(progress);
             }));
