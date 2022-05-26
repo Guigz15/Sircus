@@ -119,14 +119,11 @@ public class PlayerMonitorController{
     private Boolean viewerPlayingState;
     private FontIcon playIcon;
     private FontIcon pauseIcon;
-    private MetaSequence metaSequence;
 
     @FXML
     public void initialize() {
         initTimers();
         this.result = new Result();
-        // TODO: replace the used meta sequence by the one selected during the previous step
-        this.metaSequence = SircusApplication.dataSircus.getMetaSequencesList().get(0);
         this.viewer = null;
 
         this.viewerPlayingState = false;
@@ -167,8 +164,8 @@ public class PlayerMonitorController{
         if (viewer != null)
         {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Mettre en pause");
-            alert.setHeaderText("Êtes-vous sûr de vouloir mettre la lecture en pause ?");
+            alert.setTitle("Quitter la lecture");
+            alert.setHeaderText("Êtes-vous sûr de vouloir quitter la lecture ?");
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -200,6 +197,8 @@ public class PlayerMonitorController{
         if (result.isPresent() && result.get() == ButtonType.OK) {
             viewer.previousSequence();
 
+            stopButton.setDisable(viewer.getCurrentSequenceIndex() == 0);
+
             if (viewerPlayingState) {
                 viewer.pauseViewer();
                 playButton.setGraphic(playIcon);
@@ -209,6 +208,12 @@ public class PlayerMonitorController{
             // Clocks
             pauseAllClocks();
             sequenceChanged();
+
+            // TODO: not working
+            duration.setTime(duration.getTime().toSecondOfDay() - seqDuration.getTime().toSecondOfDay());
+            remaining.setTime(remaining.getTime().toSecondOfDay() + seqDuration.getTime().toSecondOfDay());
+
+            metaSeqDuration.setTime(viewer.getPlayingMetaSequence().getDuration().getSeconds() - getRemainingTimeInMetaSeq());
             metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
             setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
 
@@ -229,6 +234,7 @@ public class PlayerMonitorController{
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             viewer.nextSequence();
+            stopButton.setDisable(false);
 
             if (viewerPlayingState) {
                 viewer.pauseViewer();
@@ -239,6 +245,12 @@ public class PlayerMonitorController{
             // Clocks
             pauseAllClocks();
             sequenceChanged();
+
+            // TODO: not working
+            duration.setTime(duration.getTime().toSecondOfDay() - seqDuration.getTime().toSecondOfDay());
+            remaining.setTime(remaining.getTime().toSecondOfDay() + seqDuration.getTime().toSecondOfDay());
+
+            metaSeqDuration.setTime(viewer.getPlayingMetaSequence().getDuration().getSeconds() - getRemainingTimeInMetaSeq());
             metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
             setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
 
@@ -247,13 +259,54 @@ public class PlayerMonitorController{
         }
     }
 
+    public void nextMetaSequence(boolean isLastMetaSequence) {
+        Alert alert;
+
+        if (isLastMetaSequence) {
+            alert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.OK);
+            alert.setTitle("Meta séquence terminée");
+            alert.setHeaderText("Le taux d'acquisition pour cette meta-séquence est de {placeholder}%.");
+            alert.setContentText("Il s'agissait de la dernière meta-séquence. Cliquez sur OK pour fermer le viewer.");
+        } else {
+            alert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.YES, ButtonType.NO);
+            alert.setTitle("Meta séquence terminée");
+            alert.setHeaderText("Le taux d'acquisition pour cette meta-séquence est de {placeholder}%.");
+            alert.setContentText("Voulez-vous immédiatement démarrer la méta-séquence suivante ?");
+        }
+
+        firstPlay = true;
+        viewer.pauseViewer();
+        playButton.setGraphic(playIcon);
+        viewerPlayingState = false;
+        pauseAllClocks();
+
+        alert.setOnHidden(dialogEvent -> {
+            Optional<ButtonType> result = Optional.ofNullable(alert.getResult());
+
+            // If we clicked OK (close the viewer) or NO (wait for another user input) then we have nothing to do.
+            if (result.isPresent()) {
+                if (result.get() == ButtonType.YES)
+                    playViewer();
+                else if (result.get() == ButtonType.OK)
+                    viewer.closeViewer();
+            }
+        });
+
+        alert.show();
+    }
+
     /**
      * Starts/Pauses the viewer or creates one if none is opened.
      */
     @FXML
     public void playViewer() {
         if (viewer == null) {
-            viewer = new ViewerController(this.playButton.getScene().getWindow(), this.metaSequence, this);
+            viewer = new ViewerController(this.playButton.getScene().getWindow(), this);
+            forwardButton.setDisable(viewer.getCurrentSequenceIndex()+1 == viewer.getPlayingMetaSequence().getSequencesList().size());
+
+            for (MetaSequence metaSequence : SircusApplication.dataSircus.getMetaSequencesList()) {
+                remaining.setTime(remaining.getTime().getSecond() + metaSequence.getDuration().getSeconds());
+            }
         } else {
             // We are playing something, so the pause button is displayed, so we must pause the sequence
             if (viewerPlayingState) {
@@ -270,19 +323,14 @@ public class PlayerMonitorController{
                 }
             } else {
                 // We aren't playing something, so the play button is displayed, so we must start the sequence
-
-                if (stopButton.disableProperty().get()) {
-                    this.stopButton.setDisable(false);
-                    this.forwardButton.setDisable(false);
-                    this.backButton.setDisable(false);
-                }
-
                 viewer.playViewer();
                 playButton.setGraphic(pauseIcon);
                 viewerPlayingState = true;
 
                 // If it's the first lecture or after a reset
                 if (firstPlay){
+                    stopButton.setDisable(false);
+                    setCounterLabel(numMetaSeqLabel, viewer.getCurrentMetaSequenceIndex() + 1, SircusApplication.dataSircus.getMetaSequencesList().size());
 
                     // Clocks
                     sequenceChanged();
@@ -291,6 +339,7 @@ public class PlayerMonitorController{
 
                     // progress bars
                     metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
+
                     firstPlay = false;
                 }
 
@@ -390,7 +439,7 @@ public class PlayerMonitorController{
         setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
         seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
 
-        // TODO: Take the meta-sequences in count
+        // TODO: Take the meta-sequences into account
         // Disable if last sequence
         forwardButton.setDisable(viewer.getCurrentSequenceIndex()+1 == viewer.getPlayingMetaSequence().getSequencesList().size());
         // Disable if first sequence
