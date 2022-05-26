@@ -13,7 +13,7 @@
             fx:controller="fr.polytech.sircus.controller.PopUps.ModifyMediaPopUp">
    <content>
       <VBox>
-         <CheckBox mnemonicParsing="false" text="Image ajustée à la taille de l'écran">
+         <CheckBox fx:id="resizeImage" mnemonicParsing="false" text="Image ajustée à la taille de l'écran">
             <VBox.margin>
                <Insets bottom="10.0"/>
             </VBox.margin>
@@ -24,7 +24,7 @@
                   <Insets bottom="3.0"/>
                </VBox.margin>
             </Text>
-            <ColorPicker/>
+            <ColorPicker fx:id="backgroundColor"/>
          </VBox>
       </VBox>
    </content>
