@@ -59,7 +59,10 @@ public class Sequence implements Serializable {
     public void addMedia(Media media) {
         this.listMedias.add(media);
         this.duration = this.duration.plus(media.getDuration());
-        //computeDuration();
+
+        if (media.getInterstim() != null) {
+            this.duration = this.duration.plus(media.getInterstim().getDuration());
+        }
     }
 
     /**
@@ -69,8 +72,11 @@ public class Sequence implements Serializable {
      */
     public void removeMedia(Media media) {
         if (this.listMedias.remove(media)) {
-            //computeDuration();
             this.duration = this.duration.minus(media.getDuration());
+
+            if (media.getInterstim() != null) {
+                this.duration = this.duration.minus(media.getInterstim().getDuration());
+            }
         }
     }
 
@@ -79,10 +85,10 @@ public class Sequence implements Serializable {
      */
     public void computeDuration(){
         Duration duration = Duration.ofSeconds(0);
-        for (Media listMedia : listMedias) {
-            duration = duration.plus(listMedia.getDuration());
-            if (listMedia.getInterstim() != null) {
-                duration = duration.plus(listMedia.getInterstim().getDuration());
+        for (Media media : listMedias) {
+            duration = duration.plus(media.getDuration());
+            if (media.getInterstim() != null) {
+                duration = duration.plus(media.getInterstim().getDuration());
             }
         }
 

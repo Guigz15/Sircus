@@ -39,7 +39,7 @@ public class ViewerController {
 
     // The MetaSequence that id passed to the viewer
     @Getter
-    private final MetaSequence playingMetaSequence;
+    private MetaSequence playingMetaSequence;
 
     @FXML
     private MediaView mediaView;
@@ -57,27 +57,31 @@ public class ViewerController {
     private Stage viewerStage = null;
 
     // The timeline allowing the reading of the media with management of the time of each one
+    @Getter
     private Timeline timeline = null;
-
-    // Boolean indicating if the meta-sequence has already been started once or not
-    private boolean metaSequenceStarted;
 
     // Stores the start time of each sequence to be able to move between sequences.
     private final ArrayList<Integer> sequencesStartTime;
+
+    // Index of the current meta sequence
+    @Getter
+    private int currentMetaSequenceIndex;
 
     // Index of the current sequence index in the meta-sequence
     @Getter
     private int currentSequenceIndex;
 
-    private final int numberOfSequences;
+    private int numberOfSequences;
 
     /**
      * Constructor of ViewerController class.
      */
-    public ViewerController(Window owner, MetaSequence metaSequence, PlayerMonitorController playerMonitorController) {
+    public ViewerController(Window owner, PlayerMonitorController playerMonitorController) {
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/viewer.fxml")));
         fxmlLoader.setController(this);
-        numberOfSequences = metaSequence.getSequencesList().size();
+
+        this.playingMetaSequence = SircusApplication.dataSircus.getMetaSequencesList().get(0);
+        this.currentMetaSequenceIndex = 0;
 
         try {
             Scene viewerScene = new Scene(fxmlLoader.load(), 1280, 720);
@@ -106,22 +110,11 @@ public class ViewerController {
             e.printStackTrace();
         }
 
-        playingMetaSequence = metaSequence;
-        metaSequenceStarted = false;
         this.playerMonitorController = playerMonitorController;
         sequencesStartTime = new ArrayList<>();
         viewerStage.setOnCloseRequest(event -> closeViewer());
-    }
 
-
-    /**
-     * Getter of the timeline attribute.
-     *
-     * @return timeline attribute.
-     */
-    @FXML
-    public Timeline getTimeline() {
-        return timeline;
+        initializeMetaSequence();
     }
 
     /**
@@ -202,12 +195,15 @@ public class ViewerController {
     }
 
     /**
-     * Begin the playing of the meta-sequence that is passed in parameter.
-     *
-     * @param metaSequence the meta-sequence to play.
+     * Loads all the meta sequences & creates the associated keyframes in the timeline.
      */
     @FXML
-    private void startMetaSequence(MetaSequence metaSequence) {
+    private void initializeMetaSequence() {
+        if (timeline != null) {
+            timeline.jumpTo(timeline.getKeyFrames().get(timeline.getKeyFrames().size() - 1).getTime());
+            timeline.pause();
+        }
+
         timeline = new Timeline();
         timeline.setCycleCount(1);
         timeline.setAutoReverse(false);
@@ -216,60 +212,21 @@ public class ViewerController {
         int counterDuration = 0;
         int sequenceIndex = -1;
 
-        for (Sequence sequence : metaSequence.getSequencesList()) {
+        numberOfSequences = playingMetaSequence.getSequencesList().size();;
+
+        for (Sequence sequence : playingMetaSequence.getSequencesList()) {
             sequenceIndex++;
             sequencesStartTime.add(counterDuration);
-            boolean addSequenceIndex = true;
 
-            // For each Media in the sequence.
+            // Keyframe to notify the PlayerMonitor that we are playing a new sequence.
+            int finalSequenceIndex = sequenceIndex;
+            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                    event -> {
+                        currentSequenceIndex = finalSequenceIndex;
+                        playerMonitorController.sequenceChanged();
+                    }));
+
             for (fr.polytech.sircus.model.Media media : sequence.getListMedias()) {
-                // If the media is an image.
-                if (media.getTypeMedia() == TypeMedia.PICTURE) {
-                    if (addSequenceIndex) {
-                        int finalSequenceIndex = sequenceIndex;
-                        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
-                                event -> {
-                                    removeVideo();
-                                    showImage(media);
-                                    currentSequenceIndex = finalSequenceIndex;
-                                }));
-                    } else {
-                        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
-                                event -> {
-                                    removeVideo();
-                                    showImage(media);
-                                }));
-                    }
-
-                    addSequenceIndex = false;
-
-                    // We add to the counterDuration the duration of the media currently read.
-                    counterDuration += media.getDuration().getSeconds();
-                }
-                // If the media is a video
-                else if (media.getTypeMedia() == TypeMedia.VIDEO) {
-                    if (addSequenceIndex) {
-                        int finalSequenceIndex = sequenceIndex;
-                        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
-                                event -> {
-                                    removeImage();
-                                    showVideo(media);
-                                    currentSequenceIndex = finalSequenceIndex;
-                                }));
-                    } else {
-                        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
-                                event -> {
-                                    removeImage();
-                                    showVideo(media);
-                                }));
-                    }
-
-                    addSequenceIndex = false;
-
-                    // We add to the counterDuration the duration of the media currently read.
-                    counterDuration += media.getDuration().getSeconds();
-                }
-                // If the current media has a "inter-stim".
                 if (media.getInterstim() != null) {
                     timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
                             event -> {
@@ -277,26 +234,61 @@ public class ViewerController {
                                 showImage(media.getInterstim());
                             }));
 
-                    // We add to the counterDuration the duration of the "inter-stim" currently read.
+                    // We add to the counterDuration the duration of the "interstim" currently read.
                     counterDuration += media.getInterstim().getDuration().getSeconds();
+                }
+
+                if (media.getTypeMedia() == TypeMedia.PICTURE) {
+                    timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                            event -> {
+                                removeVideo();
+                                showImage(media);
+                            }));
+
+                    // We add to the counterDuration the duration of the media currently read.
+                    counterDuration += media.getDuration().getSeconds();
+                }
+                else if (media.getTypeMedia() == TypeMedia.VIDEO) {
+                    timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                            event -> {
+                                removeImage();
+                                showVideo(media);
+                            }));
+
+                    // We add to the counterDuration the duration of the media currently read.
+                    counterDuration += media.getDuration().getSeconds();
                 }
             }
         }
 
-        // We add an event that removes the image or video at the end of the playback.
-        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
-                event -> {
-                    removeVideo();
-                    removeImage();
-                    closeViewer();
-                }));
-        // The end of the playback is added to the listBeginningTimeMedia
+        // If there is another metasequence to play.
+        if (currentMetaSequenceIndex + 1 < SircusApplication.dataSircus.getMetaSequencesList().size()) {
+            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                    event -> {
+                        removeVideo();
+                        removeImage();
+
+                        currentMetaSequenceIndex++;
+                        currentSequenceIndex = 0;
+                        playingMetaSequence = SircusApplication.dataSircus.getMetaSequencesList().get(currentMetaSequenceIndex);
+                        initializeMetaSequence();
+
+                        playerMonitorController.nextMetaSequence(false);
+                    }));
+        } else {
+            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                    event -> {
+                        removeVideo();
+                        removeImage();
+
+                        playerMonitorController.nextMetaSequence(true);
+                    }));
+        }
+
+        // The end of the playback is added to the sequencesStartTime
         // This allows the button passing a media to trigger the end of the playback of the meta-sequence
         // if we are playing the last media.
         sequencesStartTime.add(counterDuration);
-
-        // We start the timeline's stopwatch so that the events we have just created are triggered
-        timeline.play();
     }
 
     /**
@@ -304,11 +296,9 @@ public class ViewerController {
      */
     @FXML
     public void pauseViewer() {
-        if (timeline != null) {
-            timeline.pause();
-            if (mediaView.getMediaPlayer() != null) {
-                mediaPlayer.pause();
-            }
+        timeline.pause();
+        if (mediaView.getMediaPlayer() != null) {
+            mediaPlayer.pause();
         }
     }
 
@@ -317,14 +307,9 @@ public class ViewerController {
      */
     @FXML
     public void playViewer() {
-        if (metaSequenceStarted) {
-            timeline.play();
-            if (mediaView.getMediaPlayer() != null) {
-                mediaPlayer.play();
-            }
-        } else {
-            metaSequenceStarted = true;
-            startMetaSequence(playingMetaSequence);
+        timeline.play();
+        if (mediaView.getMediaPlayer() != null) {
+            mediaPlayer.play();
         }
     }
 
@@ -359,6 +344,8 @@ public class ViewerController {
      */
     public void resetMetaSequence() {
         timeline.jumpTo(new Duration(0));
+        currentSequenceIndex = 0;
+        playerMonitorController.sequenceChanged();
     }
 
     /**
@@ -368,7 +355,8 @@ public class ViewerController {
     public void closeViewer() {
         playerMonitorController.clearImage();
         playerMonitorController.closeViewer();
-        timeline.stop();
+        timeline.pause();
+        timeline = null;
         viewerStage.close();
     }
 
