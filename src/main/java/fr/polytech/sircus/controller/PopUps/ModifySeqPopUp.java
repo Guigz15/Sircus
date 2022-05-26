@@ -17,7 +17,6 @@ import javafx.stage.Modality;
 import javafx.util.Callback;
 import lombok.Setter;
 import org.kordamp.ikonli.javafx.FontIcon;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -95,10 +94,11 @@ public class ModifySeqPopUp {
         this.mediaTableColumnDuration.setStyle("-fx-alignment: CENTER;");
         this.mediaTableColumnDuration.setCellValueFactory(cellData -> {
             String formattedDuration = cellData.getValue().getDuration().toString()
-                    .replace("PT", "")
-                    .replace("M", "m")
-                    .replace("S", "s");
+                    .replaceAll("[^0-9.,]", "");
             return new SimpleStringProperty(formattedDuration);
+        });
+        this.mediaTableColumnDuration.setOnEditCommit(event -> {
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setDuration(Duration.ofSeconds(Long.parseLong(event.getNewValue())));
         });
         this.mediaTableColumnDuration.setCellFactory(TextFieldTableCell.forTableColumn());
 
@@ -132,66 +132,66 @@ public class ModifySeqPopUp {
 
                             // Add button
                             // If the media doesn't have an Interstim and isn't one
-                            Media parentMedia = (Media) getTableView().getItems().get(getIndex());
-                            if (parentMedia.getInterstim() == null) {
-                                tableViewAddButton.setOnMouseClicked(event ->
-                                {
-                                    try {
-                                        FileChooser fileChooserInterstim = new FileChooser();
-                                        fileChooserInterstim.setTitle("Open file (interstim)");
-                                        fileChooserInterstim.getExtensionFilters().addAll(
-                                                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
-                                        );
-                                        File interstimFile = fileChooserInterstim.showOpenDialog(tableViewAddButton.getScene().getWindow());
+                            if (mediaTable.getItems().get(getIndex()) instanceof Media) {
+                                Media parentMedia = (Media) mediaTable.getItems().get(getIndex());
+                                if (parentMedia.getInterstim() == null) {
+                                    tableViewAddButton.setOnMouseClicked(event ->
+                                    {
+                                        try {
+                                            FileChooser fileChooserInterstim = new FileChooser();
+                                            fileChooserInterstim.setTitle("Open file (interstim)");
+                                            fileChooserInterstim.getExtensionFilters().addAll(
+                                                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+                                            );
+                                            File interstimFile = fileChooserInterstim.showOpenDialog(tableViewAddButton.getScene().getWindow());
 
-                                        Path path = Paths.get(interstimFile.getPath());
-                                        String absoluteMediaPath = new File(MEDIAS_PATH).getAbsolutePath();
+                                            Path path = Paths.get(interstimFile.getPath());
+                                            String absoluteMediaPath = new File(MEDIAS_PATH).getAbsolutePath();
 
-                                        // We compare the absolute path of the "medias" directory with the new media's one.
-                                        // If they are not the same directory, we copy the new media to the application's "medias" directory.
-                                        if (!absoluteMediaPath.equals(path.toString().split("\\\\" + interstimFile.getName())[0])) {
-                                            OutputStream os = new FileOutputStream(MEDIAS_PATH + interstimFile.getName());
-                                            Files.copy(path, os);
+                                            // We compare the absolute path of the "medias" directory with the new media's one.
+                                            // If they are not the same directory, we copy the new media to the application's "medias" directory.
+                                            if (!absoluteMediaPath.equals(path.toString().split("\\\\" + interstimFile.getName())[0])) {
+                                                OutputStream os = new FileOutputStream(MEDIAS_PATH + interstimFile.getName());
+                                                Files.copy(path, os);
+                                            }
+
+                                            Interstim newInterstim = new Interstim(
+                                                    interstimFile.getName(),
+                                                    Duration.ofSeconds(1),
+                                                    TypeMedia.PICTURE,
+                                                    parentMedia
+                                            );
+
+                                            mediaTable.getItems().add(mediaTable.getItems().indexOf(parentMedia), newInterstim);
+                                            mediaTable.refresh();
+                                        } catch (Exception e) {
+                                            System.out.print("Aucun fichier selectionné.");
                                         }
-
-                                        Interstim newInterstim = new Interstim(
-                                                interstimFile.getName(),
-                                                Duration.ofSeconds(1),
-                                                TypeMedia.PICTURE,
-                                                parentMedia
-                                        );
-
-                                        mediaTable.getItems().add(mediaTable.getItems().indexOf(parentMedia) - 1, newInterstim);
-                                        //mediaTable.refresh();
-                                    } catch (Exception e) {
-                                        System.out.print("Aucun fichier selectionné.");
-                                    }
-                                });
-                            } else { // The media has an Interstim or is one
-                                tableViewAddButton.setDisable(true);
+                                    });
+                                } else { // The media has an Interstim or is one
+                                    tableViewAddButton.setDisable(true);
+                                }
                             }
 
                             // Delete button
                             tableViewDeleteButton.setOnAction(event ->
                             {
-                                if (getTableView().getItems().get(getIndex()) instanceof Interstim) {
-                                    Interstim interstim = (Interstim) getTableView().getItems().get(getIndex());
-                                    getTableView().getItems().remove(interstim);
+                                if (mediaTable.getItems().get(getIndex()) instanceof Interstim) {
+                                    Interstim interstim = (Interstim) mediaTable.getItems().get(getIndex());
+                                    mediaTable.getItems().remove(interstim);
                                     listMediaPlusInterstim.remove(interstim);
                                     interstim.getMedia().setInterstim(null);
-                                }
-                                else {
-                                    Media media = (Media) getTableView().getItems().get(getIndex());
+                                } else {
+                                    Media media = (Media) mediaTable.getItems().get(getIndex());
                                     if (media.getInterstim() != null) {
-                                        getTableView().getItems().remove(media.getInterstim());
+                                        mediaTable.getItems().remove(media.getInterstim());
                                         listMediaPlusInterstim.remove(media.getInterstim());
                                         media.setInterstim(null);
                                     }
-                                    getTableView().getItems().remove(media);
+                                    mediaTable.getItems().remove(media);
                                     listMediaPlusInterstim.remove(media);
-                                    sequence.removeMedia(media);
                                 }
-                                //mediaTable.refresh();
+                                mediaTable.refresh();
                             });
 
                             // Option button
@@ -200,7 +200,9 @@ public class ModifySeqPopUp {
                                 try {
                                     FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_media_popup.fxml"));
                                     DialogPane dialogPane = fxmlLoader.load();
-                                    //ModifyMediaPopUp controller = fxmlLoader.getController();
+                                    ModifyMediaPopUp controller = fxmlLoader.getController();
+                                    controller.getResizeImage().setSelected(mediaTable.getItems().get(getIndex()).isResizable());
+                                    controller.getBackgroundColor().setValue(mediaTable.getItems().get(getIndex()).getBackgroundColor());
 
                                     Dialog<ButtonType> dialog = new Dialog<>();
                                     dialog.setDialogPane(dialogPane);
@@ -210,6 +212,8 @@ public class ModifySeqPopUp {
 
                                     Optional<ButtonType> clickedButton = dialog.showAndWait();
                                     if (clickedButton.get() == ButtonType.FINISH) {
+                                        mediaTable.getItems().get(getIndex()).setResizable(controller.getResizeImage().isSelected());
+                                        mediaTable.getItems().get(getIndex()).setBackgroundColor(controller.getBackgroundColor().getValue());
                                     }
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -218,6 +222,7 @@ public class ModifySeqPopUp {
 
                             if (getTableRow().getItem() instanceof Interstim) {
                                 getTableRow().setStyle("-fx-background-color: #e6f2ff; -fx-text-background-color: black;");
+                                tableViewAddButton.setDisable(true);
                             } else {
                                 getTableRow().setStyle("-fx-text-background-color: black;");
                             }
@@ -245,11 +250,17 @@ public class ModifySeqPopUp {
                         } else {
                             hBox.setAlignment(Pos.CENTER);
                             hBox.setSpacing(20);
-                            Media media = (Media) getTableView().getItems().get(getIndex());
 
-                            tableViewVerrCheckBox.setSelected(media.isLocked());
-
-                            tableViewVerrCheckBox.setOnAction(event -> media.setLocked(tableViewVerrCheckBox.isSelected()));
+                            if (getTableView().getItems().get(getIndex()) instanceof Interstim) {
+                                Interstim interstim = (Interstim) getTableView().getItems().get(getIndex());
+                                tableViewVerrCheckBox.setSelected(interstim.isLocked());
+                                tableViewVerrCheckBox.setOnAction(event -> interstim.setLocked(tableViewVerrCheckBox.isSelected()));
+                                tableViewVerrCheckBox.setDisable(true);
+                            } else {
+                                Media media = (Media) getTableView().getItems().get(getIndex());
+                                tableViewVerrCheckBox.setSelected(media.isLocked());
+                                tableViewVerrCheckBox.setOnAction(event -> media.setLocked(tableViewVerrCheckBox.isSelected()));
+                            }
 
                             setGraphic(hBox);
                         }
