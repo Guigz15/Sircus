@@ -153,23 +153,28 @@ public class Etape2AdminController implements Initializable {
                 private final TextField textField = new TextField();
 
                 {
-                    //defined action when we click on textfield to edit meta-sequence name
-                    textField.setOnAction(e -> {
-                        //we commit the change only if we are connected as admin
-                        if (SircusApplication.adminConnected) commitEdit(getItem());
-                        else cancelEdit();
-                    });
-                    textField.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
-                        //if we click on escape we cancel the editing
-                        if (e.getCode() == KeyCode.ESCAPE) {
-                            cancelEdit();
-                        }
-                    });
+                    //if we are not connected as admin we can't edit textfield
+                    if (!SircusApplication.adminConnected) textField.setDisable(true);
+                    else{
+                        //defined action when we click on textfield to edit meta-sequence name
+                        textField.setOnAction(e -> {
+                            //we commit the change only if we are connected as admin
+                            commitEdit(getItem());
+
+                        });
+                        textField.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
+                            //if we click on escape we cancel the editing
+                            if (e.getCode() == KeyCode.ESCAPE) {
+                                cancelEdit();
+                            }
+                        });
+                    }
 
                 }
 
                 @Override
                 protected void updateItem(MetaSequence metaSequence, boolean empty) {
+
                     super.updateItem(metaSequence, empty);
                     if (empty) {
                         setText(null);
