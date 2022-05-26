@@ -485,18 +485,15 @@ public class Etape2AdminController implements Initializable {
                 dialog.initModality(Modality.WINDOW_MODAL);
                 dialog.initOwner(modifySeqButton.getScene().getWindow());
 
-
                 Optional<ButtonType> clickedButton = dialog.showAndWait();
 
-                /*
-                ATTENTION A DECOMMENTER APRES AVOIR FAIT LA MODIFICATION D'UNE SEQUENCE
-                // the code below allows you to update listview.
-                metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
-                //Defined action when the MetaSequence element selected is changed.
-                metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
-                 */
-
                 if (clickedButton.get() == ButtonType.FINISH) {
+                    // To modify the sequence's name
+                    seqListView.getSelectionModel().getSelectedItem().getSequence().setName(controller.getSequenceName().getText());
+                    // the code below allows you to update listview.
+                    metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
+                    //Defined action when the MetaSequence element selected is changed.
+                    metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
                 }
             } catch (IOException e) {
                 e.printStackTrace();

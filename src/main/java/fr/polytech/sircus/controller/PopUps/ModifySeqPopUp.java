@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.util.Callback;
+import lombok.Getter;
 import lombok.Setter;
 import org.kordamp.ikonli.javafx.FontIcon;
 import java.io.File;
@@ -34,6 +35,7 @@ public class ModifySeqPopUp {
     @Setter
     private Sequence sequence;
     @FXML
+    @Getter
     private TextField sequenceName;
     @FXML
     private Button addMediaToSeq;
