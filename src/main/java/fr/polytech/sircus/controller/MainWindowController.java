@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -477,7 +478,11 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    private void enableNextButton() {
+    private void enableNextButton(MouseEvent mouseEvent) {
+        if(mouseEvent.getClickCount() == 2){
+            SircusApplication.adminConnected = true;
+            adminLabel.setVisible(true);
+        }
         next.disableProperty().unbind();
         next.setDisable(false);
     }

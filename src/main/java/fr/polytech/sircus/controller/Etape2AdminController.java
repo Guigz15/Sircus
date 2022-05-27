@@ -2,16 +2,15 @@ package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.controller.PopUps.ModifySeqPopUp;
-import fr.polytech.sircus.model.AbstractMedia;
-import fr.polytech.sircus.model.Interstim;
-import fr.polytech.sircus.model.MetaSequence;
-import fr.polytech.sircus.model.Sequence;
+import fr.polytech.sircus.model.*;
 import fr.polytech.sircus.utils.ImportMetaSeqXML;
 import fr.polytech.sircus.utils.ImportSeqXML;
 import fr.polytech.sircus.utils.ItemSequence;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -93,7 +92,7 @@ public class Etape2AdminController implements Initializable {
     private boolean aboutToMix;
 
     //DataFormat use for drag and drop sequences in listView.
-    private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
+    public static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
 
     //index of last meta-sequence selected. Is set with -1 if there are no selected meta-sequence
     int index_Selected_MetaSequence = -1;
@@ -317,7 +316,7 @@ public class Etape2AdminController implements Initializable {
         //                          Drag and Drop behaviour for sequence                    //
         //----------------------------------------------------------------------------------//
 
-        //Set the CellFactory we definied defined above. Moreover, we defined behaviours to do when we drag and drop a Sequence.
+        //Set the CellFactory we defined above. Moreover, we defined behaviours to do when we drag and drop a Sequence.
         seqListView.setCellFactory((ListView<ItemSequence> param) -> {
             ListCell<ItemSequence> listCellForSequence = new ListCell<>() {
                 private CheckBox checkBox;
@@ -344,6 +343,7 @@ public class Etape2AdminController implements Initializable {
                 private CheckBox getCheckBox() {
                     if (checkBox == null) {
                         checkBox = new CheckBox();
+
                         //define action to do when checkbox is selected
                         checkBox.selectedProperty().addListener((obs, oldValue, newValue) -> {
                             if (getItem() != null) {
@@ -433,6 +433,14 @@ public class Etape2AdminController implements Initializable {
             return listCellForSequence;
         });
 
+        //Open modifying sequence popup when we double click on sequence
+        seqListView.setOnMouseClicked(event ->
+        {
+            if(event.getClickCount() == 2 && SircusApplication.adminConnected) {
+                openModifyPopUpForSequence();
+            }
+        });
+
         //------------------------------------------------------------------//
         //                  All behaviours for sequence                     //
         //------------------------------------------------------------------//
@@ -480,32 +488,7 @@ public class Etape2AdminController implements Initializable {
 
         /*defined action to do when we update a sequence */
         modifySeqButton.setOnAction(actionEvent -> {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_seq_popup.fxml"));
-                DialogPane dialogPane = fxmlLoader.load();
-                ModifySeqPopUp controller = fxmlLoader.getController();
-                controller.setSequence(seqListView.getSelectionModel().getSelectedItem().getSequence());
-                controller.init();
-
-                Dialog<ButtonType> dialog = new Dialog<>();
-                dialog.setDialogPane(dialogPane);
-                dialog.setTitle("Modification de séquence");
-                dialog.initModality(Modality.WINDOW_MODAL);
-                dialog.initOwner(modifySeqButton.getScene().getWindow());
-
-                Optional<ButtonType> clickedButton = dialog.showAndWait();
-
-                if (clickedButton.get() == ButtonType.FINISH) {
-                    // To modify the sequence's name
-                    seqListView.getSelectionModel().getSelectedItem().getSequence().setName(controller.getSequenceName().getText());
-                    // the code below allows you to update listview.
-                    metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
-                    //Defined action when the MetaSequence element selected is changed.
-                    metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            openModifyPopUpForSequence();
         });
 
         /*defined action to do when we add a sequence */
@@ -537,6 +520,48 @@ public class Etape2AdminController implements Initializable {
             }
         });
 
+    }
+
+
+    /**
+     * This method allows to open pop for modifying a sequence
+     */
+    private void openModifyPopUpForSequence(){
+        try {
+            if(seqListView.getSelectionModel().getSelectedItem() != null) {
+                FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_seq_popup.fxml"));
+                DialogPane dialogPane = fxmlLoader.load();
+                ModifySeqPopUp controller = fxmlLoader.getController();
+                Sequence copy =new Sequence(seqListView.getSelectionModel().getSelectedItem().getSequence());
+                copy.setName("Tye modif copy");
+                copy.getListMedias().get(0).setFilename("test");
+
+                //we pass a copy if we cancel modification
+                controller.setSequence(copy);
+                controller.init();
+
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setDialogPane(dialogPane);
+                dialog.setTitle("Modification de séquence");
+                dialog.initModality(Modality.WINDOW_MODAL);
+                dialog.initOwner(modifySeqButton.getScene().getWindow());
+
+                Optional<ButtonType> clickedButton = dialog.showAndWait();
+
+                if (clickedButton.get() == ButtonType.FINISH) {
+                    Sequence oldSequence = SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().get(index_Selected_Sequence);
+                    SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().add(index_Selected_Sequence, controller.getSequence());
+                    SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().remove(oldSequence);
+                }
+                // the code below allows you to update listview.
+                seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
+                //Defined action when the MetaSequence element selected is changed.
+                seqListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerSequence());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -20,7 +20,8 @@ public class ItemSequence {
     private final Sequence sequence;
 
     public ItemSequence(String name, boolean on, Sequence sequence) {
-        this.sequence = sequence;
+        super();
+        this.sequence = new Sequence(sequence);
         setName(name);
         setOn(on);
     }

@@ -1,16 +1,19 @@
 package fr.polytech.sircus.controller.PopUps;
 
 import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.controller.Etape2AdminController;
 import fr.polytech.sircus.controller.PreviewTimeline;
 import fr.polytech.sircus.model.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -32,7 +35,12 @@ import java.util.*;
  * Controller handling the management of a sequence modification
  */
 public class ModifySeqPopUp {
+
+    //DataFormat use for drag and drop sequences in listView. Don't make it final because it make error
+    private DataFormat SERIALIZED_MIME_TYPE = Etape2AdminController.SERIALIZED_MIME_TYPE;
+
     @Setter
+    @Getter
     private Sequence sequence;
     @FXML
     @Getter
@@ -81,13 +89,18 @@ public class ModifySeqPopUp {
     @FXML
     private Button cancelAddMediaSeq;
 
+    //last index of the selected media
+    private int lastIndexSelectedMedia;
+
 
 
     /**
      * Initialize the controller and its attributes, then adding functionality to each component.
      */
     public void init() {
+
         this.mediaTable.setEditable(true);
+
         this.sequenceName.setText(this.sequence.getName());
 
         this.mediaTableColumnName.setCellValueFactory(new PropertyValueFactory<>("filename"));
@@ -107,7 +120,7 @@ public class ModifySeqPopUp {
         Callback<TableColumn<AbstractMedia, String>, TableCell<AbstractMedia, String>> cellFactoryOption = new Callback<>() {
             @Override
             public TableCell<AbstractMedia, String> call(final TableColumn<AbstractMedia, String> param) {
-                return new TableCell<>() {
+                TableCell<AbstractMedia,String> tableCell = new TableCell<AbstractMedia,String>() {
                     final Button tableViewAddButton = new Button("");
                     final Button tableViewDeleteButton = new Button("");
                     final Button tableViewOptionButton = new Button("");
@@ -199,27 +212,8 @@ public class ModifySeqPopUp {
                             // Option button
                             tableViewOptionButton.setOnAction(event ->
                             {
-                                try {
-                                    FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_media_popup.fxml"));
-                                    DialogPane dialogPane = fxmlLoader.load();
-                                    ModifyMediaPopUp controller = fxmlLoader.getController();
-                                    controller.getResizeImage().setSelected(mediaTable.getItems().get(getIndex()).isResizable());
-                                    controller.getBackgroundColor().setValue(mediaTable.getItems().get(getIndex()).getBackgroundColor());
-
-                                    Dialog<ButtonType> dialog = new Dialog<>();
-                                    dialog.setDialogPane(dialogPane);
-                                    dialog.setTitle("Modification du média");
-                                    dialog.initModality(Modality.WINDOW_MODAL);
-                                    dialog.initOwner(tableViewOptionButton.getScene().getWindow());
-
-                                    Optional<ButtonType> clickedButton = dialog.showAndWait();
-                                    if (clickedButton.get() == ButtonType.FINISH) {
-                                        mediaTable.getItems().get(getIndex()).setResizable(controller.getResizeImage().isSelected());
-                                        mediaTable.getItems().get(getIndex()).setBackgroundColor(controller.getBackgroundColor().getValue());
-                                    }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                                lastIndexSelectedMedia = getIndex();
+                                openModifyViewForMedia();
                             });
 
                             if (getTableRow().getItem() instanceof Interstim) {
@@ -227,6 +221,7 @@ public class ModifySeqPopUp {
                                 tableViewAddButton.setDisable(true);
                             } else {
                                 getTableRow().setStyle("-fx-text-background-color: black;");
+                                tableViewAddButton.setDisable(false);
                             }
 
                             setGraphic(hBox);
@@ -234,6 +229,8 @@ public class ModifySeqPopUp {
                         setText(null);
                     }
                 };
+
+                return tableCell;
             }
         };
 
@@ -247,7 +244,7 @@ public class ModifySeqPopUp {
                     @Override
                     public void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
-                        if (empty) {
+                        if (empty ) {
                             setGraphic(null);
                         } else {
                             hBox.setAlignment(Pos.CENTER);
@@ -255,13 +252,17 @@ public class ModifySeqPopUp {
 
                             if (getTableView().getItems().get(getIndex()) instanceof Interstim) {
                                 Interstim interstim = (Interstim) getTableView().getItems().get(getIndex());
-                                tableViewVerrCheckBox.setSelected(interstim.isLocked());
-                                tableViewVerrCheckBox.setOnAction(event -> interstim.setLocked(tableViewVerrCheckBox.isSelected()));
+                                tableViewVerrCheckBox.setSelected(true);
+//                                tableViewVerrCheckBox.setSelected(interstim.isLocked());
+//                                tableViewVerrCheckBox.setOnAction(event -> interstim.setLocked(tableViewVerrCheckBox.isSelected()));
                                 tableViewVerrCheckBox.setDisable(true);
                             } else {
-                                Media media = (Media) getTableView().getItems().get(getIndex());
-                                tableViewVerrCheckBox.setSelected(media.isLocked());
-                                tableViewVerrCheckBox.setOnAction(event -> media.setLocked(tableViewVerrCheckBox.isSelected()));
+                                Media currentMedia = (Media) getTableView().getItems().get(getIndex());
+                                tableViewVerrCheckBox.setDisable(false);
+                                tableViewVerrCheckBox.setSelected(currentMedia.isLocked());
+                                tableViewVerrCheckBox.setOnAction(event -> {
+                                    currentMedia.setLocked(tableViewVerrCheckBox.isSelected());
+                                });
                             }
 
                             setGraphic(hBox);
@@ -276,7 +277,91 @@ public class ModifySeqPopUp {
         this.mediaTableColumnOptions.setCellFactory(cellFactoryOption);
 
         constructMediaInterstimList();
+
+        this.mediaTable.setOnMouseClicked(new EventHandler<MouseEvent>() { //click
+            @Override
+            public void handle(MouseEvent event) {
+                if(event.getClickCount()==2){ // double click
+                    lastIndexSelectedMedia = mediaTable.getSelectionModel().getSelectedIndex();
+                    openModifyViewForMedia();
+                }
+            }
+        });
+
         this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
+
+        this.mediaTable.setRowFactory(event ->{
+            TableRow<AbstractMedia> row = new TableRow<>();
+
+            //----------------------------------------------------------------------------------//
+            //                        Drag and Drop behaviour for media                         //
+            //----------------------------------------------------------------------------------//
+            row.setOnDragDetected(dragEvent ->
+            {
+                if (! row.isEmpty()) {
+                    if(row.getItem() instanceof Media ) {
+                        Integer index = row.getIndex();
+                        Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
+                        db.setDragView(row.snapshot(null, null));
+                        ClipboardContent cc = new ClipboardContent();
+                        cc.put(SERIALIZED_MIME_TYPE, index);
+                        db.setContent(cc);
+                        dragEvent.consume();
+                    }
+                }
+            });
+
+            row.setOnDragOver(dragEvent -> {
+                Dragboard db = dragEvent.getDragboard();
+                if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                    if (row.getIndex() != ((Integer)db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+                        dragEvent.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                        dragEvent.consume();
+                    }
+                }
+            });
+
+            row.setOnDragDropped(dragEvent -> {
+                Dragboard db = dragEvent.getDragboard();
+                if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+
+                    int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
+                    Media draggedMedia = (Media) mediaTable.getItems().remove(draggedIndex);
+
+                    if (draggedMedia.getInterstim() != null) {
+                        mediaTable.getItems().remove(draggedMedia.getInterstim());
+                        listMediaPlusInterstim.remove(draggedMedia.getInterstim());
+                        listMediaPlusInterstim.remove(draggedMedia);
+                    }
+
+                    sequence.getListMedias().remove(draggedMedia);
+                    int dropIndex ;
+                    // the index of new media in sequence in order to add to the right place
+                    int dropIndexInSequence ;
+
+                    if (row.isEmpty()) {
+                        dropIndex = mediaTable.getItems().size() ;
+                        dropIndexInSequence = sequence.getListMedias().size();
+                    } else {
+                        dropIndex = row.getIndex();
+                        dropIndexInSequence = sequence.getListMedias().indexOf(row.getItem());
+                    }
+
+                    sequence.getListMedias().add(dropIndexInSequence, draggedMedia);
+                    //We add media
+                    listMediaPlusInterstim.add(dropIndex,draggedMedia);
+                    //we add interstim at good place if there is present
+                    if (draggedMedia.getInterstim() != null) {
+                        listMediaPlusInterstim.add(dropIndex ,draggedMedia.getInterstim());
+                    }
+
+                    dragEvent.setDropCompleted(true);
+                    this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
+                    dragEvent.consume();
+                }
+            });
+            return row;
+        });
 
         this.previewTimeline.addListMedia(this.sequence.getListMedias());
 
@@ -321,6 +406,33 @@ public class ModifySeqPopUp {
 
         Optional<ButtonType> clickedButton = dialog.showAndWait();
         if (clickedButton.get() == ButtonType.FINISH) {
+        }
+    }
+
+    /**
+     * Methode wich open the pop up for modify sequence.
+     */
+    private void openModifyViewForMedia() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_media_popup.fxml"));
+            DialogPane dialogPane = fxmlLoader.load();
+            ModifyMediaPopUp controller = fxmlLoader.getController();
+            controller.getResizeImage().setSelected(mediaTable.getItems().get(lastIndexSelectedMedia).isResizable());
+            controller.getBackgroundColor().setValue(mediaTable.getItems().get(lastIndexSelectedMedia).getBackgroundColor());
+
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setDialogPane(dialogPane);
+            dialog.setTitle("Modification du média");
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.initOwner(this.mediaTable.getScene().getWindow());
+
+            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            if (clickedButton.get() == ButtonType.FINISH) {
+                mediaTable.getItems().get(lastIndexSelectedMedia).setResizable(controller.getResizeImage().isSelected());
+                mediaTable.getItems().get(lastIndexSelectedMedia).setBackgroundColor(controller.getBackgroundColor().getValue());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

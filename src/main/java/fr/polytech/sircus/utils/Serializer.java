@@ -67,8 +67,6 @@ public final class Serializer {
 
         sequence1.addMedia(media1);
         sequence1.addMedia(media2);
-        sequence2.addMedia(media1);
-        sequence2.addMedia(media2);
         sequence2.addMedia(media3);
         sequence2.addMedia(media4);
         sequence2.addMedia(media5);
@@ -76,9 +74,6 @@ public final class Serializer {
         sequence2.addMedia(media7);
         sequence3.addMedia(media1);
         sequence3.addMedia(media3);
-        sequence1.addMedia(media1);
-        sequence1.addMedia(media2);
-        sequence1.addMedia(media3);
         sequence2.addMedia(media4);
         sequence2.addMedia(media5);
         sequence4.addMedia(media1);

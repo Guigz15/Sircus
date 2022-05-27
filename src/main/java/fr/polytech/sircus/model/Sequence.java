@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * This class represents a sequence
  */
-public class Sequence implements Serializable {
+public class Sequence implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,9 +45,12 @@ public class Sequence implements Serializable {
      * @param sequence Sequence to copy
      */
     public Sequence(Sequence sequence) {
+        super();
         this.name = sequence.getName();
         this.duration = sequence.getDuration();
-        this.listMedias = sequence.getListMedias();
+        this.listMedias = new ArrayList<>();
+        listMedias.addAll(sequence.listMedias);
+
         this.lock = sequence.getLock();
     }
 
@@ -132,5 +135,16 @@ public class Sequence implements Serializable {
         XML += "</listMedia>\n" +
                 "</sequence>\n";
         return XML;
+    }
+
+    @Override
+    public Sequence clone() {
+        try {
+            Sequence clone = (Sequence) super.clone();
+            clone.listMedias = List.copyOf(this.listMedias);
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

@@ -46,6 +46,16 @@ public class Media extends AbstractMedia implements Serializable {
         this.interstim = interstim;
     }
 
+    public Media(Media media) {
+        this.filename = media.filename;
+        this.duration = media.duration;
+        this.typeMedia = media.typeMedia;
+        this.isLocked = media.isLocked;
+        this.isResizable = media.isResizable;
+        this.backgroundColor = media.backgroundColor;
+        this.interstim = new Interstim(media.interstim);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
