@@ -539,7 +539,7 @@ public class Etape2AdminController implements Initializable {
 //                copy.getListMedias().get(0).setFilename("test");
 //
 //                //we pass a copy if we cancel modification
-//                controller.setSequence(copy);
+                controller.setSequence(copy);
                 controller.init();
 
                 Dialog<ButtonType> dialog = new Dialog<>();
