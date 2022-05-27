@@ -1,127 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonType?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DialogPane?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <DialogPane xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PopUps.AddMediaPopUp">
    <content>
       <VBox prefWidth="480.0">
          <HBox alignment="CENTER_LEFT">
             <VBox.margin>
-               <Insets bottom="20.0"/>
+               <Insets bottom="20.0" />
             </VBox.margin>
-            <RadioButton mnemonicParsing="false" text="Copie d'un média existant">
+            <RadioButton fx:id="existingMediaButton" mnemonicParsing="false" selected="true" text="Copie d'un média existant">
                <padding>
-                  <Insets right="20.0"/>
+                  <Insets right="20.0" />
                </padding>
+               <toggleGroup>
+                  <ToggleGroup fx:id="addType" />
+               </toggleGroup>
             </RadioButton>
-            <ComboBox prefHeight="26.0" prefWidth="174.0" promptText="Sélectionner un média"/>
+            <ComboBox fx:id="mediasList" prefHeight="26.0" prefWidth="243.0" promptText="Sélectionner un média" />
          </HBox>
          <VBox>
-            <RadioButton mnemonicParsing="false" text="Nouveau média">
+            <RadioButton fx:id="newMediaButton" mnemonicParsing="false" text="Nouveau média" toggleGroup="$addType">
                <VBox.margin>
-                  <Insets bottom="10.0"/>
+                  <Insets bottom="10.0" />
                </VBox.margin>
             </RadioButton>
-            <HBox prefHeight="100.0">
-               <VBox alignment="TOP_CENTER" prefHeight="200.0">
+            <HBox fx:id="newMediaBox" prefHeight="100.0">
+               <VBox fx:id="newInterstimBox" alignment="TOP_CENTER" prefHeight="200.0">
                   <HBox.margin>
-                     <Insets/>
+                     <Insets />
                   </HBox.margin>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Interstim">
                      <font>
-                        <Font name="System Bold" size="16.0"/>
+                        <Font name="System Bold" size="16.0" />
                      </font>
                      <VBox.margin>
-                        <Insets bottom="10.0"/>
+                        <Insets bottom="10.0" />
                      </VBox.margin>
                   </Text>
                   <HBox alignment="CENTER">
                      <VBox.margin>
-                        <Insets bottom="10.0"/>
+                        <Insets bottom="10.0" />
                      </VBox.margin>
-                     <Button mnemonicParsing="false" text="Parcourir">
+                     <Button fx:id="addInterstimFile" mnemonicParsing="false" text="Parcourir">
                         <HBox.margin>
-                           <Insets/>
+                           <Insets />
                         </HBox.margin>
                      </Button>
-                     <TextField prefHeight="26.0" prefWidth="130.0">
+                     <TextField fx:id="interstimName" editable="false" prefHeight="26.0" prefWidth="130.0">
                         <HBox.margin>
-                           <Insets left="10.0"/>
+                           <Insets left="10.0" />
                         </HBox.margin>
                      </TextField>
                   </HBox>
                   <HBox alignment="CENTER">
                      <VBox.margin>
-                        <Insets bottom="10.0"/>
+                        <Insets bottom="10.0" />
                      </VBox.margin>
-                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Durée :">
+                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Durée (s) :">
                         <HBox.margin>
-                           <Insets/>
+                           <Insets />
                         </HBox.margin>
                      </Text>
-                     <TextField prefHeight="26.0" prefWidth="80.0">
+                     <TextField fx:id="interstimDuration" prefHeight="26.0" prefWidth="80.0">
                         <HBox.margin>
-                           <Insets left="10.0"/>
+                           <Insets left="10.0" />
                         </HBox.margin>
                      </TextField>
                   </HBox>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
                </VBox>
                <Separator orientation="VERTICAL">
                   <HBox.margin>
-                     <Insets left="20.0" right="20.0"/>
+                     <Insets left="20.0" right="20.0" />
                   </HBox.margin>
                </Separator>
                <VBox alignment="TOP_CENTER" prefHeight="200.0">
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Média">
                      <font>
-                        <Font size="16.0"/>
+                        <Font size="16.0" />
                      </font>
                      <VBox.margin>
-                        <Insets bottom="10.0"/>
+                        <Insets bottom="10.0" />
                      </VBox.margin>
                   </Text>
                   <HBox alignment="CENTER">
                      <VBox.margin>
-                        <Insets bottom="10.0"/>
+                        <Insets bottom="10.0" />
                      </VBox.margin>
-                     <Button mnemonicParsing="false" text="Parcourir"/>
-                     <TextField prefHeight="26.0" prefWidth="130.0">
+                     <Button fx:id="addMediaFile" mnemonicParsing="false" text="Parcourir" />
+                     <TextField fx:id="mediaName" editable="false" prefHeight="26.0" prefWidth="130.0">
                         <HBox.margin>
-                           <Insets left="10.0"/>
+                           <Insets left="10.0" />
                         </HBox.margin>
                      </TextField>
                   </HBox>
                   <HBox alignment="CENTER">
                      <VBox.margin>
-                        <Insets bottom="10.0"/>
+                        <Insets bottom="10.0" />
                      </VBox.margin>
-                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Durée :"/>
-                     <TextField prefHeight="26.0" prefWidth="80.0">
+                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Durée (s) :" />
+                     <TextField fx:id="mediaDuration" prefHeight="26.0" prefWidth="80.0">
                         <HBox.margin>
-                           <Insets left="10.0"/>
+                           <Insets left="10.0" />
                         </HBox.margin>
                      </TextField>
                   </HBox>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
                </VBox>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <ImageView fx:id="interstimImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <HBox.margin>
+                     <Insets left="15.0" right="30.0"/>
+                  </HBox.margin>
+               </ImageView>
+               <ImageView fx:id="mediaImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
             </HBox>
          </VBox>
       </VBox>
    </content>
-   <ButtonType fx:constant="FINISH"/>
-   <ButtonType fx:constant="CANCEL"/>
+   <ButtonType fx:constant="FINISH" />
+   <ButtonType fx:constant="CANCEL" />
 </DialogPane>

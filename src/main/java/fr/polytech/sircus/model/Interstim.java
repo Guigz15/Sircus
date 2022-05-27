@@ -38,6 +38,10 @@ public class Interstim extends AbstractMedia implements Serializable {
         this.media.setInterstim(this);
     }
 
+    public Interstim(Interstim interstim) {
+        this(interstim.getFilename(), interstim.getDuration(), interstim.getTypeMedia(), interstim.isResizable(), interstim.getBackgroundColor(), interstim.getMedia());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

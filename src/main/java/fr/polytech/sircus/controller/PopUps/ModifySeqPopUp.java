@@ -143,7 +143,7 @@ public class ModifySeqPopUp {
                                             FileChooser fileChooserInterstim = new FileChooser();
                                             fileChooserInterstim.setTitle("Open file (interstim)");
                                             fileChooserInterstim.getExtensionFilters().addAll(
-                                                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+                                                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
                                             );
                                             File interstimFile = fileChooserInterstim.showOpenDialog(tableViewAddButton.getScene().getWindow());
 
@@ -167,7 +167,7 @@ public class ModifySeqPopUp {
                                             mediaTable.getItems().add(mediaTable.getItems().indexOf(parentMedia), newInterstim);
                                             mediaTable.refresh();
                                         } catch (Exception e) {
-                                            System.out.print("Aucun fichier selectionné.");
+                                            System.out.print("Aucun fichier sélectionné.");
                                         }
                                     });
                                 } else { // The media has an Interstim or is one
@@ -312,6 +312,7 @@ public class ModifySeqPopUp {
         FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/add_media_popup.fxml"));
         DialogPane dialogPane = fxmlLoader.load();
         AddMediaPopUp controller = fxmlLoader.getController();
+        controller.getMediasList().setItems(FXCollections.observableList(sequence.getListMedias()));
 
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setDialogPane(dialogPane);
@@ -321,6 +322,11 @@ public class ModifySeqPopUp {
 
         Optional<ButtonType> clickedButton = dialog.showAndWait();
         if (clickedButton.get() == ButtonType.FINISH) {
+            if (controller.getNewMedia() != null) {
+                sequence.addMedia(controller.getNewMedia());
+                constructMediaInterstimList();
+                mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
+            }
         }
     }
 
