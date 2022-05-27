@@ -39,15 +39,7 @@ public class Interstim extends AbstractMedia implements Serializable {
     }
 
     public Interstim(Interstim interstim) {
-        super();
-        this.filename = interstim.filename;
-        this.duration = interstim.duration;
-        this.typeMedia = interstim.typeMedia;
-        this.isLocked = true;
-        this.isResizable = interstim.isResizable;
-        this.backgroundColor = interstim.backgroundColor;
-        this.media = new Media(interstim.media);
-        this.media.setInterstim(this);
+        this(interstim.getFilename(), interstim.getDuration(), interstim.getTypeMedia(), interstim.isResizable(), interstim.getBackgroundColor(), interstim.getMedia());
     }
 
     @Override
