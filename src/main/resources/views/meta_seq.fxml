@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import fr.polytech.sircus.controller.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<?import fr.polytech.sircus.controller.PreviewTimeline?>
 <SplitPane dividerPositions="0.6" minHeight="675.0" orientation="VERTICAL" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.Etape2AdminController">
      <AnchorPane minHeight="375.0" minWidth="1000" prefHeight="400.0">
          <HBox alignment="CENTER" layoutX="70.0" layoutY="22.0" minHeight="375.0" prefHeight="354.0" prefWidth="850.0" spacing="100.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
@@ -44,8 +33,8 @@
                      <VBox.margin>
                          <Insets top="5.0" />
                      </VBox.margin>
-                     <Button fx:id="addMetaButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="+" textAlignment="CENTER" visible="false"/>
-                     <Button fx:id="removeMetaButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="-" textAlignment="CENTER" visible="false"/>
+                     <Button fx:id="addMetaButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="+" textAlignment="CENTER" />
+                     <Button fx:id="removeMetaButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="-" textAlignment="CENTER" />
                      <Pane prefHeight="22.0" prefWidth="109.0" HBox.hgrow="ALWAYS" />
                      <Button fx:id="renameMetaButton" disable="true" mnemonicParsing="false" prefHeight="25.0" text="Renommer" textAlignment="CENTER" visible="false">
                          <HBox.margin>
@@ -59,7 +48,7 @@
                      </VBox.margin>
                      <Button fx:id="importMetaButton" mnemonicParsing="false" onAction="#importMeta" prefHeight="25.0" text="Importer" textAlignment="CENTER" />
                      <Pane prefHeight="25.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-                     <Button fx:id="exportMetaButton" alignment="CENTER" disable="true" onAction="#exportMeta" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Exporter" HBox.hgrow="ALWAYS" visible="false"/>
+                     <Button fx:id="exportMetaButton" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#exportMeta" prefHeight="25.0" prefWidth="78.0" text="Exporter" visible="false" HBox.hgrow="ALWAYS" />
                  </HBox>
              </VBox>
              <VBox alignment="CENTER" minHeight="375.0" prefHeight="375.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
@@ -83,10 +72,10 @@
                      <VBox.margin>
                          <Insets top="5.0" />
                      </VBox.margin>
-                     <Button fx:id="addSeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="+" textAlignment="CENTER" visible="false"/>
-                     <Button fx:id="removeSeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="-" textAlignment="CENTER" visible="false"/>
+                     <Button fx:id="addSeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="+" textAlignment="CENTER" />
+                     <Button fx:id="removeSeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="-" textAlignment="CENTER" />
                      <Pane prefHeight="25.0" prefWidth="1.0" HBox.hgrow="ALWAYS" />
-                     <Button fx:id="modifySeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" text="Modifier" textAlignment="CENTER" visible="false"/>
+                     <Button fx:id="modifySeqButton" disable="true" mnemonicParsing="false" prefHeight="25.0" text="Modifier" textAlignment="CENTER" />
                  </HBox>
                  <HBox prefWidth="250.0">
                      <VBox.margin>
@@ -94,7 +83,7 @@
                      </VBox.margin>
                      <Button fx:id="importSeqButton" mnemonicParsing="false" onAction="#importSeq" prefHeight="25.0" text="Importer" textAlignment="CENTER" />
                      <Pane prefHeight="25.0" prefWidth="31.0" HBox.hgrow="ALWAYS" />
-                     <Button fx:id="exportSeqButton" disable="true" mnemonicParsing="false" onAction="#exportSeq" prefHeight="25.0" text="Exporter" textAlignment="CENTER" visible="false"/>
+                     <Button fx:id="exportSeqButton" disable="true" mnemonicParsing="false" onAction="#exportSeq" prefHeight="25.0" text="Exporter" textAlignment="CENTER" visible="false" />
                  </HBox>
              </VBox>
              <VBox alignment="CENTER" minHeight="375.0" prefHeight="375.0" prefWidth="250.0" HBox.hgrow="ALWAYS">

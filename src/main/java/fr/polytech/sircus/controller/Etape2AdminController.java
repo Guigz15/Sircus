@@ -111,9 +111,11 @@ public class Etape2AdminController implements Initializable {
         if (!SircusApplication.adminConnected) {
             doMixButton.setVisible(false);
             doMixButton.setDisable(true);
+            importSeqButton.setDisable(false);
             //hide modification buttons
             renameMetaButton.setVisible(false);
             exportMetaButton.setVisible(false);
+            importSeqButton.setVisible(false);
             removeMetaButton.setVisible(false);
             addMetaButton.setVisible(false);
             exportSeqButton.setVisible(false);
@@ -123,6 +125,12 @@ public class Etape2AdminController implements Initializable {
         } else {
             doMixButton.setVisible(true);
             doMixButton.setDisable(false);
+            //displays modification buttons
+            exportMetaButton.setVisible(true);
+            removeMetaButton.setVisible(true);
+            addMetaButton.setVisible(true);
+            exportMetaButton.setDisable(false);
+            removeMetaButton.setDisable(false);
             addMetaButton.setDisable(false);
         }
 
@@ -777,22 +785,20 @@ public class Etape2AdminController implements Initializable {
 
         @Override
         public void changed(ObservableValue<? extends MetaSequence> observableValue, MetaSequence metaSequence, MetaSequence metaSequenceSelected) {
+            importSeqButton.setVisible(true);
+            importSeqButton.setDisable(false);
+
             //allow the buttons to change meta-sequence only if connect as admin
             if (SircusApplication.adminConnected) {
-                exportMetaButton.setDisable(false);
-                removeMetaButton.setDisable(false);
-                addMetaButton.setDisable(false);
-                addMetaButton.setVisible(true);
-                exportMetaButton.setVisible(true);
-                removeMetaButton.setVisible(true);
-                //TODO Voir si ce bouton est tjr necessaire ou si le fait de cliquer et d'écrire dans la meta-seq pour modifier suffit.
-                //renameMetaButton.setVisible(true);
-                //renameMetaButton.setDisable(false);
-            } else {
-                addMetaButton.setDisable(true);
-                renameMetaButton.setDisable(true);
-                exportMetaButton.setDisable(true);
-                removeMetaButton.setDisable(true);
+                //display modifying buttons for sequences
+                exportSeqButton.setVisible(true);
+                addSeqButton.setVisible(true);
+                modifySeqButton.setVisible(true);
+                removeSeqButton.setVisible(true);
+                exportSeqButton.setDisable(false);
+                addSeqButton.setDisable(false);
+                modifySeqButton.setDisable(false);
+                removeSeqButton.setDisable(false);
             }
 
             //get the new medias lists to display it on screen
