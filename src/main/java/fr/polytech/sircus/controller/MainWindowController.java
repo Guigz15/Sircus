@@ -33,6 +33,9 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private ComboBox<String> eyeTracker;
+
+    @FXML
+    private Button adminLogOut;
     @FXML
     private Button admin;
     @FXML
@@ -138,6 +141,12 @@ public class MainWindowController implements Initializable {
         );
 
         adminLabel.setVisible(SircusApplication.adminConnected);
+        adminLogOut.setVisible(SircusApplication.adminConnected);
+        adminLogOut.setOnAction(actionEvent -> {
+            SircusApplication.adminConnected = false;
+            adminLabel.setVisible(false);
+            adminLogOut.setVisible(false);
+        });
 
         // Initialize all components if they have been already filled
         /** Commenter sinon pose des problèmes si aucun des champs n'a été rempli, en cliquant sur l'étoile rouge, ce qui n'arrivera plus dans la version finale **/
@@ -360,6 +369,7 @@ public class MainWindowController implements Initializable {
             if (clickedButton.get() == ButtonType.FINISH && controller.checkUserName() && controller.checkPassword()) {
                 SircusApplication.adminConnected = true;
                 adminLabel.setVisible(true);
+                adminLogOut.setVisible(true);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -479,9 +489,10 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void enableNextButton(MouseEvent mouseEvent) {
-        if(mouseEvent.getClickCount() == 2){
+        if(mouseEvent.getClickCount() == 2) {
             SircusApplication.adminConnected = true;
             adminLabel.setVisible(true);
+            adminLogOut.setVisible(true);
         }
         next.disableProperty().unbind();
         next.setDisable(false);
