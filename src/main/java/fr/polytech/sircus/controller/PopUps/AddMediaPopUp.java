@@ -99,7 +99,7 @@ public class AddMediaPopUp implements Initializable {
             try {
                 FileChooser fileChooserMedia = new FileChooser();
                 fileChooserMedia.setTitle("Open file (media)");
-                if(SircusApplication.dataSircus.getPath().isCustomPath()){
+                if (SircusApplication.dataSircus.getPath().isCustomPath()) {
                     fileChooserMedia.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getLastPath()));
                 } else {
                     fileChooserMedia.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getDefaultPath()));
@@ -132,7 +132,7 @@ public class AddMediaPopUp implements Initializable {
             try {
                 FileChooser fileChooserInterstim = new FileChooser();
                 fileChooserInterstim.setTitle("Open file (interstim)");
-                if(SircusApplication.dataSircus.getPath().isCustomPath()){
+                if (SircusApplication.dataSircus.getPath().isCustomPath()) {
                     fileChooserInterstim.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getLastPath()));
                 } else {
                     fileChooserInterstim.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getDefaultPath()));
