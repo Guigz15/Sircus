@@ -133,6 +133,10 @@ public class Etape2AdminController implements Initializable {
             addMetaButton.setDisable(false);
         }
 
+        if (SircusApplication.dataSircus.getMetaSequencesList().size() == 0) {
+            next.setDisable(true);
+        }
+
         /* initialize metasequences listView */
         metaListView.setStyle("-fx-font-size: 14pt;");
         metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
@@ -292,6 +296,10 @@ public class Etape2AdminController implements Initializable {
             metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
             //Defined action when the MetaSequence element selected is changed.
             metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
+
+            if (next.disableProperty().get()) {
+                next.setDisable(false);
+            }
         });
 
         /* set removeMetaSequence proprieties to remove meta-sequence */
@@ -300,6 +308,10 @@ public class Etape2AdminController implements Initializable {
             if (index_Selected_MetaSequence >= 0) {
                 SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
                 metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
+
+                if (SircusApplication.dataSircus.getMetaSequencesList().size() == 0) {
+                    next.setDisable(true);
+                }
             }
         });
 
