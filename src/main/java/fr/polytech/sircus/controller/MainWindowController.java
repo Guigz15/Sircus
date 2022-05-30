@@ -377,59 +377,6 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * Export the patient's information in a text file
-     */
-    /* Not use anymore but it might be reused later
-    @FXML
-    private void exporting() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Exporter");
-        fileChooser.setInitialFileName(this.id.getText());
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt"));
-        File file = fileChooser.showSaveDialog(exportButton.getScene().getWindow());
-        if (file != null) {
-            try {
-                PrintWriter writer = new PrintWriter(file);
-                writer.println(this.id.getText());
-                writer.println(((RadioButton)this.sex.getSelectedToggle()).getText());
-                writer.println(this.birthDate.getValue());
-                writer.println(((RadioButton)this.ocularDominance.getSelectedToggle()).getText());
-                writer.println(((RadioButton)this.laterality.getSelectedToggle()).getText());
-                writer.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-    */
-
-    /**
-     * Import the patient's information from a text file
-     */
-    /* Not use anymore but it might be reused later
-    @FXML
-    private void importing() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Importer");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt"));
-        File file = fileChooser.showOpenDialog(importButton.getScene().getWindow());
-        if (file != null) {
-            try (Scanner scanner = new Scanner(file)) {
-                while (scanner.hasNext()) {
-                    this.id.setText(scanner.next());
-                    Objects.requireNonNull(getRadioButton(sex.getToggles(), scanner.next())).setSelected(true);
-                    this.birthDate.setValue(LocalDate.parse(scanner.next()));
-                    Objects.requireNonNull(getRadioButton(ocularDominance.getToggles(), scanner.next())).setSelected(true);
-                    Objects.requireNonNull(getRadioButton(laterality.getToggles(), scanner.next())).setSelected(true);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    */
-
-    /**
      * Get the radioButton that has been saved in file.
      * @param radioButtons The radioButton list in toggleGroup.
      * @param value The radioButton's text saved.

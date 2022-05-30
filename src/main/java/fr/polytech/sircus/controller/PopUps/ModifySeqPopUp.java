@@ -109,7 +109,7 @@ public class ModifySeqPopUp {
         this.mediaTableColumnDuration.setStyle("-fx-alignment: CENTER;");
         this.mediaTableColumnDuration.setCellValueFactory(cellData -> {
             String formattedDuration = cellData.getValue().getDuration().toString()
-                    .replaceAll("[^0-9.,]", "");
+                    .replaceAll("[^\\d]", "");
             return new SimpleStringProperty(formattedDuration);
         });
         this.mediaTableColumnDuration.setOnEditCommit(event -> {
