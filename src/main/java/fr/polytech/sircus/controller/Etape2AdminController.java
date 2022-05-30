@@ -9,8 +9,6 @@ import fr.polytech.sircus.utils.ItemSequence;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -351,8 +349,9 @@ public class Etape2AdminController implements Initializable {
                                 if (!oldValue && newValue) {
                                     //if the item is not lock
                                     if (!getItem().getSequence().getLock()) {
+                                        //get the item of the sequence
+                                        metaListView.getItems().get(index_Selected_MetaSequence).getSequencesList().get(getIndex()).setLock(true);
                                         getCheckBox().setSelected(true);
-                                        getItem().getSequence().setLock(true);
                                         getItem().setOn(true);
                                     }
                                 }
@@ -361,7 +360,7 @@ public class Etape2AdminController implements Initializable {
                                     //if the item is lock
                                     if (getItem().getSequence().getLock()) {
                                         getCheckBox().setSelected(false);
-                                        getItem().getSequence().setLock(false);
+                                        metaListView.getItems().get(index_Selected_MetaSequence).getSequencesList().get(getIndex()).setLock(false);
                                         getItem().setOn(false);
                                     }
                                 }
@@ -487,9 +486,7 @@ public class Etape2AdminController implements Initializable {
         });
 
         /*defined action to do when we update a sequence */
-        modifySeqButton.setOnAction(actionEvent -> {
-            openModifyPopUpForSequence();
-        });
+        modifySeqButton.setOnAction(actionEvent -> openModifyPopUpForSequence());
 
         /*defined action to do when we add a sequence */
         addSeqButton.setOnAction(actionEvent -> {
