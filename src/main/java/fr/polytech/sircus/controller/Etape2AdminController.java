@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -86,6 +87,8 @@ public class Etape2AdminController implements Initializable {
     private Label nbInterstimLabel;
     @FXML
     private Label totalDurationLabel;
+    @FXML
+    private Text previewText;
 
     @Getter
     @Setter
@@ -226,6 +229,9 @@ public class Etape2AdminController implements Initializable {
                 }
             };
 
+            //----------------------------------------------------------------------------------//
+            //                     Drag and Drop behaviour for meta-sequence                    //
+            //----------------------------------------------------------------------------------//
 
             //defined OnDragDetected event :
             listCellForMetaSequence.setOnDragDetected((MouseEvent event) ->
@@ -457,7 +463,7 @@ public class Etape2AdminController implements Initializable {
         });
 
         //------------------------------------------------------------------//
-        //                  All behaviours for sequence                     //
+        //            Add and remove behaviours for sequence                //
         //------------------------------------------------------------------//
 
         /* set doMixButton proprieties */
@@ -508,12 +514,12 @@ public class Etape2AdminController implements Initializable {
 
         /*defined action to do when we add a sequence */
         addSeqButton.setOnAction(actionEvent -> {
-            String newNameMetaSequence = "Nouvelle Sequence " + (seqListView.getItems().size() + 1);
-            Sequence newSequence = new Sequence(newNameMetaSequence);
+            String newNameSequence = "Nouvelle Sequence " + (seqListView.getItems().size() + 1);
+            Sequence newSequence = new Sequence(newNameSequence);
             if (index_Selected_MetaSequence >= 0)
                 SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().add(newSequence);
             seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
-            //Defined action when the MetaSequence element selected is changed.
+            //Defined action when the Sequence element selected is changed.
             seqListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerSequence());
         });
 
@@ -526,7 +532,7 @@ public class Etape2AdminController implements Initializable {
             }
         });
 
-        //Defined action when we pressed "delete" key. This delete current meta-sequence
+        //Defined action when we pressed "delete" key. This delete current sequence
         seqListView.setOnKeyReleased((KeyEvent keyEvent) -> {
             //if we pressed delete and we have selected a mete-sequence and only if we are connected as admin
             if ((keyEvent.getCode() == KeyCode.DELETE) && SircusApplication.adminConnected && (index_Selected_Sequence >= 0) && (index_Selected_MetaSequence >= 0)) {
@@ -857,6 +863,7 @@ public class Etape2AdminController implements Initializable {
             seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
             if (index_Selected_MetaSequence >= 0) {
                 setMetaSeqStats();
+                previewText.setText("Prévisualisation de la métaséquence");
             }
         }
     }
@@ -891,7 +898,10 @@ public class Etape2AdminController implements Initializable {
                 MetaSequence currentMetaSeq = metaListView.getItems().get(index_Selected_MetaSequence);
                 Sequence currentSequence = currentMetaSeq.getSequencesList().get(index_Selected_Sequence);
                 previewTimeline.setMediaList(currentSequence.getListMedias());
+
                 setSeqStats();
+
+                previewText.setText("Prévisualisation de la séquence");
             }
         }
     }
