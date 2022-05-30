@@ -170,12 +170,7 @@ public class ModifySeqPopUp {
                                                 Files.copy(path, os);
                                             }
 
-                                            Interstim newInterstim = new Interstim(
-                                                    interstimFile.getName(),
-                                                    Duration.ofSeconds(1),
-                                                    TypeMedia.PICTURE,
-                                                    parentMedia
-                                            );
+                                            Interstim newInterstim = new Interstim(interstimFile.getName(), Duration.ofSeconds(1), TypeMedia.PICTURE, parentMedia);
 
                                             mediaTable.getItems().add(mediaTable.getItems().indexOf(parentMedia), newInterstim);
                                             mediaTable.refresh();
@@ -219,10 +214,8 @@ public class ModifySeqPopUp {
                             if (getTableRow().getItem() instanceof Interstim) {
                                 getTableRow().setStyle("-fx-background-color: #e6f2ff; -fx-text-background-color: black;");
                                 tableViewAddButton.setDisable(true);
-                            } else {
+                            } else
                                 getTableRow().setStyle("-fx-text-background-color: black;");
-                                tableViewAddButton.setDisable(false);
-                            }
 
                             setGraphic(hBox);
                         }
@@ -253,8 +246,6 @@ public class ModifySeqPopUp {
                             if (getTableView().getItems().get(getIndex()) instanceof Interstim) {
                                 Interstim interstim = (Interstim) getTableView().getItems().get(getIndex());
                                 tableViewVerrCheckBox.setSelected(true);
-//                                tableViewVerrCheckBox.setSelected(interstim.isLocked());
-//                                tableViewVerrCheckBox.setOnAction(event -> interstim.setLocked(tableViewVerrCheckBox.isSelected()));
                                 tableViewVerrCheckBox.setDisable(true);
                             } else {
                                 Media currentMedia = (Media) getTableView().getItems().get(getIndex());
@@ -364,16 +355,6 @@ public class ModifySeqPopUp {
         });
 
         this.previewTimeline.addListMedia(this.sequence.getListMedias());
-
-        /*this.cancelAddMediaSeq.setOnMouseClicked(mouseEvent -> cancelAddSeq());
-        this.saveAddMediaSeq.setOnMouseClicked(mouseEvent -> saveMediasToSeq());
-        this.addMediaToSeq.setOnMouseClicked(mouseEvent -> addMediaToSeq());
-        this.titleSequenceLabel.setOnKeyPressed(mouseEvent -> {
-            KeyCode keyCode = mouseEvent.getCode();
-            if (keyCode.equals(KeyCode.ENTER)) {
-                modifySequenceName();
-            }
-        });*/
     }
 
     /**
@@ -441,80 +422,4 @@ public class ModifySeqPopUp {
             e.printStackTrace();
         }
     }
-
-    /**
-     * Method modifying the name of the sequence
-     */
-    /*private void modifySequenceName() {
-        if (!Objects.equals(this.sequence.getName(), this.titleSequenceLabel.getText())) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                    "Etes-vous sûr de vouloir renommer la séquence en " + this.titleSequenceLabel.getText() + " ?",
-                    ButtonType.YES,
-                    ButtonType.NO);
-
-            alert.showAndWait();
-
-            if (alert.getResult() == ButtonType.YES) {
-                this.sequence.setName(this.titleSequenceLabel.getText());
-                this.popUpStage.setTitle("Modifier la séquence : " + this.sequence.getName());
-                this.listener.onModified(this.sequence);
-            }
-        }
-    }*/
-
-
-    /**
-     * Method adding media to the sequence
-     */
-    /*@FXML
-    private void addMediaToSeq() {
-        SequenceModificationListener listener = sequence -> {
-            constructMediaInterstimList();
-            this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
-            this.mediaTable.refresh();
-        };
-
-        new AddMediaPopUp(
-                this.saveAddMediaSeq.getScene().getWindow(),
-                FXCollections.observableList(this.sequence.getListMedias()),
-                this.sequence,
-                listener,
-                fileChooserMedia,
-                fileChooserInterstim
-        );
-    }*/
-
-    /**
-     * Method saving any modification made on the sequence and close the pop-up
-     */
-    /*@FXML
-    private void saveMediasToSeq() {
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                "Etes-vous sûr de vouloir enregistrer les modifications de " + this.sequence.getName() + " ?",
-                ButtonType.YES,
-                ButtonType.NO);
-        alert.showAndWait();
-
-        if (alert.getResult() == ButtonType.YES) {
-            this.sequence.setName(this.titleSequenceLabel.getText());
-            this.sequence.computeDuration();//.setDuration(sequence.getDuration());
-            this.listener.onModified(this.sequence);
-            this.popUpStage.close();
-        }
-    }*/
-
-    /**
-     * Event listener of a sequence modification
-     */
-    /*public interface SequenceModificationListener extends EventListener {
-        void onModified(Sequence sequence);
-    }*/
-
-    /**
-     * Event listener of a media modification
-     */
-    /*public interface MediaModificationListener extends EventListener {
-        void onModified(Media media);
-    }*/
 }

@@ -45,12 +45,12 @@ public class Sequence implements Serializable, Cloneable {
      * @param sequence Sequence to copy
      */
     public Sequence(Sequence sequence) {
-        super();
         this.name = sequence.getName();
         this.duration = sequence.getDuration();
         this.listMedias = new ArrayList<>();
-        listMedias.addAll(sequence.listMedias);
-
+        for (Media media : sequence.getListMedias()) {
+            this.listMedias.add(new Media(media));
+        }
         this.lock = sequence.getLock();
     }
 
