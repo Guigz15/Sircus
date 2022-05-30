@@ -785,9 +785,10 @@ public class Etape2AdminController implements Initializable {
         int nbInterstims = 0;
         for (Sequence seq : metaSeq.getSequencesList()) {
             nbMedias += seq.getListMedias().size();
-            for (AbstractMedia media : seq.getListMedias()) {
-                if (media instanceof Interstim)
+            for(int i=0; i<seq.getListMedias().size(); i++){
+                if(seq.getListMedias().get(i).getInterstim() != null){
                     nbInterstims++;
+                }
             }
         }
         nbMediaLabel.setText(Integer.toString(nbMedias));
@@ -808,9 +809,10 @@ public class Etape2AdminController implements Initializable {
 
         int nbMedias = sequence.getListMedias().size();
         int nbInterstims = 0;
-        for (AbstractMedia media : sequence.getListMedias()) {
-            if (media instanceof Interstim)
+        for(int i=0; i<sequence.getListMedias().size(); i++){
+            if(sequence.getListMedias().get(i).getInterstim() != null){
                 nbInterstims++;
+            }
         }
         nbMediaLabel.setText(Integer.toString(nbMedias));
         nbInterstimLabel.setText(Integer.toString(nbInterstims));
