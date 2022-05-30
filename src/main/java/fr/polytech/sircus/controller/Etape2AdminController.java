@@ -198,7 +198,6 @@ public class Etape2AdminController implements Initializable {
                         setText(metaSequence.getName());
                         setGraphic(null);
                     }
-
                 }
 
                 @Override
@@ -321,6 +320,10 @@ public class Etape2AdminController implements Initializable {
             if ((keyEvent.getCode() == KeyCode.DELETE) && SircusApplication.adminConnected && (index_Selected_MetaSequence >= 0)) {
                 SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
                 metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
+
+                if (SircusApplication.dataSircus.getMetaSequencesList().size() == 0) {
+                    next.setDisable(true);
+                }
             }
         });
 
