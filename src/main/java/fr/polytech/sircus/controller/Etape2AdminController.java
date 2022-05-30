@@ -9,8 +9,6 @@ import fr.polytech.sircus.utils.ItemSequence;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -133,6 +131,10 @@ public class Etape2AdminController implements Initializable {
             addMetaButton.setDisable(false);
         }
 
+        if (SircusApplication.dataSircus.getMetaSequencesList().size() == 0) {
+            next.setDisable(true);
+        }
+
         /* initialize metasequences listView */
         metaListView.setStyle("-fx-font-size: 14pt;");
         metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
@@ -194,7 +196,6 @@ public class Etape2AdminController implements Initializable {
                         setText(metaSequence.getName());
                         setGraphic(null);
                     }
-
                 }
 
                 @Override
@@ -292,6 +293,10 @@ public class Etape2AdminController implements Initializable {
             metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
             //Defined action when the MetaSequence element selected is changed.
             metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
+
+            if (next.disableProperty().get()) {
+                next.setDisable(false);
+            }
         });
 
         /* set removeMetaSequence proprieties to remove meta-sequence */
@@ -300,6 +305,10 @@ public class Etape2AdminController implements Initializable {
             if (index_Selected_MetaSequence >= 0) {
                 SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
                 metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
+
+                if (SircusApplication.dataSircus.getMetaSequencesList().size() == 0) {
+                    next.setDisable(true);
+                }
             }
         });
 
@@ -309,6 +318,10 @@ public class Etape2AdminController implements Initializable {
             if ((keyEvent.getCode() == KeyCode.DELETE) && SircusApplication.adminConnected && (index_Selected_MetaSequence >= 0)) {
                 SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
                 metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
+
+                if (SircusApplication.dataSircus.getMetaSequencesList().size() == 0) {
+                    next.setDisable(true);
+                }
             }
         });
 
@@ -351,8 +364,9 @@ public class Etape2AdminController implements Initializable {
                                 if (!oldValue && newValue) {
                                     //if the item is not lock
                                     if (!getItem().getSequence().getLock()) {
+                                        //get the item of the sequence
+                                        metaListView.getItems().get(index_Selected_MetaSequence).getSequencesList().get(getIndex()).setLock(true);
                                         getCheckBox().setSelected(true);
-                                        getItem().getSequence().setLock(true);
                                         getItem().setOn(true);
                                     }
                                 }
@@ -361,7 +375,7 @@ public class Etape2AdminController implements Initializable {
                                     //if the item is lock
                                     if (getItem().getSequence().getLock()) {
                                         getCheckBox().setSelected(false);
-                                        getItem().getSequence().setLock(false);
+                                        metaListView.getItems().get(index_Selected_MetaSequence).getSequencesList().get(getIndex()).setLock(false);
                                         getItem().setOn(false);
                                     }
                                 }
@@ -487,9 +501,7 @@ public class Etape2AdminController implements Initializable {
         });
 
         /*defined action to do when we update a sequence */
-        modifySeqButton.setOnAction(actionEvent -> {
-            openModifyPopUpForSequence();
-        });
+        modifySeqButton.setOnAction(actionEvent -> openModifyPopUpForSequence());
 
         /*defined action to do when we add a sequence */
         addSeqButton.setOnAction(actionEvent -> {
@@ -764,9 +776,10 @@ public class Etape2AdminController implements Initializable {
         int nbInterstims = 0;
         for (Sequence seq : metaSeq.getSequencesList()) {
             nbMedias += seq.getListMedias().size();
-            for (AbstractMedia media : seq.getListMedias()) {
-                if (media instanceof Interstim)
+            for(int i=0; i<seq.getListMedias().size(); i++){
+                if(seq.getListMedias().get(i).getInterstim() != null){
                     nbInterstims++;
+                }
             }
         }
         nbMediaLabel.setText(Integer.toString(nbMedias));
@@ -787,9 +800,10 @@ public class Etape2AdminController implements Initializable {
 
         int nbMedias = sequence.getListMedias().size();
         int nbInterstims = 0;
-        for (AbstractMedia media : sequence.getListMedias()) {
-            if (media instanceof Interstim)
+        for(int i=0; i<sequence.getListMedias().size(); i++){
+            if(sequence.getListMedias().get(i).getInterstim() != null){
                 nbInterstims++;
+            }
         }
         nbMediaLabel.setText(Integer.toString(nbMedias));
         nbInterstimLabel.setText(Integer.toString(nbInterstims));

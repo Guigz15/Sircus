@@ -1,5 +1,6 @@
 package fr.polytech.sircus.controller.PopUps;
 
+import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.model.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
@@ -98,6 +99,11 @@ public class AddMediaPopUp implements Initializable {
             try {
                 FileChooser fileChooserMedia = new FileChooser();
                 fileChooserMedia.setTitle("Open file (media)");
+                if(SircusApplication.dataSircus.getPath().isCustomPath()){
+                    fileChooserMedia.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getLastPath()));
+                } else {
+                    fileChooserMedia.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getDefaultPath()));
+                }
                 fileChooserMedia.getExtensionFilters().addAll(
                         new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
                 );
@@ -126,6 +132,11 @@ public class AddMediaPopUp implements Initializable {
             try {
                 FileChooser fileChooserInterstim = new FileChooser();
                 fileChooserInterstim.setTitle("Open file (interstim)");
+                if(SircusApplication.dataSircus.getPath().isCustomPath()){
+                    fileChooserInterstim.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getLastPath()));
+                } else {
+                    fileChooserInterstim.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getDefaultPath()));
+                }
                 fileChooserInterstim.getExtensionFilters().addAll(
                         new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
                 );

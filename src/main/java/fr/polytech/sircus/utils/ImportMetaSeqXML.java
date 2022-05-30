@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class ImportMetaSeqXML extends DefaultHandler {
     @Getter
@@ -99,7 +98,6 @@ public class ImportMetaSeqXML extends DefaultHandler {
                 e.printStackTrace();
             }
             sequence = false;
-            // TODO: if the sequence file doesn't exist (see specif)
         }
     }
 
