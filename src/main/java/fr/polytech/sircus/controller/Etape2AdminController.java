@@ -532,13 +532,7 @@ public class Etape2AdminController implements Initializable {
                 FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_seq_popup.fxml"));
                 DialogPane dialogPane = fxmlLoader.load();
                 ModifySeqPopUp controller = fxmlLoader.getController();
-                Sequence copy =new Sequence(seqListView.getSelectionModel().getSelectedItem().getSequence());
-                //test with this code lines : it change seqListView.getSelectionModel().getSelectedItem().getSequence() even if
-                //we have made a copy
-//                copy.setName("Tye modif copy");
-//                copy.getListMedias().get(0).setFilename("test");
-//
-//                //we pass a copy if we cancel modification
+                Sequence copy = new Sequence(seqListView.getSelectionModel().getSelectedItem().getSequence());
                 controller.setSequence(copy);
                 controller.init();
 
