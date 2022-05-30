@@ -24,8 +24,7 @@ import lombok.Getter;
 
 import java.io.*;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
@@ -214,7 +213,26 @@ public class ViewerController {
 
         numberOfSequences = playingMetaSequence.getSequencesList().size();;
 
+        //shuffle the sequence
         for (Sequence sequence : playingMetaSequence.getSequencesList()) {
+            //copy the list
+            List<fr.polytech.sircus.model.Media> copyMedia = new ArrayList<>(sequence.getListMedias());
+            //create Map to store the fixed medias.
+            TreeMap<Integer, fr.polytech.sircus.model.Media> fixedMedia = new TreeMap<>();
+            //find fixed medias
+            for (int indexMedia = 0; indexMedia < copyMedia.size(); indexMedia++) {
+                fr.polytech.sircus.model.Media currentMedia = copyMedia.get(indexMedia);
+                if (currentMedia.isLocked()) {
+                    fixedMedia.put(indexMedia, currentMedia);
+                    sequence.getListMedias().remove(currentMedia);
+                }
+            }
+            //Shuffle the list of medias
+            Collections.shuffle(sequence.getListMedias());
+
+            //restore fixed sequences
+            fixedMedia.forEach((integer, media) -> sequence.getListMedias().add(integer, media));
+
             sequenceIndex++;
             sequencesStartTime.add(counterDuration);
 
