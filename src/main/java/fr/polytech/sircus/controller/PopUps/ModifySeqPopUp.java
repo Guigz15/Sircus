@@ -214,10 +214,8 @@ public class ModifySeqPopUp {
                             if (getTableRow().getItem() instanceof Interstim) {
                                 getTableRow().setStyle("-fx-background-color: #e6f2ff; -fx-text-background-color: black;");
                                 tableViewAddButton.setDisable(true);
-                            } else {
+                            } else
                                 getTableRow().setStyle("-fx-text-background-color: black;");
-                                tableViewAddButton.setDisable(false);
-                            }
 
                             setGraphic(hBox);
                         }
