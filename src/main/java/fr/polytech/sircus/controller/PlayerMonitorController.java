@@ -364,6 +364,12 @@ public class PlayerMonitorController{
         this.backButton.setDisable(true);
     }
 
+    /**
+     * Display the image from its filename.
+     *
+     * @param media the media containing the image that we want to display.
+     * @throws FileNotFoundException
+     */
     public void loadImage(AbstractMedia media) throws FileNotFoundException {
         InputStream is = new FileInputStream("medias/" + media.getFilename());
         Image image = new Image(is);

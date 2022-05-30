@@ -149,7 +149,7 @@ public class ViewerController {
     }
 
     /**
-     * Display the image from its name.
+     * Display the image from its filename.
      *
      * @param media the media containing the image that we want to display.
      */
