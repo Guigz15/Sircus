@@ -149,7 +149,7 @@ public class ViewerController {
     }
 
     /**
-     * Display the image from its name.
+     * Display the image from its filename.
      *
      * @param media the media containing the image that we want to display.
      */
@@ -276,7 +276,9 @@ public class ViewerController {
                         playerMonitorController.nextMetaSequence(false);
                     }));
         } else {
-            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+            // We add 0.1s at the end in order to trigger this event even
+            // if there is only an empty metasequence (event should be triggered at 0s)
+            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration + 0.1),
                     event -> {
                         removeVideo();
                         removeImage();
