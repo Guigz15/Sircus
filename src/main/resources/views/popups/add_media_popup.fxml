@@ -36,7 +36,7 @@
                   </HBox.margin>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Interstim">
                      <font>
-                        <Font size="16.0" />
+                        <Font name="System Bold" size="16.0" />
                      </font>
                      <VBox.margin>
                         <Insets bottom="10.0" />

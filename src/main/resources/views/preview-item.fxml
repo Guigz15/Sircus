@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PreviewTimelineItemController">
+<VBox fx:id="itemContainer" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PreviewTimelineItemController">
     <children>
         <VBox fx:id="rulerContainer" alignment="TOP_RIGHT" maxHeight="35.0" prefHeight="35.0">
             <children>
@@ -20,11 +20,19 @@
                 </HBox>
             </children>
         </VBox>
-        <ImageView fx:id="imageView" fitHeight="82.0" fitWidth="200.0" preserveRatio="true" pickOnBounds="true" y="65.0">
-            <VBox.margin>
-                <Insets left="2.0" right="2.0" />
-            </VBox.margin>
-            <Image fx:id="image" url="@../../../../medias/mos01.jpg" />
-        </ImageView>
+      <StackPane fx:id="imageStackPane">
+          <children>
+              <BorderPane fx:id="imageBorder">
+                  <center>
+                      <ImageView fx:id="imageView" fitHeight="82.0" fitWidth="200.0" preserveRatio="true">
+                          <VBox.margin>
+                              <Insets left="2.0" right="2.0" />
+                          </VBox.margin>
+                          <Image fx:id="image" url="@../../../../medias/mos01.jpg" />
+                      </ImageView>
+                  </center>
+              </BorderPane>
+          </children>
+      </StackPane>
     </children>
 </VBox>

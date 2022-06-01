@@ -354,12 +354,14 @@ public class ModifySeqPopUp {
                     dragEvent.setDropCompleted(true);
                     this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
                     dragEvent.consume();
+                    previewTimeline.setSequence(sequence);
                 }
             });
             return row;
         });
 
-        this.previewTimeline.addListMedia(this.sequence.getListMedias());
+        this.previewTimeline.setSequence(this.sequence);
+
     }
 
     /**

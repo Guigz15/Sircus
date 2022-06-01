@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
-
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.layout.HBox?>
 <ScrollPane xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1"
             minHeight="100.0" minWidth="100.0" prefHeight="100.0" prefWidth="600.0"
-            fx:id="timeline" fitToWidth="true" vbarPolicy="NEVER">
+            fx:id="timeline" vbarPolicy="NEVER" fitToHeight="true" fitToWidth="true">
    <content>
-      <HBox fx:id="timelineContent">
+      <Group fx:id="group">
          <children>
+            <HBox fx:id="timelineContent">
+               <children>
 
+               </children>
+            </HBox>
          </children>
-      </HBox>
+      </Group>
    </content>
 </ScrollPane>
