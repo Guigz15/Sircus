@@ -75,12 +75,11 @@ public class AddMediaPopUp implements Initializable {
 
         mediaDuration.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d*"))
                     mediaDuration.setText(newValue.replaceAll("[^\\d]", ""));
+                if (!newValue.isEmpty())
                     newMedia.setDuration(Duration.ofSeconds(Long.parseLong(mediaDuration.getText())));
-                }
             }
         });
 
@@ -88,10 +87,10 @@ public class AddMediaPopUp implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
                                 String newValue) {
-                if (!newValue.matches("\\d*")) {
+                if (!newValue.matches("\\d*"))
                     interstimDuration.setText(newValue.replaceAll("[^\\d]", ""));
+                if (!newValue.isEmpty())
                     newInterstim.setDuration(Duration.ofSeconds(Long.parseLong(interstimDuration.getText())));
-                }
             }
         });
 
