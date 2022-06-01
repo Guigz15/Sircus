@@ -5,6 +5,8 @@ import fr.polytech.sircus.controller.Etape2AdminController;
 import fr.polytech.sircus.controller.PreviewTimeline;
 import fr.polytech.sircus.model.*;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -105,6 +107,9 @@ public class ModifySeqPopUp {
 
         this.mediaTableColumnName.setCellValueFactory(new PropertyValueFactory<>("filename"));
         this.mediaTableColumnName.setStyle("-fx-alignment: CENTER;");
+
+        //define change textfield
+        this.sequenceName.textProperty().addListener((observableValue, s, t1) -> sequence.setName(t1));
 
         this.mediaTableColumnDuration.setStyle("-fx-alignment: CENTER;");
         this.mediaTableColumnDuration.setCellValueFactory(cellData -> {
