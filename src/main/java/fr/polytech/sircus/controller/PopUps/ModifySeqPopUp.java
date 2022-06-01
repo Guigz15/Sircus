@@ -104,12 +104,10 @@ public class ModifySeqPopUp {
         this.mediaTable.setEditable(true);
 
         this.sequenceName.setText(this.sequence.getName());
+        this.sequenceName.textProperty().addListener((observableValue, oldValue, newValue) -> sequence.setName(newValue));
 
         this.mediaTableColumnName.setCellValueFactory(new PropertyValueFactory<>("filename"));
         this.mediaTableColumnName.setStyle("-fx-alignment: CENTER;");
-
-        //define change textfield
-        this.sequenceName.textProperty().addListener((observableValue, s, t1) -> sequence.setName(t1));
 
         this.mediaTableColumnDuration.setStyle("-fx-alignment: CENTER;");
         this.mediaTableColumnDuration.setCellValueFactory(cellData -> {
@@ -273,16 +271,6 @@ public class ModifySeqPopUp {
         this.mediaTableColumnOptions.setCellFactory(cellFactoryOption);
 
         constructMediaInterstimList();
-
-        this.mediaTable.setOnMouseClicked(new EventHandler<MouseEvent>() { //click
-            @Override
-            public void handle(MouseEvent event) {
-                if(event.getClickCount()==2){ // double click
-                    lastIndexSelectedMedia = mediaTable.getSelectionModel().getSelectedIndex();
-                    openModifyViewForMedia();
-                }
-            }
-        });
 
         this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
 
