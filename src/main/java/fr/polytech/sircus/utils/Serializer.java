@@ -74,8 +74,6 @@ public final class Serializer {
         sequence2.addMedia(media7);
         sequence3.addMedia(media1);
         sequence3.addMedia(media3);
-        sequence2.addMedia(media4);
-        sequence2.addMedia(media5);
         sequence4.addMedia(media1);
         sequence4.addMedia(media5);
         sequence4.addMedia(media3);
@@ -94,11 +92,11 @@ public final class Serializer {
         sequence9.addMedia(media8);
 
         stubMetaSeq1.addSequence(sequence1);
+        stubMetaSeq1.addSequence(sequence2);
         stubMetaSeq1.addSequence(sequence3);
-        stubMetaSeq1.addSequence(sequence4);
         stubMetaSeq2.addSequence(sequence2);
         stubMetaSeq2.addSequence(sequence1);
-        stubMetaSeq2.addSequence(sequence2);
+        stubMetaSeq2.addSequence(sequence6);
         stubMetaSeq3.addSequence(sequence1);
         stubMetaSeq3.addSequence(sequence2);
         stubMetaSeq3.addSequence(sequence3);

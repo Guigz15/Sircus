@@ -11,7 +11,7 @@ import java.time.Period;
 public class Patient {
 
     public enum Sex { M, F }
-    public enum EyeDominance { Droit, Gauche, Indéfini }
+    public enum EyeDominance { Droit, Gauche, Ambidextre, Indéfini }
     public enum HandLaterality { Droitier, Gaucher, Ambidextre, Indéfini }
 
     @Getter @Setter
