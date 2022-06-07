@@ -4,41 +4,48 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
-//TODO: check if this class is useful because it looks like a clone of the MetaSequence class.
 /**
  * Class used to store the results gathered by a meta sequence.
  */
 public class Result {
-    @Getter
-    @Setter
-    private String metaSequenceName;
 
-    @Getter
-    @Setter
+    //The duration of the whole experiment. Corresponds to the sum of all the duration of the Meta-Sequences
+    @Getter @Setter
     private Duration duration;
 
-    @Getter
-    @Setter
-    private List<Sequence> sequencesList;
+    @Getter @Setter
+    private List<MetaSequence> metaSequencesList;
+
+    @Getter @Setter
+    private List<Comment> comments;
 
     /**
      * Default constructor of the Result class.
      */
     public Result() {
+        this.comments = new ArrayList<>();
     }
 
     /**
      * Full constructor of the Result class.
      *
-     * @param metaSequenceName of the use meta sequence.
-     * @param duration of the used meta sequence.
-     * @param sequencesList of the used sequences.
+     * @param duration of the whole experiment.
+     * @param metaSequencesList of the used meta sequence.
      */
-    public Result(String metaSequenceName, Duration duration, List<Sequence> sequencesList) {
-        this.metaSequenceName = metaSequenceName;
+    public Result(Duration duration, List<MetaSequence> metaSequencesList) {
         this.duration = duration;
-        this.sequencesList = sequencesList;
+        this.metaSequencesList = metaSequencesList;
+        this.comments = new ArrayList<>();
+    }
+
+    /**
+     * Add a new comment to the result
+     * @param comment The content of the comment
+     */
+    public void addComment(String comment){
+        this.comments.add(new Comment(comment));
     }
 }

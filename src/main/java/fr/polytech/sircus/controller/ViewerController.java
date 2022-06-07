@@ -1,9 +1,7 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.model.MetaSequence;
-import fr.polytech.sircus.model.Sequence;
-import fr.polytech.sircus.model.TypeMedia;
+import fr.polytech.sircus.model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
@@ -13,41 +11,43 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.stage.Modality;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
+import lombok.Getter;
+
 import java.io.*;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
  * View window controller.
- * <p>
  * This class allows to manage the reading of the media and the view associated to this reading.
  */
 public class ViewerController {
 
-    // The MetaSequenceController which create this controller
-    private final MetaSequenceController metaSequenceController;
+    // The PlayerMonitorController which create this controller
+    private final PlayerMonitorController playerMonitorController;
 
     // The MetaSequence that id passed to the viewer
-    private final MetaSequence playingMetaSequence;
-
-    // The list containing the start times of the media of the current meta-sequence
-    ArrayList<Integer> listBeginningTimeMedia;
+    @Getter
+    private MetaSequence playingMetaSequence;
 
     @FXML
     private MediaView mediaView;
 
     @FXML
     private ImageView imageView;
+
+    @FXML
+    private StackPane stackPane;
 
     // This allows the playing of media
     private MediaPlayer mediaPlayer;
@@ -56,19 +56,31 @@ public class ViewerController {
     private Stage viewerStage = null;
 
     // The timeline allowing the reading of the media with management of the time of each one
+    @Getter
     private Timeline timeline = null;
 
-    // Boolean indicating if the meta-sequence has already been started once or not
-    private boolean metaSequenceStarted;
+    // Stores the start time of each sequence to be able to move between sequences.
+    private final ArrayList<Integer> sequencesStartTime;
+
+    // Index of the current meta sequence
+    @Getter
+    private int currentMetaSequenceIndex;
+
+    // Index of the current sequence index in the meta-sequence
+    @Getter
+    private int currentSequenceIndex;
+
+    private int numberOfSequences;
 
     /**
      * Constructor of ViewerController class.
-     *
-     * @param owner the main Window.
      */
-    public ViewerController(Window owner, MetaSequence metaSequence, MetaSequenceController metaSequenceController) {
+    public ViewerController(Window owner, PlayerMonitorController playerMonitorController) {
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/viewer.fxml")));
         fxmlLoader.setController(this);
+
+        this.playingMetaSequence = SircusApplication.dataSircus.getMetaSequencesList().get(0);
+        this.currentMetaSequenceIndex = 0;
 
         try {
             Scene viewerScene = new Scene(fxmlLoader.load(), 1280, 720);
@@ -88,7 +100,6 @@ public class ViewerController {
             viewerStage.setX(bounds.getMinX());
             viewerStage.setY(bounds.getMinY());
 
-            viewerStage.initModality(Modality.NONE);
             viewerStage.initOwner(owner);
             viewerStage.setScene(viewerScene);
             viewerStage.setResizable(true);
@@ -98,47 +109,26 @@ public class ViewerController {
             e.printStackTrace();
         }
 
-        playingMetaSequence = metaSequence;
-        metaSequenceStarted = false;
-        this.metaSequenceController = metaSequenceController;
-        listBeginningTimeMedia = new ArrayList<>();
-        closingManager();
-    }
+        this.playerMonitorController = playerMonitorController;
+        sequencesStartTime = new ArrayList<>();
+        viewerStage.setOnCloseRequest(event -> closeViewer());
 
-
-    /**
-     * Getter of the timeline attribute.
-     *
-     * @return timeline attribute.
-     */
-    @FXML
-    public Timeline getTimeline() {
-        return timeline;
-    }
-
-    /**
-     * Display the media that is passed in parameter.
-     *
-     * @param media the media that we want to display.
-     */
-    @FXML
-    private void showMedia(Media media) {
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setAutoPlay(true);
-        mediaView.setMediaPlayer(mediaPlayer);
+        initializeMetaSequence();
     }
 
     /**
      * Display the media from its name.
      *
-     * @param name the name of the media that we want to display.
+     * @param video the media containing the video that we want to display.
      */
     @FXML
-    private void showMediaFromName(String name) {
-        File mediaFile = new File("medias/" + name);
+    private void showVideo(AbstractMedia video) {
+        File mediaFile = new File("medias/" + video.getFilename());
         try {
             Media media = new Media(mediaFile.toURI().toURL().toString());
-            showMedia(media);
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setAutoPlay(true);
+            mediaView.setMediaPlayer(mediaPlayer);
         }
         // If the URL is malformed, it is reported
         catch (MalformedURLException error) {
@@ -147,10 +137,10 @@ public class ViewerController {
     }
 
     /**
-     * Removes the displayed media.
+     * Removes the displayed video.
      */
     @FXML
-    private void removeMedia() {
+    private void removeVideo() {
         if (mediaView.getMediaPlayer() != null) {
             mediaView.getMediaPlayer().pause();
             mediaView.setMediaPlayer(null);
@@ -158,33 +148,36 @@ public class ViewerController {
     }
 
     /**
-     * Display the image that is passed in parameter.
+     * Display the image from its filename.
      *
-     * @param image the image that we want to display.
+     * @param media the media containing the image that we want to display.
      */
     @FXML
-    private void showImage(Image image) {
-        imageView.setImage(image);
-        imageView.setCache(true);
-    }
-
-    /**
-     * Display the image from its name.
-     *
-     * @param name the name of the image that we want to display.
-     */
-    @FXML
-    private void showImageFromName(String name) {
+    private void showImage(AbstractMedia media) {
         // Try to create an InputStream with the path of the image.
         try {
-            InputStream is = new FileInputStream("medias/" + name);
+            InputStream is = new FileInputStream("medias/" + media.getFilename());
             Image image = new Image(is);
 
             imageView.setFitWidth(image.getWidth());
             imageView.setFitHeight(image.getHeight());
 
-            showImage(image);
-            centerImage();
+            imageView.setImage(image);
+            imageView.setCache(true);
+
+            if (media.isResizable()) {
+                resizeImage();
+            }
+
+            Color color = media.getBackgroundColor();
+            String hexColor = String.format( "-fx-background-color: #%02X%02X%02X;",
+                    (int)( color.getRed() * 255 ),
+                    (int)( color.getGreen() * 255 ),
+                    (int)( color.getBlue() * 255 ) );
+
+            stackPane.setStyle(hexColor);
+
+            playerMonitorController.loadImage(media);
         }
         // If the path is not found we display a message.
         catch (FileNotFoundException error) {
@@ -201,78 +194,121 @@ public class ViewerController {
     }
 
     /**
-     * Begin the playing of the meta-sequence that is passed in parameter.
-     *
-     * @param metaSequence the meta-sequence to play.
+     * Loads all the meta sequences and creates the associated keyframes in the timeline.
      */
     @FXML
-    private void startMetaSequence(MetaSequence metaSequence) {
+    private void initializeMetaSequence() {
+        if (timeline != null) {
+            timeline.jumpTo(timeline.getKeyFrames().get(timeline.getKeyFrames().size() - 1).getTime());
+            timeline.pause();
+        }
+
         timeline = new Timeline();
         timeline.setCycleCount(1);
         timeline.setAutoReverse(false);
 
         // Counter to count the total duration of the medias already played.
         int counterDuration = 0;
+        int sequenceIndex = -1;
 
-        for (Sequence sequence : metaSequence.getSequencesList()) {
-            // For each Media in the sequence.
+        numberOfSequences = playingMetaSequence.getSequencesList().size();;
+
+        //shuffle the sequence
+        for (Sequence sequence : playingMetaSequence.getSequencesList()) {
+            //copy the list
+            List<fr.polytech.sircus.model.Media> copyMedia = new ArrayList<>(sequence.getListMedias());
+            //create Map to store the fixed medias.
+            TreeMap<Integer, fr.polytech.sircus.model.Media> fixedMedia = new TreeMap<>();
+            //find fixed medias
+            for (int indexMedia = 0; indexMedia < copyMedia.size(); indexMedia++) {
+                fr.polytech.sircus.model.Media currentMedia = copyMedia.get(indexMedia);
+                if (currentMedia.isLocked()) {
+                    fixedMedia.put(indexMedia, currentMedia);
+                    sequence.getListMedias().remove(currentMedia);
+                }
+            }
+            //Shuffle the list of medias
+            Collections.shuffle(sequence.getListMedias());
+
+            //restore fixed sequences
+            fixedMedia.forEach((integer, media) -> sequence.getListMedias().add(integer, media));
+
+            sequenceIndex++;
+            sequencesStartTime.add(counterDuration);
+
+            // Keyframe to notify the PlayerMonitor that we are playing a new sequence.
+            int finalSequenceIndex = sequenceIndex;
+            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                    event -> {
+                        currentSequenceIndex = finalSequenceIndex;
+                        playerMonitorController.sequenceChanged();
+                    }));
+
             for (fr.polytech.sircus.model.Media media : sequence.getListMedias()) {
-                // If the media is an image.
-                if (media.getType() == TypeMedia.PICTURE) {
+                if (media.getInterstim() != null) {
                     timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
                             event -> {
-                                removeMedia();
-                                showImageFromName(media.getName());
+                                removeVideo();
+                                showImage(media.getInterstim());
                             }));
-                    // The second at which the image starts is added to listBeginningTimeMedia.
-                    listBeginningTimeMedia.add(counterDuration);
+
+                    // We add to the counterDuration the duration of the "interstim" currently read.
+                    counterDuration += media.getInterstim().getDuration().getSeconds();
+                }
+
+                if (media.getTypeMedia() == TypeMedia.PICTURE) {
+                    timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                            event -> {
+                                removeVideo();
+                                showImage(media);
+                            }));
 
                     // We add to the counterDuration the duration of the media currently read.
                     counterDuration += media.getDuration().getSeconds();
                 }
-                // If the media is a video
-                else if (media.getType() == TypeMedia.VIDEO) {
+                else if (media.getTypeMedia() == TypeMedia.VIDEO) {
                     timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
                             event -> {
                                 removeImage();
-                                showMediaFromName(media.getName());
+                                showVideo(media);
                             }));
-                    // The second at which the video starts is added to listBeginningTimeMedia.
-                    listBeginningTimeMedia.add(counterDuration);
+
                     // We add to the counterDuration the duration of the media currently read.
                     counterDuration += media.getDuration().getSeconds();
-                }
-                // If the current media has a "inter-stim".
-                if (media.getInterStim() != null) {
-                    timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
-                            event -> {
-                                removeMedia();
-                                showImageFromName(media.getInterStim().getName());
-                            }));
-                    // The second at which the "inter-stim" starts is added to listBeginningTimeMedia.
-                    // We could comment this line if we don't want to go through the inter-stim with the buttons
-                    // allowing to skip a media or to return to the previous media.
-                    listBeginningTimeMedia.add(counterDuration);
-                    // We add to the counterDuration the duration of the "inter-stim" currently read.
-                    counterDuration += media.getInterStim().getDuration().getSeconds();
                 }
             }
         }
 
-        // We add an event that removes the image or video at the end of the playback.
-        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
-                event -> {
-                    removeMedia();
-                    removeImage();
-                    quitViewer();
-                }));
-        // The end of the playback is added to the listBeginningTimeMedia
+        // If there is another metasequence to play.
+        if (currentMetaSequenceIndex + 1 < SircusApplication.dataSircus.getMetaSequencesList().size()) {
+            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
+                    event -> {
+                        removeVideo();
+                        removeImage();
+
+                        currentMetaSequenceIndex++;
+                        currentSequenceIndex = 0;
+                        playingMetaSequence = SircusApplication.dataSircus.getMetaSequencesList().get(currentMetaSequenceIndex);
+                        initializeMetaSequence();
+
+                        playerMonitorController.nextMetaSequence(false);
+                    }));
+        } else {
+            // We add 0.1s at the end in order to trigger this event even
+            // if there is only an empty metasequence (event should be triggered at 0s)
+            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration + 0.1),
+                    event -> {
+                        removeVideo();
+                        removeImage();
+
+                        playerMonitorController.nextMetaSequence(true);
+                    }));
+        }
+
+        // The end of the playback is added to the sequencesStartTime
         // This allows the button passing a media to trigger the end of the playback of the meta-sequence
         // if we are playing the last media.
-        listBeginningTimeMedia.add(counterDuration);
-
-        // We start the timeline's stopwatch so that the events we have just created are triggered
-        timeline.play();
+        sequencesStartTime.add(counterDuration);
     }
 
     /**
@@ -280,11 +316,9 @@ public class ViewerController {
      */
     @FXML
     public void pauseViewer() {
-        if (timeline != null) {
-            timeline.pause();
-            if (mediaView.getMediaPlayer() != null) {
-                mediaPlayer.pause();
-            }
+        timeline.pause();
+        if (mediaView.getMediaPlayer() != null) {
+            mediaPlayer.pause();
         }
     }
 
@@ -293,100 +327,65 @@ public class ViewerController {
      */
     @FXML
     public void playViewer() {
-        if (metaSequenceStarted) {
-            timeline.play();
-            if (mediaView.getMediaPlayer() != null) {
-                mediaPlayer.play();
-            }
+        timeline.play();
+        if (mediaView.getMediaPlayer() != null) {
+            mediaPlayer.play();
+        }
+    }
+
+    /**
+     * Jumps the timeline to the next sequence.
+     */
+    public void nextSequence() {
+        if (currentSequenceIndex < numberOfSequences - 1) {
+            currentSequenceIndex++;
+            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex) * 1000));
         } else {
-            metaSequenceStarted = true;
-            startMetaSequence(playingMetaSequence);
+            timeline.jumpTo(new Duration(sequencesStartTime.get(sequencesStartTime.size() - 1) * 1000));
         }
     }
 
     /**
-     * Display the next media
+     * Jumps the timeline to the previous sequence.
      */
-    public void nextMedia() {
-        if (listBeginningTimeMedia.size() > 0) {
-            // We define a buffer start date, at the first start date of the listBeginningTimeMedia (probably 0)
-            Integer startDateFound = listBeginningTimeMedia.get(0);
-
-            // For each start date of media
-            for (Integer integer : listBeginningTimeMedia) {
-                // We check if the starting date is higher than the current date of the timeline
-                if (integer > timeline.getCurrentTime().toSeconds()) {
-                    // We found the media
-                    startDateFound = integer;
-                    break;
-                }
-            }
-            // javafx.util.Duration takes milliseconds in parameter of constructor, so we multiply by 1000 seconds
-            timeline.jumpTo(new Duration(startDateFound * 1000));
+    public void previousSequence() {
+        if (currentSequenceIndex > 0) {
+            currentSequenceIndex--;
+            timeline.jumpTo(new Duration(sequencesStartTime.get(currentSequenceIndex) * 1000));
+        } else {
+            timeline.jumpTo(new Duration(0));
         }
     }
 
     /**
-     * Display the previous media
+     * Returns to the beginning of the meta sequence.
      */
-    public void prevMedia() {
-        if (listBeginningTimeMedia.size() > 0) {
-            // We define a buffer start date, at the first start date of the listBeginningTimeMedia (probably 0)
-            Integer startDateFound = listBeginningTimeMedia.get(0);
-
-            // For each start date of media
-            int i = 0;
-            // This loop allows to find the index of the first media which will be launched after the current media
-            while (i < listBeginningTimeMedia.size() && listBeginningTimeMedia.get(i) < timeline.getCurrentTime().toSeconds()) {
-                i++;
-            }
-
-            // If "i" is greater than 0, the index "i-1" corresponds to the current media.
-            // The media at index "i" corresponds to the next media.
-            // So the previous media is at index "i-2".
-            if (i > 1) {
-                i -= 2;
-                startDateFound = listBeginningTimeMedia.get(i);
-            }
-
-            // javafx.util.Duration takes milliseconds in parameter of constructor, so we multiply by 1000 seconds
-            timeline.jumpTo(new Duration(startDateFound * 1000));
-        }
+    public void resetMetaSequence() {
+        timeline.jumpTo(new Duration(0));
+        currentSequenceIndex = 0;
     }
 
     /**
      * Quit the viewer
      */
     @FXML
-    private void quitViewer() {
-        metaSequenceController.closeViewer();
+    public void closeViewer() {
+        playerMonitorController.clearImage();
+        playerMonitorController.closeViewer();
+        timeline.pause();
+        timeline = null;
         viewerStage.close();
     }
 
     /**
-     * The handle of this method is called when the user closes the viewer window.
-     * It calls the appropriate method of the MetaSequence controller in order to
-     * reset some attributes to default attributes and restart the viewer correctly.
+     * Method to resize the imageview in order to maximize width and/or height.
      */
-    private void closingManager() {
-        viewerStage.setOnCloseRequest(event -> metaSequenceController.closeViewer());
-    }
-
-    /**
-     * Method to center the imageview in the viewer.
-     */
-    private void centerImage() {
+    private void resizeImage() {
         if (imageView.getImage() != null) {
             double ratio = Math.min(viewerStage.getWidth() / imageView.getFitWidth(), viewerStage.getHeight() / imageView.getFitHeight());
 
             imageView.setFitWidth(imageView.getFitWidth() * ratio);
             imageView.setFitHeight(imageView.getFitHeight() * ratio);
-
-            double w = (viewerStage.getWidth() - imageView.getFitWidth()) / 2;
-            double h = (viewerStage.getHeight() - imageView.getFitHeight()) / 2;
-
-            imageView.setTranslateX(w);
-            imageView.setTranslateY(h);
         }
     }
 }

@@ -1,7 +1,6 @@
 package fr.polytech.sircus.controller.PopUps;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.controller.MetaSequenceController;
 import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Sequence;
 import javafx.collections.ObservableList;
@@ -64,22 +63,17 @@ public class AddSeqPopUp {
 	 * Pop up adding of sequence
 	 */
 	private Stage popUpStage = null;
-	/**
-	 * Listener of the adding of the sequence
-	 */
-	private MetaSequenceController.ModificationMetaSeqListener addListener = null;
+
 
 	/**
 	 * Constructor of the controller
 	 * @param owner main frame
 	 * @param listSequences list of the sequences
 	 * @param metaSequence the meta sequence where we add the sequence
-	 * @param addListener the listener of the adding event
 	 */
 	public AddSeqPopUp(Window owner,
                        ObservableList<Sequence> listSequences,
-                       MetaSequence metaSequence,
-                       MetaSequenceController.ModificationMetaSeqListener addListener ) {
+                       MetaSequence metaSequence) {
 
 		FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/add_seq_popup.fxml" ));
 		fxmlLoader.setController(this);
@@ -87,7 +81,6 @@ public class AddSeqPopUp {
 		try {
 			this.metaSequence = metaSequence;
 			this.listSequences = listSequences;
-			this.addListener = addListener;
 
 			Scene dialogScene = new Scene(fxmlLoader.load(),500,160);
 			Stage dialog = new Stage ();
@@ -194,7 +187,6 @@ public class AddSeqPopUp {
 				Sequence copiedSeq = new Sequence((Sequence)this.nameListSeq.getSelectionModel().getSelectedItem());
 				this.metaSequence.addSequence(copiedSeq);
 			}
-			this.addListener.onModified(this.metaSequence);
 			this.popUpStage.close();
 		}
 	}

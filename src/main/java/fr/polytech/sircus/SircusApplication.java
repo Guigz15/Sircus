@@ -2,6 +2,8 @@ package fr.polytech.sircus;
 
 import fr.polytech.sircus.controller.MainWindowController;
 import fr.polytech.sircus.model.DataSircus;
+import fr.polytech.sircus.model.Patient;
+import fr.polytech.sircus.model.User;
 import fr.polytech.sircus.utils.Serializer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +12,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Main class
+ */
 public class SircusApplication extends Application {
 
 	/**
@@ -22,15 +27,39 @@ public class SircusApplication extends Application {
 	 */
 	private MainWindowController mainWindowController;
 
+    /**
+     * boolean for administrator connection
+     */
+    public static boolean adminConnected = false;
+
+    /**
+     * The patient to be diagnostic
+     */
+    public static Patient patient = null;
+
+    /**
+     * The practitioner do the diagnostic
+     */
+    public static User user = null;
+
+    /**
+     * Diagnostic location
+     */
+    public static String currentLocation = null;
+
+    /**
+     * Classification method used
+     */
+    public static String currentMethod = null;
+
+
+
     public static void main(String[] args) {
         launch();
     }
 
 	/**
      * Starts application
-	 *
-	 * @param stage
-	 * @throw IOException
 	 */
     @Override
     public void start(Stage stage) throws IOException {
@@ -55,9 +84,10 @@ public class SircusApplication extends Application {
             }
         });
 
-        stage.setTitle("Application Sircus");
+        stage.setTitle("Application SIRCUS");
         stage.setScene(scene);
-        stage.setResizable(false);
+        stage.setMinWidth(scene.getWidth());
+        stage.setMinHeight(650);
         stage.show();
     }
 }

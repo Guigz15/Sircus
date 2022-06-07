@@ -2,9 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane id="resultat_tab_view" xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="1000.0"
-            stylesheets="@../stylesheets/bootstrapfx.css" xmlns="http://javafx.com/javafx/14.0.2.1"
-            fx:controller="fr.polytech.sircus.controller.ResultatController">
+<AnchorPane id="resultat_tab_view" xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1"
+            fx:controller="fr.polytech.sircus.controller.ResultController">
     <children>
         <GridPane layoutX="33.0" layoutY="7.0" prefHeight="571.0" prefWidth="935.0">
             <columnConstraints>
