@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metaSequence>
+<name>Meta%20sequence%203</name>
+<duration>PT2M25S</duration>
+<listSequence>
+<sequence>Sequence%201.xml</sequence>
+<sequence>Sequence%202.xml</sequence>
+<sequence>Sequence%203.xml</sequence>
+<sequence>Sequence%204.xml</sequence>
+<sequence>Sequence%205.xml</sequence>
+<sequence>Sequence%206.xml</sequence>
+<sequence>Sequence%207.xml</sequence>
+<sequence>Sequence%208.xml</sequence>
+<sequence>Sequence%209.xml</sequence>
+</listSequence>
+</metaSequence>
+

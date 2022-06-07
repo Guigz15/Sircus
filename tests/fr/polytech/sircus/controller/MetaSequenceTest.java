@@ -1,7 +1,6 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.model.Location;
 import fr.polytech.sircus.model.Sequence;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
@@ -32,7 +31,7 @@ public class MetaSequenceTest {
         robot.clickOn((RadioButton) robot.lookup("M").query());
         robot.clickOn("#birthDate").write("03/05/2010").press(KeyCode.ENTER).release((KeyCode.ENTER));
         robot.clickOn("#name").write("Name_Patient_Test");
-        ComboBox<Location> location = robot.lookup("#location").query();
+        ComboBox<String> location = robot.lookup("#location").query();
         robot.interact(() -> location.getSelectionModel().select(0));
         robot.clickOn("#button_save");
         robot.clickOn("#metaSeqTab");
