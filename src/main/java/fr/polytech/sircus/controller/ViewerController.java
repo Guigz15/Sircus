@@ -194,7 +194,7 @@ public class ViewerController {
     }
 
     /**
-     * Loads all the meta sequences & creates the associated keyframes in the timeline.
+     * Loads all the meta sequences and creates the associated keyframes in the timeline.
      */
     @FXML
     private void initializeMetaSequence() {

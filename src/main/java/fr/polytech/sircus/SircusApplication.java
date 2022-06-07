@@ -60,9 +60,6 @@ public class SircusApplication extends Application {
 
 	/**
      * Starts application
-	 *
-	 * @param stage
-	 * @throw IOException
 	 */
     @Override
     public void start(Stage stage) throws IOException {

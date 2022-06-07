@@ -149,8 +149,6 @@ public class MainWindowController implements Initializable {
         });
 
         // Initialize all components if they have been already filled
-        /** Commenter sinon pose des problèmes si aucun des champs n'a été rempli, en cliquant sur l'étoile rouge, ce qui n'arrivera plus dans la version finale **/
-        /*
         if (SircusApplication.patient != null) {
             id.setText(SircusApplication.patient.getIdentifier());
             Objects.requireNonNull(getRadioButton(sex.getToggles(), SircusApplication.patient.getSex().name())).setSelected(true);
@@ -169,7 +167,7 @@ public class MainWindowController implements Initializable {
         if (SircusApplication.currentLocation != null)
             locations.setValue(SircusApplication.currentLocation);
         if (SircusApplication.currentMethod != null)
-            methods.setValue(SircusApplication.currentMethod);*/
+            methods.setValue(SircusApplication.currentMethod);
     }
 
     /**
