@@ -5,17 +5,17 @@ import fr.polytech.sircus.controller.Etape2AdminController;
 import fr.polytech.sircus.controller.PreviewTimeline;
 import fr.polytech.sircus.model.*;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.*;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -23,6 +23,7 @@ import javafx.util.Callback;
 import lombok.Getter;
 import lombok.Setter;
 import org.kordamp.ikonli.javafx.FontIcon;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,7 +32,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Controller handling the management of a sequence modification
