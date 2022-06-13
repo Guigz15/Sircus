@@ -2,7 +2,8 @@ package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.controller.PopUps.ModifySeqPopUp;
-import fr.polytech.sircus.model.*;
+import fr.polytech.sircus.model.MetaSequence;
+import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.utils.ImportMetaSeqXML;
 import fr.polytech.sircus.utils.ImportSeqXML;
 import fr.polytech.sircus.utils.ItemSequence;
@@ -15,12 +16,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.Getter;
-import lombok.Setter;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,44 +40,39 @@ import java.util.Map.Entry;
  */
 public class Etape2AdminController implements Initializable {
     @FXML
+    private Button importMetaButtonUser;
+    @FXML
+    private BorderPane adminMetaButtons;
+    @FXML
     private ListView<MetaSequence> metaListView;
-    @FXML
-    public ListView<ItemSequence> seqListView;
-    //TODO Demandé s'ils veulent garder le boutton modifier ou juste un click sur une meta-sequence pour la renommer suffit.
-    @FXML
-    private Button renameMetaButton;
-    @FXML
-    private Button exportMetaButton;
-    @FXML
-    private Button importMetaButton;
-    @FXML
-    private Button modifySeqButton;
-    @FXML
-    private Button addSeqButton;
-    @FXML
-    private Button exportSeqButton;
-    @FXML
-    private Button importSeqButton;
-    @FXML
-    private Button removeMetaButton;
     @FXML
     private Button addMetaButton;
     @FXML
+    private Button removeMetaButton;
+    @FXML
+    private Button renameMetaButton;
+    @FXML
+    private Button importMetaButton;
+    @FXML
+    private Button exportMetaButton;
+    @FXML
+    private BorderPane adminSeqButtons;
+    @FXML
+    private Button importSeqButtonUser;
+    @FXML
+    public ListView<ItemSequence> seqListView;
+    @FXML
+    private Button addSeqButton;
+    @FXML
     private Button removeSeqButton;
     @FXML
-    private Button doMixButton;
+    private Button modifySeqButton;
     @FXML
-    private Button startMixButton;
+    private Button importSeqButton;
     @FXML
-    private Button cancelMixButton;
+    private Button exportSeqButton;
     @FXML
-    private Button previous;
-    @FXML
-    private Button next;
-    @FXML
-    private PreviewTimeline previewTimeline;
-    @FXML
-    private Label statsTitleLabel;
+    private Text statsTitle;
     @FXML
     private Label nbSeqLabel;
     @FXML
@@ -86,11 +82,21 @@ public class Etape2AdminController implements Initializable {
     @FXML
     private Label totalDurationLabel;
     @FXML
+    private Button doMixButton;
+    @FXML
+    private HBox mixBoxButtons;
+    @FXML
+    private Button startMixButton;
+    @FXML
+    private Button cancelMixButton;
+    @FXML
     private Text previewText;
-
-    @Getter
-    @Setter
-    private boolean aboutToMix;
+    @FXML
+    private PreviewTimeline previewTimeline;
+    @FXML
+    private Button previous;
+    @FXML
+    private Button next;
 
     //DataFormat use for drag and drop sequences in listView.
     public static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
@@ -108,30 +114,12 @@ public class Etape2AdminController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         /* initialize button to mix randomly the list of sequences depends if we are connected on admin mode */
-        if (!SircusApplication.adminConnected) {
-            doMixButton.setVisible(false);
-            doMixButton.setDisable(true);
-            importSeqButton.setDisable(false);
-            //hide modification buttons
-            renameMetaButton.setVisible(false);
-            exportMetaButton.setVisible(false);
-            importSeqButton.setVisible(false);
-            removeMetaButton.setVisible(false);
-            addMetaButton.setVisible(false);
-            exportSeqButton.setVisible(false);
-            modifySeqButton.setVisible(false);
-            removeSeqButton.setVisible(false);
-            addSeqButton.setVisible(false);
-        } else {
+        if (SircusApplication.adminConnected) {
+            importMetaButtonUser.setVisible(false);
+            adminMetaButtons.setVisible(true);
+            importSeqButtonUser.setVisible(false);
+            adminSeqButtons.setVisible(true);
             doMixButton.setVisible(true);
-            doMixButton.setDisable(false);
-            //displays modification buttons
-            exportMetaButton.setVisible(true);
-            removeMetaButton.setVisible(true);
-            addMetaButton.setVisible(true);
-            exportMetaButton.setDisable(false);
-            removeMetaButton.setDisable(false);
-            addMetaButton.setDisable(false);
         }
 
         if (SircusApplication.dataSircus.getMetaSequencesList().size() == 0) {
@@ -151,7 +139,7 @@ public class Etape2AdminController implements Initializable {
         //Defined action when the Sequence element selected is changed.
         seqListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerSequence());
 
-        metaListView.setEditable(true);
+        //TODO by clicking on certain metaseq then modify button is enable and you can modify the name of the meta
 
         //---------------------------------------------------------------------------------------//
         //                          Drag and Drop behaviour for meta-sequence                    //
@@ -349,7 +337,7 @@ public class Etape2AdminController implements Initializable {
                         } else {
                             getCheckBox().setVisible(true);
                             getCheckBox().setSelected(item.isOn());
-                            getCheckBox().setDisable(!isAboutToMix());
+                            getCheckBox().setDisable(!mixBoxButtons.isVisible());
                             setGraphic(getCheckBox());
                         }
                         setText(item.getName());
@@ -465,21 +453,24 @@ public class Etape2AdminController implements Initializable {
         //            Add and remove behaviours for sequence                //
         //------------------------------------------------------------------//
 
-        /* set doMixButton proprieties */
+        /* set doMixButton properties */
         doMixButton.setOnAction(event -> {
-            setAboutToMix(true);
+            doMixButton.setVisible(false);
+            mixBoxButtons.setVisible(true);
             refreshPage();
         });
 
-        /* set cancelMixButton proprieties */
+        /* set cancelMixButton properties */
         cancelMixButton.setOnAction(event -> {
-            setAboutToMix(false);
+            mixBoxButtons.setVisible(false);
+            doMixButton.setVisible(true);
             refreshPage();
         });
 
         /* set startMixButton proprieties */
         startMixButton.setOnAction(event -> {
-            setAboutToMix(false);
+            mixBoxButtons.setVisible(false);
+            doMixButton.setVisible(true);
             if (index_Selected_MetaSequence >= 0) {
                 //get the current Meta-Sequence.
                 MetaSequence currentMetaSequence = metaListView.getItems().get(index_Selected_MetaSequence);
@@ -682,25 +673,9 @@ public class Etape2AdminController implements Initializable {
     }
 
     /**
-     * function that refreshes the page : refreshes mix buttons and the seqListView objects
-     * to fix guidelines of the mix process
+     * function that refreshes the page : seqListView objects to fix guidelines of the mix process
      */
     public void refreshPage() {
-        if (isAboutToMix()) {
-            cancelMixButton.setVisible(true);
-            cancelMixButton.setDisable(false);
-            startMixButton.setVisible(true);
-            startMixButton.setDisable(false);
-            doMixButton.setVisible(false);
-            doMixButton.setDisable(true);
-        } else {
-            cancelMixButton.setVisible(false);
-            cancelMixButton.setDisable(true);
-            startMixButton.setVisible(false);
-            startMixButton.setDisable(true);
-            doMixButton.setVisible(true);
-            doMixButton.setDisable(false);
-        }
         //Defined the list of sequences. This fill with new sequences.
         seqListView.getItems().clear();
         seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
@@ -774,7 +749,7 @@ public class Etape2AdminController implements Initializable {
      */
     public void setMetaSeqStats() {
         MetaSequence metaSeq = SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence);
-        statsTitleLabel.setText("Statistiques de la méta-séquence");
+        statsTitle.setText("Statistiques de la méta-séquence");
 
         nbSeqLabel.setText(Integer.toString(metaSeq.getSequencesList().size()));
 
@@ -801,7 +776,7 @@ public class Etape2AdminController implements Initializable {
      */
     public void setSeqStats() {
         Sequence sequence = getAllItemMetaSequence().get(index_Selected_MetaSequence).getSequencesList().get(index_Selected_Sequence);
-        statsTitleLabel.setText("Statistiques de la séquence");
+        statsTitle.setText("Statistiques de la séquence");
         nbSeqLabel.setText("NA");
 
         int nbMedias = sequence.getListMedias().size();
@@ -826,22 +801,6 @@ public class Etape2AdminController implements Initializable {
 
         @Override
         public void changed(ObservableValue<? extends MetaSequence> observableValue, MetaSequence metaSequence, MetaSequence metaSequenceSelected) {
-            importSeqButton.setVisible(true);
-            importSeqButton.setDisable(false);
-
-            //allow the buttons to change meta-sequence only if connect as admin
-            if (SircusApplication.adminConnected) {
-                //display modifying buttons for sequences
-                exportSeqButton.setVisible(true);
-                addSeqButton.setVisible(true);
-                modifySeqButton.setVisible(true);
-                removeSeqButton.setVisible(true);
-                exportSeqButton.setDisable(false);
-                addSeqButton.setDisable(false);
-                modifySeqButton.setDisable(false);
-                removeSeqButton.setDisable(false);
-            }
-
             //get the new medias lists to display it on screen
             index_Selected_MetaSequence = metaListView.getSelectionModel().getSelectedIndex();
 
@@ -866,23 +825,6 @@ public class Etape2AdminController implements Initializable {
 
         @Override
         public void changed(ObservableValue<? extends ItemSequence> observableValue, ItemSequence s, ItemSequence t1) {
-
-            //allow the buttons to change Sequence only if connect as admin
-            if (SircusApplication.adminConnected) {
-                modifySeqButton.setDisable(false);
-                exportSeqButton.setDisable(false);
-                removeSeqButton.setDisable(false);
-                addSeqButton.setDisable(false);
-                modifySeqButton.setVisible(true);
-                exportSeqButton.setVisible(true);
-                removeSeqButton.setVisible(true);
-                addSeqButton.setVisible(true);
-            } else {
-                modifySeqButton.setDisable(true);
-                exportSeqButton.setDisable(true);
-                removeSeqButton.setDisable(true);
-                addSeqButton.setDisable(true);
-            }
             //get the new medias lists to display it on screen
             index_Selected_Sequence = seqListView.getSelectionModel().getSelectedIndex();
             if ((0 <= index_Selected_Sequence) && (0 <= index_Selected_MetaSequence)) {

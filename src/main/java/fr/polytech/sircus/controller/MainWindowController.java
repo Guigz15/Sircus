@@ -139,12 +139,40 @@ public class MainWindowController implements Initializable {
                 .or(Bindings.createBooleanBinding(() -> locations.getValue() == null, locations.valueProperty()))
         );
 
+        // Admin mode
         adminLabel.setVisible(SircusApplication.adminConnected);
         adminLogOut.setVisible(SircusApplication.adminConnected);
         adminLogOut.setOnAction(actionEvent -> {
             SircusApplication.adminConnected = false;
             adminLabel.setVisible(false);
             adminLogOut.setVisible(false);
+        });
+
+        // Forename and Name
+        name.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                if (!newValue.matches("\\sa-zA-Z*\\-"))
+                    name.setText(newValue.replaceAll("[^\\sa-zA-Z\\-]", ""));
+            }
+        });
+
+        forename.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                if (!newValue.matches("\\sa-zA-Z*\\-"))
+                    forename.setText(newValue.replaceAll("[^\\sa-zA-Z\\-]", ""));
+            }
+        });
+
+        birthDate.getEditor().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                if (!newValue.matches("\\d*\\/"))
+                    birthDate.getEditor().setText(newValue.replaceAll("[^\\d\\/]", ""));
+                if (newValue.length() > 10)
+                    birthDate.getEditor().setText(birthDate.getEditor().getText().substring(0, 10));
+            }
         });
 
         // Initialize all components if they have been already filled
@@ -175,8 +203,11 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     private void computeAge() {
-        Period period = Period.between(birthDate.getValue(), LocalDate.now());
-        age.setText(period.getYears() + "  ans");
+        if (birthDate.getValue() != null) {
+            Period period = Period.between(birthDate.getValue(), LocalDate.now());
+            age.setText(period.getYears() + "  ans");
+        } else
+            age.setText("  ans");
     }
 
     /**
@@ -395,7 +426,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private void nextPage() throws IOException {
         saveInfos();
-        FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
+        FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq-2.fxml")));
         Stage stage = (Stage) next.getScene().getWindow();
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
