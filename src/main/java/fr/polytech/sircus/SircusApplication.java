@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -88,6 +89,7 @@ public class SircusApplication extends Application {
         stage.setScene(scene);
         stage.setMinWidth(scene.getWidth());
         stage.setMinHeight(650);
+        // stage.getIcons().add(new Image("images/logo-Sircus-FT.png")); À tester sur Windows
         stage.show();
     }
 }

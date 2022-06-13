@@ -18,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -30,10 +31,8 @@ import java.util.ResourceBundle;
  * This class manages the main window
  */
 public class MainWindowController implements Initializable {
-
     @FXML
     private ComboBox<String> eyeTracker;
-
     @FXML
     private Button adminLogOut;
     @FXML
