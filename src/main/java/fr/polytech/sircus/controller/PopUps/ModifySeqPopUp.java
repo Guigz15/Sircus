@@ -1,7 +1,7 @@
 package fr.polytech.sircus.controller.PopUps;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.controller.Etape2AdminController;
+import fr.polytech.sircus.controller.Step2Controller;
 import fr.polytech.sircus.controller.PreviewTimeline;
 import fr.polytech.sircus.model.*;
 import javafx.beans.property.SimpleStringProperty;
@@ -42,7 +42,7 @@ import java.util.Optional;
 public class ModifySeqPopUp {
 
     //DataFormat use for drag and drop sequences in listView. Don't make it final because it make error
-    private DataFormat SERIALIZED_MIME_TYPE = Etape2AdminController.SERIALIZED_MIME_TYPE;
+    private DataFormat SERIALIZED_MIME_TYPE = Step2Controller.SERIALIZED_MIME_TYPE;
 
     @Setter
     @Getter

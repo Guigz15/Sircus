@@ -17,13 +17,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
-
+import javafx.beans.binding.Bindings;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -38,7 +39,7 @@ import java.util.Map.Entry;
 /**
  * Class Etape2AdminController : manages the metasequences settings page of the Admin
  */
-public class Etape2AdminController implements Initializable {
+public class Step2Controller implements Initializable {
     @FXML
     private Button importMetaButtonUser;
     @FXML
@@ -74,13 +75,23 @@ public class Etape2AdminController implements Initializable {
     @FXML
     private Text statsTitle;
     @FXML
-    private Label nbSeqLabel;
+    private GridPane statsForMeta;
     @FXML
-    private Label nbMediaLabel;
+    private Label nbSeqLabelForMeta;
     @FXML
-    private Label nbInterstimLabel;
+    private Label nbMediaLabelForMeta;
     @FXML
-    private Label totalDurationLabel;
+    private Label nbInterstimLabelForMeta;
+    @FXML
+    private Label totalDurationLabelForMeta;
+    @FXML
+    private GridPane statsForSeq;
+    @FXML
+    private Label nbMediaLabelForSeq;
+    @FXML
+    private Label nbInterstimLabelForSeq;
+    @FXML
+    private Label totalDurationLabelForSeq;
     @FXML
     private Button doMixButton;
     @FXML
@@ -139,7 +150,18 @@ public class Etape2AdminController implements Initializable {
         //Defined action when the Sequence element selected is changed.
         seqListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerSequence());
 
-        //TODO by clicking on certain metaseq then modify button is enable and you can modify the name of the meta
+        renameMetaButton.disableProperty().bind(Bindings.createBooleanBinding(() -> metaListView.getSelectionModel().isEmpty(), metaListView.getSelectionModel().getSelectedItems()));
+        renameMetaButton.setOnAction(actionEvent -> {
+            metaListView.setEditable(true);
+            metaListView.edit(metaListView.getSelectionModel().getSelectedIndex());
+            metaListView.setEditable(false);
+        });
+        removeMetaButton.disableProperty().bind(Bindings.createBooleanBinding(() -> metaListView.getSelectionModel().isEmpty(), metaListView.getSelectionModel().getSelectedItems()));
+        exportMetaButton.disableProperty().bind(Bindings.createBooleanBinding(() -> metaListView.getSelectionModel().isEmpty(), metaListView.getSelectionModel().getSelectedItems()));
+
+        modifySeqButton.disableProperty().bind(Bindings.createBooleanBinding(() -> seqListView.getSelectionModel().isEmpty(), seqListView.getSelectionModel().getSelectedItems()));
+        removeSeqButton.disableProperty().bind(Bindings.createBooleanBinding(() -> seqListView.getSelectionModel().isEmpty(), seqListView.getSelectionModel().getSelectedItems()));
+        exportSeqButton.disableProperty().bind(Bindings.createBooleanBinding(() -> seqListView.getSelectionModel().isEmpty(), seqListView.getSelectionModel().getSelectedItems()));
 
         //---------------------------------------------------------------------------------------//
         //                          Drag and Drop behaviour for meta-sequence                    //
@@ -750,8 +772,10 @@ public class Etape2AdminController implements Initializable {
     public void setMetaSeqStats() {
         MetaSequence metaSeq = SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence);
         statsTitle.setText("Statistiques de la méta-séquence");
+        statsForSeq.setVisible(false);
+        statsForMeta.setVisible(true);
 
-        nbSeqLabel.setText(Integer.toString(metaSeq.getSequencesList().size()));
+        nbSeqLabelForMeta.setText(Integer.toString(metaSeq.getSequencesList().size()));
 
         int nbMedias = 0;
         int nbInterstims = 0;
@@ -763,11 +787,11 @@ public class Etape2AdminController implements Initializable {
                 }
             }
         }
-        nbMediaLabel.setText(Integer.toString(nbMedias));
-        nbInterstimLabel.setText(Integer.toString(nbInterstims));
+        nbMediaLabelForMeta.setText(Integer.toString(nbMedias));
+        nbInterstimLabelForMeta.setText(Integer.toString(nbInterstims));
 
         long seconds = metaSeq.getDuration().getSeconds();
-        totalDurationLabel.setText(
+        totalDurationLabelForMeta.setText(
                 String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, (seconds % 60)));
     }
 
@@ -777,7 +801,8 @@ public class Etape2AdminController implements Initializable {
     public void setSeqStats() {
         Sequence sequence = getAllItemMetaSequence().get(index_Selected_MetaSequence).getSequencesList().get(index_Selected_Sequence);
         statsTitle.setText("Statistiques de la séquence");
-        nbSeqLabel.setText("NA");
+        statsForMeta.setVisible(false);
+        statsForSeq.setVisible(true);
 
         int nbMedias = sequence.getListMedias().size();
         int nbInterstims = 0;
@@ -786,11 +811,11 @@ public class Etape2AdminController implements Initializable {
                 nbInterstims++;
             }
         }
-        nbMediaLabel.setText(Integer.toString(nbMedias));
-        nbInterstimLabel.setText(Integer.toString(nbInterstims));
+        nbMediaLabelForSeq.setText(Integer.toString(nbMedias));
+        nbInterstimLabelForSeq.setText(Integer.toString(nbInterstims));
 
         long seconds = sequence.getDuration().getSeconds();
-        totalDurationLabel.setText(
+        totalDurationLabelForSeq.setText(
                 String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, (seconds % 60)));
     }
 
