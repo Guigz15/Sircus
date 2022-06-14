@@ -145,6 +145,11 @@ public class ModifySeqPopUp {
                                         try {
                                             FileChooser fileChooserInterstim = new FileChooser();
                                             fileChooserInterstim.setTitle("Open file (interstim)");
+                                            if (SircusApplication.dataSircus.getPath().isCustomPath()) {
+                                                fileChooserInterstim.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getLastPath()));
+                                            } else {
+                                                fileChooserInterstim.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getDefaultPath()));
+                                            }
                                             fileChooserInterstim.getExtensionFilters().addAll(
                                                     new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
                                             );
@@ -177,22 +182,21 @@ public class ModifySeqPopUp {
                             // Delete button
                             tableViewDeleteButton.setOnAction(event ->
                             {
-                                if (mediaTable.getItems().get(getIndex()) instanceof Interstim) {
-                                    Interstim interstim = (Interstim) mediaTable.getItems().get(getIndex());
+                                if (getTableRow().getItem() instanceof Interstim) {
+                                    Interstim interstim = (Interstim) getTableRow().getItem();
                                     mediaTable.getItems().remove(interstim);
-                                    listMediaPlusInterstim.remove(interstim);
                                     interstim.getMedia().setInterstim(null);
                                 } else {
-                                    Media media = (Media) mediaTable.getItems().get(getIndex());
+                                    Media media = (Media) getTableRow().getItem();
                                     if (media.getInterstim() != null) {
                                         mediaTable.getItems().remove(media.getInterstim());
-                                        listMediaPlusInterstim.remove(media.getInterstim());
                                         media.setInterstim(null);
                                     }
                                     mediaTable.getItems().remove(media);
-                                    listMediaPlusInterstim.remove(media);
+                                    sequence.getListMedias().remove(media);
                                 }
-                                mediaTable.refresh();
+                                constructMediaInterstimList();
+                                mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
                             });
 
                             // Option button

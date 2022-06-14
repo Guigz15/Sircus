@@ -489,7 +489,7 @@ public class Step2Controller implements Initializable {
             refreshPage();
         });
 
-        /* set startMixButton proprieties */
+        /* set startMixButton properties */
         startMixButton.setOnAction(event -> {
             mixBoxButtons.setVisible(false);
             doMixButton.setVisible(true);
@@ -501,11 +501,10 @@ public class Step2Controller implements Initializable {
                 //create Map to store the fixed sequences.
                 HashMap<Sequence, Integer> fixedSequence = new HashMap<>();
                 //find fixed sequences
-                for (int indiceSequence = 0; indiceSequence < copySequence.size(); indiceSequence++) {
-                    Sequence currentSequence = copySequence.get(indiceSequence);
-                    if (currentSequence.getLock()) {
-                        fixedSequence.put(currentSequence, indiceSequence);
-                        currentMetaSequence.getSequencesList().remove(currentSequence);
+                for (Sequence sequence : copySequence) {
+                    if (sequence.getLock()) {
+                        fixedSequence.put(sequence, copySequence.indexOf(sequence));
+                        currentMetaSequence.getSequencesList().remove(sequence);
                     }
                 }
                 //Shuffle the list of sequences
