@@ -432,7 +432,7 @@ public class Step2Controller implements Initializable {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
-                    //we remove the old Seque to move to the new place.
+                    //we remove the old Sequence to move to the new place.
                     ItemSequence draggedSequence = seqListView.getItems().get(draggedIndex);
 
                     seqListView.getItems().remove(draggedIndex);

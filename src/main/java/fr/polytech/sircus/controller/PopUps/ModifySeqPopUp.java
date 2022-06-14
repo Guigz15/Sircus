@@ -43,9 +43,7 @@ public class ModifySeqPopUp {
 
     //DataFormat use for drag and drop sequences in listView. Don't make it final because it make error
     private DataFormat SERIALIZED_MIME_TYPE = Step2Controller.SERIALIZED_MIME_TYPE;
-
-    @Setter
-    @Getter
+    @Setter @Getter
     private Sequence sequence;
     @FXML
     @Getter
@@ -80,21 +78,7 @@ public class ModifySeqPopUp {
 
     private final String MEDIAS_PATH = "medias/";
 
-    /** The add file button object: allows the selection of a file for a media */
-    //private final FileChooser fileChooserMedia;
-
-    /** The add file button object: allows the selection of a file for a cross-stimulus */
-    //private FileChooser fileChooserInterstim;
-
-    /** Button to save the changes in the sequence */
-    @FXML
-    private Button saveAddMediaSeq;
-
-    /** Cancel button, closes the sequence modification pop-up */
-    @FXML
-    private Button cancelAddMediaSeq;
-
-    //last index of the selected media
+    // Last index of the selected media
     private int lastIndexSelectedMedia;
 
 
@@ -184,6 +168,7 @@ public class ModifySeqPopUp {
                                             System.out.print("Aucun fichier sélectionné.");
                                         }
                                     });
+                                    tableViewAddButton.setDisable(false);
                                 } else { // The media has an Interstim or is one
                                     tableViewAddButton.setDisable(true);
                                 }
@@ -250,7 +235,6 @@ public class ModifySeqPopUp {
                             hBox.setSpacing(20);
 
                             if (getTableView().getItems().get(getIndex()) instanceof Interstim) {
-                                Interstim interstim = (Interstim) getTableView().getItems().get(getIndex());
                                 tableViewVerrCheckBox.setSelected(true);
                                 tableViewVerrCheckBox.setDisable(true);
                             } else {
@@ -277,7 +261,7 @@ public class ModifySeqPopUp {
 
         this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
 
-        this.mediaTable.setRowFactory(event ->{
+        this.mediaTable.setRowFactory(event -> {
             TableRow<AbstractMedia> row = new TableRow<>();
 
             //----------------------------------------------------------------------------------//
@@ -285,9 +269,9 @@ public class ModifySeqPopUp {
             //----------------------------------------------------------------------------------//
             row.setOnDragDetected(dragEvent ->
             {
-                if (! row.isEmpty()) {
-                    if(row.getItem() instanceof Media ) {
-                        Integer index = row.getIndex();
+                if (!row.isEmpty()) {
+                    if(row.getItem() instanceof Media) {
+                        int index = row.getIndex();
                         Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
                         db.setDragView(row.snapshot(null, null));
                         ClipboardContent cc = new ClipboardContent();
@@ -301,7 +285,7 @@ public class ModifySeqPopUp {
             row.setOnDragOver(dragEvent -> {
                 Dragboard db = dragEvent.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-                    if (row.getIndex() != ((Integer)db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+                    if (row.getIndex() != (Integer) db.getContent(SERIALIZED_MIME_TYPE)) {
                         dragEvent.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         dragEvent.consume();
                     }
@@ -311,36 +295,28 @@ public class ModifySeqPopUp {
             row.setOnDragDropped(dragEvent -> {
                 Dragboard db = dragEvent.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
                     Media draggedMedia = (Media) mediaTable.getItems().remove(draggedIndex);
 
-                    if (draggedMedia.getInterstim() != null) {
+                    if (draggedMedia.getInterstim() != null)
                         mediaTable.getItems().remove(draggedMedia.getInterstim());
-                        listMediaPlusInterstim.remove(draggedMedia.getInterstim());
-                        listMediaPlusInterstim.remove(draggedMedia);
-                    }
 
                     sequence.getListMedias().remove(draggedMedia);
-                    int dropIndex ;
-                    // the index of new media in sequence in order to add to the right place
-                    int dropIndexInSequence ;
+
+                    int dropIndexInSequence;
 
                     if (row.isEmpty()) {
-                        dropIndex = mediaTable.getItems().size() ;
                         dropIndexInSequence = sequence.getListMedias().size();
                     } else {
-                        dropIndex = row.getIndex();
-                        dropIndexInSequence = sequence.getListMedias().indexOf(row.getItem());
+                        if (row.getItem() instanceof Media)
+                            dropIndexInSequence = sequence.getListMedias().indexOf((Media) row.getItem());
+                        else
+                            dropIndexInSequence = sequence.getListMedias().indexOf(((Interstim) row.getItem()).getMedia());
                     }
 
                     sequence.getListMedias().add(dropIndexInSequence, draggedMedia);
-                    //We add media
-                    listMediaPlusInterstim.add(dropIndex,draggedMedia);
-                    //we add interstim at good place if there is present
-                    if (draggedMedia.getInterstim() != null) {
-                        listMediaPlusInterstim.add(dropIndex ,draggedMedia.getInterstim());
-                    }
+
+                    constructMediaInterstimList();
 
                     dragEvent.setDropCompleted(true);
                     this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));

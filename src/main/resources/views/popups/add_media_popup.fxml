@@ -36,7 +36,7 @@
                   </HBox.margin>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Interstim">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font size="16.0" />
                      </font>
                      <VBox.margin>
                         <Insets bottom="10.0" />
@@ -114,10 +114,10 @@
             <HBox prefHeight="100.0" prefWidth="200.0">
                <ImageView fx:id="interstimImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                   <HBox.margin>
-                     <Insets left="15.0" right="30.0"/>
+                     <Insets left="15.0" right="30.0" />
                   </HBox.margin>
                </ImageView>
-               <ImageView fx:id="mediaImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+               <ImageView fx:id="mediaImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
             </HBox>
          </VBox>
       </VBox>
