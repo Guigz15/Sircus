@@ -76,7 +76,7 @@ public class SircusApplication extends Application {
             e.printStackTrace();
         }
 
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 600);
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 650);
 
         stage.setOnCloseRequest(event -> {
             try {
@@ -88,8 +88,6 @@ public class SircusApplication extends Application {
 
         stage.setTitle("Application SIRCUS");
         stage.setScene(scene);
-        stage.setMinWidth(scene.getWidth());
-        stage.setMinHeight(650);
         stage.getIcons().add(new Image("images/logo-Sircus-FT.png"));
         stage.show();
     }
