@@ -1,21 +1,18 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.model.*;
+import fr.polytech.sircus.model.AbstractMedia;
+import fr.polytech.sircus.model.MetaSequence;
+import fr.polytech.sircus.model.Result;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
@@ -28,9 +25,9 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.io.InputStream;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -48,29 +45,19 @@ public class PlayerMonitorController{
     private TimelineProgressBar metaSeqProgressBar;
 
     @FXML
-    private GridPane playerMonitor;
-
-    @FXML
     private TextArea commentTextArea;
-
     @FXML
     private Button playButton;
-
     @FXML
     private Button stopButton;
-
     @FXML
     private Button backButton;
-
     @FXML
     private Button forwardButton;
-
     @FXML
     private StackPane previewPane;
-
     @FXML
     private MediaView mediaView;
-
     @FXML
     private ImageView imageView;
 
@@ -103,6 +90,9 @@ public class PlayerMonitorController{
     @FXML
     private Label remainingLabel;
     private TimelineClock remaining;
+
+    @FXML
+    private Button previous;
 
     /**
      * indicates if it's the first lecture or after a reset
@@ -179,7 +169,7 @@ public class PlayerMonitorController{
 
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
         Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = (Stage) playerMonitor.getScene().getWindow();
+        Stage stage = (Stage) previous.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
@@ -374,9 +364,6 @@ public class PlayerMonitorController{
         InputStream is = new FileInputStream("medias/" + media.getFilename());
         Image image = new Image(is);
 
-        imageView.setFitWidth(image.getWidth());
-        imageView.setFitHeight(image.getHeight());
-
         imageView.setImage(image);
         imageView.setCache(true);
 
@@ -384,9 +371,9 @@ public class PlayerMonitorController{
 
         Color color = media.getBackgroundColor();
         String hexColor = String.format( "-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid; -fx-background-color: #%02X%02X%02X;",
-                (int)( color.getRed() * 255 ),
-                (int)( color.getGreen() * 255 ),
-                (int)( color.getBlue() * 255 ) );
+                (int)(color.getRed() * 255),
+                (int)(color.getGreen() * 255),
+                (int)(color.getBlue() * 255));
 
         previewPane.setStyle(hexColor);
     }
