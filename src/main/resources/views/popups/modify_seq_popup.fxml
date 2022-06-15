@@ -22,7 +22,7 @@
                   </TextField>
                </left>
                <right>
-                  <Button fx:id="addMediaToSeq" mnemonicParsing="false" text="Ajouter média" onAction="#addMedia" BorderPane.alignment="CENTER">
+                  <Button fx:id="addMediaToSeq" mnemonicParsing="false" onAction="#addMedia" style="-fx-background-color: #457b9d;" text="Ajouter média" textFill="WHITE" BorderPane.alignment="CENTER">
                      <font>
                         <Font size="16.0" />
                      </font>

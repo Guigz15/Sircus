@@ -100,7 +100,7 @@
             </VBox>
             <StackPane>
                <TextArea fx:id="commentTextArea" prefHeight="200.0" prefWidth="200.0" promptText="Commentaires..." />
-               <Button mnemonicParsing="false" onMouseClicked="#addComment" StackPane.alignment="BOTTOM_LEFT">
+               <Button mnemonicParsing="false" onMouseClicked="#addComment" style="-fx-background-color: mediumseagreen;" StackPane.alignment="BOTTOM_LEFT">
                   <StackPane.margin>
                      <Insets bottom="10.0" left="10.0" />
                   </StackPane.margin>
@@ -142,22 +142,22 @@
                      <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER" />
                   </StackPane>
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="300.0" spacing="20.0">
-                     <Button fx:id="backButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#previousSequence" prefHeight="30.0" prefWidth="35.0">
+                     <Button fx:id="backButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#previousSequence" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: darkorange;">
                         <graphic>
                            <FontIcon iconLiteral="fa-backward" iconSize="15" />
                         </graphic>
                      </Button>
-                     <Button fx:id="stopButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#stopViewer" prefHeight="30.0" prefWidth="35.0">
+                     <Button fx:id="stopButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#stopViewer" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: #f87167;">
                         <graphic>
                            <FontIcon iconLiteral="fa-stop" iconSize="15" />
                         </graphic>
                      </Button>
-                     <Button fx:id="playButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#playViewer" prefHeight="30.0" prefWidth="35.0">
+                     <Button fx:id="playButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#playViewer" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: mediumseagreen;">
                         <graphic>
                            <FontIcon iconLiteral="fa-play" iconSize="15" />
                         </graphic>
                      </Button>
-                     <Button fx:id="forwardButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#nextSequence" prefHeight="30.0" prefWidth="35.0">
+                     <Button fx:id="forwardButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#nextSequence" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: darkorange;">
                         <graphic>
                            <FontIcon iconLiteral="fa-forward" iconSize="15" />
                         </graphic>
@@ -190,7 +190,7 @@
       </HBox>
    </center>
    <bottom>
-      <Button fx:id="previous" mnemonicParsing="false" onMouseClicked="#previousPage" text="Précédent" BorderPane.alignment="CENTER_LEFT">
+      <Button fx:id="previous" mnemonicParsing="false" onMouseClicked="#previousPage" style="-fx-background-color: #457b9d;" text="Précédent" textFill="WHITE" BorderPane.alignment="CENTER_LEFT">
          <BorderPane.margin>
             <Insets bottom="15.0" left="25.0" />
          </BorderPane.margin>

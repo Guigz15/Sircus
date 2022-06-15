@@ -31,16 +31,16 @@
                   <padding>
                      <Insets top="5.0" />
                   </padding>
-                  <Button fx:id="importMetaButtonUser" mnemonicParsing="false" onAction="#importMeta" text="Importer" />
+                  <Button fx:id="importMetaButtonUser" mnemonicParsing="false" onAction="#importMeta" style="-fx-background-color: #457b9d;" text="Importer" textFill="WHITE" />
                   <BorderPane fx:id="adminMetaButtons" visible="false">
                      <left>
                         <HBox BorderPane.alignment="TOP_LEFT">
-                           <Button fx:id="addMetaButton" mnemonicParsing="false">
+                           <Button fx:id="addMetaButton" mnemonicParsing="false" style="-fx-background-color: mediumseagreen;">
                               <graphic>
                                  <FontIcon iconLiteral="fa-plus" iconSize="15" />
                               </graphic>
                            </Button>
-                           <Button fx:id="removeMetaButton" mnemonicParsing="false">
+                           <Button fx:id="removeMetaButton" mnemonicParsing="false" style="-fx-background-color: #f87167;">
                               <graphic>
                                  <FontIcon iconLiteral="fa-minus" iconSize="15" />
                               </graphic>
@@ -48,7 +48,7 @@
                         </HBox>
                      </left>
                      <right>
-                        <Button fx:id="renameMetaButton" mnemonicParsing="false" BorderPane.alignment="TOP_LEFT">
+                        <Button fx:id="renameMetaButton" mnemonicParsing="false" style="-fx-background-color: darkorange;" BorderPane.alignment="TOP_LEFT">
                            <graphic>
                               <FontIcon iconLiteral="fa-pencil" iconSize="15" />
                            </graphic>
@@ -59,8 +59,8 @@
                            <padding>
                               <Insets top="10.0" />
                            </padding>
-                           <Button fx:id="importMetaButton" mnemonicParsing="false" onAction="#importMeta" text="Importer" />
-                           <Button fx:id="exportMetaButton" mnemonicParsing="false" onAction="#exportMeta" text="Exporter" />
+                           <Button fx:id="importMetaButton" mnemonicParsing="false" onAction="#importMeta" style="-fx-background-color: #457b9d;" text="Importer" textFill="WHITE" />
+                           <Button fx:id="exportMetaButton" mnemonicParsing="false" onAction="#exportMeta" style="-fx-background-color: #457b9d;" text="Exporter" textFill="WHITE" />
                         </HBox>
                      </bottom>
                   </BorderPane>
@@ -80,16 +80,16 @@
                   <padding>
                      <Insets top="5.0" />
                   </padding>
-                  <Button fx:id="importSeqButtonUser" mnemonicParsing="false" onAction="#importSeq" text="Importer" />
+                  <Button fx:id="importSeqButtonUser" mnemonicParsing="false" onAction="#importSeq" style="-fx-background-color: #457b9d;" text="Importer" textFill="WHITE" />
                   <BorderPane fx:id="adminSeqButtons" visible="false">
                      <left>
                         <HBox BorderPane.alignment="CENTER">
-                           <Button fx:id="addSeqButton" mnemonicParsing="false">
+                           <Button fx:id="addSeqButton" mnemonicParsing="false" style="-fx-background-color: mediumseagreen;">
                               <graphic>
                                  <FontIcon iconLiteral="fa-plus" iconSize="15" />
                               </graphic>
                            </Button>
-                           <Button fx:id="removeSeqButton" mnemonicParsing="false">
+                           <Button fx:id="removeSeqButton" mnemonicParsing="false" style="-fx-background-color: #f87167;">
                               <graphic>
                                  <FontIcon iconLiteral="fa-minus" iconSize="15" />
                               </graphic>
@@ -101,12 +101,12 @@
                            <padding>
                               <Insets top="10.0" />
                            </padding>
-                           <Button fx:id="importSeqButton" mnemonicParsing="false" onAction="#importSeq" text="Importer" />
-                           <Button fx:id="exportSeqButton" mnemonicParsing="false" onAction="#exportSeq" text="Exporter" />
+                           <Button fx:id="importSeqButton" mnemonicParsing="false" onAction="#importSeq" style="-fx-background-color: #457b9d;" text="Importer" textFill="WHITE" />
+                           <Button fx:id="exportSeqButton" mnemonicParsing="false" onAction="#exportSeq" style="-fx-background-color: #457b9d;" text="Exporter" textFill="WHITE" />
                         </HBox>
                      </bottom>
                      <right>
-                        <Button fx:id="modifySeqButton" mnemonicParsing="false" BorderPane.alignment="CENTER">
+                        <Button fx:id="modifySeqButton" mnemonicParsing="false" style="-fx-background-color: darkorange;" BorderPane.alignment="CENTER">
                            <graphic>
                               <FontIcon iconLiteral="fa-pencil" iconSize="15" />
                            </graphic>
@@ -223,10 +223,10 @@
                   <padding>
                      <Insets top="5.0" />
                   </padding>
-                  <Button fx:id="doMixButton" mnemonicParsing="false" text="Faire un mélange aléatoire" visible="false" />
+                  <Button fx:id="doMixButton" mnemonicParsing="false" style="-fx-background-color: #457b9d;" text="Faire un mélange aléatoire" textFill="WHITE" visible="false" />
                   <HBox fx:id="mixBoxButtons" alignment="TOP_CENTER" spacing="50.0" visible="false">
-                     <Button fx:id="cancelMixButton" mnemonicParsing="false" text="Annuler" />
-                     <Button fx:id="startMixButton" mnemonicParsing="false" text="Mélanger" />
+                     <Button fx:id="cancelMixButton" mnemonicParsing="false" style="-fx-background-color: #f87167;" text="Annuler" />
+                     <Button fx:id="startMixButton" mnemonicParsing="false" style="-fx-background-color: #457b9d;" text="Mélanger" textFill="WHITE" />
                   </HBox>
                </StackPane>
             </VBox>
@@ -244,12 +244,12 @@
          </VBox>
          <HBox spacing="783.0">
             <children>
-               <Button fx:id="previous" mnemonicParsing="false" onAction="#previousPage" text="Précédent">
+               <Button fx:id="previous" mnemonicParsing="false" onAction="#previousPage" style="-fx-background-color: #457b9d;" text="Précédent" textFill="WHITE">
                   <font>
                      <Font size="16.0" />
                   </font>
                </Button>
-               <Button fx:id="next" mnemonicParsing="false" onAction="#nextPage" text="Suivant">
+               <Button fx:id="next" mnemonicParsing="false" onAction="#nextPage" style="-fx-background-color: #457b9d;" text="Suivant" textFill="WHITE">
                   <font>
                      <Font size="16.0" />
                   </font>

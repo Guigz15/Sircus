@@ -132,8 +132,11 @@ public class ModifySeqPopUp {
 
                             tableViewAddButton.setGraphic(addIcon);
                             tableViewAddButton.setTooltip(new Tooltip("Ajouter un interstim"));
+                            tableViewAddButton.setStyle("-fx-background-color: mediumseagreen");
                             tableViewDeleteButton.setGraphic(delIcon);
+                            tableViewDeleteButton.setStyle("-fx-background-color: #f87167");
                             tableViewOptionButton.setGraphic(optionIcon);
+                            tableViewOptionButton.setStyle("-fx-background-color: darkorange");
 
                             // Add button
                             // If the media doesn't have an Interstim and isn't one
