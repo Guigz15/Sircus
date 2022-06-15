@@ -6,17 +6,16 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
- * Class create to make a list sequence. Is use for create a custom Cell of ListView. Cf Etape2AdminController.
+ * Class create to make a list sequence. Is use for create a custom Cell of ListView. Cf Step2Controller.
  */
 public class ItemSequence {
     private final StringProperty name = new SimpleStringProperty();
     private final BooleanProperty on = new SimpleBooleanProperty();
 
 
-    @Getter @Setter
+    @Getter
     private final Sequence sequence;
 
     public ItemSequence(String name, boolean on, Sequence sequence) {
