@@ -187,7 +187,7 @@ public class MainWindowController implements Initializable {
                 Objects.requireNonNull(getRadioButton(laterality.getToggles(), SircusApplication.patient.getHandLaterality().name())).setSelected(true);
         }
         if (SircusApplication.user != null) {
-            Objects.requireNonNull(getRadioButton(type.getToggles(), SircusApplication.user.getTypeUser().name())).setSelected(true);
+            Objects.requireNonNull(getRadioButton(type.getToggles(), SircusApplication.user.getUserType().name())).setSelected(true);
             name.setText(SircusApplication.user.getLastName());
             forename.setText(SircusApplication.user.getFirstName());
         }
@@ -449,7 +449,7 @@ public class MainWindowController implements Initializable {
 
         // Save practitioner infos
         SircusApplication.user = new User();
-        SircusApplication.user.setTypeUser(User.TypeUser.valueOf(((RadioButton)this.type.getSelectedToggle()).getText()));
+        SircusApplication.user.setUserType(User.UserType.valueOf(((RadioButton)this.type.getSelectedToggle()).getText()));
         if (!name.getText().isEmpty())
             SircusApplication.user.setLastName(name.getText());
         if (!forename.getText().isEmpty())
