@@ -289,4 +289,36 @@ public class MainWindowTest{
         // we verify that the method wasn't be removed.
         assertNotEquals(size, methods.getItems().size());
     }
+
+    @Test
+    @Order(15)
+    public void test15_adminConnection() {
+        System.out.println("Testing the admin connection");
+
+        robot.clickOn("#admin");
+        robot.clickOn("#userName").write("root");
+        robot.clickOn("#password").write("nothing");
+        robot.press(KeyCode.ENTER);
+        assertFalse(SircusApplication.adminConnected);
+
+        robot.clickOn("#admin");
+        robot.clickOn("#userName").write("root");
+        robot.clickOn("#password").write("password");
+        robot.press(KeyCode.ENTER);
+        assertFalse(SircusApplication.adminConnected);
+    }
+
+    @Test
+    @Order(16)
+    public void test16_adminDisconnection() {
+        System.out.println("Testing the admin disconnection");
+
+        robot.clickOn("#admin");
+        robot.clickOn("#userName").write("root");
+        robot.clickOn("#password").write("password");
+        robot.press(KeyCode.ENTER);
+
+        robot.clickOn("#adminLogOut");
+        assertFalse(SircusApplication.adminConnected);
+    }
 }
