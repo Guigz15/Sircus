@@ -135,14 +135,6 @@ public class MainWindowController implements Initializable {
         methodUpdate.disableProperty().bind(Bindings.createBooleanBinding(() -> methods.getValue() == null, methods.valueProperty()));
         methodRemove.disableProperty().bind(Bindings.createBooleanBinding(() -> methods.getValue() == null, methods.valueProperty()));
 
-        /*next.disableProperty().bind(Bindings.createBooleanBinding(() -> id.getText().trim().isEmpty(), id.textProperty())
-                .or(Bindings.createBooleanBinding(() -> sex.getSelectedToggle() == null, sex.selectedToggleProperty()))
-                .or(Bindings.createBooleanBinding(() -> birthDate.getValue() == null, birthDate.valueProperty()))
-                .or(Bindings.createBooleanBinding(() -> name.getText().trim().isEmpty(), name.textProperty()))
-                .or(Bindings.createBooleanBinding(() -> forename.getText().trim().isEmpty(), forename.textProperty()))
-                .or(Bindings.createBooleanBinding(() -> locations.getValue() == null, locations.valueProperty()))
-        );*/
-
         // Admin mode
         adminLabel.setVisible(SircusApplication.adminConnected);
         adminLogOut.setVisible(SircusApplication.adminConnected);
@@ -561,8 +553,12 @@ public class MainWindowController implements Initializable {
             SircusApplication.adminConnected = true;
             adminLabel.setVisible(true);
             adminLogOut.setVisible(true);
+            id.setText("ifsvliu");
+            radioM.setSelected(true);
+            birthDate.setValue(LocalDate.now());
+            name.setText("fdfd");
+            forename.setText("lkhfdlkjhgfd");
+            locations.getSelectionModel().select(0);
         }
-        next.disableProperty().unbind();
-        next.setDisable(false);
     }
 }

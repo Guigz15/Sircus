@@ -13,8 +13,6 @@ import lombok.Getter;
 public class ItemSequence {
     private final StringProperty name = new SimpleStringProperty();
     private final BooleanProperty on = new SimpleBooleanProperty();
-
-
     @Getter
     private final Sequence sequence;
 

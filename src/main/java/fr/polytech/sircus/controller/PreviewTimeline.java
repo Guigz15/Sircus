@@ -1,10 +1,5 @@
 package fr.polytech.sircus.controller;
 
-import java.io.IOException;
-import java.net.URL;
-import java.time.Duration;
-import java.util.*;
-
 import fr.polytech.sircus.model.AbstractMedia;
 import fr.polytech.sircus.model.Media;
 import fr.polytech.sircus.model.MetaSequence;
@@ -18,6 +13,14 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import lombok.Getter;
+
+import java.io.IOException;
+import java.net.URL;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * This class is the controller of the preview timeline.
@@ -166,7 +169,6 @@ public class PreviewTimeline extends AnchorPane implements Initializable {
         metaSequence.addSequence(sequence);
 
         addMetaSequence(metaSequence);
-
     }
 
 
@@ -274,13 +276,5 @@ public class PreviewTimeline extends AnchorPane implements Initializable {
     public void setMetaSequence(MetaSequence metaSequence){
         clear();
         addMetaSequence(metaSequence);
-    }
-
-    /**
-     * Method to refresh the content of the timeline.
-     */
-    public void refresh(){
-        removeAllMedia();
-        System.out.println("Refresh PreviewTimeline");
     }
 }

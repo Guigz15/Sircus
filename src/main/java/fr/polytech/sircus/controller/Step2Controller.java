@@ -7,6 +7,7 @@ import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.utils.ImportMetaSeqXML;
 import fr.polytech.sircus.utils.ImportSeqXML;
 import fr.polytech.sircus.utils.ItemSequence;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -24,7 +25,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
-import javafx.beans.binding.Bindings;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -348,6 +349,10 @@ public class Step2Controller implements Initializable {
         //Set the CellFactory we defined above. Moreover, we defined behaviours to do when we drag and drop a Sequence.
         seqListView.setCellFactory((ListView<ItemSequence> param) -> {
             ListCell<ItemSequence> listCellForSequence = new ListCell<>() {
+                //TODO try to put locker instead of checkboxes
+                /*private Button lockButton = new Button("");
+                final FontIcon lockIcon = new FontIcon("fa-lock");
+                final FontIcon unlockIcon = new FontIcon("fa-unlock");*/
                 private CheckBox checkBox;
 
                 @Override

@@ -78,8 +78,9 @@ public class ModifySeqPopUp {
 
     private final String MEDIAS_PATH = "medias/";
 
-    // Last index of the selected media
-    private int lastIndexSelectedMedia;
+    /** Last index of the selected media in table */
+    private int indexSelectedMediaInTable;
+
 
 
 
@@ -198,14 +199,12 @@ public class ModifySeqPopUp {
                                     mediaTable.getItems().remove(media);
                                     sequence.getListMedias().remove(media);
                                 }
-                                constructMediaInterstimList();
-                                mediaTable.setItems(FXCollections.observableList(listMediaPlusInterstim));
                             });
 
                             // Option button
                             tableViewOptionButton.setOnAction(event ->
                             {
-                                lastIndexSelectedMedia = getIndex();
+                                indexSelectedMediaInTable = getIndex();
                                 openModifyViewForMedia();
                             });
 
@@ -218,6 +217,8 @@ public class ModifySeqPopUp {
                             setGraphic(hBox);
                         }
                         setText(null);
+
+                        previewTimeline.setSequence(sequence);
                     }
                 };
 
@@ -293,8 +294,11 @@ public class ModifySeqPopUp {
                 Dragboard db = dragEvent.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
                     if (row.getIndex() != (Integer) db.getContent(SERIALIZED_MIME_TYPE)) {
-                        dragEvent.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                        dragEvent.consume();
+                        Media draggedMedia = (Media) mediaTable.getItems().get((Integer) db.getContent(SERIALIZED_MIME_TYPE));
+                        if (draggedMedia.getInterstim() == null || row.getIndex() != mediaTable.getItems().indexOf(draggedMedia.getInterstim())) {
+                            dragEvent.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                            dragEvent.consume();
+                        }
                     }
                 }
             });
@@ -328,14 +332,10 @@ public class ModifySeqPopUp {
                     dragEvent.setDropCompleted(true);
                     this.mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
                     dragEvent.consume();
-                    previewTimeline.setSequence(sequence);
                 }
             });
             return row;
         });
-
-        this.previewTimeline.setSequence(this.sequence);
-
     }
 
     /**
@@ -378,15 +378,15 @@ public class ModifySeqPopUp {
     }
 
     /**
-     * Methode wich open the pop up for modify sequence.
+     * Method which open the pop-up for modify sequence.
      */
     private void openModifyViewForMedia() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_media_popup.fxml"));
             DialogPane dialogPane = fxmlLoader.load();
             ModifyMediaPopUp controller = fxmlLoader.getController();
-            controller.getResizeImage().setSelected(mediaTable.getItems().get(lastIndexSelectedMedia).isResizable());
-            controller.getBackgroundColor().setValue(mediaTable.getItems().get(lastIndexSelectedMedia).getBackgroundColor());
+            controller.getResizeImage().setSelected(mediaTable.getItems().get(indexSelectedMediaInTable).isResizable());
+            controller.getBackgroundColor().setValue(mediaTable.getItems().get(indexSelectedMediaInTable).getBackgroundColor());
 
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
@@ -396,8 +396,9 @@ public class ModifySeqPopUp {
 
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.get() == ButtonType.FINISH) {
-                mediaTable.getItems().get(lastIndexSelectedMedia).setResizable(controller.getResizeImage().isSelected());
-                mediaTable.getItems().get(lastIndexSelectedMedia).setBackgroundColor(controller.getBackgroundColor().getValue());
+                AbstractMedia abstractMediaToModified = mediaTable.getItems().get(indexSelectedMediaInTable);
+                abstractMediaToModified.setResizable(controller.getResizeImage().isSelected());
+                abstractMediaToModified.setBackgroundColor(controller.getBackgroundColor().getValue());
             }
         } catch (IOException e) {
             e.printStackTrace();
