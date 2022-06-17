@@ -7,11 +7,6 @@ import lombok.Setter;
  * Represent a user
  */
 public class User {
-
-    public enum UserType { Praticien, Expérimentateur }
-
-    @Getter @Setter
-    private UserType userType;
     @Getter @Setter
     private String firstName;
     @Getter @Setter
@@ -22,7 +17,6 @@ public class User {
     }
 
     public User(User user) {
-        this.userType = user.userType;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
     }

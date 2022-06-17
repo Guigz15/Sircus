@@ -18,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -40,6 +41,10 @@ public class MainWindowController implements Initializable {
     private TextField id;
     @FXML
     private ToggleGroup sex;
+    @FXML
+    private RadioButton radioM;
+    @FXML
+    private RadioButton radioF;
     @FXML
     private DatePicker birthDate;
     @FXML
@@ -130,13 +135,13 @@ public class MainWindowController implements Initializable {
         methodUpdate.disableProperty().bind(Bindings.createBooleanBinding(() -> methods.getValue() == null, methods.valueProperty()));
         methodRemove.disableProperty().bind(Bindings.createBooleanBinding(() -> methods.getValue() == null, methods.valueProperty()));
 
-        next.disableProperty().bind(Bindings.createBooleanBinding(() -> id.getText().trim().isEmpty(), id.textProperty())
+        /*next.disableProperty().bind(Bindings.createBooleanBinding(() -> id.getText().trim().isEmpty(), id.textProperty())
                 .or(Bindings.createBooleanBinding(() -> sex.getSelectedToggle() == null, sex.selectedToggleProperty()))
                 .or(Bindings.createBooleanBinding(() -> birthDate.getValue() == null, birthDate.valueProperty()))
                 .or(Bindings.createBooleanBinding(() -> name.getText().trim().isEmpty(), name.textProperty()))
                 .or(Bindings.createBooleanBinding(() -> forename.getText().trim().isEmpty(), forename.textProperty()))
                 .or(Bindings.createBooleanBinding(() -> locations.getValue() == null, locations.valueProperty()))
-        );
+        );*/
 
         // Admin mode
         adminLabel.setVisible(SircusApplication.adminConnected);
@@ -147,20 +152,23 @@ public class MainWindowController implements Initializable {
             adminLogOut.setVisible(false);
         });
 
-        // Forename and Name
-        name.textProperty().addListener(new ChangeListener<String>() {
+        id.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                if (!newValue.matches("\\sa-zA-Z*\\-"))
-                    name.setText(newValue.replaceAll("[^\\sa-zA-Z\\-]", ""));
+                if (!newValue.isEmpty())
+                    id.setStyle(null);
+                else
+                    id.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
             }
         });
 
-        forename.textProperty().addListener(new ChangeListener<String>() {
+        sex.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                if (!newValue.matches("\\sa-zA-Z*\\-"))
-                    forename.setText(newValue.replaceAll("[^\\sa-zA-Z\\-]", ""));
+            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle oldToggle, Toggle newToggle) {
+                if (newToggle.isSelected()) {
+                    radioM.getStylesheets().clear();
+                    radioF.getStylesheets().clear();
+                }
             }
         });
 
@@ -171,6 +179,45 @@ public class MainWindowController implements Initializable {
                     birthDate.getEditor().setText(newValue.replaceAll("[^\\d\\/]", ""));
                 if (newValue.length() > 10)
                     birthDate.getEditor().setText(birthDate.getEditor().getText().substring(0, 10));
+                if (!newValue.isEmpty())
+                    birthDate.setStyle(null);
+                else
+                    birthDate.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
+            }
+        });
+
+        // Forename and Name
+        name.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                if (!newValue.matches("\\sa-zA-Z*\\-"))
+                    name.setText(newValue.replaceAll("[^\\sa-zA-Z\\-]", ""));
+                if (!newValue.isEmpty())
+                    name.setStyle(null);
+                else
+                    name.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
+            }
+        });
+
+        forename.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                if (!newValue.matches("\\sa-zA-Z*\\-"))
+                    forename.setText(newValue.replaceAll("[^\\sa-zA-Z\\-]", ""));
+                if (!newValue.isEmpty())
+                    forename.setStyle(null);
+                else
+                    forename.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
+            }
+        });
+
+        locations.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                if (!newValue.isEmpty())
+                    locations.setStyle(null);
+                else
+                    locations.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
             }
         });
 
@@ -391,7 +438,7 @@ public class MainWindowController implements Initializable {
 
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
-            dialog.setTitle("Connexion administrateur");
+            dialog.setTitle("Connexion expérimentateur");
 
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.get() == ButtonType.FINISH && controller.checkUserName() && controller.checkPassword()) {
@@ -424,15 +471,59 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     private void nextPage() throws IOException {
-        saveInfos();
-        FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
-        Stage stage = (Stage) next.getScene().getWindow();
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setScene(scene);
-        stage.show();
+        if (mandatoryInfosFilled()) {
+            saveInfos();
+            FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
+            Stage stage = (Stage) next.getScene().getWindow();
+            Scene scene = new Scene(fxmlLoader.load());
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
+    /**
+     * Check if all mandatory field are filled and set focus on unfilled field
+     * @return true if all are completed; false otherwise
+     */
+    private boolean mandatoryInfosFilled() {
+        boolean idEmpty = false;
+        boolean sexEmpty = false;
+        boolean dateEmpty = false;
+        boolean nameEmpty = false;
+        boolean forenameEmpty = false;
+        boolean locationEmpty = false;
 
+        if (locations.getValue() == null) {
+            locationEmpty = true;
+            locations.requestFocus();
+        }
+        if (forename.getText().isEmpty()) {
+            forenameEmpty = true;
+            forename.requestFocus();
+        }
+        if (name.getText().isEmpty()) {
+            nameEmpty = true;
+            name.requestFocus();
+        }
+        if (birthDate.getValue() == null) {
+            dateEmpty = true;
+            birthDate.requestFocus();
+        }
+        if (sex.getSelectedToggle() == null) {
+            sexEmpty = true;
+            radioF.requestFocus();
+        }
+        if (id.getText().isEmpty()) {
+            idEmpty = true;
+            id.requestFocus();
+        }
+
+        return !idEmpty && !sexEmpty && !dateEmpty && !nameEmpty && !forenameEmpty && !locationEmpty;
+    }
+
+    /**
+     * Save all fields content
+     */
     private void saveInfos() {
         // Save patient infos
         SircusApplication.patient = new Patient();
@@ -447,9 +538,8 @@ public class MainWindowController implements Initializable {
         if (laterality.getSelectedToggle() != null)
             SircusApplication.patient.setHandLaterality(Patient.HandLaterality.valueOf(((RadioButton)this.laterality.getSelectedToggle()).getText()));
 
-        // Save practitioner infos
+        // Save operator infos
         SircusApplication.user = new User();
-        SircusApplication.user.setUserType(User.UserType.valueOf(((RadioButton)this.type.getSelectedToggle()).getText()));
         if (!name.getText().isEmpty())
             SircusApplication.user.setLastName(name.getText());
         if (!forename.getText().isEmpty())
@@ -462,6 +552,9 @@ public class MainWindowController implements Initializable {
             SircusApplication.currentMethod = methods.getValue();
     }
 
+    /********************************************************************
+     ******** PENSER A ENLEVER CETTE METHODE POUR LE RENDU FINALE *******
+     ********************************************************************/
     @FXML
     private void enableNextButton(MouseEvent mouseEvent) {
         if(mouseEvent.getClickCount() == 2) {

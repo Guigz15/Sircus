@@ -1,19 +1,16 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.model.Sequence;
+import fr.polytech.sircus.model.MetaSequence;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
 import org.junit.jupiter.api.*;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
-import org.testfx.matcher.control.TableViewMatchers;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.testfx.api.FxAssert.verifyThat;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MetaSequenceTest {
@@ -31,67 +28,40 @@ public class MetaSequenceTest {
         robot.clickOn((RadioButton) robot.lookup("M").query());
         robot.clickOn("#birthDate").write("03/05/2010").press(KeyCode.ENTER).release((KeyCode.ENTER));
         robot.clickOn("#name").write("Name_Patient_Test");
-        ComboBox<String> location = robot.lookup("#location").query();
+        robot.clickOn("#forename").write("Forename_Patient_Test");
+        ComboBox<String> location = robot.lookup("#locations").query();
         robot.interact(() -> location.getSelectionModel().select(0));
-        robot.clickOn("#button_save");
-        robot.clickOn("#metaSeqTab");
+        robot.clickOn("#admin");
+        robot.clickOn("#userName").write("root");
+        robot.clickOn("#password").write("password");
+        robot.press(KeyCode.ENTER);
+        robot.clickOn("#next");
     }
 
     @Test
     @Order(1)
-    public void test1_add_new_sequence() {
-        System.out.println("Testing to add a new sequence");
+    public void test1_add_new_metasequence() {
+        System.out.println("Testing to add a new meta-sequence");
 
-        //fill the form to add new sequence
-        robot.clickOn("#addSeqToMetaSeq");
-        robot.clickOn("#nameNewSeq").write("test to add new sequence");
-        //we can't add if we don't click on radioButton
-        if (!robot.lookup("#addSeqSave").query().isDisabled()) {
-            fail("We can add the new sequence whereas we should not.");
-        }
+        ListView<MetaSequence> metaSequenceListView = robot.lookup("#metaListView").query();
+        int sizeBeforeAdding = metaSequenceListView.getItems().size();
 
-        robot.clickOn((RadioButton) robot.lookup("#addNewSeq").query());
-        robot.clickOn("#addSeqSave");
-        robot.clickOn("Oui");
+        robot.clickOn("#addMetaButton");
 
-        //we are looking for the new sequence and verify that it's added
-        TableView<String> table = robot.lookup("#metaSeqTable").query();
-        verifyThat(table, TableViewMatchers.hasTableCell("test to add new sequence"));
+        int sizeAfterAdding = metaSequenceListView.getItems().size();
+
+        assertNotEquals(sizeBeforeAdding, sizeAfterAdding);
     }
 
     @Test
     @Order(2)
-    public void test2_cancel_adding_new_sequence() {
-        System.out.println("Testing to cancel the adding of a new sequence by click on the cancel button");
-        robot.clickOn("#addSeqToMetaSeq");
-        robot.clickOn((RadioButton) robot.lookup("#addNewSeq").query());
-        robot.clickOn("#nameNewSeq").write("test the cancel button");
-        robot.clickOn("#addSeqCancel");
+    public void test2_rename_new_metasequence() {
+        System.out.println("Testing to rename the new meta-sequence");
 
-        //we verify that the new sequence was not added.
-        TableView<String> tableSequence = robot.lookup("#metaSeqTable").query();
-        for (Object row : tableSequence.getItems()) {
-            assertNotEquals(((Sequence) row).getName(), "test the cancel button");
-        }
+        robot.clickOn("#metaListView");
+        robot.clickOn("#renameMetaButton");
+
+
     }
-
-    @Test
-    @Order(3)
-    public void test3_cancel_adding_new_sequence() {
-        System.out.println("Testing to cancel the adding of a new sequence by click on the no button and cancel button");
-        robot.clickOn("#addSeqToMetaSeq");
-        robot.clickOn((RadioButton) robot.lookup("#addNewSeq").query());
-        robot.clickOn("#nameNewSeq").write("test the cancel button");
-        robot.clickOn("#addSeqSave");
-        robot.clickOn("Non");
-        robot.clickOn("#addSeqCancel");
-
-        //we verify that the new sequence was not added.
-        TableView<String> tableSequence = robot.lookup("#metaSeqTable").query();
-        for (Object row : tableSequence.getItems()) {
-            assertNotEquals(((Sequence) row).getName(), "test the cancel button");
-        }
-    }
-
 }
 

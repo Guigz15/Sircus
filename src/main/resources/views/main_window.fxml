@@ -3,13 +3,14 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
 <BorderPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.MainWindowController">
    <top>
-      <BorderPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="70.0" BorderPane.alignment="CENTER">
+      <BorderPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="80.0" BorderPane.alignment="CENTER">
          <left>
             <ComboBox fx:id="eyeTracker" promptText="Sélectionner un eye tracker" BorderPane.alignment="CENTER">
                <BorderPane.margin>
@@ -22,10 +23,18 @@
                <BorderPane.margin>
                   <Insets right="15.0" />
                </BorderPane.margin>
+               <Text fx:id="adminLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Mode Expérimentateur activé" visible="false">
+                  <font>
+                     <Font name="System Bold Italic" size="18.0" />
+                  </font>
+               </Text>
                <Button fx:id="adminLogOut" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #f87167;" visible="false">
                   <graphic>
                      <FontIcon iconLiteral="fa-sign-out" iconSize="35" />
                   </graphic>
+                  <HBox.margin>
+                     <Insets left="15.0" />
+                  </HBox.margin>
                </Button>
                <Button fx:id="admin" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleConnection" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #457b9d;">
                   <graphic>
@@ -43,20 +52,20 @@
       </BorderPane>
    </top>
    <center>
-      <HBox maxHeight="-Infinity" BorderPane.alignment="CENTER">
+      <HBox maxHeight="-Infinity" prefHeight="510.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="TOP_CENTER" fillWidth="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="497.0">
+            <VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="497.0" spacing="30.0" HBox.hgrow="ALWAYS">
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Patient" VBox.vgrow="ALWAYS">
                   <font>
                      <Font name="System Bold" size="24.0" />
                   </font>
                   <VBox.margin>
-                     <Insets bottom="30.0" top="20.0" />
+                     <Insets />
                   </VBox.margin>
                </Text>
-               <VBox prefWidth="400.0">
+               <VBox maxHeight="-Infinity" prefWidth="400.0" VBox.vgrow="ALWAYS">
                   <VBox.margin>
-                     <Insets bottom="30.0" />
+                     <Insets />
                   </VBox.margin>
                   <HBox>
                      <VBox.margin>
@@ -76,18 +85,18 @@
                         </font>
                      </Text>
                   </HBox>
-                  <TextField fx:id="id">
+                  <TextField fx:id="id" style="-fx-border-color: red; -fx-border-radius: 3;">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </TextField>
                </VBox>
-               <HBox prefWidth="400.0">
+               <HBox maxHeight="-Infinity" prefWidth="400.0" VBox.vgrow="ALWAYS">
                   <VBox.margin>
-                     <Insets bottom="30.0" />
+                     <Insets />
                   </VBox.margin>
-                  <VBox prefWidth="200.0">
-                     <HBox prefHeight="12.0" prefWidth="100.0">
+                  <VBox maxHeight="-Infinity" prefWidth="200.0">
+                     <HBox prefWidth="100.0">
                         <VBox.margin>
                            <Insets bottom="2.0" />
                         </VBox.margin>
@@ -105,8 +114,8 @@
                            </font>
                         </Text>
                      </HBox>
-                     <HBox id="sex" alignment="TOP_CENTER" prefHeight="21.0" prefWidth="200.0">
-                        <RadioButton mnemonicParsing="false" text="M">
+                     <HBox id="sex" alignment="TOP_CENTER" maxHeight="-Infinity" prefWidth="200.0">
+                        <RadioButton fx:id="radioM" mnemonicParsing="false" text="M" stylesheets="@../css/radioButton.css">
                            <toggleGroup>
                               <ToggleGroup fx:id="sex" />
                            </toggleGroup>
@@ -117,7 +126,7 @@
                               <Font size="14.0" />
                            </font>
                         </RadioButton>
-                        <RadioButton mnemonicParsing="false" text="F" toggleGroup="$sex">
+                        <RadioButton fx:id="radioF" mnemonicParsing="false" text="F" toggleGroup="$sex" stylesheets="@../css/radioButton.css">
                            <HBox.margin>
                               <Insets right="40.0" />
                            </HBox.margin>
@@ -130,7 +139,7 @@
                         <Insets right="21.0" />
                      </HBox.margin>
                   </VBox>
-                  <VBox prefWidth="180.0">
+                  <VBox maxHeight="-Infinity" prefWidth="180.0">
                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre de visite(s)">
                         <font>
                            <Font size="18.0" />
@@ -139,11 +148,11 @@
                      <TextField alignment="CENTER_RIGHT" editable="false" mouseTransparent="true" prefWidth="161.0" />
                   </VBox>
                </HBox>
-               <HBox prefHeight="40.0" prefWidth="400.0">
+               <HBox maxHeight="-Infinity" prefWidth="400.0" VBox.vgrow="ALWAYS">
                   <VBox.margin>
-                     <Insets bottom="30.0" />
+                     <Insets />
                   </VBox.margin>
-                  <VBox prefHeight="79.0" prefWidth="114.0">
+                  <VBox maxHeight="-Infinity" prefWidth="114.0">
                      <HBox.margin>
                         <Insets right="120.0" />
                      </HBox.margin>
@@ -165,9 +174,9 @@
                            </font>
                         </Text>
                      </HBox>
-                     <DatePicker fx:id="birthDate" onAction="#computeAge" />
+                     <DatePicker fx:id="birthDate" maxHeight="-Infinity" onAction="#computeAge" prefHeight="29.6" style="-fx-border-color: red; -fx-border-radius: 3;" />
                   </VBox>
-                  <VBox prefHeight="68.0" prefWidth="133.0">
+                  <VBox maxHeight="-Infinity" prefWidth="133.0">
                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Âge">
                         <font>
                            <Font size="18.0" />
@@ -186,9 +195,9 @@
                      </TextField>
                   </VBox>
                </HBox>
-               <VBox id="ocularDom" prefHeight="39.0" prefWidth="400.0">
+               <VBox id="ocularDom" maxHeight="-Infinity" prefWidth="400.0" VBox.vgrow="ALWAYS">
                   <VBox.margin>
-                     <Insets bottom="30.0" />
+                     <Insets />
                   </VBox.margin>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dominance oculaire">
                      <font>
@@ -198,7 +207,7 @@
                         <Insets bottom="5.0" />
                      </VBox.margin>
                   </Text>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox maxHeight="-Infinity" prefWidth="200.0">
                      <RadioButton mnemonicParsing="false" text="Droit">
                         <toggleGroup>
                            <ToggleGroup fx:id="ocularDominance" />
@@ -220,7 +229,7 @@
                      <RadioButton mnemonicParsing="false" text="Indéfini" toggleGroup="$ocularDominance" />
                   </HBox>
                </VBox>
-               <VBox id="manualLateral" prefHeight="200.0" prefWidth="400.0">
+               <VBox id="manualLateral" prefWidth="400.0">
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Latéralité manuelle">
                      <font>
                         <Font size="18.0" />
@@ -229,7 +238,7 @@
                         <Insets bottom="5.0" />
                      </VBox.margin>
                   </Text>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefWidth="200.0">
                      <RadioButton mnemonicParsing="false" text="Droitier">
                         <toggleGroup>
                            <ToggleGroup fx:id="laterality" />
@@ -251,66 +260,25 @@
                      <RadioButton mnemonicParsing="false" text="Indéfini" toggleGroup="$laterality" />
                   </HBox>
                </VBox>
+               <HBox.margin>
+                  <Insets top="20.0" />
+               </HBox.margin>
             </VBox>
             <Separator orientation="VERTICAL" />
-            <VBox alignment="TOP_CENTER" fillWidth="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="497.0">
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Praticien/Expérimentateur" VBox.vgrow="ALWAYS">
+            <VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="497.0" spacing="30.0" HBox.hgrow="ALWAYS">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Opérateur" VBox.vgrow="ALWAYS">
                   <font>
                      <Font name="System Bold" size="24.0" />
                   </font>
                   <VBox.margin>
-                     <Insets bottom="30.0" top="20.0" />
+                     <Insets />
                   </VBox.margin>
                </Text>
-               <HBox id="type" alignment="TOP_CENTER" prefHeight="38.0" prefWidth="250.0">
+               <VBox maxHeight="-Infinity" prefWidth="400.0" VBox.vgrow="ALWAYS">
                   <VBox.margin>
-                     <Insets bottom="30.0" />
+                     <Insets />
                   </VBox.margin>
-                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-                     <HBox.margin>
-                        <Insets right="15.0" />
-                     </HBox.margin>
-                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Praticien">
-                        <VBox.margin>
-                           <Insets bottom="5.0" />
-                        </VBox.margin>
-                        <font>
-                           <Font size="18.0" />
-                        </font>
-                     </Text>
-                     <RadioButton mnemonicParsing="false" prefHeight="18.0" prefWidth="8.0" selected="true" text="Praticien" textFill="TRANSPARENT">
-                        <toggleGroup>
-                           <ToggleGroup fx:id="type" />
-                        </toggleGroup>
-                        <VBox.margin>
-                           <Insets left="15.0" />
-                        </VBox.margin>
-                     </RadioButton>
-                  </VBox>
-                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-                     <HBox.margin>
-                        <Insets left="15.0" />
-                     </HBox.margin>
-                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Expérimentateur">
-                        <VBox.margin>
-                           <Insets bottom="5.0" />
-                        </VBox.margin>
-                        <font>
-                           <Font size="18.0" />
-                        </font>
-                     </Text>
-                     <RadioButton mnemonicParsing="false" prefHeight="18.0" prefWidth="0.0" text="Expérimentateur" textFill="TRANSPARENT" toggleGroup="$type">
-                        <VBox.margin>
-                           <Insets left="15.0" />
-                        </VBox.margin>
-                     </RadioButton>
-                  </VBox>
-               </HBox>
-               <VBox prefHeight="40.0" prefWidth="400.0">
-                  <VBox.margin>
-                     <Insets bottom="30.0" />
-                  </VBox.margin>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox maxHeight="-Infinity" prefWidth="200.0">
                      <VBox.margin>
                         <Insets bottom="2.0" />
                      </VBox.margin>
@@ -328,17 +296,17 @@
                         </font>
                      </Text>
                   </HBox>
-                  <TextField fx:id="name">
+                  <TextField fx:id="name" maxHeight="-Infinity" style="-fx-border-color: red; -fx-border-radius: 3;">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </TextField>
                </VBox>
-               <VBox prefHeight="40.0" prefWidth="400.0">
+               <VBox maxHeight="-Infinity" prefWidth="400.0" VBox.vgrow="ALWAYS">
                   <VBox.margin>
-                     <Insets bottom="30.0" />
+                     <Insets />
                   </VBox.margin>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefWidth="200.0">
                      <VBox.margin>
                         <Insets bottom="2.0" />
                      </VBox.margin>
@@ -356,17 +324,17 @@
                         </font>
                      </Text>
                   </HBox>
-                  <TextField fx:id="forename">
+                  <TextField fx:id="forename" style="-fx-border-color: red; -fx-border-radius: 3;">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </TextField>
                </VBox>
-               <VBox prefHeight="40.0" prefWidth="400.0">
+               <VBox maxHeight="-Infinity" prefWidth="400.0" VBox.vgrow="ALWAYS">
                   <VBox.margin>
-                     <Insets bottom="30.0" />
+                     <Insets />
                   </VBox.margin>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefWidth="200.0">
                      <VBox.margin>
                         <Insets bottom="2.0" />
                      </VBox.margin>
@@ -384,9 +352,9 @@
                         </font>
                      </Text>
                   </HBox>
-                  <StackPane prefHeight="100.0" prefWidth="200.0">
-                     <HBox fx:id="locationFullBox" prefHeight="100.0" prefWidth="200.0">
-                        <ComboBox fx:id="locations" prefHeight="25.0" prefWidth="250.0" promptText="Sélectionner un lieu">
+                  <StackPane prefWidth="200.0">
+                     <HBox fx:id="locationFullBox" prefWidth="200.0">
+                        <ComboBox fx:id="locations" prefHeight="25.0" prefWidth="250.0" promptText="Sélectionner un lieu" style="-fx-border-color: red; -fx-border-radius: 3;">
                            <HBox.margin>
                               <Insets right="16.0" />
                            </HBox.margin>
@@ -413,7 +381,7 @@
                            </graphic>
                         </Button>
                      </HBox>
-                     <HBox fx:id="locationBox" prefHeight="100.0" prefWidth="200.0" visible="false">
+                     <HBox fx:id="locationBox" prefWidth="200.0" visible="false">
                         <TextField fx:id="locationField" prefHeight="25.0" prefWidth="250.0">
                            <HBox.margin>
                               <Insets right="35.0" />
@@ -435,14 +403,14 @@
                      </HBox>
                   </StackPane>
                </VBox>
-               <VBox prefHeight="40.0" prefWidth="400.0">
+               <VBox maxHeight="-Infinity" prefWidth="400.0" VBox.vgrow="ALWAYS">
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Méthode de classification">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Text>
                   <StackPane>
-                     <HBox fx:id="methodFullBox" prefHeight="100.0" prefWidth="200.0">
+                     <HBox fx:id="methodFullBox" prefWidth="200.0">
                         <ComboBox fx:id="methods" prefHeight="25.0" prefWidth="250.0" promptText="Sélectionner une méthode">
                            <HBox.margin>
                               <Insets right="16.0" />
@@ -470,7 +438,7 @@
                            </graphic>
                         </Button>
                      </HBox>
-                     <HBox fx:id="methodBox" prefHeight="100.0" prefWidth="200.0" visible="false">
+                     <HBox fx:id="methodBox" prefWidth="200.0" visible="false">
                         <TextField fx:id="methodField" prefHeight="25.0" prefWidth="250.0">
                            <HBox.margin>
                               <Insets right="35.0" />
@@ -492,16 +460,19 @@
                      </HBox>
                   </StackPane>
                </VBox>
+               <HBox.margin>
+                  <Insets top="20.0" />
+               </HBox.margin>
             </VBox>
          </children>
       </HBox>
    </center>
    <bottom>
-      <BorderPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="70.0" BorderPane.alignment="CENTER">
+      <BorderPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="80.0" BorderPane.alignment="CENTER">
          <right>
             <Button fx:id="next" mnemonicParsing="false" onAction="#nextPage" style="-fx-background-color: #457b9d;" text="Suivant" textFill="WHITE" BorderPane.alignment="CENTER">
                <BorderPane.margin>
-                  <Insets left="140.0" right="25.0" />
+                  <Insets left="35.0" right="25.0" />
                </BorderPane.margin>
                <font>
                   <Font size="16.0" />
@@ -525,19 +496,19 @@
                </Text>
             </HBox>
          </center>
-         <left>
-            <Text fx:id="adminLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Mode Administrateur activé" visible="false" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="System Bold Italic" size="18.0" />
-               </font>
-               <BorderPane.margin>
-                  <Insets left="30.0" />
-               </BorderPane.margin>
-            </Text>
-         </left>
          <top>
             <Separator prefWidth="200.0" BorderPane.alignment="CENTER" />
          </top>
+         <left>
+            <ImageView fitHeight="70.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../images/logo-Sircus-FT.png" />
+               </image>
+               <BorderPane.margin>
+                  <Insets left="25.0" />
+               </BorderPane.margin>
+            </ImageView>
+         </left>
       </BorderPane>
    </bottom>
 </BorderPane>

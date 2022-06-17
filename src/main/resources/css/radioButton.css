@@ -1,0 +1,4 @@
+.radio-button .radio {
+    -fx-border-color: red;
+    -fx-border-radius: 15px;
+}
