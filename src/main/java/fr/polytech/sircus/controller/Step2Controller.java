@@ -349,10 +349,6 @@ public class Step2Controller implements Initializable {
         //Set the CellFactory we defined above. Moreover, we defined behaviours to do when we drag and drop a Sequence.
         seqListView.setCellFactory((ListView<ItemSequence> param) -> {
             ListCell<ItemSequence> listCellForSequence = new ListCell<>() {
-                //TODO try to put locker instead of checkboxes
-                /*private Button lockButton = new Button("");
-                final FontIcon lockIcon = new FontIcon("fa-lock");
-                final FontIcon unlockIcon = new FontIcon("fa-unlock");*/
                 private CheckBox checkBox;
 
                 @Override
@@ -377,6 +373,7 @@ public class Step2Controller implements Initializable {
                 private CheckBox getCheckBox() {
                     if (checkBox == null) {
                         checkBox = new CheckBox();
+                        checkBox.getStylesheets().add(String.valueOf(SircusApplication.class.getClassLoader().getResource("css/checkBoxes.css")));
 
                         //define action to do when checkbox is selected
                         checkBox.selectedProperty().addListener((obs, oldValue, newValue) -> {
@@ -747,7 +744,6 @@ public class Step2Controller implements Initializable {
      * @return the list of itemsMetaSequence
      */
     private List<MetaSequence> getAllItemMetaSequence() {
-
         return new ArrayList<>(SircusApplication.dataSircus.getMetaSequencesList());
     }
 
