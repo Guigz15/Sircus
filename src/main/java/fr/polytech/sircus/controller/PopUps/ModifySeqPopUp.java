@@ -98,15 +98,16 @@ public class ModifySeqPopUp {
         this.mediaTableColumnName.setStyle("-fx-alignment: CENTER;");
 
         this.mediaTableColumnDuration.setStyle("-fx-alignment: CENTER;");
+        this.mediaTableColumnDuration.setCellFactory(TextFieldTableCell.forTableColumn());
         this.mediaTableColumnDuration.setCellValueFactory(cellData -> {
-            String formattedDuration = cellData.getValue().getDuration().toString()
-                    .replaceAll("[^\\d]", "");
+            String formattedDuration = cellData.getValue().getMinDuration().toString().replaceAll("[^\\d\\-]" , "") + "-"
+                    + cellData.getValue().getMaxDuration().toString().replaceAll("[^\\d\\-]" , "");
             return new SimpleStringProperty(formattedDuration);
         });
         this.mediaTableColumnDuration.setOnEditCommit(event -> {
-            event.getTableView().getItems().get(event.getTablePosition().getRow()).setDuration(Duration.ofSeconds(Long.parseLong(event.getNewValue())));
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setMinDuration(Duration.ofSeconds(Long.parseLong(event.getNewValue().split("\\-")[0])));
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setMaxDuration(Duration.ofSeconds(Long.parseLong(event.getNewValue().split("\\-")[1])));
         });
-        this.mediaTableColumnDuration.setCellFactory(TextFieldTableCell.forTableColumn());
 
         Callback<TableColumn<AbstractMedia, String>, TableCell<AbstractMedia, String>> cellFactoryOption = new Callback<>() {
             @Override
@@ -169,7 +170,7 @@ public class ModifySeqPopUp {
                                                 Files.copy(path, os);
                                             }
 
-                                            Interstim newInterstim = new Interstim(interstimFile.getName(), Duration.ofSeconds(1), TypeMedia.PICTURE, parentMedia);
+                                            Interstim newInterstim = new Interstim(interstimFile.getName(), Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.PICTURE, parentMedia);
 
                                             mediaTable.getItems().add(mediaTable.getItems().indexOf(parentMedia), newInterstim);
                                             mediaTable.refresh();

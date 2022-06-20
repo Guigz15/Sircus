@@ -223,7 +223,7 @@ public class PreviewTimeline extends AnchorPane implements Initializable {
 
                     //Editing item
                     controllerChild = itemLoader.getController();
-                    duration = duration.plus(media.getDuration());
+                    duration = duration.plus(media.getMinDuration());
                     controllerChild.setFromMedia(media);
                     controllerChild.setTime(duration);
 

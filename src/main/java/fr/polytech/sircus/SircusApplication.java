@@ -87,6 +87,8 @@ public class SircusApplication extends Application {
         });
 
         stage.setTitle("Application SIRCUS");
+        stage.setMinHeight(700);
+        stage.setMinWidth(scene.getWidth());
         stage.setScene(scene);
         stage.getIcons().add(new Image("images/logo-Sircus-FT-fond-blanc.png"));
         stage.show();

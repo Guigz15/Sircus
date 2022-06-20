@@ -3,6 +3,7 @@ package fr.polytech.sircus.model;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,10 +23,16 @@ public abstract class AbstractMedia implements Serializable {
     protected String filename;
 
     /**
-     * Duration for which the media should be displayed.
+     * Minimum duration for which the media could be displayed.
      */
     @Getter @Setter
-    protected Duration duration;
+    protected Duration minDuration;
+
+    /**
+     * Maximum duration for which the media could be displayed.
+     */
+    @Getter @Setter
+    protected Duration maxDuration;
 
     /**
      * The type of the media (picture or video).
@@ -58,7 +65,8 @@ public abstract class AbstractMedia implements Serializable {
         if (!(o instanceof AbstractMedia)) return false;
         AbstractMedia media = (AbstractMedia) o;
         return getFilename().equals(media.getFilename()) &&
-                getDuration().equals(media.getDuration()) &&
+                getMinDuration().equals(media.getMinDuration()) &&
+                getMaxDuration().equals(media.getMaxDuration()) &&
                 getTypeMedia().equals(media.getTypeMedia()) &&
                 Objects.equals(isLocked(), media.isLocked()) &&
                 isResizable() == media.isResizable() &&
@@ -74,7 +82,8 @@ public abstract class AbstractMedia implements Serializable {
      */
     protected void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeUTF(filename);
-        oos.writeObject(duration);
+        oos.writeObject(minDuration);
+        oos.writeObject(maxDuration);
         oos.writeObject(typeMedia);
         oos.writeBoolean(isLocked);
         oos.writeBoolean(isResizable);
@@ -90,7 +99,8 @@ public abstract class AbstractMedia implements Serializable {
      */
     protected void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
         filename = ois.readUTF();
-        duration = (Duration) ois.readObject();
+        minDuration = (Duration) ois.readObject();
+        maxDuration = (Duration) ois.readObject();
         typeMedia = (TypeMedia) ois.readObject();
         isLocked = ois.readBoolean();
         isResizable = ois.readBoolean();

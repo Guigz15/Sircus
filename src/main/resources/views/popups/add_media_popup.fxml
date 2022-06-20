@@ -30,7 +30,7 @@
                </VBox.margin>
             </RadioButton>
             <HBox fx:id="newMediaBox" alignment="CENTER" spacing="20.0">
-               <VBox fx:id="newInterstimBox" alignment="TOP_CENTER" maxHeight="-Infinity">
+               <VBox alignment="TOP_CENTER" maxHeight="-Infinity">
                   <HBox.margin>
                      <Insets />
                   </HBox.margin>
@@ -42,7 +42,7 @@
                         <Insets bottom="10.0" />
                      </VBox.margin>
                   </Text>
-                  <HBox alignment="CENTER">
+                  <HBox fx:id="newInterstimBox" alignment="CENTER">
                      <VBox.margin>
                         <Insets bottom="10.0" />
                      </VBox.margin>

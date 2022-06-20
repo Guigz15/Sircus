@@ -24,7 +24,8 @@ public class Media extends AbstractMedia implements Serializable {
 
     public Media(){
         filename = null;
-        duration = null;
+        minDuration = null;
+        maxDuration = null;
         typeMedia = null;
         isLocked = false;
         isResizable = false;
@@ -32,13 +33,14 @@ public class Media extends AbstractMedia implements Serializable {
         interstim = null;
     }
 
-    public Media(String filename, Duration duration, TypeMedia typeMedia) {
-        this(filename, duration, typeMedia, true, false, Color.WHITE, null);
+    public Media(String filename, Duration minDuration, Duration maxDuration, TypeMedia typeMedia) {
+        this(filename, minDuration, maxDuration, typeMedia, true, false, Color.WHITE, null);
     }
 
-    public Media(String filename, Duration duration, TypeMedia typeMedia, boolean isLocked, boolean isResizable, Color backgroundColor, Interstim interstim) {
+    public Media(String filename, Duration minDuration, Duration maxDuration, TypeMedia typeMedia, boolean isLocked, boolean isResizable, Color backgroundColor, Interstim interstim) {
         this.filename = filename;
-        this.duration = duration;
+        this.minDuration = minDuration;
+        this.maxDuration = maxDuration;
         this.typeMedia = typeMedia;
         this.isLocked = isLocked;
         this.isResizable = isResizable;
@@ -47,7 +49,7 @@ public class Media extends AbstractMedia implements Serializable {
     }
 
     public Media(Media media) {
-        this(media.filename, media.getDuration(), media.getTypeMedia(), media.isLocked, media.isResizable, media.getBackgroundColor(), null);
+        this(media.filename, media.getMinDuration(), media.getMaxDuration(), media.getTypeMedia(), media.isLocked, media.isResizable, media.getBackgroundColor(), null);
         if (media.getInterstim() != null) {
             this.interstim = new Interstim(media.getInterstim());
             this.interstim.setMedia(this);
@@ -86,7 +88,8 @@ public class Media extends AbstractMedia implements Serializable {
     public String toXML(){
         String XML = "<media>\n" +
                 "<filename>" + filename.replace(" ", "%20") + "</filename>\n" +
-                "<duration>" + duration + "</duration>\n" +
+                "<minDuration>" + minDuration + "</minDuration>\n" +
+                "<maxDuration>" + maxDuration + "</maxDuration>\n" +
                 "<type>" + typeMedia + "</type>\n";
         if(interstim == null){
             XML += "<lock>" + isLocked + "</lock>\n" +

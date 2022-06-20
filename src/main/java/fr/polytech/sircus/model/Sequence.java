@@ -19,7 +19,10 @@ public class Sequence implements Serializable, Cloneable {
     private String name;
 
     @Getter @Setter
-    private Duration duration;
+    private Duration minDuration;
+
+    @Getter @Setter
+    private Duration maxDuration;
 
     @Getter @Setter
     private List<Media> listMedias;
@@ -34,7 +37,8 @@ public class Sequence implements Serializable, Cloneable {
      */
     public Sequence(String name) {
         this.name = name;
-        this.duration = Duration.ZERO;
+        this.minDuration = Duration.ofSeconds(0);
+        this.maxDuration = Duration.ofSeconds(0);
         this.listMedias = new ArrayList<>();
         this.lock = true;
     }
@@ -46,7 +50,8 @@ public class Sequence implements Serializable, Cloneable {
      */
     public Sequence(Sequence sequence) {
         this.name = sequence.getName();
-        this.duration = sequence.getDuration();
+        this.minDuration = sequence.getMinDuration();
+        this.maxDuration = sequence.getMaxDuration();
         this.listMedias = new ArrayList<>();
         for (Media media : sequence.getListMedias()) {
             this.listMedias.add(new Media(media));
@@ -61,10 +66,12 @@ public class Sequence implements Serializable, Cloneable {
      */
     public void addMedia(Media media) {
         this.listMedias.add(media);
-        this.duration = this.duration.plus(media.getDuration());
+        this.minDuration = this.minDuration.plus(media.getMinDuration());
+        this.maxDuration = this.maxDuration.plus(media.getMaxDuration());
 
         if (media.getInterstim() != null) {
-            this.duration = this.duration.plus(media.getInterstim().getDuration());
+            this.minDuration = this.minDuration.plus(media.getInterstim().getMinDuration());
+            this.maxDuration = this.maxDuration.plus(media.getInterstim().getMaxDuration());
         }
     }
 
@@ -75,10 +82,12 @@ public class Sequence implements Serializable, Cloneable {
      */
     public void removeMedia(Media media) {
         if (this.listMedias.remove(media)) {
-            this.duration = this.duration.minus(media.getDuration());
+            this.minDuration = this.minDuration.minus(media.getMinDuration());
+            this.maxDuration = this.maxDuration.minus(media.getMaxDuration());
 
             if (media.getInterstim() != null) {
-                this.duration = this.duration.minus(media.getInterstim().getDuration());
+                this.minDuration = this.minDuration.minus(media.getInterstim().getMinDuration());
+                this.maxDuration = this.maxDuration.minus(media.getInterstim().getMaxDuration());
             }
         }
     }
@@ -86,16 +95,21 @@ public class Sequence implements Serializable, Cloneable {
     /**
      *  Compute the duration of the sequence.
      */
-    public void computeDuration(){
-        Duration duration = Duration.ofSeconds(0);
+    public void computeDurations(){
+        Duration minDuration = Duration.ofSeconds(0);
+        Duration maxDuration = Duration.ofSeconds(0);
+
         for (Media media : listMedias) {
-            duration = duration.plus(media.getDuration());
+            minDuration = minDuration.plus(media.getMinDuration());
+            maxDuration = maxDuration.plus(media.getMaxDuration());
             if (media.getInterstim() != null) {
-                duration = duration.plus(media.getInterstim().getDuration());
+                minDuration = minDuration.plus(media.getInterstim().getMinDuration());
+                maxDuration = maxDuration.plus(media.getInterstim().getMaxDuration());
             }
         }
 
-        this.duration = duration;
+        this.minDuration = minDuration;
+        this.maxDuration = maxDuration;
     }
 
     /**
@@ -119,7 +133,8 @@ public class Sequence implements Serializable, Cloneable {
         if (this == o) return true;
         if (!(o instanceof Sequence)) return false;
         Sequence sequence = (Sequence) o;
-        return Objects.equals(getName(), sequence.getName()) && Objects.equals(getDuration(), sequence.getDuration()) && Objects.equals(getListMedias(), sequence.getListMedias());
+        return Objects.equals(getName(), sequence.getName()) && Objects.equals(getMinDuration(), sequence.getMinDuration())
+                && Objects.equals(getMaxDuration(), sequence.getMaxDuration()) && Objects.equals(getListMedias(), sequence.getListMedias());
     }
 
     /**
@@ -127,8 +142,8 @@ public class Sequence implements Serializable, Cloneable {
      * @return XML
      */
     public String toXML(){
-        String XML = "<sequence name=\"" + name.replace(" ", "%20") + "\" duration=\"" + duration
-                + "\" lock=\"" + lock + "\">\n" + "<listMedia>\n";
+        String XML = "<sequence name=\"" + name.replace(" ", "%20") + "\" minDuration=\"" + minDuration
+                + "\" maxDuration=\"" + maxDuration + "\" lock=\"" + lock + "\">\n" + "<listMedia>\n";
         for(int i=0; i<listMedias.size(); i++){
             XML += listMedias.get(i).toXML();
         }

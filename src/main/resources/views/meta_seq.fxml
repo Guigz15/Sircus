@@ -24,47 +24,38 @@
                   </VBox.margin>
                </Text>
                <ListView fx:id="metaListView" fixedCellSize="40.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0" />
-               <StackPane alignment="TOP_LEFT">
-                  <VBox.margin>
-                     <Insets />
-                  </VBox.margin>
-                  <padding>
-                     <Insets top="5.0" />
-                  </padding>
-                  <Button fx:id="importMetaButtonUser" mnemonicParsing="false" onAction="#importMeta" style="-fx-background-color: #457b9d;" text="Importer" textFill="WHITE" />
-                  <BorderPane fx:id="adminMetaButtons" visible="false">
-                     <left>
-                        <HBox BorderPane.alignment="TOP_LEFT">
-                           <Button fx:id="addMetaButton" mnemonicParsing="false" style="-fx-background-color: mediumseagreen;">
-                              <graphic>
-                                 <FontIcon iconLiteral="fa-plus" iconSize="15" />
-                              </graphic>
-                           </Button>
-                           <Button fx:id="removeMetaButton" mnemonicParsing="false" style="-fx-background-color: #f87167;">
-                              <graphic>
-                                 <FontIcon iconLiteral="fa-minus" iconSize="15" />
-                              </graphic>
-                           </Button>
-                        </HBox>
-                     </left>
-                     <right>
-                        <Button fx:id="renameMetaButton" mnemonicParsing="false" style="-fx-background-color: darkorange;" BorderPane.alignment="TOP_LEFT">
+               <BorderPane fx:id="adminMetaButtons" visible="false">
+                  <left>
+                     <HBox BorderPane.alignment="TOP_LEFT">
+                        <Button fx:id="addMetaButton" mnemonicParsing="false" style="-fx-background-color: mediumseagreen;">
                            <graphic>
-                              <FontIcon iconLiteral="fa-pencil" iconSize="15" />
+                              <FontIcon iconLiteral="fa-plus" iconSize="15" />
                            </graphic>
                         </Button>
-                     </right>
-                     <bottom>
-                        <HBox spacing="127.0" BorderPane.alignment="CENTER">
-                           <padding>
-                              <Insets top="10.0" />
-                           </padding>
-                           <Button fx:id="importMetaButton" mnemonicParsing="false" onAction="#importMeta" style="-fx-background-color: #457b9d;" text="Importer" textFill="WHITE" />
-                           <Button fx:id="exportMetaButton" mnemonicParsing="false" onAction="#exportMeta" style="-fx-background-color: #457b9d;" text="Exporter" textFill="WHITE" />
-                        </HBox>
-                     </bottom>
-                  </BorderPane>
-               </StackPane>
+                        <Button fx:id="removeMetaButton" mnemonicParsing="false" style="-fx-background-color: #f87167;">
+                           <graphic>
+                              <FontIcon iconLiteral="fa-minus" iconSize="15" />
+                           </graphic>
+                        </Button>
+                     </HBox>
+                  </left>
+                  <right>
+                     <Button fx:id="renameMetaButton" mnemonicParsing="false" style="-fx-background-color: darkorange;" BorderPane.alignment="TOP_LEFT">
+                        <graphic>
+                           <FontIcon iconLiteral="fa-pencil" iconSize="15" />
+                        </graphic>
+                     </Button>
+                  </right>
+                  <bottom>
+                     <HBox spacing="127.0" BorderPane.alignment="CENTER">
+                        <padding>
+                           <Insets top="10.0" />
+                        </padding>
+                        <Button fx:id="importMetaButton" mnemonicParsing="false" onAction="#importMeta" style="-fx-background-color: #457b9d;" text="Importer" textFill="WHITE" />
+                        <Button fx:id="exportMetaButton" mnemonicParsing="false" onAction="#exportMeta" style="-fx-background-color: #457b9d;" text="Exporter" textFill="WHITE" />
+                     </HBox>
+                  </bottom>
+               </BorderPane>
             </VBox>
             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Séquences">
@@ -76,44 +67,38 @@
                   </VBox.margin>
                </Text>
                <ListView fx:id="seqListView" fixedCellSize="40.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0" />
-               <StackPane alignment="TOP_LEFT">
-                  <padding>
-                     <Insets top="5.0" />
-                  </padding>
-                  <Button fx:id="importSeqButtonUser" mnemonicParsing="false" onAction="#importSeq" style="-fx-background-color: #457b9d;" text="Importer" textFill="WHITE" />
-                  <BorderPane fx:id="adminSeqButtons" visible="false">
-                     <left>
-                        <HBox BorderPane.alignment="CENTER">
-                           <Button fx:id="addSeqButton" mnemonicParsing="false" style="-fx-background-color: mediumseagreen;">
-                              <graphic>
-                                 <FontIcon iconLiteral="fa-plus" iconSize="15" />
-                              </graphic>
-                           </Button>
-                           <Button fx:id="removeSeqButton" mnemonicParsing="false" style="-fx-background-color: #f87167;">
-                              <graphic>
-                                 <FontIcon iconLiteral="fa-minus" iconSize="15" />
-                              </graphic>
-                           </Button>
-                        </HBox>
-                     </left>
-                     <bottom>
-                        <HBox spacing="127.0" BorderPane.alignment="CENTER">
-                           <padding>
-                              <Insets top="10.0" />
-                           </padding>
-                           <Button fx:id="importSeqButton" mnemonicParsing="false" onAction="#importSeq" style="-fx-background-color: #457b9d;" text="Importer" textFill="WHITE" />
-                           <Button fx:id="exportSeqButton" mnemonicParsing="false" onAction="#exportSeq" style="-fx-background-color: #457b9d;" text="Exporter" textFill="WHITE" />
-                        </HBox>
-                     </bottom>
-                     <right>
-                        <Button fx:id="modifySeqButton" mnemonicParsing="false" style="-fx-background-color: darkorange;" BorderPane.alignment="CENTER">
+               <BorderPane fx:id="adminSeqButtons" visible="false">
+                  <left>
+                     <HBox BorderPane.alignment="CENTER">
+                        <Button fx:id="addSeqButton" mnemonicParsing="false" style="-fx-background-color: mediumseagreen;">
                            <graphic>
-                              <FontIcon iconLiteral="fa-pencil" iconSize="15" />
+                              <FontIcon iconLiteral="fa-plus" iconSize="15" />
                            </graphic>
                         </Button>
-                     </right>
-                  </BorderPane>
-               </StackPane>
+                        <Button fx:id="removeSeqButton" mnemonicParsing="false" style="-fx-background-color: #f87167;">
+                           <graphic>
+                              <FontIcon iconLiteral="fa-minus" iconSize="15" />
+                           </graphic>
+                        </Button>
+                     </HBox>
+                  </left>
+                  <bottom>
+                     <HBox spacing="127.0" BorderPane.alignment="CENTER">
+                        <padding>
+                           <Insets top="10.0" />
+                        </padding>
+                        <Button fx:id="importSeqButton" mnemonicParsing="false" onAction="#importSeq" style="-fx-background-color: #457b9d;" text="Importer" textFill="WHITE" />
+                        <Button fx:id="exportSeqButton" mnemonicParsing="false" onAction="#exportSeq" style="-fx-background-color: #457b9d;" text="Exporter" textFill="WHITE" />
+                     </HBox>
+                  </bottom>
+                  <right>
+                     <Button fx:id="modifySeqButton" mnemonicParsing="false" style="-fx-background-color: darkorange;" BorderPane.alignment="CENTER">
+                        <graphic>
+                           <FontIcon iconLiteral="fa-pencil" iconSize="15" />
+                        </graphic>
+                     </Button>
+                  </right>
+               </BorderPane>
             </VBox>
             <VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0">
                <Text fx:id="statsTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Statistiques de la métaséquence " textAlignment="CENTER" wrappingWidth="150.0">

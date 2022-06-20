@@ -47,16 +47,16 @@ public final class Serializer {
         Sequence sequence8 = new Sequence("Sequence 8");
         Sequence sequence9 = new Sequence("Sequence 9");
 
-        Media media1 = new Media("mos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE);
-        Media media2 = new Media("mos02.jpg", Duration.ofSeconds(2), TypeMedia.PICTURE);
-        Media media3 = new Media("mosob01.jpg", Duration.ofSeconds(1), TypeMedia.PICTURE);
-        Media media4 = new Media("vis03.jpg", Duration.ofSeconds(7), TypeMedia.PICTURE);
-        Media media5 = new Media("vismos01.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE);
-        Media media6 = new Media("visob02.jpg", Duration.ofSeconds(5), TypeMedia.PICTURE);
-        Media media7 = new Media("croix.jpg", Duration.ofSeconds(4), TypeMedia.PICTURE);
-        Media media8 = new Media("ob01.jpg", Duration.ofSeconds(10), TypeMedia.PICTURE);
+        Media media1 = new Media("mos01.jpg", Duration.ofSeconds(5), Duration.ofSeconds(5), TypeMedia.PICTURE);
+        Media media2 = new Media("mos02.jpg", Duration.ofSeconds(2), Duration.ofSeconds(2), TypeMedia.PICTURE);
+        Media media3 = new Media("mosob01.jpg", Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.PICTURE);
+        Media media4 = new Media("vis03.jpg", Duration.ofSeconds(7), Duration.ofSeconds(7), TypeMedia.PICTURE);
+        Media media5 = new Media("vismos01.jpg", Duration.ofSeconds(5), Duration.ofSeconds(5), TypeMedia.PICTURE);
+        Media media6 = new Media("visob02.jpg", Duration.ofSeconds(5), Duration.ofSeconds(5), TypeMedia.PICTURE);
+        Media media7 = new Media("croix.jpg", Duration.ofSeconds(4), Duration.ofSeconds(4), TypeMedia.PICTURE);
+        Media media8 = new Media("ob01.jpg", Duration.ofSeconds(10), Duration.ofSeconds(10), TypeMedia.PICTURE);
 
-        Interstim inter1 = new Interstim("white.jpg", Duration.ofSeconds(2), TypeMedia.PICTURE, media1);
+        Interstim inter1 = new Interstim("white.jpg", Duration.ofSeconds(2), Duration.ofSeconds(2), TypeMedia.PICTURE, media1);
         media1.setInterstim(inter1);
         inter1.setBackgroundColor(Color.WHITE);
         inter1.setResizable(true);

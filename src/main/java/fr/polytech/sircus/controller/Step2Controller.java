@@ -25,7 +25,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -42,8 +41,6 @@ import java.util.Map.Entry;
  */
 public class Step2Controller implements Initializable {
     @FXML
-    private Button importMetaButtonUser;
-    @FXML
     private BorderPane adminMetaButtons;
     @FXML
     private ListView<MetaSequence> metaListView;
@@ -59,8 +56,6 @@ public class Step2Controller implements Initializable {
     private Button exportMetaButton;
     @FXML
     private BorderPane adminSeqButtons;
-    @FXML
-    private Button importSeqButtonUser;
     @FXML
     public ListView<ItemSequence> seqListView;
     @FXML
@@ -127,9 +122,7 @@ public class Step2Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         /* initialize button to mix randomly the list of sequences depends if we are connected on admin mode */
         if (SircusApplication.adminConnected) {
-            importMetaButtonUser.setVisible(false);
             adminMetaButtons.setVisible(true);
-            importSeqButtonUser.setVisible(false);
             adminSeqButtons.setVisible(true);
             doMixButton.setVisible(true);
         }
@@ -717,6 +710,8 @@ public class Step2Controller implements Initializable {
     private void nextPage() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/player_monitor.fxml")));
         Scene scene = new Scene(fxmlLoader.load());
+        PlayerMonitorController playerMonitorController = fxmlLoader.getController();
+        playerMonitorController.setMetaSequenceToRead(metaListView.getSelectionModel().getSelectedItem());
         Stage stage = (Stage) next.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
@@ -790,7 +785,7 @@ public class Step2Controller implements Initializable {
         nbMediaLabelForMeta.setText(Integer.toString(nbMedias));
         nbInterstimLabelForMeta.setText(Integer.toString(nbInterstims));
 
-        long seconds = metaSeq.getDuration().getSeconds();
+        long seconds = metaSeq.getMinDuration().getSeconds();
         totalDurationLabelForMeta.setText(
                 String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, (seconds % 60)));
     }
@@ -814,7 +809,7 @@ public class Step2Controller implements Initializable {
         nbMediaLabelForSeq.setText(Integer.toString(nbMedias));
         nbInterstimLabelForSeq.setText(Integer.toString(nbInterstims));
 
-        long seconds = sequence.getDuration().getSeconds();
+        long seconds = sequence.getMinDuration().getSeconds();
         totalDurationLabelForSeq.setText(
                 String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, (seconds % 60)));
     }

@@ -253,7 +253,7 @@ public class ViewerController {
                             }));
 
                     // We add to the counterDuration the duration of the "interstim" currently read.
-                    counterDuration += media.getInterstim().getDuration().getSeconds();
+                    counterDuration += media.getInterstim().getMinDuration().getSeconds();
                 }
 
                 if (media.getTypeMedia() == TypeMedia.PICTURE) {
@@ -264,7 +264,7 @@ public class ViewerController {
                             }));
 
                     // We add to the counterDuration the duration of the media currently read.
-                    counterDuration += media.getDuration().getSeconds();
+                    counterDuration += media.getMinDuration().getSeconds();
                 }
                 else if (media.getTypeMedia() == TypeMedia.VIDEO) {
                     timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
@@ -274,36 +274,21 @@ public class ViewerController {
                             }));
 
                     // We add to the counterDuration the duration of the media currently read.
-                    counterDuration += media.getDuration().getSeconds();
+                    counterDuration += media.getMinDuration().getSeconds();
                 }
             }
         }
 
-        // If there is another metasequence to play.
-        if (currentMetaSequenceIndex + 1 < SircusApplication.dataSircus.getMetaSequencesList().size()) {
-            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
-                    event -> {
-                        removeVideo();
-                        removeImage();
+        // We add 0.1s at the end in order to trigger this event even
+        // if there is only an empty metasequence (event should be triggered at 0s)
+        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration + 0.1),
+                event -> {
+                    removeVideo();
+                    removeImage();
 
-                        currentMetaSequenceIndex++;
-                        currentSequenceIndex = 0;
-                        playingMetaSequence = SircusApplication.dataSircus.getMetaSequencesList().get(currentMetaSequenceIndex);
-                        initializeMetaSequence();
-
-                        playerMonitorController.nextMetaSequence(false);
-                    }));
-        } else {
-            // We add 0.1s at the end in order to trigger this event even
-            // if there is only an empty metasequence (event should be triggered at 0s)
-            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration + 0.1),
-                    event -> {
-                        removeVideo();
-                        removeImage();
-
-                        playerMonitorController.nextMetaSequence(true);
-                    }));
-        }
+                    playerMonitorController.replayMetaSequence();
+                }
+        ));
 
         // The end of the playback is added to the sequencesStartTime
         // This allows the button passing a media to trigger the end of the playback of the meta-sequence

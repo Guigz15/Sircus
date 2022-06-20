@@ -27,7 +27,10 @@ public class MetaSequence implements Serializable {
     private String name;
 
     @Getter @Setter
-    private Duration duration;
+    private Duration minDuration;
+
+    @Getter @Setter
+    private Duration maxDuration;
 
     @Getter
     private List<Sequence> sequencesList;
@@ -48,7 +51,8 @@ public class MetaSequence implements Serializable {
      */
     public MetaSequence(String name) {
         this.name = name;
-        this.duration = Duration.ZERO;
+        this.minDuration = Duration.ZERO;
+        this.maxDuration = Duration.ZERO;
         this.sequencesList = new ArrayList<>();
     }
 
@@ -60,7 +64,8 @@ public class MetaSequence implements Serializable {
      */
     public void addSequence(Sequence sequence) {
         this.sequencesList.add(sequence);
-        this.duration = this.duration.plus(sequence.getDuration());
+        this.minDuration = this.minDuration.plus(sequence.getMinDuration());
+        this.maxDuration = this.maxDuration.plus(sequence.getMaxDuration());
     }
 
 
@@ -71,7 +76,8 @@ public class MetaSequence implements Serializable {
      */
     public void removeSequence(Sequence sequence) {
         if (this.sequencesList.remove(sequence)) {
-            this.duration = this.duration.minus(sequence.getDuration());
+            this.minDuration = this.minDuration.minus(sequence.getMinDuration());
+            this.maxDuration = this.maxDuration.minus(sequence.getMaxDuration());
         }
     }
 
@@ -79,14 +85,17 @@ public class MetaSequence implements Serializable {
     /**
      *  Compute the duration of the meta sequence and its sequences.
      */
-    public void computeDuration(){
-        Duration duration = Duration.ofSeconds(0);
+    public void computeDurations(){
+        Duration minDuration = Duration.ofSeconds(0);
+        Duration maxDuration = Duration.ofSeconds(0);
         for (Sequence sequence : sequencesList) {
-            sequence.computeDuration();
-            duration = duration.plus(sequence.getDuration());
+            sequence.computeDurations();
+            minDuration = minDuration.plus(sequence.getMinDuration());
+            maxDuration = maxDuration.plus(sequence.getMaxDuration());
         }
 
-        this.duration = duration;
+        this.minDuration = minDuration;
+        this.maxDuration = maxDuration;
     }
 
 
@@ -97,7 +106,7 @@ public class MetaSequence implements Serializable {
      */
     public void setSequencesList(List<Sequence> sequenceList){
         this.sequencesList = sequenceList;
-        this.computeDuration();
+        this.computeDurations();
     }
 
 
@@ -123,7 +132,8 @@ public class MetaSequence implements Serializable {
         if (this == o) return true;
         if (!(o instanceof MetaSequence)) return false;
         MetaSequence that = (MetaSequence) o;
-        return Objects.equals(getName(), that.getName()) && Objects.equals(getDuration(), that.getDuration()) && Objects.equals(getSequencesList(), that.getSequencesList());
+        return Objects.equals(getName(), that.getName()) && Objects.equals(getMinDuration(), that.getMinDuration())
+                && Objects.equals(getMaxDuration(), that.getMaxDuration()) && Objects.equals(getSequencesList(), that.getSequencesList());
     }
 
     /**
@@ -133,7 +143,8 @@ public class MetaSequence implements Serializable {
     public String toXML(){
         String XML = "<metaSequence>\n" +
                 "<name>" + name.replace(" ", "%20") + "</name>\n" +
-                "<duration>" + duration + "</duration>\n" +
+                "<minDuration>" + minDuration + "</minDuration>\n" +
+                "<maxDuration>" + maxDuration + "</maxDuration>\n" +
                 "<listSequence>\n";
         for (Sequence sequence : sequencesList) {
             XML += "<sequence>" + sequence.getName().replace(" ", "%20") + ".xml</sequence>\n";

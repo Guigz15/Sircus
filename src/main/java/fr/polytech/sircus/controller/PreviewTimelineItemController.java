@@ -71,7 +71,6 @@ public class PreviewTimelineItemController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //initializeBindings();
     }
 
     public void setTimeline(PreviewTimeline timeline){

@@ -1,11 +1,11 @@
 package fr.polytech.sircus.controller.PopUps;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.model.*;
+import fr.polytech.sircus.model.Interstim;
+import fr.polytech.sircus.model.Media;
+import fr.polytech.sircus.model.TypeMedia;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,9 +16,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import lombok.Getter;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -42,7 +42,7 @@ public class AddMediaPopUp implements Initializable {
     @FXML
     private RadioButton existingMediaButton;
     @FXML
-    private VBox newInterstimBox;
+    private HBox newInterstimBox;
     @FXML
     @Getter
     private ComboBox<Media> mediasList;
@@ -70,16 +70,20 @@ public class AddMediaPopUp implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         newMediaBox.disableProperty().bind(Bindings.createBooleanBinding(() -> !newMediaButton.isSelected(), newMediaButton.selectedProperty()));
+        mediaDuration.disableProperty().bind(Bindings.createBooleanBinding(() -> mediaName.getText().isEmpty(), mediaName.textProperty()));
         newInterstimBox.disableProperty().bind(Bindings.createBooleanBinding(() -> mediaName.getText().isEmpty(), mediaName.textProperty()));
+        interstimDuration.disableProperty().bind(Bindings.createBooleanBinding(() -> interstimName.getText().isEmpty(), interstimName.textProperty()));
         mediasList.disableProperty().bind(Bindings.createBooleanBinding(() -> !existingMediaButton.isSelected(), existingMediaButton.selectedProperty()));
 
         mediaDuration.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*"))
-                    mediaDuration.setText(newValue.replaceAll("[^\\d]", ""));
-                if (!newValue.isEmpty())
-                    newMedia.setDuration(Duration.ofSeconds(Long.parseLong(mediaDuration.getText())));
+                if (!newValue.matches("\\d*\\-"))
+                    mediaDuration.setText(newValue.replaceAll("[^\\d\\-]", ""));
+                if (!newValue.isEmpty()) {
+                    newMedia.setMinDuration(Duration.ofSeconds(Long.parseLong(mediaDuration.getText().split("\\-")[0])));
+                    newMedia.setMaxDuration(Duration.ofSeconds(Long.parseLong(mediaDuration.getText().split("\\-")[1])));
+                }
             }
         });
 
@@ -87,10 +91,12 @@ public class AddMediaPopUp implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
                                 String newValue) {
-                if (!newValue.matches("\\d*"))
-                    interstimDuration.setText(newValue.replaceAll("[^\\d]", ""));
-                if (!newValue.isEmpty())
-                    newInterstim.setDuration(Duration.ofSeconds(Long.parseLong(interstimDuration.getText())));
+                if (!newValue.matches("\\d*\\-"))
+                    interstimDuration.setText(newValue.replaceAll("[^\\d\\-]", ""));
+                if (!newValue.isEmpty()) {
+                    newInterstim.setMinDuration(Duration.ofSeconds(Long.parseLong(interstimDuration.getText().split("\\-")[0])));
+                    newInterstim.setMaxDuration(Duration.ofSeconds(Long.parseLong(interstimDuration.getText().split("\\-")[1])));
+                }
             }
         });
 
@@ -118,9 +124,9 @@ public class AddMediaPopUp implements Initializable {
                     Files.copy(path, os);
                 }
 
-                newMedia = new Media(mediaFile.getName(), Duration.ofSeconds(1), TypeMedia.PICTURE);
+                newMedia = new Media(mediaFile.getName(), Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.PICTURE);
                 mediaName.setText(newMedia.getFilename());
-                mediaDuration.setText(newMedia.getDuration().toString());
+                mediaDuration.setText(newMedia.getMinDuration().toString() + "-" + newMedia.getMaxDuration().toString());
                 mediaImage.setImage(new Image(mediaFile.toURI().toString()));
             } catch (Exception e) {
                 System.out.print("Aucun fichier sélectionné.");
@@ -151,9 +157,9 @@ public class AddMediaPopUp implements Initializable {
                     Files.copy(path, os);
                 }
 
-                newInterstim = new Interstim(interstimFile.getName(), Duration.ofSeconds(1), TypeMedia.PICTURE, newMedia);
+                newInterstim = new Interstim(interstimFile.getName(), Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.PICTURE, newMedia);
                 interstimName.setText(newInterstim.getFilename());
-                interstimDuration.setText(newInterstim.getDuration().toString());
+                interstimDuration.setText(newInterstim.getMinDuration().toString() + "-" + newInterstim.getMaxDuration().toString());
                 interstimImage.setImage(new Image(interstimFile.toURI().toString()));
             } catch (Exception e) {
                 System.out.print("Aucun fichier sélectionné.");

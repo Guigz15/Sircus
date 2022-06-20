@@ -25,7 +25,8 @@ public class ImportMetaSeqXML extends DefaultHandler {
     private final StringBuilder currentValue = new StringBuilder();
 
     private Boolean name = false;
-    private Boolean duration = false;
+    private Boolean minDuration = false;
+    private Boolean maxDuration = false;
     private Boolean sequence = false;
 
 
@@ -46,8 +47,10 @@ public class ImportMetaSeqXML extends DefaultHandler {
             meta = new MetaSequence();
         } else if (qName.equalsIgnoreCase("name")) {
             name = true;
-        } else if (qName.equalsIgnoreCase("duration")) {
-            duration = true;
+        } else if (qName.equalsIgnoreCase("minDuration")) {
+            minDuration = true;
+        } else if (qName.equalsIgnoreCase("maxDuration")) {
+            maxDuration = true;
         } else if (qName.equalsIgnoreCase("listSequence")) {
             meta.setSequencesList(new ArrayList<>());
         } else if (qName.equalsIgnoreCase("sequence")) {
@@ -64,9 +67,12 @@ public class ImportMetaSeqXML extends DefaultHandler {
         if (name) {
             meta.setName(currentValue.toString().replace("%20", " "));
             name = false;
-        } else if (duration) {
-            meta.setDuration(Duration.parse(currentValue.toString()));
-            duration = false;
+        } else if (minDuration) {
+            meta.setMinDuration(Duration.parse(currentValue.toString()));
+            minDuration = false;
+        } else if (maxDuration) {
+            meta.setMaxDuration(Duration.parse(currentValue.toString()));
+            maxDuration = false;
         } else if (sequence) {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             try {
@@ -86,13 +92,11 @@ public class ImportMetaSeqXML extends DefaultHandler {
                             System.out.println("Pressed OK.");
                         }
                     });
-                    // TODO: in etape 2, the metaSequence need to be
-                    //  in red when it has a sequence that doesn't exist
                 } else{
                     saxParser.parse(file, handler);
                     // add the new sequence in the metaSequence
                     meta.getSequencesList().add(handler.getSeq());
-                    meta.computeDuration();
+                    meta.computeDurations();
                 }
             } catch (ParserConfigurationException | SAXException | IOException e) {
                 e.printStackTrace();

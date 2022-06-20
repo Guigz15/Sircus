@@ -23,13 +23,14 @@ public class Interstim extends AbstractMedia implements Serializable {
     @Getter @Setter
     private Media media;
 
-    public Interstim(String filename, Duration duration, TypeMedia typeMedia, Media media) {
-        this(filename, duration, typeMedia, false, Color.WHITE, media);
+    public Interstim(String filename, Duration minDuration, Duration maxDuration, TypeMedia typeMedia, Media media) {
+        this(filename, minDuration, maxDuration, typeMedia, false, Color.WHITE, media);
     }
 
-    public Interstim(String filename, Duration duration, TypeMedia typeMedia, boolean isResizable, Color backgroundColor, Media media) {
+    public Interstim(String filename, Duration minDuration, Duration maxDuration, TypeMedia typeMedia, boolean isResizable, Color backgroundColor, Media media) {
         this.filename = filename;
-        this.duration = duration;
+        this.minDuration = minDuration;
+        this.maxDuration = maxDuration;
         this.typeMedia = typeMedia;
         this.isLocked = true;
         this.isResizable = isResizable;
@@ -39,7 +40,7 @@ public class Interstim extends AbstractMedia implements Serializable {
     }
 
     public Interstim(Interstim interstim) {
-        this(interstim.getFilename(), interstim.getDuration(), interstim.getTypeMedia(), interstim.isResizable(), interstim.getBackgroundColor(), interstim.getMedia());
+        this(interstim.getFilename(), interstim.getMinDuration(), interstim.getMaxDuration(), interstim.getTypeMedia(), interstim.isResizable(), interstim.getBackgroundColor(), interstim.getMedia());
     }
 
     @Override
@@ -73,7 +74,7 @@ public class Interstim extends AbstractMedia implements Serializable {
      */
     public String toXML(){
         String XML = "<interstim filename=\"" + filename.replace(" ", "%20") +
-                "\" duration=\"" + duration + "\" type=\"" + typeMedia + "\" lock=\"" +
+                "\" minDuration=\"" + minDuration + "\" maxDuration=\"" + maxDuration + "\" type=\"" + typeMedia + "\" lock=\"" +
                 isLocked + "\" isResizable=\"" + isResizable + "\" backgroundColor=\"" +
                 backgroundColor + "\"></interstim>\n";
         return XML;

@@ -34,7 +34,10 @@ import java.util.Optional;
 /**
  * Manages the interface used when the exam is in progress (player_monitor).
  */
-public class PlayerMonitorController{
+public class PlayerMonitorController {
+
+    @Getter @Setter
+    private MetaSequence metaSequenceToRead;
 
     @FXML
     private ProgressBar seqProgressBarFX;
@@ -228,41 +231,32 @@ public class PlayerMonitorController{
     }
 
     /**
-     * Let the user choose if he wants to play the next meta-sequence or not
-     * @param isLastMetaSequence true if it's the last meta-sequence, false otherwise
+     * Let the user choose if he wants to replay the meta-sequence or not
      */
-    public void nextMetaSequence(boolean isLastMetaSequence) {
-        Alert alert;
+    public void replayMetaSequence() {
 
-        if (isLastMetaSequence) {
-            alert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.OK);
-            alert.setTitle("Meta séquence terminée");
-            alert.setHeaderText("Le taux d'acquisition pour cette meta-séquence est de {placeholder}%.");
-            alert.setContentText("Il s'agissait de la dernière meta-séquence. Cliquez sur OK pour fermer le viewer.");
-        } else {
-            alert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.YES, ButtonType.NO);
-            alert.setTitle("Meta séquence terminée");
-            alert.setHeaderText("Le taux d'acquisition pour cette meta-séquence est de {placeholder}%.");
-            alert.setContentText("Voulez-vous immédiatement démarrer la méta-séquence suivante ?");
-        }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Meta séquence terminée");
+        alert.setHeaderText("Le taux d'acquisition pour cette meta-séquence est de {placeholder}%.");
+        alert.setContentText("Voulez-vous rejouer la métaséquence ?");
 
         firstPlay = true;
         viewer.pauseViewer();
         playButton.setGraphic(playIcon);
         viewerPlayingState = false;
-        pauseAllClocks();
+        resetAllClocks();
 
         alert.setOnHidden(dialogEvent -> {
             Optional<ButtonType> result = Optional.ofNullable(alert.getResult());
 
-            // If we clicked OK (close the viewer) or NO (wait for another user input) then we have nothing to do.
             if (result.isPresent()) {
                 if (result.get() == ButtonType.YES) {
                     metaSeqDuration.setTime(0);
                     playViewer();
                 }
-                else if (result.get() == ButtonType.OK)
+                else if (result.get() == ButtonType.NO) {
                     viewer.closeViewer();
+                }
             }
         });
 
@@ -276,11 +270,10 @@ public class PlayerMonitorController{
     public void playViewer() {
         if (viewer == null) {
             viewer = new ViewerController(this.playButton.getScene().getWindow(), this);
-            forwardButton.setDisable(viewer.getCurrentSequenceIndex()+1 == viewer.getPlayingMetaSequence().getSequencesList().size());
+            forwardButton.setDisable(viewer.getCurrentSequenceIndex() + 1 == viewer.getPlayingMetaSequence().getSequencesList().size());
 
-            for (MetaSequence metaSequence : SircusApplication.dataSircus.getMetaSequencesList()) {
-                remaining.setTime(remaining.getTime().getSecond() + metaSequence.getDuration().getSeconds());
-            }
+            remaining.setTime(remaining.getTime().getSecond() + metaSequenceToRead.getMinDuration().getSeconds());
+
         } else {
             // We are playing something, so the pause button is displayed, so we must pause the sequence
             if (viewerPlayingState) {
@@ -406,13 +399,13 @@ public class PlayerMonitorController{
         remaining.setTime(getRemainingTime());
 
         seqDuration.setTime(0);
-        seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+        seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getMinDuration().getSeconds());
         setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
-        seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
+        seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getMinDuration().getSeconds());
 
-        metaSeqDuration.setTime(viewer.getPlayingMetaSequence().getDuration().getSeconds() - getRemainingTimeInMetaSeq());
+        metaSeqDuration.setTime(viewer.getPlayingMetaSequence().getMinDuration().getSeconds() - getRemainingTimeInMetaSeq());
         metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
-        metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
+        metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getMinDuration().getSeconds());
 
         // Disable if last sequence
         forwardButton.setDisable(viewer.getCurrentSequenceIndex()+1 == viewer.getPlayingMetaSequence().getSequencesList().size());
@@ -485,7 +478,7 @@ public class PlayerMonitorController{
 
         // Sum all the next sequences including the current one
         for (int seqIndex=viewer.getCurrentSequenceIndex() ; seqIndex<metaSeq.getSequencesList().size() ; seqIndex++){
-            seconds += metaSeq.getSequencesList().get(seqIndex).getDuration().getSeconds();
+            seconds += metaSeq.getSequencesList().get(seqIndex).getMinDuration().getSeconds();
         }
         // Minus what we already played in the current sequence
         seconds -= seqDuration.getTime().getSecond();
@@ -502,7 +495,7 @@ public class PlayerMonitorController{
 
         // Sum all the next sequences including the current one
         for (int metaSeqIndex=viewer.getCurrentMetaSequenceIndex() ; metaSeqIndex<SircusApplication.dataSircus.getMetaSequencesList().size() ; metaSeqIndex++){
-            seconds += SircusApplication.dataSircus.getMetaSequencesList().get(metaSeqIndex).getDuration().getSeconds();
+            seconds += SircusApplication.dataSircus.getMetaSequencesList().get(metaSeqIndex).getMinDuration().getSeconds();
         }
         // Minus what we already played in the current sequence
         seconds -= metaSeqDuration.getTime().getSecond();
