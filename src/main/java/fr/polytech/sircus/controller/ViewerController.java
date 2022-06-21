@@ -62,10 +62,6 @@ public class ViewerController {
     // Stores the start time of each sequence to be able to move between sequences.
     private final ArrayList<Integer> sequencesStartTime;
 
-    // Index of the current meta sequence
-    @Getter
-    private int currentMetaSequenceIndex;
-
     // Index of the current sequence index in the meta-sequence
     @Getter
     private int currentSequenceIndex;
@@ -75,12 +71,11 @@ public class ViewerController {
     /**
      * Constructor of ViewerController class.
      */
-    public ViewerController(Window owner, PlayerMonitorController playerMonitorController) {
+    public ViewerController(Window owner, PlayerMonitorController playerMonitorController, MetaSequence playingMetaSequence) {
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/viewer.fxml")));
         fxmlLoader.setController(this);
 
-        this.playingMetaSequence = SircusApplication.dataSircus.getMetaSequencesList().get(0);
-        this.currentMetaSequenceIndex = 0;
+        this.playingMetaSequence = playingMetaSequence;
 
         try {
             Scene viewerScene = new Scene(fxmlLoader.load(), 1280, 720);
@@ -132,7 +127,7 @@ public class ViewerController {
         }
         // If the URL is malformed, it is reported
         catch (MalformedURLException error) {
-            System.out.println("URL malformée, le chemin vers la vidéo est incorrect.");
+            System.out.println("URL mal formé, le chemin vers la vidéo est incorrect.");
         }
     }
 
@@ -194,7 +189,7 @@ public class ViewerController {
     }
 
     /**
-     * Loads all the meta sequences and creates the associated keyframes in the timeline.
+     * Loads the meta sequences and creates the associated keyframes in the timeline.
      */
     @FXML
     private void initializeMetaSequence() {

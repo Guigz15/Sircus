@@ -24,6 +24,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lombok.Getter;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -43,6 +44,7 @@ public class Step2Controller implements Initializable {
     @FXML
     private BorderPane adminMetaButtons;
     @FXML
+    @Getter
     private ListView<MetaSequence> metaListView;
     @FXML
     private Button addMetaButton;

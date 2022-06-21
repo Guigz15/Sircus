@@ -172,6 +172,8 @@ public class PlayerMonitorController {
 
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
         Scene scene = new Scene(fxmlLoader.load());
+        Step2Controller controller = fxmlLoader.getController();
+        controller.getMetaListView().getSelectionModel().select(metaSequenceToRead);
         Stage stage = (Stage) previous.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
@@ -240,22 +242,38 @@ public class PlayerMonitorController {
         alert.setHeaderText("Le taux d'acquisition pour cette meta-séquence est de {placeholder}%.");
         alert.setContentText("Voulez-vous rejouer la métaséquence ?");
 
-        firstPlay = true;
         viewer.pauseViewer();
-        playButton.setGraphic(playIcon);
-        viewerPlayingState = false;
-        resetAllClocks();
 
         alert.setOnHidden(dialogEvent -> {
             Optional<ButtonType> result = Optional.ofNullable(alert.getResult());
 
             if (result.isPresent()) {
                 if (result.get() == ButtonType.YES) {
-                    metaSeqDuration.setTime(0);
-                    playViewer();
+                    viewer.resetMetaSequence();
+                    resetAllClocks();
+                    firstPlay = true;
+
+                    this.stopButton.setDisable(true);
+
+                    playButton.setGraphic(playIcon);
+                    viewerPlayingState = false;
                 }
                 else if (result.get() == ButtonType.NO) {
                     viewer.closeViewer();
+
+                    // Go to previous page to launch another sequence
+                    FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
+                    Scene scene = null;
+                    try {
+                        scene = new Scene(fxmlLoader.load());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Step2Controller controller = fxmlLoader.getController();
+                    controller.getMetaListView().getSelectionModel().select(metaSequenceToRead);
+                    Stage stage = (Stage) previous.getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show();
                 }
             }
         });
@@ -269,7 +287,7 @@ public class PlayerMonitorController {
     @FXML
     public void playViewer() {
         if (viewer == null) {
-            viewer = new ViewerController(this.playButton.getScene().getWindow(), this);
+            viewer = new ViewerController(this.playButton.getScene().getWindow(), this, metaSequenceToRead);
             forwardButton.setDisable(viewer.getCurrentSequenceIndex() + 1 == viewer.getPlayingMetaSequence().getSequencesList().size());
 
             remaining.setTime(remaining.getTime().getSecond() + metaSequenceToRead.getMinDuration().getSeconds());
@@ -297,7 +315,7 @@ public class PlayerMonitorController {
                 // If it's the first lecture or after a reset
                 if (firstPlay){
                     stopButton.setDisable(false);
-                    setCounterLabel(numMetaSeqLabel, viewer.getCurrentMetaSequenceIndex() + 1, SircusApplication.dataSircus.getMetaSequencesList().size());
+                    setCounterLabel(numMetaSeqLabel, SircusApplication.dataSircus.getMetaSequencesList().indexOf(metaSequenceToRead) + 1, SircusApplication.dataSircus.getMetaSequencesList().size());
 
                     firstPlay = false;
                 }
@@ -491,16 +509,17 @@ public class PlayerMonitorController {
      * @return the duration in seconds
      */
     private long getRemainingTime(){
-        long seconds = 0;
+        /*long seconds = 0;
 
         // Sum all the next sequences including the current one
-        for (int metaSeqIndex=viewer.getCurrentMetaSequenceIndex() ; metaSeqIndex<SircusApplication.dataSircus.getMetaSequencesList().size() ; metaSeqIndex++){
+        for (int metaSeqIndex = viewer.getCurrentMetaSequenceIndex() ; metaSeqIndex < SircusApplication.dataSircus.getMetaSequencesList().size() ; metaSeqIndex++){
             seconds += SircusApplication.dataSircus.getMetaSequencesList().get(metaSeqIndex).getMinDuration().getSeconds();
         }
         // Minus what we already played in the current sequence
         seconds -= metaSeqDuration.getTime().getSecond();
 
-        return seconds;
+        return seconds;*/
+        return metaSequenceToRead.getMinDuration().getSeconds();
     }
 
     /**
