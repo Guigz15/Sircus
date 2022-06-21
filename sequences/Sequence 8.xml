@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sequence name="Sequence%208" duration="PT15S" lock="true">
+<sequence name="Sequence%208" minDuration="PT15S" maxDuration="PT15S" lock="true">
 <listMedia>
 <media>
 <filename>vismos01.jpg</filename>
-<duration>PT5S</duration>
+<minDuration>PT5S</minDuration>
+<maxDuration>PT5S</maxDuration>
 <type>PICTURE</type>
 <lock>true</lock>
 <isResizable>false</isResizable>
@@ -11,7 +12,8 @@
 </media>
 <media>
 <filename>visob02.jpg</filename>
-<duration>PT5S</duration>
+<minDuration>PT5S</minDuration>
+<maxDuration>PT5S</maxDuration>
 <type>PICTURE</type>
 <lock>true</lock>
 <isResizable>false</isResizable>
@@ -19,7 +21,8 @@
 </media>
 <media>
 <filename>vismos01.jpg</filename>
-<duration>PT5S</duration>
+<minDuration>PT5S</minDuration>
+<maxDuration>PT5S</maxDuration>
 <type>PICTURE</type>
 <lock>true</lock>
 <isResizable>false</isResizable>

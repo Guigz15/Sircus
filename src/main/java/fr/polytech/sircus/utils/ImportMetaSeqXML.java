@@ -96,7 +96,7 @@ public class ImportMetaSeqXML extends DefaultHandler {
                     saxParser.parse(file, handler);
                     // add the new sequence in the metaSequence
                     meta.getSequencesList().add(handler.getSeq());
-                    meta.computeDurations();
+                    meta.computeMinMaxDurations();
                 }
             } catch (ParserConfigurationException | SAXException | IOException e) {
                 e.printStackTrace();

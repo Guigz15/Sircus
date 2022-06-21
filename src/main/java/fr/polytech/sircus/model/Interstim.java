@@ -31,6 +31,7 @@ public class Interstim extends AbstractMedia implements Serializable {
         this.filename = filename;
         this.minDuration = minDuration;
         this.maxDuration = maxDuration;
+        this.duration = Duration.ZERO;
         this.typeMedia = typeMedia;
         this.isLocked = true;
         this.isResizable = isResizable;

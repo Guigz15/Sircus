@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sequence name="Sequence%207" duration="PT12S" lock="true">
+<sequence name="Sequence%207" minDuration="PT12S" maxDuration="PT12S" lock="true">
 <listMedia>
 <media>
 <filename>croix.jpg</filename>
-<duration>PT4S</duration>
+<minDuration>PT4S</minDuration>
+<maxDuration>PT4S</maxDuration>
 <type>PICTURE</type>
 <lock>true</lock>
 <isResizable>false</isResizable>
@@ -11,7 +12,8 @@
 </media>
 <media>
 <filename>mosob01.jpg</filename>
-<duration>PT1S</duration>
+<minDuration>PT1S</minDuration>
+<maxDuration>PT1S</maxDuration>
 <type>PICTURE</type>
 <lock>true</lock>
 <isResizable>false</isResizable>
@@ -19,7 +21,8 @@
 </media>
 <media>
 <filename>vis03.jpg</filename>
-<duration>PT7S</duration>
+<minDuration>PT7S</minDuration>
+<maxDuration>PT7S</maxDuration>
 <type>PICTURE</type>
 <lock>true</lock>
 <isResizable>false</isResizable>

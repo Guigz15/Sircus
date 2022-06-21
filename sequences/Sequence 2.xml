@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sequence name="Sequence%202" duration="PT34S" lock="true">
+<sequence name="Sequence%202" minDuration="PT22S" maxDuration="PT22S" lock="true">
 <listMedia>
 <media>
 <filename>mosob01.jpg</filename>
-<duration>PT1S</duration>
+<minDuration>PT1S</minDuration>
+<maxDuration>PT1S</maxDuration>
 <type>PICTURE</type>
 <lock>true</lock>
 <isResizable>false</isResizable>
@@ -11,7 +12,8 @@
 </media>
 <media>
 <filename>vis03.jpg</filename>
-<duration>PT7S</duration>
+<minDuration>PT7S</minDuration>
+<maxDuration>PT7S</maxDuration>
 <type>PICTURE</type>
 <lock>true</lock>
 <isResizable>false</isResizable>
@@ -19,7 +21,8 @@
 </media>
 <media>
 <filename>vismos01.jpg</filename>
-<duration>PT5S</duration>
+<minDuration>PT5S</minDuration>
+<maxDuration>PT5S</maxDuration>
 <type>PICTURE</type>
 <lock>true</lock>
 <isResizable>false</isResizable>
@@ -27,7 +30,8 @@
 </media>
 <media>
 <filename>visob02.jpg</filename>
-<duration>PT5S</duration>
+<minDuration>PT5S</minDuration>
+<maxDuration>PT5S</maxDuration>
 <type>PICTURE</type>
 <lock>true</lock>
 <isResizable>false</isResizable>
@@ -35,23 +39,8 @@
 </media>
 <media>
 <filename>croix.jpg</filename>
-<duration>PT4S</duration>
-<type>PICTURE</type>
-<lock>true</lock>
-<isResizable>false</isResizable>
-<backgroundColor>0xffffffff</backgroundColor>
-</media>
-<media>
-<filename>vis03.jpg</filename>
-<duration>PT7S</duration>
-<type>PICTURE</type>
-<lock>true</lock>
-<isResizable>false</isResizable>
-<backgroundColor>0xffffffff</backgroundColor>
-</media>
-<media>
-<filename>vismos01.jpg</filename>
-<duration>PT5S</duration>
+<minDuration>PT4S</minDuration>
+<maxDuration>PT4S</maxDuration>
 <type>PICTURE</type>
 <lock>true</lock>
 <isResizable>false</isResizable>

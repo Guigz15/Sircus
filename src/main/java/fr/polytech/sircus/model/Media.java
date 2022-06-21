@@ -3,7 +3,6 @@ package fr.polytech.sircus.model;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,10 +21,11 @@ public class Media extends AbstractMedia implements Serializable {
     @Getter @Setter
     private Interstim interstim;
 
-    public Media(){
+    public Media() {
         filename = null;
         minDuration = null;
         maxDuration = null;
+        duration = null;
         typeMedia = null;
         isLocked = false;
         isResizable = false;
@@ -41,6 +41,7 @@ public class Media extends AbstractMedia implements Serializable {
         this.filename = filename;
         this.minDuration = minDuration;
         this.maxDuration = maxDuration;
+        duration = Duration.ZERO;
         this.typeMedia = typeMedia;
         this.isLocked = isLocked;
         this.isResizable = isResizable;

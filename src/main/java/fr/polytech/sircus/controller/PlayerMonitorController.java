@@ -1,9 +1,7 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.model.AbstractMedia;
-import fr.polytech.sircus.model.MetaSequence;
-import fr.polytech.sircus.model.Result;
+import fr.polytech.sircus.model.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -290,7 +288,17 @@ public class PlayerMonitorController {
             viewer = new ViewerController(this.playButton.getScene().getWindow(), this, metaSequenceToRead);
             forwardButton.setDisable(viewer.getCurrentSequenceIndex() + 1 == viewer.getPlayingMetaSequence().getSequencesList().size());
 
-            remaining.setTime(remaining.getTime().getSecond() + metaSequenceToRead.getMinDuration().getSeconds());
+            for (Sequence sequence : metaSequenceToRead.getSequencesList()) {
+                for (Media media : sequence.getListMedias()) {
+                    media.setDuration(media.getRandomDuration());
+                    if (media.getInterstim() != null)
+                        media.getInterstim().setDuration(media.getInterstim().getRandomDuration());
+                }
+            }
+
+            metaSequenceToRead.computeDuration();
+
+            remaining.setTime(remaining.getTime().getSecond() + metaSequenceToRead.getDuration().getSeconds());
 
         } else {
             // We are playing something, so the pause button is displayed, so we must pause the sequence
@@ -417,13 +425,13 @@ public class PlayerMonitorController {
         remaining.setTime(getRemainingTime());
 
         seqDuration.setTime(0);
-        seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getMinDuration().getSeconds());
+        seqRemaining.setTime(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
         setCounterLabel(numSeqLabel, viewer.getCurrentSequenceIndex()+1, viewer.getPlayingMetaSequence().getSequencesList().size());
-        seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getMinDuration().getSeconds());
+        seqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getSequencesList().get(viewer.getCurrentSequenceIndex()).getDuration().getSeconds());
 
-        metaSeqDuration.setTime(viewer.getPlayingMetaSequence().getMinDuration().getSeconds() - getRemainingTimeInMetaSeq());
+        metaSeqDuration.setTime(viewer.getPlayingMetaSequence().getDuration().getSeconds() - getRemainingTimeInMetaSeq());
         metaSeqRemaining.setTime(getRemainingTimeInMetaSeq());
-        metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getMinDuration().getSeconds());
+        metaSeqProgressBar.setTotalDuration(viewer.getPlayingMetaSequence().getDuration().getSeconds());
 
         // Disable if last sequence
         forwardButton.setDisable(viewer.getCurrentSequenceIndex()+1 == viewer.getPlayingMetaSequence().getSequencesList().size());
@@ -496,7 +504,7 @@ public class PlayerMonitorController {
 
         // Sum all the next sequences including the current one
         for (int seqIndex=viewer.getCurrentSequenceIndex() ; seqIndex<metaSeq.getSequencesList().size() ; seqIndex++){
-            seconds += metaSeq.getSequencesList().get(seqIndex).getMinDuration().getSeconds();
+            seconds += metaSeq.getSequencesList().get(seqIndex).getDuration().getSeconds();
         }
         // Minus what we already played in the current sequence
         seconds -= seqDuration.getTime().getSecond();
@@ -519,7 +527,7 @@ public class PlayerMonitorController {
         seconds -= metaSeqDuration.getTime().getSecond();
 
         return seconds;*/
-        return metaSequenceToRead.getMinDuration().getSeconds();
+        return metaSequenceToRead.getDuration().getSeconds();
     }
 
     /**

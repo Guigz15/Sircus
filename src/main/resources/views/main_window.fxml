@@ -140,7 +140,7 @@
                      </HBox.margin>
                   </VBox>
                   <VBox maxHeight="-Infinity" prefWidth="180.0">
-                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre de visite(s)">
+                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Numéro de visite(s)">
                         <font>
                            <Font size="18.0" />
                         </font>

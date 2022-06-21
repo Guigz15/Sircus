@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metaSequence>
 <name>Meta%20sequence%202</name>
-<duration>PT1M48S</duration>
+<minDuration>PT42S</minDuration>
+<maxDuration>PT1M18S</maxDuration>
 <listSequence>
 <sequence>Sequence%202.xml</sequence>
 <sequence>Sequence%201.xml</sequence>
-<sequence>Sequence%202.xml</sequence>
 <sequence>Sequence%206.xml</sequence>
 </listSequence>
 </metaSequence>

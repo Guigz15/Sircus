@@ -81,7 +81,9 @@ public class Step2Controller implements Initializable {
     @FXML
     private Label nbInterstimLabelForMeta;
     @FXML
-    private Label totalDurationLabelForMeta;
+    private Label totalMinDurationLabelForMeta;
+    @FXML
+    private Label totalMaxDurationLabelForMeta;
     @FXML
     private GridPane statsForSeq;
     @FXML
@@ -89,7 +91,9 @@ public class Step2Controller implements Initializable {
     @FXML
     private Label nbInterstimLabelForSeq;
     @FXML
-    private Label totalDurationLabelForSeq;
+    private Label totalMinDurationLabelForSeq;
+    @FXML
+    private Label totalMaxDurationLabelForSeq;
     @FXML
     private Button doMixButton;
     @FXML
@@ -570,11 +574,13 @@ public class Step2Controller implements Initializable {
                 dialog.initOwner(modifySeqButton.getScene().getWindow());
 
                 Optional<ButtonType> clickedButton = dialog.showAndWait();
-
-                if (clickedButton.get() == ButtonType.FINISH) {
-                    Sequence oldSequence = SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().get(index_Selected_Sequence);
-                    SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().add(index_Selected_Sequence, controller.getSequence());
-                    SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().remove(oldSequence);
+                if (clickedButton.isPresent()) {
+                    if (clickedButton.get() == ButtonType.FINISH) {
+                        Sequence oldSequence = SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().get(index_Selected_Sequence);
+                        SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().add(index_Selected_Sequence, controller.getSequence());
+                        SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().remove(oldSequence);
+                        metaListView.getSelectionModel().getSelectedItem().computeMinMaxDurations();
+                    }
                 }
                 // the code below allows you to update listview.
                 seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
@@ -787,9 +793,12 @@ public class Step2Controller implements Initializable {
         nbMediaLabelForMeta.setText(Integer.toString(nbMedias));
         nbInterstimLabelForMeta.setText(Integer.toString(nbInterstims));
 
-        long seconds = metaSeq.getMinDuration().getSeconds();
-        totalDurationLabelForMeta.setText(
-                String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, (seconds % 60)));
+        long minDuration = metaSeq.getMinDuration().getSeconds();
+        totalMinDurationLabelForMeta.setText(
+                String.format("%02d:%02d:%02d", minDuration / 3600, (minDuration % 3600) / 60, (minDuration % 60)));
+        long maxDuration = metaSeq.getMaxDuration().getSeconds();
+        totalMaxDurationLabelForMeta.setText(
+                String.format("%02d:%02d:%02d", maxDuration / 3600, (maxDuration % 3600) / 60, (maxDuration % 60)));
     }
 
     /**
@@ -811,9 +820,12 @@ public class Step2Controller implements Initializable {
         nbMediaLabelForSeq.setText(Integer.toString(nbMedias));
         nbInterstimLabelForSeq.setText(Integer.toString(nbInterstims));
 
-        long seconds = sequence.getMinDuration().getSeconds();
-        totalDurationLabelForSeq.setText(
-                String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, (seconds % 60)));
+        long minDuration = sequence.getMinDuration().getSeconds();
+        totalMinDurationLabelForSeq.setText(
+                String.format("%02d:%02d:%02d", minDuration / 3600, (minDuration % 3600) / 60, (minDuration % 60)));
+        long maxDuration = sequence.getMaxDuration().getSeconds();
+        totalMaxDurationLabelForSeq.setText(
+                String.format("%02d:%02d:%02d", maxDuration / 3600, (maxDuration % 3600) / 60, (maxDuration % 60)));
     }
 
     /**

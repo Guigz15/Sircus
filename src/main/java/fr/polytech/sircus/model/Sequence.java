@@ -25,6 +25,9 @@ public class Sequence implements Serializable, Cloneable {
     private Duration maxDuration;
 
     @Getter @Setter
+    private Duration duration;
+
+    @Getter @Setter
     private List<Media> listMedias;
 
     @Getter @Setter
@@ -39,6 +42,7 @@ public class Sequence implements Serializable, Cloneable {
         this.name = name;
         this.minDuration = Duration.ofSeconds(0);
         this.maxDuration = Duration.ofSeconds(0);
+        this.duration = Duration.ofSeconds(0);
         this.listMedias = new ArrayList<>();
         this.lock = true;
     }
@@ -53,9 +57,8 @@ public class Sequence implements Serializable, Cloneable {
         this.minDuration = sequence.getMinDuration();
         this.maxDuration = sequence.getMaxDuration();
         this.listMedias = new ArrayList<>();
-        for (Media media : sequence.getListMedias()) {
+        for (Media media : sequence.getListMedias())
             this.listMedias.add(new Media(media));
-        }
         this.lock = sequence.getLock();
     }
 
@@ -93,9 +96,9 @@ public class Sequence implements Serializable, Cloneable {
     }
 
     /**
-     *  Compute the duration of the sequence.
+     *  Compute the min max duration of the sequence.
      */
-    public void computeDurations(){
+    public void computeMinMaxDurations(){
         Duration minDuration = Duration.ofSeconds(0);
         Duration maxDuration = Duration.ofSeconds(0);
 
@@ -110,6 +113,21 @@ public class Sequence implements Serializable, Cloneable {
 
         this.minDuration = minDuration;
         this.maxDuration = maxDuration;
+    }
+
+    /**
+     *  Compute the duration of the sequence.
+     */
+    public void computeDuration(){
+        Duration duration = Duration.ofSeconds(0);
+
+        for (Media media : listMedias) {
+            duration = duration.plus(media.getDuration());
+            if (media.getInterstim() != null)
+                duration = duration.plus(media.getInterstim().getDuration());
+        }
+
+        this.duration = duration;
     }
 
     /**

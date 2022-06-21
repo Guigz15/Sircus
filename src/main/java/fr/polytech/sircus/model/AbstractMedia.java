@@ -3,13 +3,15 @@ package fr.polytech.sircus.model;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * This class represents an abstract media (picture or video).
@@ -33,6 +35,12 @@ public abstract class AbstractMedia implements Serializable {
      */
     @Getter @Setter
     protected Duration maxDuration;
+
+    /**
+     * Duration for which the media would be displayed.
+     */
+    @Getter @Setter
+    protected Duration duration;
 
     /**
      * The type of the media (picture or video).
@@ -67,6 +75,7 @@ public abstract class AbstractMedia implements Serializable {
         return getFilename().equals(media.getFilename()) &&
                 getMinDuration().equals(media.getMinDuration()) &&
                 getMaxDuration().equals(media.getMaxDuration()) &&
+                getDuration().equals(media.getDuration()) &&
                 getTypeMedia().equals(media.getTypeMedia()) &&
                 Objects.equals(isLocked(), media.isLocked()) &&
                 isResizable() == media.isResizable() &&
@@ -78,12 +87,38 @@ public abstract class AbstractMedia implements Serializable {
     }
 
     /**
+     * Get a random duration between minDuration and maxDuration of the media
+     */
+    public Duration getRandomDuration() {
+        Random r = new Random();
+        double randomDuration = r.nextDouble() * Math.abs(this.maxDuration.getSeconds() - this.minDuration.getSeconds()) + this.minDuration.getSeconds();
+
+        BigDecimal bd = BigDecimal.valueOf(randomDuration);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+
+        String[] arr = String.valueOf(bd.doubleValue()).split("\\.");
+        long[] longArr = new long[2];
+        longArr[0] = Long.parseLong(arr[0]);
+
+        // To format millis correctly
+        if (arr[1].length() == 1)
+            arr[1] += "00";
+        else if (arr[1].length() == 2)
+            arr[1] += "0";
+
+        longArr[1] = Long.parseLong(arr[1]);
+
+        return Duration.ofSeconds(longArr[0]).plus(Duration.ofMillis(longArr[1]));
+    }
+
+    /**
      * Override of the writeObject method to handle the background color attribute which is not serializable.
      */
     protected void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeUTF(filename);
         oos.writeObject(minDuration);
         oos.writeObject(maxDuration);
+        oos.writeObject(duration);
         oos.writeObject(typeMedia);
         oos.writeBoolean(isLocked);
         oos.writeBoolean(isResizable);
@@ -101,9 +136,11 @@ public abstract class AbstractMedia implements Serializable {
         filename = ois.readUTF();
         minDuration = (Duration) ois.readObject();
         maxDuration = (Duration) ois.readObject();
+        duration = (Duration) ois.readObject();
         typeMedia = (TypeMedia) ois.readObject();
         isLocked = ois.readBoolean();
         isResizable = ois.readBoolean();
         backgroundColor = new Color(ois.readDouble(), ois.readDouble(), ois.readDouble(), ois.readDouble());
     }
+
 }
