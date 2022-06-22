@@ -19,13 +19,14 @@ import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
 import org.xml.sax.SAXException;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -97,11 +98,13 @@ public class Step2Controller implements Initializable {
     @FXML
     private Button doMixButton;
     @FXML
-    private HBox mixBoxButtons;
+    private VBox mixBoxButtons;
     @FXML
     private Button startMixButton;
     @FXML
     private Button cancelMixButton;
+    @FXML
+    private CheckBox mixedForever;
     @FXML
     private Text previewText;
     @FXML
@@ -551,6 +554,12 @@ public class Step2Controller implements Initializable {
             }
         });
 
+        mixedForever.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
+                metaListView.getSelectionModel().getSelectedItem().setMixedForever(!oldValue && newValue);
+            }
+        });
     }
 
 

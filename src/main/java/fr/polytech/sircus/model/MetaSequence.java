@@ -22,8 +22,7 @@ public class MetaSequence implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     private String name;
 
     @Getter @Setter
@@ -37,6 +36,9 @@ public class MetaSequence implements Serializable {
 
     @Getter
     private List<Sequence> sequencesList;
+
+    @Getter @Setter
+    private boolean mixedForever;
 
 
     /**
@@ -58,6 +60,7 @@ public class MetaSequence implements Serializable {
         this.maxDuration = Duration.ZERO;
         this.duration = Duration.ZERO;
         this.sequencesList = new ArrayList<>();
+        this.mixedForever = false;
     }
 
     /**
@@ -72,6 +75,7 @@ public class MetaSequence implements Serializable {
         this.sequencesList = new ArrayList<>();
         for (Sequence sequence : metaSequence.getSequencesList())
             this.sequencesList.add(new Sequence(sequence));
+        this.mixedForever = metaSequence.isMixedForever();
     }
 
 
@@ -165,7 +169,8 @@ public class MetaSequence implements Serializable {
         if (!(o instanceof MetaSequence)) return false;
         MetaSequence that = (MetaSequence) o;
         return Objects.equals(getName(), that.getName()) && Objects.equals(getMinDuration(), that.getMinDuration())
-                && Objects.equals(getMaxDuration(), that.getMaxDuration()) && Objects.equals(getSequencesList(), that.getSequencesList());
+                && Objects.equals(getMaxDuration(), that.getMaxDuration()) && Objects.equals(getSequencesList(), that.getSequencesList())
+                && Objects.equals(isMixedForever(), that.isMixedForever());
     }
 
     /**
@@ -191,6 +196,7 @@ public class MetaSequence implements Serializable {
             }
         }
         XML += "</listSequence>\n" +
+                "<mixedForever>" + mixedForever + "</mixedForever>\n" +
                 "</metaSequence>\n";
         return XML;
     }

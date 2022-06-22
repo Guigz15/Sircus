@@ -231,10 +231,22 @@
                      <Insets top="5.0" />
                   </padding>
                   <Button fx:id="doMixButton" mnemonicParsing="false" style="-fx-background-color: #457b9d;" text="Faire un mélange aléatoire" textFill="WHITE" visible="false" />
-                  <HBox fx:id="mixBoxButtons" alignment="TOP_CENTER" spacing="50.0" visible="false">
-                     <Button fx:id="cancelMixButton" mnemonicParsing="false" style="-fx-background-color: #f87167;" text="Annuler" />
-                     <Button fx:id="startMixButton" mnemonicParsing="false" style="-fx-background-color: #457b9d;" text="Mélanger" textFill="WHITE" />
-                  </HBox>
+                  <VBox fx:id="mixBoxButtons" alignment="TOP_CENTER" visible="false">
+                     <HBox alignment="TOP_CENTER" spacing="50.0">
+                        <Button fx:id="cancelMixButton" mnemonicParsing="false" style="-fx-background-color: #f87167;"
+                                text="Annuler"/>
+                        <Button fx:id="startMixButton" mnemonicParsing="false" style="-fx-background-color: #457b9d;"
+                                text="Mélanger" textFill="WHITE"/>
+                        <VBox.margin>
+                           <Insets bottom="10.0"/>
+                        </VBox.margin>
+                     </HBox>
+                     <CheckBox fx:id="mixedForever" mnemonicParsing="false" text="Toujours mélanger">
+                        <font>
+                           <Font size="14.0"/>
+                        </font>
+                     </CheckBox>
+                  </VBox>
                </StackPane>
             </VBox>
          </HBox>

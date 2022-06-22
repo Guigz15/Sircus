@@ -129,12 +129,8 @@ public class PlayerMonitorController {
         this.forwardButton.setDisable(true);
         this.backButton.setDisable(true);
 
-        metaSeqProgressBar = new TimelineProgressBar(metaSeqProgressBarFX,
-                metaSeqRemaining,
-                0);
-        seqProgressBar = new TimelineProgressBar(seqProgressBarFX,
-                seqRemaining,
-                0);
+        metaSeqProgressBar = new TimelineProgressBar(metaSeqProgressBarFX, metaSeqRemaining, 0);
+        seqProgressBar = new TimelineProgressBar(seqProgressBarFX, seqRemaining, 0);
 
         firstPlay = true;
     }
@@ -143,7 +139,7 @@ public class PlayerMonitorController {
      * Save a comment written in the comment section with the time.
      */
     @FXML
-    private void addComment(){
+    private void addComment() {
         this.result.addComment(this.commentTextArea.getText());
         this.commentTextArea.clear();
     }
@@ -300,6 +296,12 @@ public class PlayerMonitorController {
 
             remaining.setTime(remaining.getTime().getSecond() + metaSequenceToRead.getDuration().getSeconds());
 
+            /*try {
+                PythonInterpreter interpreter = new PythonInterpreter();
+                interpreter.execfile("TobiiPro.SDK.Python.Windows_1.10.1.2/64/tobii_research.py");
+            } catch (PyException e) {
+                e.printStackTrace();
+            }*/
         } else {
             // We are playing something, so the pause button is displayed, so we must pause the sequence
             if (viewerPlayingState) {
@@ -498,12 +500,12 @@ public class PlayerMonitorController {
      * Give the remaining time before finishing the meta-sequence
      * @return the duration in seconds
      */
-    private long getRemainingTimeInMetaSeq(){
+    private long getRemainingTimeInMetaSeq() {
         long seconds = 0;
         MetaSequence metaSeq = viewer.getPlayingMetaSequence();
 
         // Sum all the next sequences including the current one
-        for (int seqIndex=viewer.getCurrentSequenceIndex() ; seqIndex<metaSeq.getSequencesList().size() ; seqIndex++){
+        for (int seqIndex = viewer.getCurrentSequenceIndex(); seqIndex < metaSeq.getSequencesList().size(); seqIndex++){
             seconds += metaSeq.getSequencesList().get(seqIndex).getDuration().getSeconds();
         }
         // Minus what we already played in the current sequence

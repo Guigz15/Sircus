@@ -26,6 +26,8 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.util.*;
 
+import static fr.polytech.sircus.controller.Step2Controller.sortByValue;
+
 
 /**
  * View window controller.
@@ -206,7 +208,29 @@ public class ViewerController {
         int counterDuration = 0;
         int sequenceIndex = -1;
 
-        numberOfSequences = playingMetaSequence.getSequencesList().size();;
+        numberOfSequences = playingMetaSequence.getSequencesList().size();
+
+        if (playingMetaSequence.isMixedForever()) {
+            //copy the list
+            List<Sequence> copySequence = new ArrayList<>(playingMetaSequence.getSequencesList());
+            //create Map to store the fixed sequences.
+            HashMap<Sequence, Integer> fixedSequence = new HashMap<>();
+            //find fixed sequences
+            for (Sequence sequence : copySequence) {
+                if (sequence.getLock()) {
+                    fixedSequence.put(sequence, copySequence.indexOf(sequence));
+                    playingMetaSequence.getSequencesList().remove(sequence);
+                }
+            }
+            //Shuffle the list of sequences
+            Collections.shuffle(playingMetaSequence.getSequencesList());
+
+            //We sort the hashmap to insert elements in ascending order (on the index of insertion)
+            fixedSequence = sortByValue(fixedSequence);
+            //restore fixed sequences
+            fixedSequence.forEach((sequence, integer) -> playingMetaSequence.getSequencesList().add(integer, sequence));
+        }
+
 
         //shuffle the sequence
         for (Sequence sequence : playingMetaSequence.getSequencesList()) {

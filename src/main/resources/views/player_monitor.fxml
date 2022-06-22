@@ -95,7 +95,10 @@
                   <Label text="Temps restant total" GridPane.rowIndex="1" />
                   <Label fx:id="remainingLabel" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </GridPane>
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Luminosité" />
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Luminosité">
+                  <font>
+                     <Font name="System Bold" size="12.0" />
+                  </font></Text>
                <ProgressBar minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="200.0" progress="0.0" />
             </VBox>
             <StackPane>
@@ -105,7 +108,7 @@
                      <Insets bottom="10.0" left="10.0" />
                   </StackPane.margin>
                   <graphic>
-                     <FontIcon iconLiteral="fa-plus" iconSize="15" />
+                     <FontIcon iconLiteral="fa-save" iconSize="15" />
                   </graphic>
                </Button>
             </StackPane>
