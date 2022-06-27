@@ -34,6 +34,8 @@ public class MainWindowController implements Initializable {
     @FXML
     private ComboBox<String> eyeTracker;
     @FXML
+    private Button tobiiCalibration;
+    @FXML
     private Button adminLogOut;
     @FXML
     private Button admin;
@@ -120,6 +122,14 @@ public class MainWindowController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldName, String newName) {
                 SircusApplication.dataSircus.saveEyeTracker(newName);
+            }
+        });
+        tobiiCalibration.visibleProperty().bind(Bindings.createBooleanBinding(() -> eyeTracker.getValue() != null, eyeTracker.valueProperty()));
+        tobiiCalibration.setOnAction(actionEvent -> {
+            try {
+                Process process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiCalibration.py");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         });
 

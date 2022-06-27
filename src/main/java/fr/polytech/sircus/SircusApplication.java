@@ -55,7 +55,6 @@ public class SircusApplication extends Application {
     public static String currentMethod = null;
 
 
-
     public static void main(String[] args) {
         launch();
     }

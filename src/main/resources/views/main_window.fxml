@@ -12,11 +12,13 @@
    <top>
       <BorderPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="80.0" BorderPane.alignment="CENTER">
          <left>
-            <ComboBox fx:id="eyeTracker" promptText="Sélectionner un eye tracker" BorderPane.alignment="CENTER">
+            <HBox maxHeight="-Infinity" spacing="20.0" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets left="30.0" />
                </BorderPane.margin>
-            </ComboBox>
+               <ComboBox fx:id="eyeTracker" promptText="Sélectionner un eye tracker" />
+               <Button fx:id="tobiiCalibration" mnemonicParsing="false" style="-fx-background-color: #457b9d;" text="Calibration" textFill="WHITE" />
+            </HBox>
          </left>
          <right>
             <HBox alignment="CENTER" BorderPane.alignment="CENTER_RIGHT">
@@ -115,7 +117,7 @@
                         </Text>
                      </HBox>
                      <HBox id="sex" alignment="TOP_CENTER" maxHeight="-Infinity" prefWidth="200.0">
-                        <RadioButton fx:id="radioM" mnemonicParsing="false" text="M" stylesheets="@../css/radioButton.css">
+                        <RadioButton fx:id="radioM" mnemonicParsing="false" stylesheets="@../css/radioButton.css" text="M">
                            <toggleGroup>
                               <ToggleGroup fx:id="sex" />
                            </toggleGroup>
@@ -126,7 +128,7 @@
                               <Font size="14.0" />
                            </font>
                         </RadioButton>
-                        <RadioButton fx:id="radioF" mnemonicParsing="false" text="F" toggleGroup="$sex" stylesheets="@../css/radioButton.css">
+                        <RadioButton fx:id="radioF" mnemonicParsing="false" stylesheets="@../css/radioButton.css" text="F" toggleGroup="$sex">
                            <HBox.margin>
                               <Insets right="40.0" />
                            </HBox.margin>

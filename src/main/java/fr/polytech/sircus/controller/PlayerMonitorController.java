@@ -20,10 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -33,7 +30,6 @@ import java.util.Optional;
  * Manages the interface used when the exam is in progress (player_monitor).
  */
 public class PlayerMonitorController {
-
     @Getter @Setter
     private MetaSequence metaSequenceToRead;
 
@@ -295,13 +291,6 @@ public class PlayerMonitorController {
             metaSequenceToRead.computeDuration();
 
             remaining.setTime(remaining.getTime().getSecond() + metaSequenceToRead.getDuration().getSeconds());
-
-            /*try {
-                PythonInterpreter interpreter = new PythonInterpreter();
-                interpreter.execfile("TobiiPro.SDK.Python.Windows_1.10.1.2/64/tobii_research.py");
-            } catch (PyException e) {
-                e.printStackTrace();
-            }*/
         } else {
             // We are playing something, so the pause button is displayed, so we must pause the sequence
             if (viewerPlayingState) {
@@ -321,6 +310,16 @@ public class PlayerMonitorController {
                 viewer.playViewer();
                 playButton.setGraphic(pauseIcon);
                 viewerPlayingState = true;
+                //TODO try to execute that on another thread
+                try {
+                    Process process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiAcquisition.py");
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String out;
+                    while ((out = reader.readLine()) != null)
+                        System.out.println(out);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
 
                 // If it's the first lecture or after a reset
                 if (firstPlay){
