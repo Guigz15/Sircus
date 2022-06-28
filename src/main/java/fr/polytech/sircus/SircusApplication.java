@@ -6,6 +6,7 @@ import fr.polytech.sircus.model.Patient;
 import fr.polytech.sircus.model.User;
 import fr.polytech.sircus.utils.Serializer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -83,6 +84,11 @@ public class SircusApplication extends Application {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            // Kill GUI Thread
+            Platform.exit();
+            // Kill the JVM
+            System.exit(0);
         });
 
         stage.setTitle("Application SIRCUS");

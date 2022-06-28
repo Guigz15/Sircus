@@ -20,7 +20,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
                <VBox.margin>
-                  <Insets top="3.0" />
+                  <Insets bottom="5.0" top="3.0" />
                </VBox.margin>
             </Text>
             <VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="302.0" prefWidth="330.0" spacing="20.0" style="-fx-border-color: black;">
@@ -115,21 +115,22 @@
          </VBox>
          <VBox>
             <HBox.margin>
-               <Insets left="23.0" />
+               <Insets left="14.0" />
             </HBox.margin>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="23.0">
-               <VBox alignment="TOP_CENTER">
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="14.0">
+               <VBox alignment="TOP_CENTER" maxHeight="-Infinity">
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Caméra">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="3.0" />
+                        <Insets bottom="5.0" top="3.0" />
                      </VBox.margin>
                   </Text>
-                  <Pane minHeight="-Infinity" minWidth="-Infinity" style="-fx-border-color: black;">
-                     <MediaView fitHeight="300.0" fitWidth="300.0" />
-                  </Pane>
+                  <Pane fx:id="cameraPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" style="-fx-border-color: black;">
+                     <padding>
+                        <Insets right="1.0" top="1.0" />
+                     </padding></Pane>
                </VBox>
                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Aperçu">
@@ -137,7 +138,7 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="3.0" />
+                        <Insets bottom="5.0" top="3.0" />
                      </VBox.margin>
                   </Text>
                   <StackPane fx:id="previewPane" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">

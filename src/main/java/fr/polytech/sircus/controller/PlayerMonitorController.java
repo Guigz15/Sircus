@@ -1,16 +1,21 @@
 package fr.polytech.sircus.controller;
 
+import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
+import com.github.sarxos.webcam.WebcamResolution;
 import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.model.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
@@ -20,16 +25,20 @@ import lombok.Getter;
 import lombok.Setter;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import javax.swing.*;
 import java.io.*;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Manages the interface used when the exam is in progress (player_monitor).
  */
 public class PlayerMonitorController {
+
     @Getter @Setter
     private MetaSequence metaSequenceToRead;
 
@@ -51,6 +60,9 @@ public class PlayerMonitorController {
     private Button backButton;
     @FXML
     private Button forwardButton;
+    @FXML
+    private Pane cameraPane;
+    private Webcam webcam = null;
     @FXML
     private StackPane previewPane;
     @FXML
@@ -129,6 +141,23 @@ public class PlayerMonitorController {
         seqProgressBar = new TimelineProgressBar(seqProgressBarFX, seqRemaining, 0);
 
         firstPlay = true;
+
+        SwingNode swingNode = new SwingNode();
+        createWebcamAndSetSwingContent(swingNode);
+        cameraPane.getChildren().add(swingNode);
+    }
+
+    private void createWebcamAndSetSwingContent(final SwingNode swingNode) {
+        SwingUtilities.invokeLater(() -> {
+            if (Webcam.getWebcams().size() == 1)
+                webcam = Webcam.getDefault();
+            else
+                webcam = Webcam.getWebcams().get(1);
+            webcam.setViewSize(WebcamResolution.QVGA.getSize());
+            WebcamPanel panel = new WebcamPanel(webcam);
+            panel.setMirrored(true);
+            swingNode.setContent(panel);
+        });
     }
 
     /**
@@ -159,6 +188,9 @@ public class PlayerMonitorController {
                 return;
             }
         }
+
+        // Close the webcam if we go back to the previous page
+        webcam.close();
 
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
         Scene scene = new Scene(fxmlLoader.load());
@@ -310,16 +342,21 @@ public class PlayerMonitorController {
                 viewer.playViewer();
                 playButton.setGraphic(pauseIcon);
                 viewerPlayingState = true;
-                //TODO try to execute that on another thread
-                try {
-                    Process process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiAcquisition.py");
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    String out;
-                    while ((out = reader.readLine()) != null)
-                        System.out.println(out);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+
+                // Launch acquisition on another thread
+                ExecutorService threadPool = Executors.newWorkStealingPool();
+                threadPool.execute(() -> {
+                    try {
+                        Process process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiAcquisition.py " + metaSequenceToRead.getDuration().getSeconds());
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                        String out;
+                        while ((out = reader.readLine()) != null)
+                            System.out.println(out);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                threadPool.shutdown();
 
                 // If it's the first lecture or after a reset
                 if (firstPlay){
@@ -518,16 +555,6 @@ public class PlayerMonitorController {
      * @return the duration in seconds
      */
     private long getRemainingTime(){
-        /*long seconds = 0;
-
-        // Sum all the next sequences including the current one
-        for (int metaSeqIndex = viewer.getCurrentMetaSequenceIndex() ; metaSeqIndex < SircusApplication.dataSircus.getMetaSequencesList().size() ; metaSeqIndex++){
-            seconds += SircusApplication.dataSircus.getMetaSequencesList().get(metaSeqIndex).getMinDuration().getSeconds();
-        }
-        // Minus what we already played in the current sequence
-        seconds -= metaSeqDuration.getTime().getSecond();
-
-        return seconds;*/
         return metaSequenceToRead.getDuration().getSeconds();
     }
 

@@ -26,6 +26,8 @@ import java.time.Period;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * This class manages the main window
@@ -126,11 +128,16 @@ public class MainWindowController implements Initializable {
         });
         tobiiCalibration.visibleProperty().bind(Bindings.createBooleanBinding(() -> eyeTracker.getValue() != null, eyeTracker.valueProperty()));
         tobiiCalibration.setOnAction(actionEvent -> {
-            try {
-                Process process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiCalibration.py");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            // Launch Eye Tracker Manager on another thread
+            ExecutorService threadPool = Executors.newWorkStealingPool();
+            threadPool.execute(() -> {
+                try {
+                    Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiCalibration.py");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            threadPool.shutdown();
         });
 
         // Location

@@ -299,7 +299,7 @@ public class ViewerController {
         }
 
         // We add 0.1s at the end in order to trigger this event even
-        // if there is only an empty metasequence (event should be triggered at 0s)
+        // if there is only an empty meta-sequence (event should be triggered at 0s)
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration + 0.1),
                 event -> {
                     removeVideo();
