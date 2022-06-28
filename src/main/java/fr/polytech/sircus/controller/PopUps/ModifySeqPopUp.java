@@ -112,7 +112,7 @@ public class ModifySeqPopUp {
         Callback<TableColumn<AbstractMedia, String>, TableCell<AbstractMedia, String>> cellFactoryOption = new Callback<>() {
             @Override
             public TableCell<AbstractMedia, String> call(final TableColumn<AbstractMedia, String> param) {
-                TableCell<AbstractMedia,String> tableCell = new TableCell<AbstractMedia,String>() {
+                TableCell<AbstractMedia,String> tableCell = new TableCell<>() {
                     final Button tableViewAddButton = new Button("");
                     final Button tableViewDeleteButton = new Button("");
                     final Button tableViewOptionButton = new Button("");
@@ -369,11 +369,13 @@ public class ModifySeqPopUp {
         dialog.initOwner(addMediaToSeq.getScene().getWindow());
 
         Optional<ButtonType> clickedButton = dialog.showAndWait();
-        if (clickedButton.get() == ButtonType.FINISH) {
-            if (controller.getNewMedia() != null) {
-                sequence.addMedia(controller.getNewMedia());
-                constructMediaInterstimList();
-                mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
+        if (clickedButton.isPresent()) {
+            if (clickedButton.get() == ButtonType.FINISH) {
+                if (controller.getNewMedia() != null) {
+                    sequence.addMedia(controller.getNewMedia());
+                    constructMediaInterstimList();
+                    mediaTable.setItems(FXCollections.observableList(this.listMediaPlusInterstim));
+                }
             }
         }
     }
@@ -396,10 +398,12 @@ public class ModifySeqPopUp {
             dialog.initOwner(this.mediaTable.getScene().getWindow());
 
             Optional<ButtonType> clickedButton = dialog.showAndWait();
-            if (clickedButton.get() == ButtonType.FINISH) {
-                AbstractMedia abstractMediaToModified = mediaTable.getItems().get(indexSelectedMediaInTable);
-                abstractMediaToModified.setResizable(controller.getResizeImage().isSelected());
-                abstractMediaToModified.setBackgroundColor(controller.getBackgroundColor().getValue());
+            if (clickedButton.isPresent()) {
+                if (clickedButton.get() == ButtonType.FINISH) {
+                    AbstractMedia abstractMediaToModified = mediaTable.getItems().get(indexSelectedMediaInTable);
+                    abstractMediaToModified.setResizable(controller.getResizeImage().isSelected());
+                    abstractMediaToModified.setBackgroundColor(controller.getBackgroundColor().getValue());
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

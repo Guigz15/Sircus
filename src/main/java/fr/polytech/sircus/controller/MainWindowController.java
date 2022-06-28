@@ -5,8 +5,6 @@ import fr.polytech.sircus.controller.PopUps.LoginPopup;
 import fr.polytech.sircus.model.Patient;
 import fr.polytech.sircus.model.User;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,7 +17,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
@@ -120,19 +120,18 @@ public class MainWindowController implements Initializable {
         ObservableList<String> eyeTrackersList = FXCollections.observableArrayList(SircusApplication.dataSircus.getEyeTrackerList());
         eyeTracker.setItems(eyeTrackersList);
         eyeTracker.getSelectionModel().select(SircusApplication.dataSircus.getEyeTrackerSaved());
-        eyeTracker.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldName, String newName) {
-                SircusApplication.dataSircus.saveEyeTracker(newName);
-            }
-        });
+        eyeTracker.valueProperty().addListener((observableValue, oldName, newName) -> SircusApplication.dataSircus.saveEyeTracker(newName));
         tobiiCalibration.visibleProperty().bind(Bindings.createBooleanBinding(() -> eyeTracker.getValue() != null, eyeTracker.valueProperty()));
         tobiiCalibration.setOnAction(actionEvent -> {
             // Launch Eye Tracker Manager on another thread
             ExecutorService threadPool = Executors.newWorkStealingPool();
             threadPool.execute(() -> {
                 try {
-                    Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiCalibration.py");
+                    Process process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiCalibration.py");
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String out;
+                    while ((out = reader.readLine()) != null)
+                        System.out.println(out);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -161,73 +160,55 @@ public class MainWindowController implements Initializable {
             adminLogOut.setVisible(false);
         });
 
-        id.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                if (!newValue.isEmpty())
-                    id.setStyle(null);
-                else
-                    id.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
+        id.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue.isEmpty())
+                id.setStyle(null);
+            else
+                id.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
+        });
+
+        sex.selectedToggleProperty().addListener((observableValue, oldToggle, newToggle) -> {
+            if (newToggle.isSelected()) {
+                radioM.getStylesheets().clear();
+                radioF.getStylesheets().clear();
             }
         });
 
-        sex.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle oldToggle, Toggle newToggle) {
-                if (newToggle.isSelected()) {
-                    radioM.getStylesheets().clear();
-                    radioF.getStylesheets().clear();
-                }
-            }
-        });
-
-        birthDate.getEditor().textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*\\/"))
-                    birthDate.getEditor().setText(newValue.replaceAll("[^\\d\\/]", ""));
-                if (newValue.length() > 10)
-                    birthDate.getEditor().setText(birthDate.getEditor().getText().substring(0, 10));
-                if (!newValue.isEmpty())
-                    birthDate.setStyle(null);
-                else
-                    birthDate.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
-            }
+        birthDate.getEditor().textProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*\\/"))
+                birthDate.getEditor().setText(newValue.replaceAll("[^\\d\\/]", ""));
+            if (newValue.length() > 10)
+                birthDate.getEditor().setText(birthDate.getEditor().getText().substring(0, 10));
+            if (!newValue.isEmpty())
+                birthDate.setStyle(null);
+            else
+                birthDate.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
         });
 
         // Forename and Name
-        name.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                if (!newValue.matches("\\sa-zA-Z*\\-"))
-                    name.setText(newValue.replaceAll("[^\\sa-zA-Z\\-]", ""));
-                if (!newValue.isEmpty())
-                    name.setStyle(null);
-                else
-                    name.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
-            }
+        name.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue.matches("\\sa-zA-Z*\\-"))
+                name.setText(newValue.replaceAll("[^\\sa-zA-Z\\-]", ""));
+            if (!newValue.isEmpty())
+                name.setStyle(null);
+            else
+                name.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
         });
 
-        forename.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                if (!newValue.matches("\\sa-zA-Z*\\-"))
-                    forename.setText(newValue.replaceAll("[^\\sa-zA-Z\\-]", ""));
-                if (!newValue.isEmpty())
-                    forename.setStyle(null);
-                else
-                    forename.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
-            }
+        forename.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue.matches("\\sa-zA-Z*\\-"))
+                forename.setText(newValue.replaceAll("[^\\sa-zA-Z\\-]", ""));
+            if (!newValue.isEmpty())
+                forename.setStyle(null);
+            else
+                forename.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
         });
 
-        locations.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                if (!newValue.isEmpty())
-                    locations.setStyle(null);
-                else
-                    locations.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
-            }
+        locations.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue.isEmpty())
+                locations.setStyle(null);
+            else
+                locations.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
         });
 
         // Initialize all components if they have been already filled
@@ -450,10 +431,12 @@ public class MainWindowController implements Initializable {
             dialog.setTitle("Connexion expérimentateur");
 
             Optional<ButtonType> clickedButton = dialog.showAndWait();
-            if (clickedButton.get() == ButtonType.FINISH && controller.checkUserName() && controller.checkPassword()) {
-                SircusApplication.adminConnected = true;
-                adminLabel.setVisible(true);
-                adminLogOut.setVisible(true);
+            if (clickedButton.isPresent()) {
+                if (clickedButton.get() == ButtonType.FINISH && controller.checkUserName() && controller.checkPassword()) {
+                    SircusApplication.adminConnected = true;
+                    adminLabel.setVisible(true);
+                    adminLogOut.setVisible(true);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

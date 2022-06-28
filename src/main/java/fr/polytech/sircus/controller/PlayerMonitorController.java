@@ -282,6 +282,7 @@ public class PlayerMonitorController {
                 }
                 else if (result.get() == ButtonType.NO) {
                     viewer.closeViewer();
+                    webcam.close();
 
                     // Go to previous page to launch another sequence
                     FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
@@ -309,9 +310,6 @@ public class PlayerMonitorController {
     @FXML
     public void playViewer() {
         if (viewer == null) {
-            viewer = new ViewerController(this.playButton.getScene().getWindow(), this, metaSequenceToRead);
-            forwardButton.setDisable(viewer.getCurrentSequenceIndex() + 1 == viewer.getPlayingMetaSequence().getSequencesList().size());
-
             for (Sequence sequence : metaSequenceToRead.getSequencesList()) {
                 for (Media media : sequence.getListMedias()) {
                     media.setDuration(media.getRandomDuration());
@@ -321,6 +319,9 @@ public class PlayerMonitorController {
             }
 
             metaSequenceToRead.computeDuration();
+
+            viewer = new ViewerController(this.playButton.getScene().getWindow(), this, metaSequenceToRead);
+            forwardButton.setDisable(viewer.getCurrentSequenceIndex() + 1 == viewer.getPlayingMetaSequence().getSequencesList().size());
 
             remaining.setTime(remaining.getTime().getSecond() + metaSequenceToRead.getDuration().getSeconds());
         } else {
@@ -339,7 +340,6 @@ public class PlayerMonitorController {
                 }
             } else {
                 // We aren't playing something, so the play button is displayed, so we must start the sequence
-                viewer.playViewer();
                 playButton.setGraphic(pauseIcon);
                 viewerPlayingState = true;
 
@@ -348,6 +348,8 @@ public class PlayerMonitorController {
                 threadPool.execute(() -> {
                     try {
                         Process process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiAcquisition.py " + metaSequenceToRead.getDuration().getSeconds());
+                        if (process.isAlive())
+                            viewer.playViewer();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                         String out;
                         while ((out = reader.readLine()) != null)

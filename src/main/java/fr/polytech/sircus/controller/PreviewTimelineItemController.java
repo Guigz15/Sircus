@@ -73,7 +73,7 @@ public class PreviewTimelineItemController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
     }
 
-    public void setTimeline(PreviewTimeline timeline){
+    public void setTimeline(PreviewTimeline timeline) {
         this.timeline = timeline;
         initializeBindings();
     }
@@ -81,7 +81,7 @@ public class PreviewTimelineItemController implements Initializable {
     /**
      * Initialize the bindings of the item elements.
      */
-    public void initializeBindings(){
+    public void initializeBindings() {
 
         if(timeline == null) {
 
@@ -122,7 +122,7 @@ public class PreviewTimelineItemController implements Initializable {
     /**
      * Method that sets the standard border for the item ruler.
      */
-    public void setDefaultRulerBorder(){
+    public void setDefaultRulerBorder() {
 
         ruler.setBorder(new Border(
                 new BorderStroke(
@@ -158,7 +158,7 @@ public class PreviewTimelineItemController implements Initializable {
      * Method that sets all the properties of the item according to a media.
      * @param media The media to set the item to.
      */
-    public void setFromMedia(AbstractMedia media){
+    public void setFromMedia(AbstractMedia media) {
 
         this.media = media;
 
@@ -182,11 +182,9 @@ public class PreviewTimelineItemController implements Initializable {
         ));
     }
 
-    private void setImage(String pathToImage){
-        FileInputStream fip = null;
-
+    private void setImage(String pathToImage) {
         try {
-            fip = new FileInputStream(pathToImage);
+            FileInputStream fip = new FileInputStream(pathToImage);
             image = new Image(fip);
             imageView.setImage(image);
 

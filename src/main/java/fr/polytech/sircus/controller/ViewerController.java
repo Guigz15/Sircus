@@ -272,7 +272,7 @@ public class ViewerController {
                             }));
 
                     // We add to the counterDuration the duration of the "interstim" currently read.
-                    counterDuration += media.getInterstim().getMinDuration().getSeconds();
+                    counterDuration += media.getInterstim().getDuration().getSeconds();
                 }
 
                 if (media.getTypeMedia() == TypeMedia.PICTURE) {
@@ -283,7 +283,7 @@ public class ViewerController {
                             }));
 
                     // We add to the counterDuration the duration of the media currently read.
-                    counterDuration += media.getMinDuration().getSeconds();
+                    counterDuration += media.getDuration().getSeconds();
                 }
                 else if (media.getTypeMedia() == TypeMedia.VIDEO) {
                     timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),
@@ -293,7 +293,7 @@ public class ViewerController {
                             }));
 
                     // We add to the counterDuration the duration of the media currently read.
-                    counterDuration += media.getMinDuration().getSeconds();
+                    counterDuration += media.getDuration().getSeconds();
                 }
             }
         }

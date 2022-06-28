@@ -5,8 +5,6 @@ import fr.polytech.sircus.model.Interstim;
 import fr.polytech.sircus.model.Media;
 import fr.polytech.sircus.model.TypeMedia;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -75,28 +73,21 @@ public class AddMediaPopUp implements Initializable {
         interstimDuration.disableProperty().bind(Bindings.createBooleanBinding(() -> interstimName.getText().isEmpty(), interstimName.textProperty()));
         mediasList.disableProperty().bind(Bindings.createBooleanBinding(() -> !existingMediaButton.isSelected(), existingMediaButton.selectedProperty()));
 
-        mediaDuration.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*\\-"))
-                    mediaDuration.setText(newValue.replaceAll("[^\\d\\-]", ""));
-                if (!newValue.isEmpty()) {
-                    newMedia.setMinDuration(Duration.ofSeconds(Long.parseLong(mediaDuration.getText().split("\\-")[0])));
-                    newMedia.setMaxDuration(Duration.ofSeconds(Long.parseLong(mediaDuration.getText().split("\\-")[1])));
-                }
+        mediaDuration.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*\\-"))
+                mediaDuration.setText(newValue.replaceAll("[^\\d\\-]", ""));
+            if (!newValue.isEmpty()) {
+                newMedia.setMinDuration(Duration.ofSeconds(Long.parseLong(mediaDuration.getText().split("\\-")[0])));
+                newMedia.setMaxDuration(Duration.ofSeconds(Long.parseLong(mediaDuration.getText().split("\\-")[1])));
             }
         });
 
-        interstimDuration.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*\\-"))
-                    interstimDuration.setText(newValue.replaceAll("[^\\d\\-]", ""));
-                if (!newValue.isEmpty()) {
-                    newInterstim.setMinDuration(Duration.ofSeconds(Long.parseLong(interstimDuration.getText().split("\\-")[0])));
-                    newInterstim.setMaxDuration(Duration.ofSeconds(Long.parseLong(interstimDuration.getText().split("\\-")[1])));
-                }
+        interstimDuration.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*\\-"))
+                interstimDuration.setText(newValue.replaceAll("[^\\d\\-]", ""));
+            if (!newValue.isEmpty()) {
+                newInterstim.setMinDuration(Duration.ofSeconds(Long.parseLong(interstimDuration.getText().split("\\-")[0])));
+                newInterstim.setMaxDuration(Duration.ofSeconds(Long.parseLong(interstimDuration.getText().split("\\-")[1])));
             }
         });
 
