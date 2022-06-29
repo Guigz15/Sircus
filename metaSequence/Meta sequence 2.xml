@@ -8,5 +8,6 @@
 <sequence>Sequence%201.xml</sequence>
 <sequence>Sequence%206.xml</sequence>
 </listSequence>
+<mixedForever>false</mixedForever>
 </metaSequence>
 

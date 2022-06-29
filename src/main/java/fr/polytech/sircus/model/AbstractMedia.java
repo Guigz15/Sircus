@@ -75,7 +75,6 @@ public abstract class AbstractMedia implements Serializable {
         return getFilename().equals(media.getFilename()) &&
                 getMinDuration().equals(media.getMinDuration()) &&
                 getMaxDuration().equals(media.getMaxDuration()) &&
-                getDuration().equals(media.getDuration()) &&
                 getTypeMedia().equals(media.getTypeMedia()) &&
                 Objects.equals(isLocked(), media.isLocked()) &&
                 isResizable() == media.isResizable() &&

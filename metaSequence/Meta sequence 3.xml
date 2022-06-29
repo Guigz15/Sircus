@@ -14,5 +14,6 @@
 <sequence>Sequence%208.xml</sequence>
 <sequence>Sequence%209.xml</sequence>
 </listSequence>
+<mixedForever>false</mixedForever>
 </metaSequence>
 

@@ -28,6 +28,7 @@ public class ImportMetaSeqXML extends DefaultHandler {
     private Boolean minDuration = false;
     private Boolean maxDuration = false;
     private Boolean sequence = false;
+    private Boolean mixedForever = false;
 
 
     public ImportMetaSeqXML() {
@@ -55,6 +56,8 @@ public class ImportMetaSeqXML extends DefaultHandler {
             meta.setSequencesList(new ArrayList<>());
         } else if (qName.equalsIgnoreCase("sequence")) {
             sequence = true;
+        } else if (qName.equalsIgnoreCase("mixedForever")) {
+            mixedForever = true;
         }
     }
 
@@ -102,6 +105,9 @@ public class ImportMetaSeqXML extends DefaultHandler {
                 e.printStackTrace();
             }
             sequence = false;
+        } else if (mixedForever) {
+            meta.setMixedForever(Boolean.parseBoolean(currentValue.toString()));
+            mixedForever = false;
         }
     }
 
