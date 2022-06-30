@@ -86,7 +86,7 @@ public class Media extends AbstractMedia implements Serializable {
      * Convert a media to XML
      * @return XML
      */
-    public String toXML(){
+    public String toXML() {
         String XML = "<media>\n" +
                 "<filename>" + filename.replace(" ", "%20") + "</filename>\n" +
                 "<minDuration>" + minDuration + "</minDuration>\n" +

@@ -33,4 +33,8 @@ public class Comment {
         this.comment = comment;
         this.time = LocalTime.now();
     }
+
+    public String toXML() {
+        return "<comment content=\"" + this.comment.replace(" ", "%20") + "\" time=\"" + this.time + "\" />\n";
+    }
 }

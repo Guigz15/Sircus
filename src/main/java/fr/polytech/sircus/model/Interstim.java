@@ -77,7 +77,7 @@ public class Interstim extends AbstractMedia implements Serializable {
         String XML = "<interstim filename=\"" + filename.replace(" ", "%20") +
                 "\" minDuration=\"" + minDuration + "\" maxDuration=\"" + maxDuration + "\" type=\"" + typeMedia + "\" lock=\"" +
                 isLocked + "\" isResizable=\"" + isResizable + "\" backgroundColor=\"" +
-                backgroundColor + "\"></interstim>\n";
+                backgroundColor + "\" />\n";
         return XML;
     }
 }

@@ -1,7 +1,10 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.model.*;
+import fr.polytech.sircus.model.AbstractMedia;
+import fr.polytech.sircus.model.MetaSequence;
+import fr.polytech.sircus.model.Sequence;
+import fr.polytech.sircus.model.TypeMedia;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
@@ -24,6 +27,8 @@ import lombok.Getter;
 
 import java.io.*;
 import java.net.MalformedURLException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static fr.polytech.sircus.controller.Step2Controller.sortByValue;
@@ -269,6 +274,8 @@ public class ViewerController {
                             event -> {
                                 removeVideo();
                                 showImage(media.getInterstim());
+                                playerMonitorController.getResult().addViewerData(media.getInterstim().getFilename()
+                                        + "\t" + LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss.SSS")));
                             }));
 
                     // We add to the counterDuration the duration of the "interstim" currently read.
@@ -280,6 +287,8 @@ public class ViewerController {
                             event -> {
                                 removeVideo();
                                 showImage(media);
+                                playerMonitorController.getResult().addViewerData(media.getFilename()
+                                        + "\t" + LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss.SSS")));
                             }));
 
                     // We add to the counterDuration the duration of the media currently read.

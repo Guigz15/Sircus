@@ -112,6 +112,8 @@ public class Step2Controller implements Initializable {
     @FXML
     private Button previous;
     @FXML
+    private Text nextPageAdviceText;
+    @FXML
     private Button next;
 
     //DataFormat use for drag and drop sequences in listView.
@@ -146,6 +148,7 @@ public class Step2Controller implements Initializable {
 
         //Defined action when the MetaSequence element selected is changed.
         metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
+        nextPageAdviceText.visibleProperty().bind(Bindings.createBooleanBinding(() -> metaListView.getSelectionModel().isEmpty(), metaListView.getSelectionModel().getSelectedItems()));
 
         /* initialize sequences listView */
         seqListView.setStyle("-fx-font-size: 14pt;");
@@ -566,7 +569,7 @@ public class Step2Controller implements Initializable {
     /**
      * This method allows to open pop for modifying a sequence
      */
-    private void openModifyPopUpForSequence(){
+    private void openModifyPopUpForSequence() {
         try {
             if(seqListView.getSelectionModel().getSelectedItem() != null) {
                 FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_seq_popup.fxml"));
@@ -617,8 +620,12 @@ public class Step2Controller implements Initializable {
                 PrintWriter writer = new PrintWriter(file);
                 writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + seq.toXML());
                 writer.close();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "L'exportation de la séquence a réussi.", ButtonType.OK);
+                alert.show();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR, "L'exportation de la séquence a échoué.", ButtonType.OK);
+                alert.show();
             }
         }
     }
@@ -639,8 +646,12 @@ public class Step2Controller implements Initializable {
                 PrintWriter writer = new PrintWriter(file);
                 writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + meta.toXML());
                 writer.close();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "L'exportation de la métaséquence a réussi.", ButtonType.OK);
+                alert.show();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR, "L'exportation de la métaséquence a échoué.", ButtonType.OK);
+                alert.show();
             }
         }
     }
@@ -725,13 +736,15 @@ public class Step2Controller implements Initializable {
 
     @FXML
     private void nextPage() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/player_monitor.fxml")));
-        Scene scene = new Scene(fxmlLoader.load());
-        PlayerMonitorController playerMonitorController = fxmlLoader.getController();
-        playerMonitorController.setMetaSequenceToRead(metaListView.getSelectionModel().getSelectedItem());
-        Stage stage = (Stage) next.getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+        if (!metaListView.getSelectionModel().isEmpty()) {
+            FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/player_monitor.fxml")));
+            Scene scene = new Scene(fxmlLoader.load());
+            PlayerMonitorController playerMonitorController = fxmlLoader.getController();
+            playerMonitorController.setMetaSequenceToRead(metaListView.getSelectionModel().getSelectedItem());
+            Stage stage = (Stage) next.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     /**

@@ -11,6 +11,8 @@ import javafx.animation.Timeline;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -27,6 +29,9 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import javax.swing.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -111,6 +116,7 @@ public class PlayerMonitorController {
     /**
      * The Result to fill.
      */
+    @Getter
     private Result result;
 
     // Viewer manager
@@ -147,6 +153,10 @@ public class PlayerMonitorController {
         cameraPane.getChildren().add(swingNode);
     }
 
+    /**
+     * Instantiate webcam, create a webcam panel and convert it in a JFX object.
+     * @param swingNode that welcome webcam panel
+     */
     private void createWebcamAndSetSwingContent(final SwingNode swingNode) {
         SwingUtilities.invokeLater(() -> {
             if (Webcam.getWebcams().size() == 1)
@@ -166,7 +176,24 @@ public class PlayerMonitorController {
     @FXML
     private void addComment() {
         this.result.addComment(this.commentTextArea.getText());
-        this.commentTextArea.clear();
+        //this.commentTextArea.clear();
+    }
+
+    public void saveResult() throws IOException {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Files.createDirectories(Path.of(SircusApplication.dataSircus.getPath().getResultPath() + localDateTime.getYear()
+                + "\\" + localDateTime.getMonthValue() + "\\" + localDateTime.getDayOfMonth() + "\\" + localDateTime.getHour()
+                + "\\" + localDateTime.getMinute()));
+
+        File resultFile = new File(SircusApplication.dataSircus.getPath().getResultPath() +
+                localDateTime.getYear() + "\\" + localDateTime.getMonthValue() + "\\" +
+                localDateTime.getDayOfMonth() + "\\" + localDateTime.getHour()
+                + "\\" + localDateTime.getMinute() + "\\" + metaSequenceToRead.getName()
+                + " - " + SircusApplication.patient.getIdentifier() + ".xml");
+
+        PrintWriter writer = new PrintWriter(resultFile);
+        writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + result.toXML());
+        writer.close();
     }
 
     /**
@@ -259,13 +286,18 @@ public class PlayerMonitorController {
      */
     public void replayMetaSequence() {
 
+        viewer.pauseViewer();
+        try {
+            saveResult();
+            result.clear();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.YES, ButtonType.NO);
         alert.setTitle("Meta séquence terminée");
         alert.setHeaderText("Le taux d'acquisition pour cette meta-séquence est de {placeholder}%.");
         alert.setContentText("Voulez-vous rejouer la métaséquence ?");
-
-        viewer.pauseViewer();
-
         alert.setOnHidden(dialogEvent -> {
             Optional<ButtonType> result = Optional.ofNullable(alert.getResult());
 
@@ -319,11 +351,12 @@ public class PlayerMonitorController {
             }
 
             metaSequenceToRead.computeDuration();
+            remaining.setTime(remaining.getTime().getSecond() + metaSequenceToRead.getDuration().getSeconds());
+
+            result.setMetaSequenceUsed(metaSequenceToRead);
 
             viewer = new ViewerController(this.playButton.getScene().getWindow(), this, metaSequenceToRead);
             forwardButton.setDisable(viewer.getCurrentSequenceIndex() + 1 == viewer.getPlayingMetaSequence().getSequencesList().size());
-
-            remaining.setTime(remaining.getTime().getSecond() + metaSequenceToRead.getDuration().getSeconds());
         } else {
             // We are playing something, so the pause button is displayed, so we must pause the sequence
             if (viewerPlayingState) {
@@ -348,17 +381,19 @@ public class PlayerMonitorController {
                 threadPool.execute(() -> {
                     try {
                         Process process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiAcquisition.py " + metaSequenceToRead.getDuration().getSeconds());
-                        if (process.isAlive())
-                            viewer.playViewer();
+                        Thread.sleep(3000); // Wait for eye tracker to launch
+                        viewer.playViewer();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                         String out;
-                        while ((out = reader.readLine()) != null)
-                            System.out.println(out);
-                    } catch (IOException e) {
+                        while ((out = reader.readLine()) != null) {
+                            if (!viewerPlayingState)
+                                process.destroy();
+                            result.addEyeTrackerData(out);
+                        }
+                    } catch (IOException | InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                 });
-                threadPool.shutdown();
 
                 // If it's the first lecture or after a reset
                 if (firstPlay){
@@ -380,22 +415,48 @@ public class PlayerMonitorController {
     @FXML
     public void stopViewer() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.getDialogPane().applyCss();
+        Node graphic = alert.getDialogPane().getGraphic();
+        alert.setDialogPane(new DialogPane() {
+            @Override
+            protected Node createDetailsButton() {
+                CheckBox saveOption = new CheckBox("Voulez-vous sauvegarder les données ?");
+                saveOption.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
+                    if (!oldValue && newValue) {
+                        try {
+                            saveResult();
+                            result.clear();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                return saveOption;
+            }
+        });
+        alert.getDialogPane().getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+        alert.setContentText("Êtes-vous sûr de vouloir arrêter la méta-séquence et la réinitialiser ?");
+        alert.getDialogPane().setExpandableContent(new Group());
+        alert.getDialogPane().setExpanded(true);
+        alert.getDialogPane().setGraphic(graphic);
         alert.setTitle("Réinitialiser la méta-séquence");
-        alert.setHeaderText("Êtes-vous sûr de vouloir arrêter la méta-séquence et la réinitialiser ?");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            viewer.resetMetaSequence();
-            resetAllClocks();
-            firstPlay = true;
+        if (result.isPresent()) {
+            if (result.get() == ButtonType.YES) {
+                viewer.resetMetaSequence();
+                resetAllClocks();
+                firstPlay = true;
 
-            this.stopButton.setDisable(true);
+                this.stopButton.setDisable(true);
 
-            if (viewerPlayingState) {
-                viewer.pauseViewer();
-                playButton.setGraphic(playIcon);
-                viewerPlayingState = false;
-            }
+                if (viewerPlayingState) {
+                    viewer.pauseViewer();
+                    playButton.setGraphic(playIcon);
+                    viewerPlayingState = false;
+                }
+            } else
+                viewer.playViewer();
         }
     }
 

@@ -21,6 +21,8 @@ public class PathMedia  implements Serializable {
     private String seqPath;
     @Getter @Setter
     private String metaPath;
+    @Getter @Setter
+    private String resultPath;
 
     /**
      * Boolean to indicate if defaultPath is a path provided by the user.
@@ -39,12 +41,14 @@ public class PathMedia  implements Serializable {
             defaultPath = System.getProperty("user.dir") + "\\medias";
             seqPath = System.getProperty("user.dir") + "\\sequences\\";
             metaPath = System.getProperty("user.dir") + "\\metaSequence\\";
+            resultPath = System.getProperty("user.dir") + "\\result\\";
         }
         // others
         else {
             defaultPath = System.getProperty("user.dir") + "/medias";
             seqPath = System.getProperty("user.dir") + "/sequences/";
             metaPath = System.getProperty("user.dir") + "/metaSequence/";
+            resultPath = System.getProperty("user.dir") + "/result/";
         }
 
         lastPath = null;

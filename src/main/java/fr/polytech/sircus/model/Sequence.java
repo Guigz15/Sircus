@@ -162,8 +162,8 @@ public class Sequence implements Serializable, Cloneable {
     public String toXML(){
         String XML = "<sequence name=\"" + name.replace(" ", "%20") + "\" minDuration=\"" + minDuration
                 + "\" maxDuration=\"" + maxDuration + "\" lock=\"" + lock + "\">\n" + "<listMedia>\n";
-        for(int i=0; i<listMedias.size(); i++){
-            XML += listMedias.get(i).toXML();
+        for (Media media : listMedias){
+            XML += media.toXML();
         }
         XML += "</listMedia>\n" +
                 "</sequence>\n";
