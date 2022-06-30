@@ -1,5 +1,6 @@
 package fr.polytech.sircus.model;
 
+import fr.polytech.sircus.SircusApplication;
 import lombok.Getter;
 
 import java.time.Duration;
@@ -77,7 +78,7 @@ public class Result {
         this.viewerDatas.clear();
     }
 
-    public String toXML() {
+    public String toXML() throws Exception {
         String XML = "<result>\n" +
                 "<metasequenceUsed name=\"" + metaSequenceUsed.getName().replace(" ", "%20") +
                 "\" minDuration=\"" + metaSequenceUsed.getMinDuration() + "\" maxDuration=\"" +
@@ -99,6 +100,6 @@ public class Result {
             XML += comment.toXML();
         XML += "</listComment>\n" +
                 "</result>\n";
-        return XML;
+        return SircusApplication.XMLFormatter(XML, 4, true);
     }
 }

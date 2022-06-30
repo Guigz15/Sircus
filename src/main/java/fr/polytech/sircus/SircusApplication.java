@@ -11,8 +11,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
-import java.io.IOException;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
 import java.util.Objects;
 
 /**
@@ -97,5 +106,21 @@ public class SircusApplication extends Application {
         stage.setScene(scene);
         stage.getIcons().add(new Image("images/logo-Sircus-FT-fond-blanc.png"));
         stage.show();
+    }
+
+    public static String XMLFormatter(String xmlString, int indent, boolean ignoreDeclaration) throws Exception {
+        InputSource src = new InputSource(new StringReader(xmlString));
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(src);
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        transformerFactory.setAttribute("indent-number", indent);
+        Transformer transformer = transformerFactory.newTransformer(new StreamSource(new File("src/main/resources/styleSheetXML.xsl")));
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, ignoreDeclaration ? "yes" : "no");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+        Writer out = new StringWriter();
+        transformer.transform(new DOMSource(document), new StreamResult(out));
+        return out.toString();
     }
 }

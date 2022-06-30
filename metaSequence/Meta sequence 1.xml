@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metaSequence>
-<name>Meta%20sequence%201</name>
-<minDuration>PT39S</minDuration>
-<maxDuration>PT1M28S</maxDuration>
-<listSequence>
-<sequence>Sequence%201.xml</sequence>
-<sequence>Sequence%202.xml</sequence>
-<sequence>Sequence%203.xml</sequence>
-</listSequence>
-<mixedForever>false</mixedForever>
+    <name>Meta%20sequence%201</name>
+    <minDuration>PT39S</minDuration>
+    <maxDuration>PT1M28S</maxDuration>
+    <listSequence>
+        <sequence>Sequence%201.xml</sequence>
+        <sequence>Sequence%202.xml</sequence>
+        <sequence>Sequence%203.xml</sequence>
+    </listSequence>
+    <mixedForever>false</mixedForever>
 </metaSequence>
 

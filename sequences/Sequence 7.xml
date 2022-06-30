@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sequence name="Sequence%207" minDuration="PT12S" maxDuration="PT12S" lock="true">
-<listMedia>
-<media>
-<filename>croix.jpg</filename>
-<minDuration>PT4S</minDuration>
-<maxDuration>PT4S</maxDuration>
-<type>PICTURE</type>
-<lock>true</lock>
-<isResizable>false</isResizable>
-<backgroundColor>0xffffffff</backgroundColor>
-</media>
-<media>
-<filename>mosob01.jpg</filename>
-<minDuration>PT1S</minDuration>
-<maxDuration>PT1S</maxDuration>
-<type>PICTURE</type>
-<lock>true</lock>
-<isResizable>false</isResizable>
-<backgroundColor>0xffffffff</backgroundColor>
-</media>
-<media>
-<filename>vis03.jpg</filename>
-<minDuration>PT7S</minDuration>
-<maxDuration>PT7S</maxDuration>
-<type>PICTURE</type>
-<lock>true</lock>
-<isResizable>false</isResizable>
-<backgroundColor>0xffffffff</backgroundColor>
-</media>
-</listMedia>
+<sequence lock="true" maxDuration="PT12S" minDuration="PT12S" name="Sequence%207">
+    <listMedia>
+        <media>
+            <filename>croix.jpg</filename>
+            <minDuration>PT4S</minDuration>
+            <maxDuration>PT4S</maxDuration>
+            <type>PICTURE</type>
+            <lock>true</lock>
+            <isResizable>false</isResizable>
+            <backgroundColor>0xffffffff</backgroundColor>
+        </media>
+        <media>
+            <filename>mosob01.jpg</filename>
+            <minDuration>PT1S</minDuration>
+            <maxDuration>PT1S</maxDuration>
+            <type>PICTURE</type>
+            <lock>true</lock>
+            <isResizable>false</isResizable>
+            <backgroundColor>0xffffffff</backgroundColor>
+        </media>
+        <media>
+            <filename>vis03.jpg</filename>
+            <minDuration>PT7S</minDuration>
+            <maxDuration>PT7S</maxDuration>
+            <type>PICTURE</type>
+            <lock>true</lock>
+            <isResizable>false</isResizable>
+            <backgroundColor>0xffffffff</backgroundColor>
+        </media>
+    </listMedia>
 </sequence>
 

@@ -176,10 +176,10 @@ public class PlayerMonitorController {
     @FXML
     private void addComment() {
         this.result.addComment(this.commentTextArea.getText());
-        //this.commentTextArea.clear();
+        this.commentTextArea.clear();
     }
 
-    public void saveResult() throws IOException {
+    public void saveResult() throws Exception {
         LocalDateTime localDateTime = LocalDateTime.now();
         Files.createDirectories(Path.of(SircusApplication.dataSircus.getPath().getResultPath() + localDateTime.getYear()
                 + "\\" + localDateTime.getMonthValue() + "\\" + localDateTime.getDayOfMonth() + "\\" + localDateTime.getHour()
@@ -290,7 +290,7 @@ public class PlayerMonitorController {
         try {
             saveResult();
             result.clear();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -426,7 +426,7 @@ public class PlayerMonitorController {
                         try {
                             saveResult();
                             result.clear();
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

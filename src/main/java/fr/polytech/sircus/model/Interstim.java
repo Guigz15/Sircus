@@ -1,5 +1,6 @@
 package fr.polytech.sircus.model;
 
+import fr.polytech.sircus.SircusApplication;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
@@ -73,11 +74,11 @@ public class Interstim extends AbstractMedia implements Serializable {
      * Convert an interstim to XML
      * @return XML
      */
-    public String toXML(){
+    public String toXML() throws Exception {
         String XML = "<interstim filename=\"" + filename.replace(" ", "%20") +
                 "\" minDuration=\"" + minDuration + "\" maxDuration=\"" + maxDuration + "\" type=\"" + typeMedia + "\" lock=\"" +
                 isLocked + "\" isResizable=\"" + isResizable + "\" backgroundColor=\"" +
                 backgroundColor + "\" />\n";
-        return XML;
+        return SircusApplication.XMLFormatter(XML, 4, true);
     }
 }

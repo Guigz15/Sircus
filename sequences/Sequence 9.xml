@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sequence name="Sequence%209" minDuration="PT24S" maxDuration="PT24S" lock="true">
-<listMedia>
-<media>
-<filename>croix.jpg</filename>
-<minDuration>PT4S</minDuration>
-<maxDuration>PT4S</maxDuration>
-<type>PICTURE</type>
-<lock>true</lock>
-<isResizable>false</isResizable>
-<backgroundColor>0xffffffff</backgroundColor>
-</media>
-<media>
-<filename>ob01.jpg</filename>
-<minDuration>PT10S</minDuration>
-<maxDuration>PT10S</maxDuration>
-<type>PICTURE</type>
-<lock>true</lock>
-<isResizable>false</isResizable>
-<backgroundColor>0xffffffff</backgroundColor>
-</media>
-<media>
-<filename>ob01.jpg</filename>
-<minDuration>PT10S</minDuration>
-<maxDuration>PT10S</maxDuration>
-<type>PICTURE</type>
-<lock>true</lock>
-<isResizable>false</isResizable>
-<backgroundColor>0xffffffff</backgroundColor>
-</media>
-</listMedia>
+<sequence lock="true" maxDuration="PT24S" minDuration="PT24S" name="Sequence%209">
+    <listMedia>
+        <media>
+            <filename>croix.jpg</filename>
+            <minDuration>PT4S</minDuration>
+            <maxDuration>PT4S</maxDuration>
+            <type>PICTURE</type>
+            <lock>true</lock>
+            <isResizable>false</isResizable>
+            <backgroundColor>0xffffffff</backgroundColor>
+        </media>
+        <media>
+            <filename>ob01.jpg</filename>
+            <minDuration>PT10S</minDuration>
+            <maxDuration>PT10S</maxDuration>
+            <type>PICTURE</type>
+            <lock>true</lock>
+            <isResizable>false</isResizable>
+            <backgroundColor>0xffffffff</backgroundColor>
+        </media>
+        <media>
+            <filename>ob01.jpg</filename>
+            <minDuration>PT10S</minDuration>
+            <maxDuration>PT10S</maxDuration>
+            <type>PICTURE</type>
+            <lock>true</lock>
+            <isResizable>false</isResizable>
+            <backgroundColor>0xffffffff</backgroundColor>
+        </media>
+    </listMedia>
 </sequence>
 

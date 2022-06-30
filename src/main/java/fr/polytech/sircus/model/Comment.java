@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Represent a comment written in the monitor
@@ -31,7 +32,7 @@ public class Comment {
      */
     public Comment(String comment){
         this.comment = comment;
-        this.time = LocalTime.now();
+        this.time = LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss.SSS")));
     }
 
     public String toXML() {

@@ -622,7 +622,7 @@ public class Step2Controller implements Initializable {
                 writer.close();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "L'exportation de la séquence a réussi.", ButtonType.OK);
                 alert.show();
-            } catch (FileNotFoundException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR, "L'exportation de la séquence a échoué.", ButtonType.OK);
                 alert.show();
@@ -648,7 +648,7 @@ public class Step2Controller implements Initializable {
                 writer.close();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "L'exportation de la métaséquence a réussi.", ButtonType.OK);
                 alert.show();
-            } catch (FileNotFoundException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR, "L'exportation de la métaséquence a échoué.", ButtonType.OK);
                 alert.show();

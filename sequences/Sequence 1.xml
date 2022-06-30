@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sequence name="Sequence%201" minDuration="PT9S" maxDuration="PT45S" lock="true">
-<listMedia>
-<media>
-<filename>mos01.jpg</filename>
-<minDuration>PT5S</minDuration>
-<maxDuration>PT15S</maxDuration>
-<type>PICTURE</type>
-<interstim filename="white.jpg" minDuration="PT2S" maxDuration="PT5S" type="PICTURE" lock="true" isResizable="true" backgroundColor="0xffffffff"></interstim>
-<lock>true</lock>
-<isResizable>false</isResizable>
-<backgroundColor>0x00ffffff</backgroundColor>
-</media>
-<media>
-<filename>mos02.jpg</filename>
-<minDuration>PT2S</minDuration>
-<maxDuration>PT25S</maxDuration>
-<type>PICTURE</type>
-<lock>true</lock>
-<isResizable>true</isResizable>
-<backgroundColor>0xadff2fff</backgroundColor>
-</media>
-</listMedia>
+<sequence lock="true" maxDuration="PT45S" minDuration="PT9S" name="Sequence%201">
+    <listMedia>
+        <media>
+            <filename>mos01.jpg</filename>
+            <minDuration>PT5S</minDuration>
+            <maxDuration>PT15S</maxDuration>
+            <type>PICTURE</type>
+            <interstim backgroundColor="0xffffffff" filename="white.jpg" isResizable="true" lock="true" maxDuration="PT5S" minDuration="PT2S" type="PICTURE"/>
+            <lock>true</lock>
+            <isResizable>false</isResizable>
+            <backgroundColor>0x00ffffff</backgroundColor>
+        </media>
+        <media>
+            <filename>mos02.jpg</filename>
+            <minDuration>PT2S</minDuration>
+            <maxDuration>PT25S</maxDuration>
+            <type>PICTURE</type>
+            <lock>true</lock>
+            <isResizable>true</isResizable>
+            <backgroundColor>0xadff2fff</backgroundColor>
+        </media>
+    </listMedia>
 </sequence>
 

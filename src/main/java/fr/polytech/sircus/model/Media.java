@@ -1,5 +1,6 @@
 package fr.polytech.sircus.model;
 
+import fr.polytech.sircus.SircusApplication;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
@@ -86,7 +87,7 @@ public class Media extends AbstractMedia implements Serializable {
      * Convert a media to XML
      * @return XML
      */
-    public String toXML() {
+    public String toXML() throws Exception {
         String XML = "<media>\n" +
                 "<filename>" + filename.replace(" ", "%20") + "</filename>\n" +
                 "<minDuration>" + minDuration + "</minDuration>\n" +
@@ -104,6 +105,6 @@ public class Media extends AbstractMedia implements Serializable {
                     "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
                     "</media>\n";
         }
-        return XML;
+        return SircusApplication.XMLFormatter(XML, 4, true);
     }
 }

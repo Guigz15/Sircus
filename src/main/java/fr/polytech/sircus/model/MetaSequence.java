@@ -177,7 +177,7 @@ public class MetaSequence implements Serializable {
      * Convert a metaSequence to XML
      * @return XML
      */
-    public String toXML(){
+    public String toXML() throws Exception {
         String XML = "<metaSequence>\n" +
                 "<name>" + name.replace(" ", "%20") + "</name>\n" +
                 "<minDuration>" + minDuration + "</minDuration>\n" +
@@ -198,6 +198,6 @@ public class MetaSequence implements Serializable {
         XML += "</listSequence>\n" +
                 "<mixedForever>" + mixedForever + "</mixedForever>\n" +
                 "</metaSequence>\n";
-        return XML;
+        return SircusApplication.XMLFormatter(XML, 4, true);
     }
 }

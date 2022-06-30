@@ -1,5 +1,6 @@
 package fr.polytech.sircus.model;
 
+import fr.polytech.sircus.SircusApplication;
 import lombok.Getter;
 import lombok.Setter;
 import java.io.Serializable;
@@ -159,7 +160,7 @@ public class Sequence implements Serializable, Cloneable {
      * Convert a sequence to XML
      * @return XML
      */
-    public String toXML(){
+    public String toXML() throws Exception {
         String XML = "<sequence name=\"" + name.replace(" ", "%20") + "\" minDuration=\"" + minDuration
                 + "\" maxDuration=\"" + maxDuration + "\" lock=\"" + lock + "\">\n" + "<listMedia>\n";
         for (Media media : listMedias){
@@ -167,7 +168,7 @@ public class Sequence implements Serializable, Cloneable {
         }
         XML += "</listMedia>\n" +
                 "</sequence>\n";
-        return XML;
+        return SircusApplication.XMLFormatter(XML, 4, true);
     }
 
     @Override

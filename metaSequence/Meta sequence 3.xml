@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metaSequence>
-<name>Meta%20sequence%203</name>
-<minDuration>PT2M6S</minDuration>
-<maxDuration>PT3M21S</maxDuration>
-<listSequence>
-<sequence>Sequence%201.xml</sequence>
-<sequence>Sequence%202.xml</sequence>
-<sequence>Sequence%203.xml</sequence>
-<sequence>Sequence%204.xml</sequence>
-<sequence>Sequence%205.xml</sequence>
-<sequence>Sequence%206.xml</sequence>
-<sequence>Sequence%207.xml</sequence>
-<sequence>Sequence%208.xml</sequence>
-<sequence>Sequence%209.xml</sequence>
-</listSequence>
-<mixedForever>false</mixedForever>
+    <name>Meta%20sequence%203</name>
+    <minDuration>PT2M6S</minDuration>
+    <maxDuration>PT3M21S</maxDuration>
+    <listSequence>
+        <sequence>Sequence%201.xml</sequence>
+        <sequence>Sequence%202.xml</sequence>
+        <sequence>Sequence%203.xml</sequence>
+        <sequence>Sequence%204.xml</sequence>
+        <sequence>Sequence%205.xml</sequence>
+        <sequence>Sequence%206.xml</sequence>
+        <sequence>Sequence%207.xml</sequence>
+        <sequence>Sequence%208.xml</sequence>
+        <sequence>Sequence%209.xml</sequence>
+    </listSequence>
+    <mixedForever>false</mixedForever>
 </metaSequence>
 
