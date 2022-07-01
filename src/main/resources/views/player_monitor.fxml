@@ -103,7 +103,7 @@
             </VBox>
             <StackPane>
                <TextArea fx:id="commentTextArea" prefHeight="200.0" prefWidth="200.0" promptText="Commentaires..." />
-               <Button mnemonicParsing="false" onMouseClicked="#addComment" style="-fx-background-color: mediumseagreen;" StackPane.alignment="BOTTOM_LEFT">
+               <Button fx:id="commentButton" mnemonicParsing="false" style="-fx-background-color: mediumseagreen;" StackPane.alignment="BOTTOM_LEFT">
                   <StackPane.margin>
                      <Insets bottom="10.0" left="10.0" />
                   </StackPane.margin>

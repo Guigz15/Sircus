@@ -27,13 +27,17 @@ public class Result {
     @Getter
     private List<Comment> comments;
 
+    @Getter
+    private List<Log> logs;
+
     /**
      * Default constructor of the Result class.
      */
     public Result() {
         this.eyeTrackerDatas = new ArrayList<>();
-        this.comments = new ArrayList<>();
         this.viewerDatas = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        this.logs = new ArrayList<>();
     }
 
     /**
@@ -45,8 +49,9 @@ public class Result {
         this.metaSequenceUsed = metaSequenceUsed;
         this.duration = metaSequenceUsed.getDuration();
         this.eyeTrackerDatas = new ArrayList<>();
-        this.comments = new ArrayList<>();
         this.viewerDatas = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        this.logs = new ArrayList<>();
     }
 
     /**
@@ -65,6 +70,8 @@ public class Result {
         this.viewerDatas.add(new ViewerData(tuple));
     }
 
+    public void addLog(String log) { this.logs.add(new Log(log)); }
+
     public void setMetaSequenceUsed(MetaSequence metaSequenceUsed) {
         this.metaSequenceUsed = metaSequenceUsed;
         this.duration = metaSequenceUsed.getDuration();
@@ -74,8 +81,9 @@ public class Result {
         this.metaSequenceUsed = null;
         this.duration = Duration.ZERO;
         this.eyeTrackerDatas.clear();
-        this.comments.clear();
         this.viewerDatas.clear();
+        this.comments.clear();
+        this.logs.clear();
     }
 
     public String toXML() throws Exception {
@@ -99,6 +107,11 @@ public class Result {
         for (Comment comment : comments)
             XML += comment.toXML();
         XML += "</listComment>\n" +
+                "<listLog>\n";
+        for (Log log : logs) {
+            XML += log.toXML();
+        }
+        XML += "</listLog>\n" +
                 "</result>\n";
         return SircusApplication.XMLFormatter(XML, 4, true);
     }

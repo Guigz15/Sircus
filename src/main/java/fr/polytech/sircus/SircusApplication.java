@@ -13,7 +13,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -108,6 +107,14 @@ public class SircusApplication extends Application {
         stage.show();
     }
 
+    /**
+     * Format a string for xml style.
+     *
+     * @param xmlString String to format.
+     * @param indent Number of indentation.
+     * @param ignoreDeclaration Boolean to ignore declaration at the top of the file.
+     * @return The string formatted.
+     */
     public static String XMLFormatter(String xmlString, int indent, boolean ignoreDeclaration) throws Exception {
         InputSource src = new InputSource(new StringReader(xmlString));
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(src);

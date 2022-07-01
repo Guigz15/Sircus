@@ -139,9 +139,7 @@ public final class Serializer {
                 ObjectInputStream input = new ObjectInputStream(new FileInputStream(file));
                 obj = input.readObject();
                 input.close();
-            } catch(FileNotFoundException ex) {
-                ex.printStackTrace();
-            } catch (ClassNotFoundException ex) {
+            } catch(FileNotFoundException | ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
         }

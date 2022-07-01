@@ -1,5 +1,7 @@
 package fr.polytech.sircus.controller;
 
+import animatefx.animation.AnimationFX;
+import animatefx.animation.Flash;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
@@ -57,6 +59,8 @@ public class PlayerMonitorController {
 
     @FXML
     private TextArea commentTextArea;
+    @FXML
+    private Button commentButton;
     @FXML
     private Button playButton;
     @FXML
@@ -151,6 +155,26 @@ public class PlayerMonitorController {
         SwingNode swingNode = new SwingNode();
         createWebcamAndSetSwingContent(swingNode);
         cameraPane.getChildren().add(swingNode);
+
+        // To make commentButton blink
+        Flash buttonBlinking = new Flash(commentButton);
+        buttonBlinking.setCycleCount(AnimationFX.INDEFINITE);
+        commentTextArea.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue.isEmpty())
+                buttonBlinking.play();
+        });
+
+        // Save comment in result and stop blinking
+        commentButton.setOnAction(actionEvent -> {
+            if (!this.commentTextArea.getText().isEmpty())
+                this.result.addComment(this.commentTextArea.getText());
+            this.commentTextArea.clear();
+
+            buttonBlinking.stop();
+
+            // To reset commentButton to its first state
+            commentButton.setOpacity(1.0);
+        });
     }
 
     /**
@@ -171,14 +195,8 @@ public class PlayerMonitorController {
     }
 
     /**
-     * Save a comment written in the comment section with the time.
+     * Save results of the experiment in xml file.
      */
-    @FXML
-    private void addComment() {
-        this.result.addComment(this.commentTextArea.getText());
-        this.commentTextArea.clear();
-    }
-
     public void saveResult() throws Exception {
         LocalDateTime localDateTime = LocalDateTime.now();
         Files.createDirectories(Path.of(SircusApplication.dataSircus.getPath().getResultPath() + localDateTime.getYear()
@@ -239,6 +257,7 @@ public class PlayerMonitorController {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
+            this.result.addLog("Retour à la séquence " + (viewer.getCurrentSequenceIndex() + 1));
             pauseAllClocks();
             viewer.previousSequence();
 
@@ -266,6 +285,7 @@ public class PlayerMonitorController {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
+            this.result.addLog("Avance à la séquence " + (viewer.getCurrentSequenceIndex() + 1));
             pauseAllClocks();
             viewer.nextSequence();
             stopButton.setDisable(false);
@@ -287,6 +307,7 @@ public class PlayerMonitorController {
     public void replayMetaSequence() {
 
         viewer.pauseViewer();
+        result.addLog("Fin de l'expérience");
         try {
             saveResult();
             result.clear();
@@ -366,6 +387,7 @@ public class PlayerMonitorController {
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
+                    this.result.addLog("Mise en pause de l'expérience");
                     viewer.pauseViewer();
                     playButton.setGraphic(playIcon);
                     viewerPlayingState = false;
@@ -375,6 +397,8 @@ public class PlayerMonitorController {
                 // We aren't playing something, so the play button is displayed, so we must start the sequence
                 playButton.setGraphic(pauseIcon);
                 viewerPlayingState = true;
+
+                this.result.addLog("Lancement de l'expérience");
 
                 // Launch acquisition on another thread
                 ExecutorService threadPool = Executors.newWorkStealingPool();
@@ -388,7 +412,8 @@ public class PlayerMonitorController {
                         while ((out = reader.readLine()) != null) {
                             if (!viewerPlayingState)
                                 process.destroy();
-                            result.addEyeTrackerData(out);
+                            //result.addEyeTrackerData(out);
+                            System.out.println(out);
                         }
                     } catch (IOException | InterruptedException e) {
                         throw new RuntimeException(e);
@@ -444,6 +469,7 @@ public class PlayerMonitorController {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent()) {
             if (result.get() == ButtonType.YES) {
+                this.result.addLog("Arrêt et réinitialisation de l'expérience");
                 viewer.resetMetaSequence();
                 resetAllClocks();
                 firstPlay = true;

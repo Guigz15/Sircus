@@ -17,9 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
@@ -128,10 +126,6 @@ public class MainWindowController implements Initializable {
             threadPool.execute(() -> {
                 try {
                     Process process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiCalibration.py");
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    String out;
-                    while ((out = reader.readLine()) != null)
-                        System.out.println(out);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

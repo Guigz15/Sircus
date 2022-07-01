@@ -275,7 +275,7 @@ public class ViewerController {
                                 removeVideo();
                                 showImage(media.getInterstim());
                                 playerMonitorController.getResult().addViewerData(media.getInterstim().getFilename()
-                                        + "\t" + LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss.SSS")));
+                                        + "\t" + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss.SSS")));
                             }));
 
                     // We add to the counterDuration the duration of the "interstim" currently read.
@@ -288,7 +288,7 @@ public class ViewerController {
                                 removeVideo();
                                 showImage(media);
                                 playerMonitorController.getResult().addViewerData(media.getFilename()
-                                        + "\t" + LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss.SSS")));
+                                        + "\t" + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss.SSS")));
                             }));
 
                     // We add to the counterDuration the duration of the media currently read.

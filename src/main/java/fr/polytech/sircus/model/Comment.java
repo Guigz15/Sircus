@@ -32,7 +32,7 @@ public class Comment {
      */
     public Comment(String comment){
         this.comment = comment;
-        this.time = LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss.SSS")));
+        this.time = LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss.SSS")));
     }
 
     public String toXML() {

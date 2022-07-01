@@ -19,3 +19,4 @@ if __name__ == "__main__":
                             as_dictionary=True)
     time.sleep(float(sys.argv[1]))
     eyetracker.unsubscribe_from(tobiiresearch.implementation.EyeTracker.EYETRACKER_GAZE_DATA, gaze_data_callback)
+
