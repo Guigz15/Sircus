@@ -38,4 +38,8 @@ public class Comment {
     public String toXML() {
         return "<comment content=\"" + this.comment.replace(" ", "%20") + "\" time=\"" + this.time + "\" />\n";
     }
+    @Override
+    public String toString() {
+        return this.time + " :\n" + this.comment;
+    }
 }

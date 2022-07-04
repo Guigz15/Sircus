@@ -31,7 +31,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -182,8 +181,9 @@ public class Step2Controller implements Initializable {
 
                 {
                     //if we are not connected as admin we can't edit textfield
-                    if (!SircusApplication.adminConnected) textField.setDisable(true);
-                    else{
+                    if (!SircusApplication.adminConnected)
+                        textField.setDisable(true);
+                    else {
                         //defined action when we click on textfield to edit meta-sequence name
                         textField.setOnAction(e -> {
                             //we commit the change only if we are connected as admin

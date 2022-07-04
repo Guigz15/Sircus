@@ -19,6 +19,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaView;
@@ -28,7 +30,6 @@ import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 import org.kordamp.ikonli.javafx.FontIcon;
-
 import javax.swing.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -57,6 +58,8 @@ public class PlayerMonitorController {
     private ProgressBar metaSeqProgressBarFX;
     private TimelineProgressBar metaSeqProgressBar;
 
+    @FXML
+    private ListView<Comment> commentListView;
     @FXML
     private TextArea commentTextArea;
     @FXML
@@ -123,6 +126,9 @@ public class PlayerMonitorController {
     @Getter
     private Result result;
 
+    // Eye tracker process
+    private Process process;
+
     // Viewer manager
     private ViewerController viewer;
     private Boolean viewerPlayingState;
@@ -164,10 +170,82 @@ public class PlayerMonitorController {
                 buttonBlinking.play();
         });
 
+        // To allow text to wrap in each cell and defined context menu behavior
+        commentListView.setCellFactory((ListView<Comment> param) -> new ListCell<>() {
+            @Override
+            protected void updateItem(Comment item, boolean empty) {
+                super.updateItem(item, empty);
+
+                ContextMenu contextMenu = new ContextMenu();
+                MenuItem editItem = new MenuItem("Modifier");
+                editItem.setOnAction(event -> startEdit());
+                MenuItem deleteItem = new MenuItem("Supprimer");
+                deleteItem.setOnAction(event -> commentListView.getItems().remove(getItem()));
+                contextMenu.getItems().addAll(editItem, deleteItem);
+
+                if (empty || item == null) {
+                    setGraphic(null);
+                    setText(null);
+                    setContextMenu(null);
+                } else {
+                    setMinWidth(param.getWidth());
+                    setMaxWidth(param.getWidth());
+                    setPrefWidth(param.getWidth());
+
+                    setWrapText(true);
+
+                    setText(item.toString());
+                    setContextMenu(contextMenu);
+                }
+            }
+
+            private final TextField textField = new TextField();
+            {
+                textField.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
+                    //if we click on enter we commit the modification
+                    if (e.getCode() == KeyCode.ENTER)
+                        commitEdit(getItem());
+
+                    //if we click on escape we cancel the editing
+                    if (e.getCode() == KeyCode.ESCAPE)
+                        cancelEdit();
+                });
+            }
+
+
+            @Override
+            public void startEdit() {
+                super.startEdit();
+                textField.setText(getItem().getComment());
+                setText(null);
+                setGraphic(textField);
+                textField.selectAll();
+                textField.requestFocus();
+            }
+
+            @Override
+            public void cancelEdit() {
+                super.cancelEdit();
+                setText(getItem().toString());
+                setGraphic(null);
+            }
+
+            @Override
+            public void commitEdit(Comment comment) {
+                comment.setComment(textField.getText());
+                super.commitEdit(comment);
+                setText(comment.toString());
+                setGraphic(null);
+            }
+        });
+
         // Save comment in result and stop blinking
         commentButton.setOnAction(actionEvent -> {
-            if (!this.commentTextArea.getText().isEmpty())
+            if (!this.commentTextArea.getText().isEmpty()) {
                 this.result.addComment(this.commentTextArea.getText());
+                LocalTime time = LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
+                this.commentListView.getItems().add(new Comment(this.commentTextArea.getText(), time));
+            }
             this.commentTextArea.clear();
 
             buttonBlinking.stop();
@@ -388,6 +466,7 @@ public class PlayerMonitorController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
                     this.result.addLog("Mise en pause de l'expérience");
+                    process.destroy();
                     viewer.pauseViewer();
                     playButton.setGraphic(playIcon);
                     viewerPlayingState = false;
@@ -404,16 +483,13 @@ public class PlayerMonitorController {
                 ExecutorService threadPool = Executors.newWorkStealingPool();
                 threadPool.execute(() -> {
                     try {
-                        Process process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiAcquisition.py " + metaSequenceToRead.getDuration().getSeconds());
+                        process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiAcquisition.py " + metaSequenceToRead.getDuration().getSeconds());
                         Thread.sleep(3000); // Wait for eye tracker to launch
                         viewer.playViewer();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                         String out;
                         while ((out = reader.readLine()) != null) {
-                            if (!viewerPlayingState)
-                                process.destroy();
-                            //result.addEyeTrackerData(out);
-                            System.out.println(out);
+                            result.addEyeTrackerData(out);
                         }
                     } catch (IOException | InterruptedException e) {
                         throw new RuntimeException(e);
@@ -442,23 +518,15 @@ public class PlayerMonitorController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.getDialogPane().applyCss();
         Node graphic = alert.getDialogPane().getGraphic();
+
+        CheckBox saveOption = new CheckBox("Voulez-vous sauvegarder les données ?");
         alert.setDialogPane(new DialogPane() {
             @Override
             protected Node createDetailsButton() {
-                CheckBox saveOption = new CheckBox("Voulez-vous sauvegarder les données ?");
-                saveOption.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
-                    if (!oldValue && newValue) {
-                        try {
-                            saveResult();
-                            result.clear();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
                 return saveOption;
             }
         });
+
         alert.getDialogPane().getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
         alert.setContentText("Êtes-vous sûr de vouloir arrêter la méta-séquence et la réinitialiser ?");
         alert.getDialogPane().setExpandableContent(new Group());
@@ -469,10 +537,20 @@ public class PlayerMonitorController {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent()) {
             if (result.get() == ButtonType.YES) {
-                this.result.addLog("Arrêt et réinitialisation de l'expérience");
                 viewer.resetMetaSequence();
                 resetAllClocks();
                 firstPlay = true;
+                process.destroy();
+                this.result.addLog("Arrêt et réinitialisation de l'expérience");
+
+                if (saveOption.isSelected()) {
+                    try {
+                        saveResult();
+                        this.result.clear();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 this.stopButton.setDisable(true);
 

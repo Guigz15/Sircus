@@ -101,17 +101,19 @@
                   </font></Text>
                <ProgressBar minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="200.0" progress="0.0" />
             </VBox>
-            <StackPane>
-               <TextArea fx:id="commentTextArea" prefHeight="200.0" prefWidth="200.0" promptText="Commentaires..." />
-               <Button fx:id="commentButton" mnemonicParsing="false" style="-fx-background-color: mediumseagreen;" StackPane.alignment="BOTTOM_LEFT">
-                  <StackPane.margin>
-                     <Insets bottom="10.0" left="10.0" />
-                  </StackPane.margin>
+            <ListView fx:id="commentListView" maxHeight="-Infinity" prefHeight="170.0">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </ListView>
+            <HBox alignment="CENTER" maxHeight="-Infinity" spacing="10.0">
+               <Button fx:id="commentButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: mediumseagreen;">
                   <graphic>
                      <FontIcon iconLiteral="fa-save" iconSize="15" />
                   </graphic>
                </Button>
-            </StackPane>
+               <TextArea fx:id="commentTextArea" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="31.0" promptText="Commentaires..." wrapText="true" />
+            </HBox>
          </VBox>
          <VBox>
             <HBox.margin>
