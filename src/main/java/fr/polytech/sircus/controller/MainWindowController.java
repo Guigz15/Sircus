@@ -550,6 +550,8 @@ public class MainWindowController implements Initializable {
             id.setText("ifsvliu");
             radioM.setSelected(true);
             birthDate.setValue(LocalDate.now());
+            ocularDominance.getToggles().get(0).setSelected(true);
+            laterality.getToggles().get(2).setSelected(true);
             name.setText("fdfd");
             forename.setText("lkhfdlkjhgfd");
             locations.getSelectionModel().select(0);

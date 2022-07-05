@@ -65,6 +65,7 @@ public class AddMediaPopUp implements Initializable {
     @FXML
     private ImageView mediaImage;
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         newMediaBox.disableProperty().bind(Bindings.createBooleanBinding(() -> !newMediaButton.isSelected(), newMediaButton.selectedProperty()));

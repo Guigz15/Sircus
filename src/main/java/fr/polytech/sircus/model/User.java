@@ -20,4 +20,8 @@ public class User {
         this.firstName = user.firstName;
         this.lastName = user.lastName;
     }
+
+    public String toXML() {
+        return "<user firstName=\"" + this.firstName + "\" lastName=\"" + this.lastName + "\" />\n";
+    }
 }

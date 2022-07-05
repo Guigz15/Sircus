@@ -180,7 +180,10 @@ public class PlayerMonitorController {
                 MenuItem editItem = new MenuItem("Modifier");
                 editItem.setOnAction(event -> startEdit());
                 MenuItem deleteItem = new MenuItem("Supprimer");
-                deleteItem.setOnAction(event -> commentListView.getItems().remove(getItem()));
+                deleteItem.setOnAction(event -> {
+                    result.getComments().remove(getIndex());
+                    commentListView.getItems().remove(getItem());
+                });
                 contextMenu.getItems().addAll(editItem, deleteItem);
 
                 if (empty || item == null) {
@@ -233,6 +236,7 @@ public class PlayerMonitorController {
             @Override
             public void commitEdit(Comment comment) {
                 comment.setComment(textField.getText());
+                result.getComments().set(getIndex(), comment);
                 super.commitEdit(comment);
                 setText(comment.toString());
                 setGraphic(null);
@@ -243,8 +247,7 @@ public class PlayerMonitorController {
         commentButton.setOnAction(actionEvent -> {
             if (!this.commentTextArea.getText().isEmpty()) {
                 this.result.addComment(this.commentTextArea.getText());
-                LocalTime time = LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
-                this.commentListView.getItems().add(new Comment(this.commentTextArea.getText(), time));
+                this.commentListView.getItems().add(new Comment(this.commentTextArea.getText()));
             }
             this.commentTextArea.clear();
 
@@ -417,7 +420,7 @@ public class PlayerMonitorController {
 
                     // Go to previous page to launch another sequence
                     FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
-                    Scene scene = null;
+                    Scene scene;
                     try {
                         scene = new Scene(fxmlLoader.load());
                     } catch (IOException e) {

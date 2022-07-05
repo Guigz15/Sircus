@@ -88,6 +88,8 @@ public class Result {
 
     public String toXML() throws Exception {
         String XML = "<result>\n" +
+                SircusApplication.user.toXML() + SircusApplication.patient.toXML() +
+                "<experimentLocation>" + SircusApplication.currentLocation + "</experimentLocation>\n" +
                 "<metasequenceUsed name=\"" + metaSequenceUsed.getName().replace(" ", "%20") +
                 "\" minDuration=\"" + metaSequenceUsed.getMinDuration() + "\" maxDuration=\"" +
                 metaSequenceUsed.getMaxDuration() + "\" duration=\"" + duration + "\" />\n" +

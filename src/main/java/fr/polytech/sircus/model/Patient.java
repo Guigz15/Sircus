@@ -50,4 +50,14 @@ public class Patient {
         Period period = Period.between(birthDate, LocalDate.now());
         return period.getYears();
     }
+
+    public String toXML() {
+        return "<patient>\n" +
+                "<id>" + this.identifier + "</id>\n" +
+                "<sex>" + this.sex.toString() + "</sex>\n" +
+                "<birthDate>" + this.birthDate.toString() + "</birthDate>\n" +
+                "<eyeDominance>" + this.eyeDominance.toString() + "</eyeDominance>\n" +
+                "<handLaterality>" + this.handLaterality.toString() + "</handLaterality>\n" +
+                "</patient>\n";
+    }
 }

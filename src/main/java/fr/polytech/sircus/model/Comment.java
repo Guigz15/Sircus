@@ -40,6 +40,6 @@ public class Comment {
     }
     @Override
     public String toString() {
-        return this.time + " :\n" + this.comment;
+        return this.time.format(DateTimeFormatter.ofPattern("HH:ss")) + " :\n" + this.comment;
     }
 }

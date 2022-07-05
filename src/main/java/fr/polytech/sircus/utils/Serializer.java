@@ -36,6 +36,7 @@ public final class Serializer {
         MetaSequence stubMetaSeq1 = new MetaSequence("Meta sequence 1");
         MetaSequence stubMetaSeq2 = new MetaSequence("Meta sequence 2");
         MetaSequence stubMetaSeq3 = new MetaSequence("Meta sequence 3");
+        MetaSequence stubMetaSeq4 = new MetaSequence("Meta sequence 4");
 
         Sequence sequence1 = new Sequence("Sequence 1");
         Sequence sequence2 = new Sequence("Sequence 2");
@@ -47,8 +48,8 @@ public final class Serializer {
         Sequence sequence8 = new Sequence("Sequence 8");
         Sequence sequence9 = new Sequence("Sequence 9");
 
-        Media media1 = new Media("mos01.jpg", Duration.ofSeconds(5), Duration.ofSeconds(15), TypeMedia.PICTURE);
-        Media media2 = new Media("mos02.jpg", Duration.ofSeconds(2), Duration.ofSeconds(25), TypeMedia.PICTURE);
+        Media media1 = new Media("mos01.jpg", Duration.ofSeconds(5), Duration.ofSeconds(5), TypeMedia.PICTURE);
+        Media media2 = new Media("mos02.jpg", Duration.ofSeconds(3), Duration.ofSeconds(3), TypeMedia.PICTURE);
         Media media3 = new Media("mosob01.jpg", Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.PICTURE);
         Media media4 = new Media("vis03.jpg", Duration.ofSeconds(7), Duration.ofSeconds(7), TypeMedia.PICTURE);
         Media media5 = new Media("vismos01.jpg", Duration.ofSeconds(5), Duration.ofSeconds(5), TypeMedia.PICTURE);
@@ -106,10 +107,12 @@ public final class Serializer {
         stubMetaSeq3.addSequence(sequence7);
         stubMetaSeq3.addSequence(sequence8);
         stubMetaSeq3.addSequence(sequence9);
+        stubMetaSeq4.addSequence(sequence1);
 
         stubData.saveMetaSeq(stubMetaSeq1);
         stubData.saveMetaSeq(stubMetaSeq2);
         stubData.saveMetaSeq(stubMetaSeq3);
+        stubData.saveMetaSeq(stubMetaSeq4);
 
         stubData.addLocationToList("Hôpital Bretonneau");
         stubData.addLocationToList("Hôpital Trousseau");
