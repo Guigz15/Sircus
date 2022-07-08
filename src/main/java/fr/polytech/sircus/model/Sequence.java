@@ -171,6 +171,21 @@ public class Sequence implements Serializable, Cloneable {
         return SircusApplication.XMLFormatter(XML, 4, true);
     }
 
+    /**
+     * Convert a sequence to XML + duration for result
+     * @return XML
+     */
+    public String toXMLForResult() throws Exception {
+        String XML = "<sequence name=\"" + name.replace(" ", "%20") + "\" minDuration=\"" + minDuration
+                + "\" maxDuration=\"" + maxDuration + "\" lock=\"" + lock + "\" duration=\"" + this.duration + "\" >\n" + "<listMedia>\n";
+        for (Media media : listMedias){
+            XML += media.toXMLForResult();
+        }
+        XML += "</listMedia>\n" +
+                "</sequence>\n";
+        return SircusApplication.XMLFormatter(XML, 4, true);
+    }
+
     @Override
     public Sequence clone() {
         try {

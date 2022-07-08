@@ -81,4 +81,16 @@ public class Interstim extends AbstractMedia implements Serializable {
                 backgroundColor + "\" />\n";
         return SircusApplication.XMLFormatter(XML, 4, true);
     }
+
+    /**
+     * Convert an interstim to XML + duration for result
+     * @return XML
+     */
+    public String toXMLForResult() throws Exception {
+        String XML = "<interstim filename=\"" + filename.replace(" ", "%20") +
+                "\" minDuration=\"" + minDuration + "\" maxDuration=\"" + maxDuration + "\" type=\"" + typeMedia + "\" lock=\"" +
+                isLocked + "\" isResizable=\"" + isResizable + "\" backgroundColor=\"" +
+                backgroundColor + "\" duration=\"" + duration + "\" />\n";
+        return SircusApplication.XMLFormatter(XML, 4, true);
+    }
 }

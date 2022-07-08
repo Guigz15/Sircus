@@ -107,4 +107,30 @@ public class Media extends AbstractMedia implements Serializable {
         }
         return SircusApplication.XMLFormatter(XML, 4, true);
     }
+
+    /**
+     * Convert a media to XML + duration for result
+     * @return XML
+     */
+    public String toXMLForResult() throws Exception {
+        String XML = "<media>\n" +
+                "<filename>" + filename.replace(" ", "%20") + "</filename>\n" +
+                "<minDuration>" + minDuration + "</minDuration>\n" +
+                "<maxDuration>" + maxDuration + "</maxDuration>\n" +
+                "<duration>" + duration + "</duration>\n" +
+                "<type>" + typeMedia + "</type>\n";
+        if(interstim == null){
+            XML += "<lock>" + isLocked + "</lock>\n" +
+                    "<isResizable>" + isResizable + "</isResizable>\n" +
+                    "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
+                    "</media>\n";
+        } else {
+            XML += interstim.toXMLForResult() +
+                    "<lock>" + isLocked + "</lock>\n" +
+                    "<isResizable>" + isResizable + "</isResizable>\n" +
+                    "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
+                    "</media>\n";
+        }
+        return SircusApplication.XMLFormatter(XML, 4, true);
+    }
 }

@@ -67,7 +67,7 @@ public class ViewerController {
     private Timeline timeline = null;
 
     // Stores the start time of each sequence to be able to move between sequences.
-    private final ArrayList<Integer> sequencesStartTime;
+    private final ArrayList<Double> sequencesStartTime;
 
     // Index of the current sequence index in the meta-sequence
     @Getter
@@ -210,7 +210,7 @@ public class ViewerController {
         timeline.setAutoReverse(false);
 
         // Counter to count the total duration of the medias already played.
-        int counterDuration = 0;
+        double counterDuration = 0;
         int sequenceIndex = -1;
 
         numberOfSequences = playingMetaSequence.getSequencesList().size();
@@ -279,7 +279,13 @@ public class ViewerController {
                             }));
 
                     // We add to the counterDuration the duration of the "interstim" currently read.
-                    counterDuration += media.getInterstim().getDuration().getSeconds();
+                    if (media.getInterstim().getDuration().toString().contains(".")) {
+                        String[] secondPlusMillis = media.getInterstim().getDuration().toString().split("\\.");
+                        counterDuration += Double.parseDouble(secondPlusMillis[0].substring(2) + "." +
+                                secondPlusMillis[1].substring(0, secondPlusMillis[1].length() - 1));
+                    } else {
+                        counterDuration += media.getInterstim().getDuration().getSeconds();
+                    }
                 }
 
                 if (media.getTypeMedia() == TypeMedia.PICTURE) {
@@ -292,7 +298,13 @@ public class ViewerController {
                             }));
 
                     // We add to the counterDuration the duration of the media currently read.
-                    counterDuration += media.getDuration().getSeconds();
+                    if (media.getDuration().toString().contains(".")) {
+                        String[] secondPlusMillis = media.getDuration().toString().split("\\.");
+                        counterDuration += Double.parseDouble(secondPlusMillis[0].substring(2) + "." +
+                                secondPlusMillis[1].substring(0, secondPlusMillis[1].length() - 1));
+                    } else {
+                        counterDuration += media.getDuration().getSeconds();
+                    }
                 }
                 else if (media.getTypeMedia() == TypeMedia.VIDEO) {
                     timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(counterDuration),

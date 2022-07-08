@@ -24,8 +24,6 @@ import java.time.Period;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * This class manages the main window
@@ -47,6 +45,8 @@ public class MainWindowController implements Initializable {
     private RadioButton radioM;
     @FXML
     private RadioButton radioF;
+    @FXML
+    private TextField visitNumber;
     @FXML
     private DatePicker birthDate;
     @FXML
@@ -122,15 +122,11 @@ public class MainWindowController implements Initializable {
         tobiiCalibration.visibleProperty().bind(Bindings.createBooleanBinding(() -> eyeTracker.getValue() != null, eyeTracker.valueProperty()));
         tobiiCalibration.setOnAction(actionEvent -> {
             // Launch Eye Tracker Manager on another thread
-            ExecutorService threadPool = Executors.newWorkStealingPool();
-            threadPool.execute(() -> {
-                try {
-                    Process process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiCalibration.py");
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            threadPool.shutdown();
+            try {
+                Runtime.getRuntime().exec(System.getenv("LocalAppData") + "\\Programs\\TobiiProEyeTrackerManager\\TobiiProEyeTrackerManager.exe");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         // Location
@@ -168,6 +164,11 @@ public class MainWindowController implements Initializable {
             }
         });
 
+        visitNumber.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*"))
+                birthDate.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+        });
+
         birthDate.getEditor().textProperty().addListener((observableValue, oldValue, newValue) -> {
             if (!newValue.matches("\\d*\\/"))
                 birthDate.getEditor().setText(newValue.replaceAll("[^\\d\\/]", ""));
@@ -199,7 +200,7 @@ public class MainWindowController implements Initializable {
         });
 
         locations.valueProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (!newValue.isEmpty())
+            if (newValue != null && !newValue.isEmpty())
                 locations.setStyle(null);
             else
                 locations.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
@@ -210,6 +211,7 @@ public class MainWindowController implements Initializable {
         if (SircusApplication.patient != null) {
             id.setText(SircusApplication.patient.getIdentifier());
             Objects.requireNonNull(getRadioButton(sex.getToggles(), SircusApplication.patient.getSex().name())).setSelected(true);
+            visitNumber.setText(SircusApplication.patient.getVisitNumber());
             birthDate.setValue(SircusApplication.patient.getBirthDate());
             age.setText(SircusApplication.patient.computeAge() + "  ans");
             if (SircusApplication.patient.getEyeDominance() != null)
@@ -517,6 +519,8 @@ public class MainWindowController implements Initializable {
             SircusApplication.patient.setIdentifier(id.getText());
         if (sex.getSelectedToggle() != null)
             SircusApplication.patient.setSex(Patient.Sex.valueOf(((RadioButton)this.sex.getSelectedToggle()).getText()));
+        if (!visitNumber.getText().isEmpty())
+            SircusApplication.patient.setVisitNumber(Integer.parseInt(visitNumber.getText()));
         if (birthDate.getValue() != null)
             SircusApplication.patient.setBirthDate(birthDate.getValue());
         if (ocularDominance.getSelectedToggle() != null)

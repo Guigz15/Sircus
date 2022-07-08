@@ -95,7 +95,7 @@ public class Result {
                 metaSequenceUsed.getMaxDuration() + "\" duration=\"" + duration + "\" />\n" +
                 "<listSequence>\n";
         for (Sequence sequence : metaSequenceUsed.getSequencesList())
-           XML += sequence.toXML();
+           XML += sequence.toXMLForResult();
         XML += "</listSequence>\n" +
                 "<listEyeTrackerData>\n";
         for (EyeTrackerData eyeTrackerData : eyeTrackerDatas)

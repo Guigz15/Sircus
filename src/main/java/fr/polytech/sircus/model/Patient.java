@@ -19,6 +19,8 @@ public class Patient {
     @Getter @Setter
     private Sex sex;
     @Getter @Setter
+    private int visitNumber;
+    @Getter @Setter
     private LocalDate birthDate;
     @Getter @Setter
     private EyeDominance eyeDominance;
@@ -37,6 +39,7 @@ public class Patient {
     public Patient(Patient patient) {
         this.identifier = patient.identifier;
         this.sex = patient.sex;
+        this.visitNumber = patient.visitNumber;
         this.birthDate = patient.birthDate;
         this.eyeDominance = patient.eyeDominance;
         this.handLaterality = patient.handLaterality;
@@ -55,6 +58,7 @@ public class Patient {
         return "<patient>\n" +
                 "<id>" + this.identifier + "</id>\n" +
                 "<sex>" + this.sex.toString() + "</sex>\n" +
+                "<visitNumber>" + this.visitNumber + "</visitNumber>\n" +
                 "<birthDate>" + this.birthDate.toString() + "</birthDate>\n" +
                 "<eyeDominance>" + this.eyeDominance.toString() + "</eyeDominance>\n" +
                 "<handLaterality>" + this.handLaterality.toString() + "</handLaterality>\n" +
