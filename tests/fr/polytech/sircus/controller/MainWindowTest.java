@@ -27,6 +27,9 @@ public class MainWindowTest{
     }
 
     @AfterEach
+
+
+
     public void cleanup() {
         ((TextField) robot.lookup("#id").query()).clear();
         ((RadioButton) robot.lookup("M").query()).setSelected(false);
@@ -48,7 +51,7 @@ public class MainWindowTest{
         verifyThat("#age", NodeMatchers.isNotNull());
         verifyThat("#ocularDom", NodeMatchers.isNotNull());
         verifyThat("#manualLateral", NodeMatchers.isNotNull());
-        verifyThat("#type", NodeMatchers.isNotNull());
+        verifyThat("#sex", NodeMatchers.isNotNull());
         verifyThat("#name", NodeMatchers.isNotNull());
         verifyThat("#forename", NodeMatchers.isNotNull());
         verifyThat("#locations", NodeMatchers.isNotNull());
@@ -292,7 +295,21 @@ public class MainWindowTest{
 
     @Test
     @Order(15)
-    public void test15_adminConnection() {
+    public void test15_adminDisconnection() {
+        System.out.println("Testing the admin disconnection");
+
+        robot.clickOn("#admin");
+        robot.clickOn("#userName").write("root");
+        robot.clickOn("#password").write("password");
+        robot.press(KeyCode.ENTER);
+
+        robot.clickOn("#adminLogOut");
+        assertFalse(SircusApplication.adminConnected);
+    }
+
+    @Test
+    @Order(16)
+    public void test16_adminConnection() {
         System.out.println("Testing the admin connection");
 
         robot.clickOn("#admin");
@@ -305,20 +322,6 @@ public class MainWindowTest{
         robot.clickOn("#userName").write("root");
         robot.clickOn("#password").write("password");
         robot.press(KeyCode.ENTER);
-        assertFalse(SircusApplication.adminConnected);
-    }
-
-    @Test
-    @Order(16)
-    public void test16_adminDisconnection() {
-        System.out.println("Testing the admin disconnection");
-
-        robot.clickOn("#admin");
-        robot.clickOn("#userName").write("root");
-        robot.clickOn("#password").write("password");
-        robot.press(KeyCode.ENTER);
-
-        robot.clickOn("#adminLogOut");
         assertFalse(SircusApplication.adminConnected);
     }
 }
