@@ -6,6 +6,7 @@ import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
 import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.controller.PopUps.PatientCalibrationPopup;
 import fr.polytech.sircus.model.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -25,6 +26,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.Getter;
@@ -114,6 +116,8 @@ public class PlayerMonitorController {
 
     @FXML
     private Button previous;
+    @FXML
+    private Button participantCalibration;
 
     /**
      * indicates if it's the first lecture or after a reset
@@ -148,6 +152,12 @@ public class PlayerMonitorController {
 
         this.pauseIcon = new FontIcon("fa-pause");
         this.pauseIcon.setIconSize(15);
+
+        playButton.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
+            if (e.getCode() == KeyCode.SPACE) {
+                playViewer();
+            }
+        });
 
         this.stopButton.setDisable(true);
         this.forwardButton.setDisable(true);
@@ -255,6 +265,48 @@ public class PlayerMonitorController {
 
             // To reset commentButton to its first state
             commentButton.setOpacity(1.0);
+        });
+
+        participantCalibration.setOnAction(actionEvent -> {
+            FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/patient_calibration_popup.fxml"));
+            DialogPane dialogPane;
+            try {
+                dialogPane = fxmlLoader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            PatientCalibrationPopup controller = fxmlLoader.getController();
+
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setDialogPane(dialogPane);
+            dialog.setTitle("Calibration Patient");
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.initOwner(participantCalibration.getScene().getWindow());
+
+            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            if (clickedButton.isPresent()) {
+                if (clickedButton.get() == ButtonType.FINISH) {
+                    Color backgroundColor = controller.getBackgroundColor().getValue();
+                    Color targetColor = controller.getTargetColor().getValue();
+                    ExecutorService threadPool = Executors.newWorkStealingPool();
+                    threadPool.execute(() -> {
+                        try {
+                            Process process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/PatientCalibration.py " +
+                                    controller.getTargetNumber().getValue() + " " + controller.getRandomizeTarget().isSelected() + " " +
+                                    String.format("#%02X%02X%02X", (int)(backgroundColor.getRed() * 255), (int)(backgroundColor.getGreen() * 255), (int)(backgroundColor.getBlue() * 255)) +
+                                    " " + String.format("#%02X%02X%02X", (int)(targetColor.getRed() * 255), (int)(targetColor.getGreen() * 255), (int)(targetColor.getBlue() * 255)));
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                            String out;
+                            while ((out = reader.readLine()) != null) {
+                                System.out.println(out);
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                    threadPool.shutdown();
+                }
+            }
         });
     }
 

@@ -196,13 +196,22 @@
       </HBox>
    </center>
    <bottom>
-      <Button fx:id="previous" mnemonicParsing="false" onMouseClicked="#previousPage" style="-fx-background-color: #457b9d;" text="Précédent" textFill="WHITE" BorderPane.alignment="CENTER_LEFT">
+      <HBox spacing="705.0" BorderPane.alignment="CENTER_LEFT">
          <BorderPane.margin>
-            <Insets bottom="15.0" left="25.0" />
+            <Insets bottom="15.0" left="25.0" right="25.0"/>
          </BorderPane.margin>
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Button>
+         <Button fx:id="previous" mnemonicParsing="false" onMouseClicked="#previousPage"
+                 style="-fx-background-color: #457b9d;" text="Précédent" textFill="WHITE">
+            <font>
+               <Font size="16.0"/>
+            </font>
+         </Button>
+         <Button fx:id="participantCalibration" mnemonicParsing="false" style="-fx-background-color: #457b9d;" text="Calibration Participant"
+                 textFill="WHITE">
+            <font>
+               <Font size="16.0"/>
+            </font>
+         </Button>
+      </HBox>
    </bottom>
 </BorderPane>
