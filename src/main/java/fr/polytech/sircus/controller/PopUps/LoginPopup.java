@@ -12,11 +12,27 @@ public class LoginPopup {
 
     public LoginPopup() {}
 
-    public boolean checkUserName() {
-        return userName.getText().equals("root");
+    private boolean isSuperAdminUsername() {
+        return userName.getText().equals("sudo");
     }
 
-    public boolean checkPassword() {
+    private boolean isSuperAdminPassword() {
         return password.getText().equals("password");
+    }
+
+    private boolean isAdminUsername() {
+        return userName.getText().equals("admin");
+    }
+
+    private boolean isAdminPassword() {
+        return password.getText().equals("password");
+    }
+
+    public boolean isSuperAdmin() {
+        return isSuperAdminUsername() && isSuperAdminPassword();
+    }
+
+    public boolean isAdmin() {
+        return isAdminUsername() && isAdminPassword();
     }
 }

@@ -34,6 +34,8 @@ public class MainWindowController implements Initializable {
     @FXML
     private Button tobiiCalibration;
     @FXML
+    private Button addAdmin;
+    @FXML
     private Button adminLogOut;
     @FXML
     private Button admin;
@@ -144,10 +146,13 @@ public class MainWindowController implements Initializable {
         // Admin mode
         adminLabel.setVisible(SircusApplication.adminConnected);
         adminLogOut.setVisible(SircusApplication.adminConnected);
+        addAdmin.setVisible(SircusApplication.superAdminConnected);
         adminLogOut.setOnAction(actionEvent -> {
             SircusApplication.adminConnected = false;
+            SircusApplication.superAdminConnected = false;
             adminLabel.setVisible(false);
             adminLogOut.setVisible(false);
+            addAdmin.setVisible(false);
         });
 
         id.textProperty().addListener((observableValue, oldValue, newValue) -> {
@@ -428,10 +433,16 @@ public class MainWindowController implements Initializable {
 
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.isPresent()) {
-                if (clickedButton.get() == ButtonType.FINISH && controller.checkUserName() && controller.checkPassword()) {
-                    SircusApplication.adminConnected = true;
-                    adminLabel.setVisible(true);
-                    adminLogOut.setVisible(true);
+                if (clickedButton.get() == ButtonType.FINISH) {
+                    if (controller.isAdmin()) {
+                        SircusApplication.adminConnected = true;
+                    } else if (controller.isSuperAdmin()) {
+                        SircusApplication.adminConnected = true;
+                        SircusApplication.superAdminConnected = true;
+                    }
+                    adminLabel.setVisible(SircusApplication.adminConnected);
+                    adminLogOut.setVisible(SircusApplication.adminConnected);
+                    addAdmin.setVisible(SircusApplication.superAdminConnected);
                 }
             }
         } catch (IOException e) {

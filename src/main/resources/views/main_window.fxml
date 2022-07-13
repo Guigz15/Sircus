@@ -25,12 +25,20 @@
                <BorderPane.margin>
                   <Insets right="15.0" />
                </BorderPane.margin>
+               <Button fx:id="addAdmin" mnemonicParsing="false" style="-fx-background-color: mediumseagreen;" visible="false">
+                  <graphic>
+                     <FontIcon iconLiteral="fa-plus" iconSize="35" />
+                  </graphic>
+               </Button>
                <Text fx:id="adminLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Mode Expérimentateur activé" visible="false">
                   <font>
                      <Font name="System Bold Italic" size="18.0" />
                   </font>
+                  <HBox.margin>
+                     <Insets left="15.0" />
+                  </HBox.margin>
                </Text>
-               <Button fx:id="adminLogOut" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #f87167;" visible="false">
+               <Button fx:id="adminLogOut" mnemonicParsing="false" style="-fx-background-color: #f87167;" visible="false">
                   <graphic>
                      <FontIcon iconLiteral="fa-sign-out" iconSize="35" />
                   </graphic>
@@ -38,7 +46,7 @@
                      <Insets left="15.0" />
                   </HBox.margin>
                </Button>
-               <Button fx:id="admin" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleConnection" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #457b9d;">
+               <Button fx:id="admin" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleConnection" style="-fx-background-color: #457b9d;">
                   <graphic>
                      <FontIcon iconLiteral="fa-user-md" iconSize="35" />
                   </graphic>

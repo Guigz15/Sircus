@@ -44,6 +44,11 @@ public class SircusApplication extends Application {
     public static boolean adminConnected = false;
 
     /**
+     * boolean for super administrator connection
+     */
+    public static boolean superAdminConnected = false;
+
+    /**
      * The patient to be diagnostic
      */
     public static Patient patient = null;

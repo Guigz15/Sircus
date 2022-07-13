@@ -18,13 +18,16 @@ for screen in screens:
     if not screen.is_primary:
         secondScreen = screen
 
+# Create the window to display calibration and validation points
 root = Tk()
-root.title('Calibration Patient')
+root.title('Calibration Participant')
+# To force the window to be on the second screen
 root.geometry('%dx%d+%d+%d' % (secondScreen.width, secondScreen.height, secondScreen.x, 0))
 root.overrideredirect(True)
 root.bind("<Escape>", lambda event: close())
 
 if not test:
+    # Set the canvas properties, especially background color choose by the user
     canvas = Canvas(root, width=root.winfo_screenwidth(), height=root.winfo_screenheight(), borderwidth=0,
                     highlightthickness=0, bg=str(sys.argv[3]))
 else:
@@ -34,15 +37,29 @@ canvas.pack()
 
 
 def close():
+    """
+    Triggered when escape is pressed to close the window.
+    """
     root.quit()
     sys.exit()
 
 
 def create_circle(x, y, r, **kwargs):
+    """
+    Create circle with only center coordinates and radius.
+    :param x: x coordinate of the center
+    :param y: y coordinate of the center
+    :param r: radius of the circle
+    """
     return canvas.create_oval(x - r, y - r, x + r, y + r, **kwargs)
 
 
 def plot(calibration_result, validation_result):
+    """
+    Display the calibration plot.
+    :param calibration_result: data from calibration
+    :param validation_result: data from validation
+    """
     for calibration_point in calibration_result.calibration_points:
         position = calibration_point.position_on_display_area
         create_circle(x=root.winfo_screenwidth() * position[0], y=root.winfo_screenheight() * position[1], r=20)
@@ -84,6 +101,9 @@ def plot(calibration_result, validation_result):
 
 
 def calibrateAndValidate():
+    """
+    Perform the calibration and the validation.
+    """
     eyetracker = tobiiresearch.implementation.EyeTracker.find_all_eyetrackers()[0]
     calibration = tobiiresearch.implementation.ScreenBasedCalibration.ScreenBasedCalibration(eyetracker)
 

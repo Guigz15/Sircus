@@ -37,7 +37,7 @@ public class PreviewTimelineItemController implements Initializable {
     @FXML @Getter @Setter
     private VBox itemContainer;
 
-    @FXML @Getter @Setter
+    @FXML @Getter
     private Text time;
 
     @FXML @Getter @Setter
@@ -52,7 +52,7 @@ public class PreviewTimelineItemController implements Initializable {
     @FXML @Getter @Setter
     private VBox rulerContainer;
 
-    @FXML @Getter @Setter
+    @FXML @Getter
     private Image image;
 
     @FXML @Getter @Setter
