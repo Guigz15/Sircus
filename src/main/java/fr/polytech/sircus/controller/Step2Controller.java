@@ -137,10 +137,6 @@ public class Step2Controller implements Initializable {
             doMixButton.setVisible(true);
         }
 
-        if (SircusApplication.dataSircus.getMetaSequencesList().size() == 0) {
-            next.setDisable(true);
-        }
-
         /* initialize metasequences listView */
         metaListView.setStyle("-fx-font-size: 14pt;");
         metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
@@ -315,10 +311,6 @@ public class Step2Controller implements Initializable {
             metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
             //Defined action when the MetaSequence element selected is changed.
             metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
-
-            if (next.disableProperty().get()) {
-                next.setDisable(false);
-            }
         });
 
         /* set removeMetaSequence proprieties to remove meta-sequence */
@@ -327,10 +319,6 @@ public class Step2Controller implements Initializable {
             if (index_Selected_MetaSequence >= 0) {
                 SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
                 metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
-
-                if (SircusApplication.dataSircus.getMetaSequencesList().size() == 0) {
-                    next.setDisable(true);
-                }
             }
         });
 
@@ -340,10 +328,6 @@ public class Step2Controller implements Initializable {
             if ((keyEvent.getCode() == KeyCode.DELETE) && SircusApplication.adminConnected && (index_Selected_MetaSequence >= 0)) {
                 SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
                 metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
-
-                if (SircusApplication.dataSircus.getMetaSequencesList().size() == 0) {
-                    next.setDisable(true);
-                }
             }
         });
 
