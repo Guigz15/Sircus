@@ -1,13 +1,10 @@
 package fr.polytech.sircus.model;
 
 import fr.polytech.sircus.SircusApplication;
-import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.awt.*;
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.Objects;
@@ -54,21 +51,6 @@ public class Interstim extends AbstractMedia implements Serializable {
         return Objects.equals(media, interstim.media);
     }
 
-    /**
-     * Override of the writeObject method to handle the background color attribute which is not serializable.
-     */
-    protected void writeObject(ObjectOutputStream oos) throws IOException {
-        super.writeObject(oos);
-        oos.writeObject(media);
-    }
-
-    /**
-     * Override of the readObject method to handle the background color attribute which is not serializable.
-     */
-    protected void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-        super.readObject(ois);
-        media = (Media) ois.readObject();
-    }
 
     /**
      * Convert an interstim to XML
@@ -78,7 +60,8 @@ public class Interstim extends AbstractMedia implements Serializable {
         String XML = "<interstim filename=\"" + filename.replace(" ", "%20") +
                 "\" minDuration=\"" + minDuration + "\" maxDuration=\"" + maxDuration + "\" type=\"" + typeMedia + "\" lock=\"" +
                 isLocked + "\" isResizable=\"" + isResizable + "\" backgroundColor=\"" +
-                backgroundColor + "\" />\n";
+                String.format("0x%02x%02x%02x", backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue())
+                + "\" />\n";
         return SircusApplication.XMLFormatter(XML, 4, true);
     }
 

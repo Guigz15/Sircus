@@ -1,14 +1,17 @@
 package fr.polytech.sircus.controller.PopUps;
 
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.controller.Step2Controller;
 import fr.polytech.sircus.controller.PreviewTimeline;
+import fr.polytech.sircus.controller.Step2Controller;
 import fr.polytech.sircus.model.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -24,6 +27,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -389,7 +393,11 @@ public class ModifySeqPopUp {
             DialogPane dialogPane = fxmlLoader.load();
             ModifyMediaPopUp controller = fxmlLoader.getController();
             controller.getResizeImage().setSelected(mediaTable.getItems().get(indexSelectedMediaInTable).isResizable());
-            controller.getBackgroundColor().setValue(mediaTable.getItems().get(indexSelectedMediaInTable).getBackgroundColor());
+            Color backgroundColor = mediaTable.getItems().get(indexSelectedMediaInTable).getBackgroundColor();
+            double opacity = backgroundColor.getAlpha() / 255.0;
+            controller.getBackgroundColor().setValue(
+                    javafx.scene.paint.Color.rgb(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(), opacity)
+            );
 
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
@@ -402,7 +410,10 @@ public class ModifySeqPopUp {
                 if (clickedButton.get() == ButtonType.FINISH) {
                     AbstractMedia abstractMediaToModified = mediaTable.getItems().get(indexSelectedMediaInTable);
                     abstractMediaToModified.setResizable(controller.getResizeImage().isSelected());
-                    abstractMediaToModified.setBackgroundColor(controller.getBackgroundColor().getValue());
+                    javafx.scene.paint.Color color = controller.getBackgroundColor().getValue();
+                    abstractMediaToModified.setBackgroundColor(
+                            new Color((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue(), (float) color.getOpacity())
+                    );
                 }
             }
         } catch (IOException e) {

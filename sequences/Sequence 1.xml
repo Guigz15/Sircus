@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sequence lock="true" maxDuration="PT45S" minDuration="PT9S" name="Sequence%201">
+<sequence lock="true" maxDuration="PT13S" minDuration="PT10S" name="Sequence%201">
     <listMedia>
         <media>
             <filename>mos01.jpg</filename>
             <minDuration>PT5S</minDuration>
-            <maxDuration>PT15S</maxDuration>
+            <maxDuration>PT5S</maxDuration>
             <type>PICTURE</type>
-            <interstim backgroundColor="0xffffffff" filename="white.jpg" isResizable="true" lock="true" maxDuration="PT5S" minDuration="PT2S" type="PICTURE"/>
+            <interstim backgroundColor="0xffffff" filename="white.jpg" isResizable="true" lock="true" maxDuration="PT5S" minDuration="PT2S" type="PICTURE"/>
             <lock>true</lock>
             <isResizable>false</isResizable>
-            <backgroundColor>0x00ffffff</backgroundColor>
+            <backgroundColor>0x00ffff</backgroundColor>
         </media>
         <media>
             <filename>mos02.jpg</filename>
-            <minDuration>PT2S</minDuration>
-            <maxDuration>PT25S</maxDuration>
+            <minDuration>PT3S</minDuration>
+            <maxDuration>PT3S</maxDuration>
             <type>PICTURE</type>
             <lock>true</lock>
             <isResizable>true</isResizable>
-            <backgroundColor>0xadff2fff</backgroundColor>
+            <backgroundColor>0xff00ff</backgroundColor>
         </media>
     </listMedia>
 </sequence>

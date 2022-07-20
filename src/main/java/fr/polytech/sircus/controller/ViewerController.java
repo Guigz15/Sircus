@@ -18,7 +18,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -171,11 +170,9 @@ public class ViewerController {
                 resizeImage();
             }
 
-            Color color = media.getBackgroundColor();
+            java.awt.Color color = media.getBackgroundColor();
             String hexColor = String.format( "-fx-background-color: #%02X%02X%02X;",
-                    (int)(color.getRed() * 255),
-                    (int)(color.getGreen() * 255),
-                    (int)(color.getBlue() * 255));
+                    color.getRed(), color.getGreen(), color.getBlue());
 
             stackPane.setStyle(hexColor);
 

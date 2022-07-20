@@ -1,11 +1,9 @@
 package fr.polytech.sircus.model;
 
-import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+
+import java.awt.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -65,7 +63,7 @@ public abstract class AbstractMedia implements Serializable {
      * Color displayed behind the media in the viewer.
      */
     @Getter @Setter
-    protected transient Color backgroundColor;
+    protected Color backgroundColor;
 
     @Override
     public boolean equals(Object o) {
@@ -109,37 +107,4 @@ public abstract class AbstractMedia implements Serializable {
 
         return Duration.ofSeconds(longArr[0]).plus(Duration.ofMillis(longArr[1]));
     }
-
-    /**
-     * Override of the writeObject method to handle the background color attribute which is not serializable.
-     */
-    protected void writeObject(ObjectOutputStream oos) throws IOException {
-        oos.writeUTF(filename);
-        oos.writeObject(minDuration);
-        oos.writeObject(maxDuration);
-        oos.writeObject(duration);
-        oos.writeObject(typeMedia);
-        oos.writeBoolean(isLocked);
-        oos.writeBoolean(isResizable);
-
-        oos.writeDouble(backgroundColor.getRed());
-        oos.writeDouble(backgroundColor.getGreen());
-        oos.writeDouble(backgroundColor.getBlue());
-        oos.writeDouble(backgroundColor.getOpacity());
-    }
-
-    /**
-     * Override of the readObject method to handle the background color attribute which is not serializable.
-     */
-    protected void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-        filename = ois.readUTF();
-        minDuration = (Duration) ois.readObject();
-        maxDuration = (Duration) ois.readObject();
-        duration = (Duration) ois.readObject();
-        typeMedia = (TypeMedia) ois.readObject();
-        isLocked = ois.readBoolean();
-        isResizable = ois.readBoolean();
-        backgroundColor = new Color(ois.readDouble(), ois.readDouble(), ois.readDouble(), ois.readDouble());
-    }
-
 }

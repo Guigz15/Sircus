@@ -8,7 +8,7 @@
             <type>PICTURE</type>
             <lock>true</lock>
             <isResizable>false</isResizable>
-            <backgroundColor>0xffffffff</backgroundColor>
+            <backgroundColor>0xffffff</backgroundColor>
         </media>
         <media>
             <filename>mosob01.jpg</filename>
@@ -17,7 +17,7 @@
             <type>PICTURE</type>
             <lock>true</lock>
             <isResizable>false</isResizable>
-            <backgroundColor>0xffffffff</backgroundColor>
+            <backgroundColor>0xffffff</backgroundColor>
         </media>
         <media>
             <filename>vis03.jpg</filename>
@@ -26,7 +26,7 @@
             <type>PICTURE</type>
             <lock>true</lock>
             <isResizable>false</isResizable>
-            <backgroundColor>0xffffffff</backgroundColor>
+            <backgroundColor>0xffffff</backgroundColor>
         </media>
     </listMedia>
 </sequence>

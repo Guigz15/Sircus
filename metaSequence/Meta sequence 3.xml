@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metaSequence>
     <name>Meta%20sequence%203</name>
-    <minDuration>PT2M6S</minDuration>
-    <maxDuration>PT3M21S</maxDuration>
+    <minDuration>PT2M7S</minDuration>
+    <maxDuration>PT2M19S</maxDuration>
     <listSequence>
         <sequence>Sequence%201.xml</sequence>
         <sequence>Sequence%202.xml</sequence>

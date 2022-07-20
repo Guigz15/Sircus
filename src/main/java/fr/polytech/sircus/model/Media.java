@@ -1,12 +1,10 @@
 package fr.polytech.sircus.model;
 
 import fr.polytech.sircus.SircusApplication;
-import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+
+import java.awt.*;
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.Objects;
@@ -68,22 +66,6 @@ public class Media extends AbstractMedia implements Serializable {
     }
 
     /**
-     * Override of the writeObject method to handle the background color attribute which is not serializable.
-     */
-    protected void writeObject(ObjectOutputStream oos) throws IOException {
-        super.writeObject(oos);
-        oos.writeObject(interstim);
-    }
-
-    /**
-     * Override of the readObject method to handle the background color attribute which is not serializable.
-     */
-    protected void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-        super.readObject(ois);
-        interstim = (Interstim) ois.readObject();
-    }
-
-    /**
      * Convert a media to XML
      * @return XML
      */
@@ -96,13 +78,17 @@ public class Media extends AbstractMedia implements Serializable {
         if(interstim == null){
             XML += "<lock>" + isLocked + "</lock>\n" +
                     "<isResizable>" + isResizable + "</isResizable>\n" +
-                    "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
+                    "<backgroundColor>" +
+                    String.format("0x%02x%02x%02x", backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue()) +
+                    "</backgroundColor>\n" +
                     "</media>\n";
         } else {
             XML += interstim.toXML() +
                     "<lock>" + isLocked + "</lock>\n" +
                     "<isResizable>" + isResizable + "</isResizable>\n" +
-                    "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
+                    "<backgroundColor>" +
+                    String.format("0x%02x%02x%02x", backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue()) +
+                    "</backgroundColor>\n" +
                     "</media>\n";
         }
         return SircusApplication.XMLFormatter(XML, 4, true);

@@ -13,7 +13,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;

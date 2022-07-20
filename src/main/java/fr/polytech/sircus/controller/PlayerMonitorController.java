@@ -686,11 +686,9 @@ public class PlayerMonitorController {
 
         resizeImage();
 
-        Color color = media.getBackgroundColor();
-        String hexColor = String.format( "-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid; -fx-background-color: #%02X%02X%02X;",
-                (int)(color.getRed() * 255),
-                (int)(color.getGreen() * 255),
-                (int)(color.getBlue() * 255));
+        java.awt.Color color = media.getBackgroundColor();
+        String hexColor = String.format( "-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid; " +
+                        "-fx-background-color: #%02X%02X%02X;", color.getRed(), color.getGreen(), color.getBlue());
 
         previewPane.setStyle(hexColor);
     }

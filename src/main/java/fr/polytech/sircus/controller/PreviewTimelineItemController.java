@@ -169,7 +169,9 @@ public class PreviewTimelineItemController implements Initializable {
         Color borderColor = Color.WHITE;
 
         if(media.getBackgroundColor() != null) {
-            borderColor = media.getBackgroundColor();
+            java.awt.Color color = media.getBackgroundColor();
+            double opacity = color.getAlpha() / 255.0;
+            borderColor = Color.rgb(color.getRed(), color.getGreen(), color.getBlue(), opacity);
         }
 
         imageBorder.setBorder(new Border(

@@ -6,12 +6,11 @@ import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.model.TypeMedia;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
-
+import java.awt.*;
 import java.io.File;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -77,7 +76,7 @@ public class ImportSeqXML extends DefaultHandler {
             Duration maxDuration = Duration.parse(attributes.getValue("maxDuration"));
             TypeMedia type = TypeMedia.valueOf(attributes.getValue("type"));
             boolean isResizable = Boolean.parseBoolean(attributes.getValue("isResizable"));
-            Color backgroundColor = Color.valueOf(attributes.getValue("backgroundColor"));
+            Color backgroundColor = Color.decode(attributes.getValue("backgroundColor"));
 
             // the media of the interstim is the last one in the list of the sequence
             Media media = seq.getListMedias().get(seq.getListMedias().size() - 1);
@@ -147,7 +146,7 @@ public class ImportSeqXML extends DefaultHandler {
             if(currentValue.toString().equals("null")){
                 seq.getListMedias().get(seq.getListMedias().size() - 1).setBackgroundColor(null);
             } else {
-                seq.getListMedias().get(seq.getListMedias().size() - 1).setBackgroundColor(Color.valueOf(currentValue.toString()));
+                seq.getListMedias().get(seq.getListMedias().size() - 1).setBackgroundColor(Color.decode(currentValue.toString()));
             }
             backgroundColor = false;
         }
