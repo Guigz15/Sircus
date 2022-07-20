@@ -5,6 +5,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.media.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
@@ -106,13 +107,18 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </ListView>
-            <HBox alignment="CENTER" maxHeight="-Infinity" spacing="10.0">
+            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" spacing="10.0">
                <Button fx:id="commentButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: mediumseagreen;">
                   <graphic>
                      <FontIcon iconLiteral="fa-save" iconSize="15" />
                   </graphic>
                </Button>
                <TextArea fx:id="commentTextArea" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="31.0" promptText="Commentaires..." wrapText="true" />
+               <HBox alignment="BOTTOM_CENTER" minWidth="-Infinity" prefWidth="50.0" spacing="5.0">
+                  <Circle fx:id="blueCircle" fill="DODGERBLUE" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+                  <Circle fx:id="redCircle" fill="RED" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+                  <Circle fx:id="greenCircle" fill="#00ff32" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+               </HBox>
             </HBox>
          </VBox>
          <VBox>
@@ -198,18 +204,16 @@
    <bottom>
       <HBox spacing="705.0" BorderPane.alignment="CENTER_LEFT">
          <BorderPane.margin>
-            <Insets bottom="15.0" left="25.0" right="25.0"/>
+            <Insets bottom="15.0" left="25.0" right="25.0" />
          </BorderPane.margin>
-         <Button fx:id="previous" mnemonicParsing="false" onMouseClicked="#previousPage"
-                 style="-fx-background-color: #457b9d;" text="Précédent" textFill="WHITE">
+         <Button fx:id="previous" mnemonicParsing="false" onMouseClicked="#previousPage" style="-fx-background-color: #457b9d;" text="Précédent" textFill="WHITE">
             <font>
-               <Font size="16.0"/>
+               <Font size="16.0" />
             </font>
          </Button>
-         <Button fx:id="participantCalibration" mnemonicParsing="false" style="-fx-background-color: #457b9d;" text="Calibration Participant"
-                 textFill="WHITE">
+         <Button fx:id="participantCalibration" mnemonicParsing="false" style="-fx-background-color: #457b9d;" text="Calibration Participant" textFill="WHITE">
             <font>
-               <Font size="16.0"/>
+               <Font size="16.0" />
             </font>
          </Button>
       </HBox>

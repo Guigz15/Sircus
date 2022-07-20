@@ -8,7 +8,7 @@ import java.time.Period;
 /**
  * Represent a patient with its information
  */
-public class Patient {
+public class Participant {
 
     public enum Sex { M, F }
     public enum EyeDominance { Droit, Gauche, Ambidextre, Indéfini }
@@ -30,19 +30,19 @@ public class Patient {
     /**
      * Default constructor
      */
-    public Patient() {}
+    public Participant() {}
 
     /**
      * Copy constructor
-     * @param patient the patient to copy
+     * @param participant the patient to copy
      */
-    public Patient(Patient patient) {
-        this.identifier = patient.identifier;
-        this.sex = patient.sex;
-        this.visitNumber = patient.visitNumber;
-        this.birthDate = patient.birthDate;
-        this.eyeDominance = patient.eyeDominance;
-        this.handLaterality = patient.handLaterality;
+    public Participant(Participant participant) {
+        this.identifier = participant.identifier;
+        this.sex = participant.sex;
+        this.visitNumber = participant.visitNumber;
+        this.birthDate = participant.birthDate;
+        this.eyeDominance = participant.eyeDominance;
+        this.handLaterality = participant.handLaterality;
     }
 
     /**

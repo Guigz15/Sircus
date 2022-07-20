@@ -2,7 +2,7 @@ package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
 import fr.polytech.sircus.controller.PopUps.LoginPopup;
-import fr.polytech.sircus.model.Patient;
+import fr.polytech.sircus.model.Participant;
 import fr.polytech.sircus.model.User;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -123,9 +123,8 @@ public class MainWindowController implements Initializable {
         eyeTracker.valueProperty().addListener((observableValue, oldName, newName) -> SircusApplication.dataSircus.saveEyeTracker(newName));
         tobiiCalibration.visibleProperty().bind(Bindings.createBooleanBinding(() -> eyeTracker.getValue() != null, eyeTracker.valueProperty()));
         tobiiCalibration.setOnAction(actionEvent -> {
-            // Launch Eye Tracker Manager on another thread
             try {
-                Runtime.getRuntime().exec(System.getenv("LocalAppData") + "\\Programs\\TobiiProEyeTrackerManager\\TobiiProEyeTrackerManager.exe");
+                Runtime.getRuntime().exec("python TobiiCalibration.py");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -213,16 +212,16 @@ public class MainWindowController implements Initializable {
 
         // Initialize all components if they have been already filled
         /*
-        if (SircusApplication.patient != null) {
-            id.setText(SircusApplication.patient.getIdentifier());
-            Objects.requireNonNull(getRadioButton(sex.getToggles(), SircusApplication.patient.getSex().name())).setSelected(true);
-            visitNumber.setText(SircusApplication.patient.getVisitNumber());
-            birthDate.setValue(SircusApplication.patient.getBirthDate());
-            age.setText(SircusApplication.patient.computeAge() + "  ans");
-            if (SircusApplication.patient.getEyeDominance() != null)
-                Objects.requireNonNull(getRadioButton(ocularDominance.getToggles(), SircusApplication.patient.getEyeDominance().name())).setSelected(true);
-            if (SircusApplication.patient.getHandLaterality() != null)
-                Objects.requireNonNull(getRadioButton(laterality.getToggles(), SircusApplication.patient.getHandLaterality().name())).setSelected(true);
+        if (SircusApplication.participant != null) {
+            id.setText(SircusApplication.participant.getIdentifier());
+            Objects.requireNonNull(getRadioButton(sex.getToggles(), SircusApplication.participant.getSex().name())).setSelected(true);
+            visitNumber.setText(SircusApplication.participant.getVisitNumber());
+            birthDate.setValue(SircusApplication.participant.getBirthDate());
+            age.setText(SircusApplication.participant.computeAge() + "  ans");
+            if (SircusApplication.participant.getEyeDominance() != null)
+                Objects.requireNonNull(getRadioButton(ocularDominance.getToggles(), SircusApplication.participant.getEyeDominance().name())).setSelected(true);
+            if (SircusApplication.participant.getHandLaterality() != null)
+                Objects.requireNonNull(getRadioButton(laterality.getToggles(), SircusApplication.participant.getHandLaterality().name())).setSelected(true);
         }
         if (SircusApplication.user != null) {
             Objects.requireNonNull(getRadioButton(type.getToggles(), SircusApplication.user.getUserType().name())).setSelected(true);
@@ -525,19 +524,19 @@ public class MainWindowController implements Initializable {
      */
     private void saveInfos() {
         // Save patient infos
-        SircusApplication.patient = new Patient();
+        SircusApplication.participant = new Participant();
         if (!id.getText().isEmpty())
-            SircusApplication.patient.setIdentifier(id.getText());
+            SircusApplication.participant.setIdentifier(id.getText());
         if (sex.getSelectedToggle() != null)
-            SircusApplication.patient.setSex(Patient.Sex.valueOf(((RadioButton)this.sex.getSelectedToggle()).getText()));
+            SircusApplication.participant.setSex(Participant.Sex.valueOf(((RadioButton)this.sex.getSelectedToggle()).getText()));
         if (!visitNumber.getText().isEmpty())
-            SircusApplication.patient.setVisitNumber(Integer.parseInt(visitNumber.getText()));
+            SircusApplication.participant.setVisitNumber(Integer.parseInt(visitNumber.getText()));
         if (birthDate.getValue() != null)
-            SircusApplication.patient.setBirthDate(birthDate.getValue());
+            SircusApplication.participant.setBirthDate(birthDate.getValue());
         if (ocularDominance.getSelectedToggle() != null)
-            SircusApplication.patient.setEyeDominance(Patient.EyeDominance.valueOf(((RadioButton)this.ocularDominance.getSelectedToggle()).getText()));
+            SircusApplication.participant.setEyeDominance(Participant.EyeDominance.valueOf(((RadioButton)this.ocularDominance.getSelectedToggle()).getText()));
         if (laterality.getSelectedToggle() != null)
-            SircusApplication.patient.setHandLaterality(Patient.HandLaterality.valueOf(((RadioButton)this.laterality.getSelectedToggle()).getText()));
+            SircusApplication.participant.setHandLaterality(Participant.HandLaterality.valueOf(((RadioButton)this.laterality.getSelectedToggle()).getText()));
 
         // Save operator infos
         SircusApplication.user = new User();

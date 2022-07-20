@@ -1,12 +1,12 @@
 package fr.polytech.sircus.controller;
 
 import animatefx.animation.AnimationFX;
-import animatefx.animation.Flash;
+import animatefx.animation.Bounce;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
 import fr.polytech.sircus.SircusApplication;
-import fr.polytech.sircus.controller.PopUps.PatientCalibrationPopup;
+import fr.polytech.sircus.controller.PopUps.ParticipantCalibrationPopup;
 import fr.polytech.sircus.model.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -26,12 +26,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 import org.kordamp.ikonli.javafx.FontIcon;
+
 import javax.swing.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -66,6 +68,12 @@ public class PlayerMonitorController {
     private TextArea commentTextArea;
     @FXML
     private Button commentButton;
+    @FXML
+    private Circle blueCircle;
+    @FXML
+    private Circle redCircle;
+    @FXML
+    private Circle greenCircle;
     @FXML
     private Button playButton;
     @FXML
@@ -172,12 +180,21 @@ public class PlayerMonitorController {
         createWebcamAndSetSwingContent(swingNode);
         cameraPane.getChildren().add(swingNode);
 
-        // To make commentButton blink
-        Flash buttonBlinking = new Flash(commentButton);
-        buttonBlinking.setCycleCount(AnimationFX.INDEFINITE);
+        // To make little circles bounce
+        Bounce blueCircleBounce = new Bounce(blueCircle);
+        blueCircleBounce.setCycleCount(AnimationFX.INDEFINITE);
+        Bounce redCircleBounce = new Bounce(redCircle);
+        redCircleBounce.setCycleCount(AnimationFX.INDEFINITE);
+        redCircleBounce.setDelay(Duration.valueOf("100ms"));
+        Bounce greenCircleBounce = new Bounce(greenCircle);
+        greenCircleBounce.setCycleCount(AnimationFX.INDEFINITE);
+        greenCircleBounce.setDelay(Duration.valueOf("200ms"));
         commentTextArea.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (!newValue.isEmpty())
-                buttonBlinking.play();
+            if (!newValue.isEmpty()) {
+                blueCircleBounce.play();
+                redCircleBounce.play();
+                greenCircleBounce.play();
+            }
         });
 
         // To allow text to wrap in each cell and defined context menu behavior
@@ -253,7 +270,7 @@ public class PlayerMonitorController {
             }
         });
 
-        // Save comment in result and stop blinking
+        // Save comment in result and stop bounce
         commentButton.setOnAction(actionEvent -> {
             if (!this.commentTextArea.getText().isEmpty()) {
                 this.result.addComment(this.commentTextArea.getText());
@@ -261,21 +278,36 @@ public class PlayerMonitorController {
             }
             this.commentTextArea.clear();
 
-            buttonBlinking.stop();
-
-            // To reset commentButton to its first state
-            commentButton.setOpacity(1.0);
+            blueCircleBounce.stop();
+            blueCircleBounce.resetNode();
+            redCircleBounce.stop();
+            redCircleBounce.resetNode();
+            greenCircleBounce.stop();
+            greenCircleBounce.resetNode();
         });
 
+        // To stop little circles bounce if comment text area is empty and not focused
+        commentTextArea.focusedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if (!t1 && commentTextArea.getText().isEmpty()) {
+                blueCircleBounce.stop();
+                blueCircleBounce.resetNode();
+                redCircleBounce.stop();
+                redCircleBounce.resetNode();
+                greenCircleBounce.stop();
+                greenCircleBounce.resetNode();
+            }
+        });
+
+        // To launch python script that make participant calibration
         participantCalibration.setOnAction(actionEvent -> {
-            FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/patient_calibration_popup.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/participant_calibration_popup.fxml"));
             DialogPane dialogPane;
             try {
                 dialogPane = fxmlLoader.load();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            PatientCalibrationPopup controller = fxmlLoader.getController();
+            ParticipantCalibrationPopup controller = fxmlLoader.getController();
 
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
@@ -291,10 +323,16 @@ public class PlayerMonitorController {
                     ExecutorService threadPool = Executors.newWorkStealingPool();
                     threadPool.execute(() -> {
                         try {
-                            Process process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/PatientCalibration.py " +
+                            String command = "python PatientCalibration.py " +
                                     controller.getTargetNumber().getValue() + " " + controller.getRandomizeTarget().isSelected() + " " +
-                                    String.format("#%02X%02X%02X", (int)(backgroundColor.getRed() * 255), (int)(backgroundColor.getGreen() * 255), (int)(backgroundColor.getBlue() * 255)) +
-                                    " " + String.format("#%02X%02X%02X", (int)(targetColor.getRed() * 255), (int)(targetColor.getGreen() * 255), (int)(targetColor.getBlue() * 255)));
+                                    String.format("#%02X%02X%02X", (int)(backgroundColor.getRed() * 255), (int)(backgroundColor.getGreen() * 255), (int)(backgroundColor.getBlue() * 255));
+                            if (controller.getTargetButton().isSelected())
+                                command += " target:" + String.format("#%02X%02X%02X", (int)(targetColor.getRed() * 255), (int)(targetColor.getGreen() * 255), (int)(targetColor.getBlue() * 255));
+                            if (controller.getImageButton().isSelected())
+                                command += " image:" + controller.getTargetImage().getImage().getUrl().substring(6);
+                            if (controller.getVideoButton().isSelected())
+                                command += " video:" + controller.getTargetVideo().getMediaPlayer().getMedia().getSource();
+                            Process process = Runtime.getRuntime().exec(command);
                             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                             String out;
                             while ((out = reader.readLine()) != null) {
@@ -340,7 +378,7 @@ public class PlayerMonitorController {
                 localDateTime.getYear() + "\\" + localDateTime.getMonthValue() + "\\" +
                 localDateTime.getDayOfMonth() + "\\" + localDateTime.getHour()
                 + "\\" + localDateTime.getMinute() + "\\" + metaSequenceToRead.getName()
-                + " - " + SircusApplication.patient.getIdentifier() + ".xml");
+                + " - " + SircusApplication.participant.getIdentifier() + ".xml");
 
         PrintWriter writer = new PrintWriter(resultFile);
         writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + result.toXML());
@@ -538,7 +576,7 @@ public class PlayerMonitorController {
                 ExecutorService threadPool = Executors.newWorkStealingPool();
                 threadPool.execute(() -> {
                     try {
-                        process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiAcquisition.py " + metaSequenceToRead.getDuration().getSeconds());
+                        process = Runtime.getRuntime().exec("python TobiiAcquisition.py " + metaSequenceToRead.getDuration().getSeconds());
                         Thread.sleep(3000); // Wait for eye tracker to launch
                         viewer.playViewer();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));

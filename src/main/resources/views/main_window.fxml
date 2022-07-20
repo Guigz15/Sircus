@@ -64,7 +64,7 @@
    <center>
       <HBox maxHeight="-Infinity" prefHeight="510.0" BorderPane.alignment="CENTER">
          <VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="497.0" spacing="30.0" HBox.hgrow="ALWAYS">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Patient" VBox.vgrow="ALWAYS">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Participant" VBox.vgrow="ALWAYS">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>

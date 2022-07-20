@@ -173,9 +173,9 @@ public class ViewerController {
 
             Color color = media.getBackgroundColor();
             String hexColor = String.format( "-fx-background-color: #%02X%02X%02X;",
-                    (int)( color.getRed() * 255 ),
-                    (int)( color.getGreen() * 255 ),
-                    (int)( color.getBlue() * 255 ) );
+                    (int)(color.getRed() * 255),
+                    (int)(color.getGreen() * 255),
+                    (int)(color.getBlue() * 255));
 
             stackPane.setStyle(hexColor);
 

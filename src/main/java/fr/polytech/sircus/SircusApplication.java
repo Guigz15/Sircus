@@ -2,7 +2,7 @@ package fr.polytech.sircus;
 
 import fr.polytech.sircus.controller.MainWindowController;
 import fr.polytech.sircus.model.DataSircus;
-import fr.polytech.sircus.model.Patient;
+import fr.polytech.sircus.model.Participant;
 import fr.polytech.sircus.model.User;
 import fr.polytech.sircus.utils.Serializer;
 import javafx.application.Application;
@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -20,7 +21,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.*;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Objects;
 
 /**
@@ -51,7 +55,7 @@ public class SircusApplication extends Application {
     /**
      * The patient to be diagnostic
      */
-    public static Patient patient = null;
+    public static Participant participant = null;
 
     /**
      * The practitioner do the diagnostic
@@ -126,7 +130,7 @@ public class SircusApplication extends Application {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         transformerFactory.setAttribute("indent-number", indent);
-        Transformer transformer = transformerFactory.newTransformer(new StreamSource(new File("src/main/resources/styleSheetXML.xsl")));
+        Transformer transformer = transformerFactory.newTransformer(new StreamSource(SircusApplication.class.getClassLoader().getResourceAsStream("styleSheetXML.xsl")));
         transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, ignoreDeclaration ? "yes" : "no");
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
