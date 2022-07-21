@@ -414,6 +414,7 @@ public class ModifySeqPopUp {
                     abstractMediaToModified.setBackgroundColor(
                             new Color((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue(), (float) color.getOpacity())
                     );
+                    previewTimeline.setSequence(sequence);
                 }
             }
         } catch (IOException e) {

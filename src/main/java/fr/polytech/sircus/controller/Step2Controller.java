@@ -576,12 +576,14 @@ public class Step2Controller implements Initializable {
                         SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().add(index_Selected_Sequence, controller.getSequence());
                         SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().remove(oldSequence);
                         metaListView.getSelectionModel().getSelectedItem().computeMinMaxDurations();
+
+                        // the code below allows you to update listview.
+                        seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
+                        //Defined action when the MetaSequence element selected is changed.
+                        seqListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerSequence());
+                        seqListView.getSelectionModel().select(metaListView.getItems().get(index_Selected_MetaSequence).getSequencesList().indexOf(controller.getSequence()));
                     }
                 }
-                // the code below allows you to update listview.
-                seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
-                //Defined action when the MetaSequence element selected is changed.
-                seqListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerSequence());
             }
 
         } catch (IOException e) {
@@ -605,10 +607,14 @@ public class Step2Controller implements Initializable {
                 writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + seq.toXML());
                 writer.close();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "L'exportation de la séquence a réussi.", ButtonType.OK);
+                alert.setTitle("Succès de l'exportation");
+                alert.setHeaderText("Information");
                 alert.show();
             } catch (Exception e) {
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR, "L'exportation de la séquence a échoué.", ButtonType.OK);
+                alert.setTitle("Echec de l'exportation");
+                alert.setHeaderText("Erreur");
                 alert.show();
             }
         }
@@ -631,10 +637,14 @@ public class Step2Controller implements Initializable {
                 writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + meta.toXML());
                 writer.close();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "L'exportation de la métaséquence a réussi.", ButtonType.OK);
+                alert.setTitle("Succès de l'exportation");
+                alert.setHeaderText("Information");
                 alert.show();
             } catch (Exception e) {
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR, "L'exportation de la métaséquence a échoué.", ButtonType.OK);
+                alert.setTitle("Echec de l'exportation");
+                alert.setHeaderText("Erreur");
                 alert.show();
             }
         }
