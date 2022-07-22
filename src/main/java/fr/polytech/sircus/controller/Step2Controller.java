@@ -143,6 +143,24 @@ public class Step2Controller implements Initializable {
 
         //Defined action when the MetaSequence element selected is changed.
         metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
+
+        // Defined action when we reselect the sequence already selected.
+        metaListView.focusedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if (!t1 && seqListView.isFocused() && !seqListView.getSelectionModel().isEmpty()) {
+                previewTimeline.removeAllMedia();
+                previewTimeline.addSequence(metaListView.getItems().get(index_Selected_MetaSequence).getSequencesList().get(index_Selected_Sequence));
+
+                setSeqStats();
+                previewText.setText("Prévisualisation de la séquence");
+            }
+        });
+
+        // Defined action when metaListView is empty
+        metaListView.itemsProperty().addListener((observableValue, metaSequences, t1) -> {
+            if (t1.isEmpty())
+                resetStats();
+        });
+
         nextPageAdviceText.visibleProperty().bind(Bindings.createBooleanBinding(() -> metaListView.getSelectionModel().isEmpty(), metaListView.getSelectionModel().getSelectedItems()));
 
         /* initialize sequences listView */
@@ -150,6 +168,17 @@ public class Step2Controller implements Initializable {
 
         //Defined action when the Sequence element selected is changed.
         seqListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerSequence());
+
+        // Defined action when we reselect the metasequence already selected.
+        seqListView.focusedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if (!t1 && metaListView.isFocused() && !metaListView.getSelectionModel().isEmpty()) {
+                previewTimeline.removeAllMedia();
+                previewTimeline.addMetaSequence(metaListView.getItems().get(index_Selected_MetaSequence));
+
+                setMetaSeqStats();
+                previewText.setText("Prévisualisation de la métaséquence");
+            }
+        });
 
         renameMetaButton.disableProperty().bind(Bindings.createBooleanBinding(() -> metaListView.getSelectionModel().isEmpty(), metaListView.getSelectionModel().getSelectedItems()));
         renameMetaButton.setOnAction(actionEvent -> {
@@ -160,8 +189,10 @@ public class Step2Controller implements Initializable {
         removeMetaButton.disableProperty().bind(Bindings.createBooleanBinding(() -> metaListView.getSelectionModel().isEmpty(), metaListView.getSelectionModel().getSelectedItems()));
         exportMetaButton.disableProperty().bind(Bindings.createBooleanBinding(() -> metaListView.getSelectionModel().isEmpty(), metaListView.getSelectionModel().getSelectedItems()));
 
-        modifySeqButton.disableProperty().bind(Bindings.createBooleanBinding(() -> seqListView.getSelectionModel().isEmpty(), seqListView.getSelectionModel().getSelectedItems()));
+        addSeqButton.disableProperty().bind(Bindings.createBooleanBinding(() -> metaListView.getSelectionModel().isEmpty(), metaListView.getSelectionModel().getSelectedItems()));
         removeSeqButton.disableProperty().bind(Bindings.createBooleanBinding(() -> seqListView.getSelectionModel().isEmpty(), seqListView.getSelectionModel().getSelectedItems()));
+        modifySeqButton.disableProperty().bind(Bindings.createBooleanBinding(() -> seqListView.getSelectionModel().isEmpty(), seqListView.getSelectionModel().getSelectedItems()));
+        importSeqButton.disableProperty().bind(Bindings.createBooleanBinding(() -> metaListView.getSelectionModel().isEmpty(), metaListView.getSelectionModel().getSelectedItems()));
         exportSeqButton.disableProperty().bind(Bindings.createBooleanBinding(() -> seqListView.getSelectionModel().isEmpty(), seqListView.getSelectionModel().getSelectedItems()));
 
         //---------------------------------------------------------------------------------------//
@@ -324,7 +355,7 @@ public class Step2Controller implements Initializable {
 
         //Defined action when we pressed "delete" key. This delete current meta-sequence
         metaListView.setOnKeyReleased((KeyEvent keyEvent) -> {
-            //if we pressed delete and we have selected a mete-sequence and only if we are connected as admin
+            //if we pressed delete and we have selected a meta-sequence and only if we are connected as admin
             if ((keyEvent.getCode() == KeyCode.DELETE) && SircusApplication.adminConnected && (index_Selected_MetaSequence >= 0)) {
                 SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
                 metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
@@ -541,12 +572,9 @@ public class Step2Controller implements Initializable {
             }
         });
 
-        mixedForever.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
-                metaListView.getSelectionModel().getSelectedItem().setMixedForever(!oldValue && newValue);
-            }
-        });
+        mixedForever.selectedProperty().addListener((observableValue, oldValue, newValue) ->
+                metaListView.getSelectionModel().getSelectedItem().setMixedForever(!oldValue && newValue)
+        );
     }
 
 
@@ -680,6 +708,10 @@ public class Step2Controller implements Initializable {
                 previewTimeline.addMetaSequence(currentMetaSequence);
             } catch (ParserConfigurationException | SAXException | IOException e) {
                 e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR, "L'importation de la séquence a échoué.", ButtonType.OK);
+                alert.setTitle("Echec de l'importation");
+                alert.setHeaderText("Erreur");
+                alert.show();
             }
         }
     }
@@ -706,6 +738,10 @@ public class Step2Controller implements Initializable {
                 metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
             } catch (ParserConfigurationException | SAXException | IOException e) {
                 e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR, "L'importation de la métaséquence a échoué.", ButtonType.OK);
+                alert.setTitle("Echec de l'importation");
+                alert.setHeaderText("Erreur");
+                alert.show();
             }
         }
     }
@@ -786,7 +822,7 @@ public class Step2Controller implements Initializable {
     }
 
     /**
-     * Set the information section about the selected meta-sequence
+     * Set the statistic section about the selected meta-sequence
      */
     public void setMetaSeqStats() {
         MetaSequence metaSeq = SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence);
@@ -818,7 +854,7 @@ public class Step2Controller implements Initializable {
     }
 
     /**
-     * Set the information section about the selected sequence
+     * Set the statistic section about the selected sequence
      */
     public void setSeqStats() {
         Sequence sequence = getAllItemMetaSequence().get(index_Selected_MetaSequence).getSequencesList().get(index_Selected_Sequence);
@@ -842,6 +878,18 @@ public class Step2Controller implements Initializable {
         long maxDuration = sequence.getMaxDuration().getSeconds();
         totalMaxDurationLabelForSeq.setText(
                 String.format("%02d:%02d:%02d", maxDuration / 3600, (maxDuration % 3600) / 60, (maxDuration % 60)));
+    }
+
+    /**
+     * Reset the statistic section
+     */
+    private void resetStats() {
+        statsTitle.setText("Statistiques de la méta-séquence");
+        nbSeqLabelForMeta.setText("0");
+        nbMediaLabelForMeta.setText("0");
+        nbInterstimLabelForMeta.setText("0");
+        totalMinDurationLabelForMeta.setText("00:00:00");
+        totalMaxDurationLabelForMeta.setText("00:00:00");
     }
 
     /**

@@ -110,7 +110,7 @@
                   </VBox.margin>
                </Text>
                <StackPane style="-fx-border-color: black;">
-                  <GridPane fx:id="statsForMeta" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="223.0" prefWidth="240.0" visible="false">
+                  <GridPane fx:id="statsForMeta" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="223.0" prefWidth="240.0">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="10.0" prefWidth="180.0" />
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="118.0" minWidth="10.0" prefWidth="59.0" />
@@ -173,7 +173,7 @@
                         </font>
                      </Label>
                   </GridPane>
-                  <GridPane fx:id="statsForSeq" minHeight="-Infinity" minWidth="-Infinity" prefHeight="223.0" prefWidth="240.0">
+                  <GridPane fx:id="statsForSeq" minHeight="-Infinity" minWidth="-Infinity" prefHeight="223.0" prefWidth="240.0" visible="false">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="180.0" />
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -271,13 +271,12 @@
             <HBox alignment="CENTER" spacing="20.0">
                <Text fx:id="nextPageAdviceText" strokeType="OUTSIDE" strokeWidth="0.0" text="Sélectionner une métaséquence">
                   <font>
-                     <Font name="System Bold Italic" size="16.0"/>
+                     <Font name="System Bold Italic" size="16.0" />
                   </font>
                </Text>
-               <Button fx:id="next" mnemonicParsing="false" onAction="#nextPage" style="-fx-background-color: #457b9d;"
-                       text="Suivant" textFill="WHITE">
+               <Button fx:id="next" mnemonicParsing="false" onAction="#nextPage" style="-fx-background-color: #457b9d;" text="Suivant" textFill="WHITE">
                   <font>
-                     <Font size="16.0"/>
+                     <Font size="16.0" />
                   </font>
                </Button>
             </HBox>
