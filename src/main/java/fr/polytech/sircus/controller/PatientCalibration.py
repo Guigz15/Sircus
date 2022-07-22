@@ -3,14 +3,13 @@ import random
 import sys
 import threading
 import time
-import tkinter
 import tobiiresearch.implementation.EyeTracker
 import tobiiresearch.implementation.ScreenBasedCalibration
 from tkinter import *
 from tobii_research_addons import ScreenBasedCalibrationValidation, Point2
 from screeninfo import get_monitors
 
-test = False
+test = True
 
 # Both monitors have to have the same resolution
 screens = get_monitors()
@@ -130,12 +129,12 @@ def targetCalibrationValidation(eyetracker, calibration, points_to_calibrate, po
     first_point = True
     big_circle = None
     little_circle = None
-    targetColor = sys.argv[4][sys.argv[4].find(':') + 1:]
 
     for point in points_to_calibrate:
         # Create target point with right color
         if first_point:
             if not test:
+                targetColor = sys.argv[4][sys.argv[4].find(':') + 1:]
                 big_circle = create_circle(x=root.winfo_screenwidth() * point[0],
                                            y=root.winfo_screenheight() * point[1], r=20,
                                            fill=targetColor, outline=targetColor)
@@ -151,12 +150,15 @@ def targetCalibrationValidation(eyetracker, calibration, points_to_calibrate, po
         # Subtraction between big_circle current coordinates and point coordinate to know which direction taken
         width_diff = (root.winfo_screenwidth() * point[0] - 20) - round(canvas.coords(big_circle).__getitem__(0), 2)
         height_diff = (root.winfo_screenheight() * point[1] - 20) - round(canvas.coords(big_circle).__getitem__(1), 2)
+        speed = 300
+        if height_diff < 1000 and width_diff < 1000:
+            speed = 200
 
-        while round(canvas.coords(big_circle).__getitem__(0), 2) != (root.winfo_screenwidth() * point[0] - 20) \
-                or round(canvas.coords(big_circle).__getitem__(1), 2) != (root.winfo_screenheight() * point[1] - 20):
-            canvas.move(big_circle, width_diff / 500, height_diff / 500)
-            canvas.move(little_circle, width_diff / 500, height_diff / 500)
-            time.sleep(0.00001)
+        while round(canvas.coords(big_circle).__getitem__(0), 0) != (root.winfo_screenwidth() * point[0] - 20) \
+                or round(canvas.coords(big_circle).__getitem__(1), 0) != (root.winfo_screenheight() * point[1] - 20):
+            canvas.move(big_circle, width_diff / speed, height_diff / speed)
+            canvas.move(little_circle, width_diff / speed, height_diff / speed)
+            time.sleep(0.001)
             canvas.update()
 
         # Wait a little for user to focus.
@@ -179,14 +181,16 @@ def targetCalibrationValidation(eyetracker, calibration, points_to_calibrate, po
         for point in points_to_validate:
             # Subtraction between big_circle current coordinates and point coordinate to know which direction taken
             width_diff = (root.winfo_screenwidth() * point.x - 20) - round(canvas.coords(big_circle).__getitem__(0), 2)
-            height_diff = (root.winfo_screenheight() * point.y - 20) - round(canvas.coords(big_circle).__getitem__(1),
-                                                                             2)
+            height_diff = (root.winfo_screenheight() * point.y - 20) - round(canvas.coords(big_circle).__getitem__(1), 2)
+            speed = 300
+            if height_diff < 1000 and width_diff < 1000:
+                speed = 200
 
-            while round(canvas.coords(big_circle).__getitem__(0), 2) != (root.winfo_screenwidth() * point.x - 20) \
-                    or round(canvas.coords(big_circle).__getitem__(1), 2) != (root.winfo_screenheight() * point.y - 20):
-                canvas.move(big_circle, width_diff / 500, height_diff / 500)
-                canvas.move(little_circle, width_diff / 500, height_diff / 500)
-                time.sleep(0.00001)
+            while round(canvas.coords(big_circle).__getitem__(0), 0) != (root.winfo_screenwidth() * point.x - 20) \
+                    or round(canvas.coords(big_circle).__getitem__(1), 0) != (root.winfo_screenheight() * point.y - 20):
+                canvas.move(big_circle, width_diff / speed, height_diff / speed)
+                canvas.move(little_circle, width_diff / speed, height_diff / speed)
+                time.sleep(0.001)
                 canvas.update()
 
             calib.start_collecting_data(point)
@@ -227,7 +231,7 @@ def calibrateAndValidate():
     if not test:
         targetNumbers = int(sys.argv[1])
     else:
-        targetNumbers = 2
+        targetNumbers = 9
     if targetNumbers == 2:
         points_to_calibrate = [(0.9, 0.9), (0.1, 0.1)]
     elif targetNumbers == 5:
@@ -249,15 +253,19 @@ def calibrateAndValidate():
 
     calibration_result = None
     validation_result = None
-    if sys.argv[4][:sys.argv[4].find(':')] == "target":
+    if not test:
+        if sys.argv[4][:sys.argv[4].find(':')] == "target":
+            calibration_result, validation_result = targetCalibrationValidation(eyetracker, calibration,
+                                                                                points_to_calibrate, points_to_validate)
+        '''elif sys.argv[4][:sys.argv[4].find(':')] == "image":
+            calibration_result, validation_result = imageCalibrationValidation(eyetracker, calibration, points_to_calibrate,
+                                                                               points_to_validate)
+        elif sys.argv[4][:sys.argv[4].find(':')] == "video":
+        calibration_result, validation_result = videoCalibrationValidation(eyetracker, calibration, points_to_calibrate,
+                                                                       points_to_validate)'''
+    else:
         calibration_result, validation_result = targetCalibrationValidation(eyetracker, calibration,
                                                                             points_to_calibrate, points_to_validate)
-    '''elif sys.argv[4][:sys.argv[4].find(':')] == "image":
-        calibration_result, validation_result = imageCalibrationValidation(eyetracker, calibration, points_to_calibrate,
-                                                                           points_to_validate)
-    elif sys.argv[4][:sys.argv[4].find(':')] == "video":
-    calibration_result, validation_result = videoCalibrationValidation(eyetracker, calibration, points_to_calibrate,
-                                                                       points_to_validate)'''
 
     print(validation_result.average_accuracy_left)
     print(validation_result.average_accuracy_right)
