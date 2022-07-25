@@ -1,5 +1,6 @@
 package fr.polytech.sircus.controller.PopUps;
 
+import fr.polytech.sircus.SircusApplication;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -12,27 +13,13 @@ public class LoginPopup {
 
     public LoginPopup() {}
 
-    private boolean isSuperAdminUsername() {
-        return userName.getText().equals("sudo");
-    }
-
-    private boolean isSuperAdminPassword() {
-        return password.getText().equals("password");
-    }
-
-    private boolean isAdminUsername() {
-        return userName.getText().equals("admin");
-    }
-
-    private boolean isAdminPassword() {
-        return password.getText().equals("password");
-    }
-
     public boolean isSuperAdmin() {
-        return isSuperAdminUsername() && isSuperAdminPassword();
+        return SircusApplication.dataSircus.getSuperAdmins().containsKey(userName.getText())
+                && SircusApplication.dataSircus.getSuperAdmins().containsValue(password.getText());
     }
 
     public boolean isAdmin() {
-        return isAdminUsername() && isAdminPassword();
+        return SircusApplication.dataSircus.getAdmins().containsKey(userName.getText())
+                && SircusApplication.dataSircus.getAdmins().containsValue(password.getText());
     }
 }

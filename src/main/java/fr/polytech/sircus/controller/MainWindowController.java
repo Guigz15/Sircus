@@ -1,7 +1,9 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.controller.PopUps.AddAdminPopup;
 import fr.polytech.sircus.controller.PopUps.LoginPopup;
+import fr.polytech.sircus.controller.PopUps.RemoveAdminPopup;
 import fr.polytech.sircus.model.Participant;
 import fr.polytech.sircus.model.User;
 import javafx.beans.binding.Bindings;
@@ -16,7 +18,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -35,6 +36,8 @@ public class MainWindowController implements Initializable {
     private Button tobiiCalibration;
     @FXML
     private Button addAdmin;
+    @FXML
+    private Button removeAdmin;
     @FXML
     private Button adminLogOut;
     @FXML
@@ -144,14 +147,53 @@ public class MainWindowController implements Initializable {
 
         // Admin mode
         adminLabel.setVisible(SircusApplication.adminConnected);
-        adminLogOut.setVisible(SircusApplication.adminConnected);
         addAdmin.setVisible(SircusApplication.superAdminConnected);
+        addAdmin.setOnAction(actionEvent -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/add_admin_popup.fxml"));
+                DialogPane dialogPane = fxmlLoader.load();
+                AddAdminPopup controller = fxmlLoader.getController();
+
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setDialogPane(dialogPane);
+                dialog.setTitle("Ajout d'un administrateur");
+
+                Optional<ButtonType> clickedButton = dialog.showAndWait();
+                if (clickedButton.isPresent())
+                    if (clickedButton.get() == ButtonType.FINISH)
+                        SircusApplication.dataSircus.addAdmin(controller.getUserName().getText(),
+                                controller.getPassword().getText());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        removeAdmin.setVisible(SircusApplication.superAdminConnected);
+        removeAdmin.setOnAction(actionEvent -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/remove_admin_popup.fxml"));
+                DialogPane dialogPane = fxmlLoader.load();
+                RemoveAdminPopup controller = fxmlLoader.getController();
+
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setDialogPane(dialogPane);
+                dialog.setTitle("Suppression d'un administrateur");
+
+                Optional<ButtonType> clickedButton = dialog.showAndWait();
+                if (clickedButton.isPresent())
+                    if (clickedButton.get() == ButtonType.FINISH)
+                        SircusApplication.dataSircus.removeAdmin(controller.admins.getValue());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        adminLogOut.setVisible(SircusApplication.adminConnected);
         adminLogOut.setOnAction(actionEvent -> {
             SircusApplication.adminConnected = false;
             SircusApplication.superAdminConnected = false;
             adminLabel.setVisible(false);
             adminLogOut.setVisible(false);
             addAdmin.setVisible(false);
+            removeAdmin.setVisible(false);
         });
 
         id.textProperty().addListener((observableValue, oldValue, newValue) -> {
@@ -428,7 +470,7 @@ public class MainWindowController implements Initializable {
 
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
-            dialog.setTitle("Connexion expérimentateur");
+            dialog.setTitle("Connexion opérateur");
 
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.isPresent()) {
@@ -442,6 +484,7 @@ public class MainWindowController implements Initializable {
                     adminLabel.setVisible(SircusApplication.adminConnected);
                     adminLogOut.setVisible(SircusApplication.adminConnected);
                     addAdmin.setVisible(SircusApplication.superAdminConnected);
+                    removeAdmin.setVisible(SircusApplication.superAdminConnected);
                 }
             }
         } catch (IOException e) {

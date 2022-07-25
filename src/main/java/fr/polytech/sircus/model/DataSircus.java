@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,6 +26,10 @@ public class DataSircus implements Serializable {
     private String eyeTrackerSaved;
     @Getter @Setter
     private PathMedia path;
+    @Getter @Setter
+    private HashMap<String, String> admins;
+    @Getter @Setter
+    private HashMap<String, String> superAdmins;
 
     /**
      * Main constructor
@@ -35,6 +40,8 @@ public class DataSircus implements Serializable {
         this.methodsList = new ArrayList<>();
         this.eyeTrackerList = new ArrayList<>();
         this.path = new PathMedia();
+        this.admins = new HashMap<>();
+        this.superAdmins = new HashMap<>();
     }
 
     /**
@@ -115,5 +122,30 @@ public class DataSircus implements Serializable {
     public void saveEyeTracker(String eyeTrackerName) {
         if (eyeTrackerName != null)
             this.eyeTrackerSaved = eyeTrackerName;
+    }
+
+    /**
+     * Add admin to admins list
+     * @param username of the admin
+     * @param password of the admin
+     */
+    public void addAdmin(String username, String password) {
+        if (username != null)
+            this.admins.put(username, password);
+    }
+
+    public void removeAdmin(String username) {
+        if (username != null)
+            this.admins.remove(username);
+    }
+
+    /**
+     * Add superAdmin to superAdmins list
+     * @param username of the superAdmin
+     * @param password of the supeAdmin
+     */
+    public void addSuperAdmin(String username, String password) {
+        if (username != null)
+            this.superAdmins.put(username, password);
     }
 }

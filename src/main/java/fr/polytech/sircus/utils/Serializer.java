@@ -35,6 +35,9 @@ public final class Serializer {
         stubData.addEyeTrackerToList("Tobii 1");
         stubData.addEyeTrackerToList("Tobii 2");
         stubData.addEyeTrackerToList("Tobii 3");
+
+        stubData.addAdmin("admin", "password");
+        stubData.addSuperAdmin("sudo", "password");
     }
 
     /**

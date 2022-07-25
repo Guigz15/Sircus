@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+
+<DialogPane prefWidth="210.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="fr.polytech.sircus.controller.PopUps.RemoveAdminPopup">
+   <content>
+      <VBox spacing="3.0">
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Liste des administrateurs"/>
+         <ComboBox fx:id="admins" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0"/>
+      </VBox>
+   </content>
+   <ButtonType fx:constant="FINISH"/>
+   <ButtonType fx:constant="CANCEL"/>
+</DialogPane>

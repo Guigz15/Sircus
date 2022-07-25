@@ -884,12 +884,18 @@ public class Step2Controller implements Initializable {
      * Reset the statistic section
      */
     private void resetStats() {
-        statsTitle.setText("Statistiques de la méta-séquence");
-        nbSeqLabelForMeta.setText("0");
-        nbMediaLabelForMeta.setText("0");
-        nbInterstimLabelForMeta.setText("0");
-        totalMinDurationLabelForMeta.setText("00:00:00");
-        totalMaxDurationLabelForMeta.setText("00:00:00");
+        if (statsTitle.getText().equals("Statistiques de la méta-séquence")) {
+            nbSeqLabelForMeta.setText("0");
+            nbMediaLabelForMeta.setText("0");
+            nbInterstimLabelForMeta.setText("0");
+            totalMinDurationLabelForMeta.setText("00:00:00");
+            totalMaxDurationLabelForMeta.setText("00:00:00");
+        } else {
+            nbMediaLabelForSeq.setText("0");
+            nbInterstimLabelForSeq.setText("0");
+            totalMinDurationLabelForSeq.setText("00:00:00");
+            totalMaxDurationLabelForSeq.setText("00:00:00");
+        }
     }
 
     /**

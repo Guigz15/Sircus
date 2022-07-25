@@ -30,6 +30,14 @@
                      <FontIcon iconLiteral="fa-plus" iconSize="35" />
                   </graphic>
                </Button>
+               <Button fx:id="removeAdmin" mnemonicParsing="false" style="-fx-background-color: #f87167;" visible="false">
+                  <graphic>
+                     <FontIcon iconLiteral="fa-minus" iconSize="35" />
+                  </graphic>
+                  <HBox.margin>
+                     <Insets left="15.0" />
+                  </HBox.margin>
+               </Button>
                <Text fx:id="adminLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Mode Expérimentateur activé" visible="false">
                   <font>
                      <Font name="System Bold Italic" size="18.0" />
