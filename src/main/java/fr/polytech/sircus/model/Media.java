@@ -108,13 +108,17 @@ public class Media extends AbstractMedia implements Serializable {
         if(interstim == null){
             XML += "<lock>" + isLocked + "</lock>\n" +
                     "<isResizable>" + isResizable + "</isResizable>\n" +
-                    "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
+                    "<backgroundColor>" +
+                    String.format("0x%02x%02x%02x", backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue()) +
+                    "</backgroundColor>\n" +
                     "</media>\n";
         } else {
             XML += interstim.toXMLForResult() +
                     "<lock>" + isLocked + "</lock>\n" +
                     "<isResizable>" + isResizable + "</isResizable>\n" +
-                    "<backgroundColor>" + backgroundColor + "</backgroundColor>\n" +
+                    "<backgroundColor>" +
+                    String.format("0x%02x%02x%02x", backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue()) +
+                    "</backgroundColor>\n" +
                     "</media>\n";
         }
         return SircusApplication.XMLFormatter(XML, 4, true);
