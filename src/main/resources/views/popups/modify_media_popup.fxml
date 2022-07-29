@@ -8,26 +8,24 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
-<DialogPane xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="fr.polytech.sircus.controller.PopUps.ModifyMediaPopUp">
+<DialogPane prefWidth="227.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PopUps.ModifyMediaPopUp">
    <content>
       <VBox>
-         <CheckBox fx:id="resizeImage" mnemonicParsing="false" text="Image ajustée à la taille de l'écran">
+         <CheckBox fx:id="resizeImage" mnemonicParsing="false" prefWidth="206.0" text="Image ajustée à la taille de l'écran">
             <VBox.margin>
-               <Insets bottom="10.0"/>
+               <Insets bottom="10.0" />
             </VBox.margin>
          </CheckBox>
          <VBox>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Couleur de l'arrière plan">
                <VBox.margin>
-                  <Insets bottom="3.0"/>
+                  <Insets bottom="3.0" />
                </VBox.margin>
             </Text>
-            <ColorPicker fx:id="backgroundColor"/>
+            <ColorPicker fx:id="backgroundColor" />
          </VBox>
       </VBox>
    </content>
-   <ButtonType fx:constant="FINISH"/>
-   <ButtonType fx:constant="CANCEL"/>
+   <ButtonType fx:id="modify" text="Modifier" />
+   <ButtonType fx:id="cancel" text="Annuler" />
 </DialogPane>

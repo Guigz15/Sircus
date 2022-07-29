@@ -20,10 +20,12 @@ import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import lombok.Getter;
 import org.xml.sax.SAXException;
 
@@ -591,11 +593,20 @@ public class Step2Controller implements Initializable {
                 controller.setSequence(copy);
                 controller.init();
 
+                Button cancelButton = (Button) dialogPane.lookupButton(controller.getCancel());
+                cancelButton.setCancelButton(true);
+                Button modifyButton = (Button) dialogPane.lookupButton(controller.getModify());
+                modifyButton.setDefaultButton(true);
+                modifyButton.setStyle("-fx-background-color: #457b9d;");
+                modifyButton.setTextFill(Paint.valueOf("white"));
+
                 Dialog<ButtonType> dialog = new Dialog<>();
                 dialog.setDialogPane(dialogPane);
                 dialog.setTitle("Modification de séquence");
                 dialog.initModality(Modality.WINDOW_MODAL);
                 dialog.initOwner(modifySeqButton.getScene().getWindow());
+                Window window = dialogPane.getScene().getWindow();
+                window.setOnCloseRequest(e -> dialog.hide());
 
                 Optional<ButtonType> clickedButton = dialog.showAndWait();
                 if (clickedButton.isPresent()) {
@@ -758,7 +769,7 @@ public class Step2Controller implements Initializable {
     @FXML
     private void previousPage() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/main_window.fxml")));
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene = new Scene(fxmlLoader.load(), previous.getScene().getWidth(), previous.getScene().getHeight());
         Stage stage = (Stage) previous.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
@@ -768,7 +779,7 @@ public class Step2Controller implements Initializable {
     private void nextPage() throws IOException {
         if (!metaListView.getSelectionModel().isEmpty()) {
             FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/player_monitor.fxml")));
-            Scene scene = new Scene(fxmlLoader.load());
+            Scene scene = new Scene(fxmlLoader.load(), next.getScene().getWidth(), next.getScene().getHeight());
             PlayerMonitorController playerMonitorController = fxmlLoader.getController();
             playerMonitorController.setMetaSequenceToRead(metaListView.getSelectionModel().getSelectedItem());
             Stage stage = (Stage) next.getScene().getWindow();

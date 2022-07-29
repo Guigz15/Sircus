@@ -26,6 +26,6 @@
          <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         </GridPane>
     </content>
-    <ButtonType fx:constant="CANCEL" />
-    <ButtonType fx:constant="FINISH" />
+    <ButtonType fx:id="connect" text="Connecter" />
+    <ButtonType fx:id="cancel" text="Annuler" />
 </DialogPane>

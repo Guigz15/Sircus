@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -107,10 +108,10 @@ public class SircusApplication extends Application {
             System.exit(0);
         });
 
-        stage.setTitle("Application SIRCUS");
-        stage.setMinHeight(700);
-        stage.setMinWidth(scene.getWidth());
+        stage.setTitle("Eyenalyze");
         stage.setScene(scene);
+        stage.setMinWidth(scene.getWidth());
+        stage.setMinHeight(scene.getHeight());
         stage.getIcons().add(new Image("images/logo-Sircus-FT-fond-blanc.png"));
         stage.show();
     }

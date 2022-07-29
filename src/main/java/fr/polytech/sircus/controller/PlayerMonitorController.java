@@ -29,6 +29,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
@@ -309,11 +310,20 @@ public class PlayerMonitorController {
             }
             ParticipantCalibrationPopup controller = fxmlLoader.getController();
 
+            Button cancelButton = (Button) dialogPane.lookupButton(controller.getCancel());
+            cancelButton.setCancelButton(true);
+            Button calibrateButton = (Button) dialogPane.lookupButton(controller.getCalibrate());
+            calibrateButton.setDefaultButton(true);
+            calibrateButton.setStyle("-fx-background-color: #457b9d;");
+            calibrateButton.setTextFill(javafx.scene.paint.Paint.valueOf("white"));
+
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
             dialog.setTitle("Calibration Patient");
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.initOwner(participantCalibration.getScene().getWindow());
+            Window window = dialogPane.getScene().getWindow();
+            window.setOnCloseRequest(e -> dialog.hide());
 
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.isPresent()) {
@@ -323,7 +333,7 @@ public class PlayerMonitorController {
                     ExecutorService threadPool = Executors.newWorkStealingPool();
                     threadPool.execute(() -> {
                         try {
-                            String command = "python PatientCalibration.py " +
+                            String command = "python src/main/java/fr/polytech/sircus/controller/PatientCalibration.py " +
                                     controller.getTargetNumber().getValue() + " " + controller.getRandomizeTarget().isSelected() + " " +
                                     String.format("#%02X%02X%02X", (int)(backgroundColor.getRed() * 255), (int)(backgroundColor.getGreen() * 255), (int)(backgroundColor.getBlue() * 255));
                             if (controller.getTargetButton().isSelected())
@@ -409,7 +419,7 @@ public class PlayerMonitorController {
         webcam.close();
 
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene = new Scene(fxmlLoader.load(), previous.getScene().getWidth(), previous.getScene().getHeight());
         Step2Controller controller = fxmlLoader.getController();
         controller.getMetaListView().getSelectionModel().select(metaSequenceToRead);
         Stage stage = (Stage) previous.getScene().getWindow();
@@ -478,6 +488,7 @@ public class PlayerMonitorController {
     public void replayMetaSequence() {
 
         viewer.pauseViewer();
+        process.destroy();
         result.addLog("Fin de l'expérience");
         try {
             saveResult();
@@ -570,14 +581,14 @@ public class PlayerMonitorController {
                 playButton.setGraphic(pauseIcon);
                 viewerPlayingState = true;
 
-                this.result.addLog("Lancement de l'expérience");
 
                 // Launch acquisition on another thread
                 ExecutorService threadPool = Executors.newWorkStealingPool();
                 threadPool.execute(() -> {
                     try {
-                        process = Runtime.getRuntime().exec("python TobiiAcquisition.py " + metaSequenceToRead.getDuration().getSeconds());
+                        process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiAcquisition.py " + metaSequenceToRead.getDuration().getSeconds());
                         Thread.sleep(3000); // Wait for eye tracker to launch
+                        this.result.addLog("Lancement de l'expérience");
                         viewer.playViewer();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                         String out;

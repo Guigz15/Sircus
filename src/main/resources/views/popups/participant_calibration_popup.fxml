@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.media.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Text?>
 
 <DialogPane xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PopUps.ParticipantCalibrationPopup">
    <content>
       <BorderPane>
          <center>
             <VBox alignment="CENTER_LEFT" spacing="20.0" BorderPane.alignment="CENTER_LEFT">
-               <CheckBox fx:id="randomizeTarget" mnemonicParsing="false" text="Mélanger aléatoirement l'ordre des cibles" />
+               <CheckBox fx:id="randomizeTarget" mnemonicParsing="false" prefWidth="250.0" text="Mélanger aléatoirement l'ordre des cibles" />
                <HBox alignment="CENTER" spacing="80.0">
                   <VBox maxHeight="-Infinity" spacing="3.0">
                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Couleur d'arrière plan" />
@@ -28,7 +38,7 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Type de cible :" />
                   <HBox alignment="CENTER" spacing="20.0">
                      <VBox alignment="TOP_CENTER" spacing="5.0">
-                        <RadioButton fx:id="targetButton" mnemonicParsing="false" selected="true" text="Point">
+                        <RadioButton fx:id="targetButton" mnemonicParsing="false" prefWidth="55.0" selected="true" text="Point">
                            <toggleGroup>
                               <ToggleGroup fx:id="targetType" />
                            </toggleGroup>
@@ -49,20 +59,17 @@
                         </VBox>
                      </VBox>
                      <VBox alignment="TOP_CENTER" spacing="5.0">
-                        <RadioButton fx:id="imageButton" mnemonicParsing="false" text="Image" toggleGroup="$targetType" />
-                        <VBox fx:id="imageBox" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                              minWidth="-Infinity" prefHeight="161.0" prefWidth="110.0" spacing="20.0">
-                           <ImageView fx:id="targetImage" fitHeight="110.0" fitWidth="110.0" pickOnBounds="true"
-                                      preserveRatio="true"/>
-                           <Button fx:id="addImage" mnemonicParsing="false" text="Parcourir"/>
+                        <RadioButton fx:id="imageButton" mnemonicParsing="false" prefHeight="18.0" prefWidth="60.0" text="Image" toggleGroup="$targetType" />
+                        <VBox fx:id="imageBox" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="161.0" prefWidth="110.0" spacing="20.0">
+                           <ImageView fx:id="targetImage" fitHeight="110.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true" />
+                           <Button fx:id="addImage" mnemonicParsing="false" text="Parcourir" />
                         </VBox>
                      </VBox>
                      <VBox alignment="TOP_CENTER" spacing="5.0">
-                        <RadioButton fx:id="videoButton" mnemonicParsing="false" text="Video" toggleGroup="$targetType" />
-                        <VBox fx:id="videoBox" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                              minWidth="-Infinity" prefHeight="161.0" prefWidth="110.0" spacing="20.0">
-                           <MediaView fx:id="targetVideo" fitHeight="110.0" fitWidth="110.0" pickOnBounds="true"/>
-                           <Button fx:id="addVideo" mnemonicParsing="false" text="Parcourir"/>
+                        <RadioButton fx:id="videoButton" mnemonicParsing="false" prefWidth="60.0" text="Video" toggleGroup="$targetType" />
+                        <VBox fx:id="videoBox" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="161.0" prefWidth="110.0" spacing="20.0">
+                           <MediaView fx:id="targetVideo" fitHeight="110.0" fitWidth="110.0" pickOnBounds="true" />
+                           <Button fx:id="addVideo" mnemonicParsing="false" text="Parcourir" />
                         </VBox>
                      </VBox>
                   </HBox>
@@ -71,6 +78,6 @@
          </center>
       </BorderPane>
    </content>
-   <ButtonType fx:constant="FINISH" />
-   <ButtonType fx:constant="CANCEL" />
+   <ButtonType fx:id="calibrate" text="Calibrer" />
+   <ButtonType fx:id="cancel" text="Annuler" />
 </DialogPane>

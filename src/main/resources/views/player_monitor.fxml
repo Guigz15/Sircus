@@ -2,220 +2,240 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.media.*?>
-<?import javafx.scene.shape.*?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.*?>
-<?import org.kordamp.ikonli.javafx.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PlayerMonitorController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PlayerMonitorController">
    <center>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets left="10.0" right="10.0" top="10.0" />
-         </BorderPane.margin>
-         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Informations">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="5.0" top="3.0" />
-               </VBox.margin>
-            </Text>
-            <VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="302.0" prefWidth="330.0" spacing="20.0" style="-fx-border-color: black;">
+       <GridPane alignment="TOP_CENTER" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+           <columnConstraints>
+               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" percentWidth="35.0" />
+               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" percentWidth="33.0" />
+               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" percentWidth="32.0" />
+           </columnConstraints>
+           <rowConstraints>
+               <RowConstraints percentHeight="60.0" vgrow="SOMETIMES" />
+               <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
+               <RowConstraints percentHeight="30.0" vgrow="SOMETIMES" />
+           </rowConstraints>
+           <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="335.0" prefWidth="330.0">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Informations">
+                   <font>
+                       <Font name="System Bold" size="18.0" />
+                   </font>
+                   <VBox.margin>
+                       <Insets bottom="5.0" top="3.0" />
+                   </VBox.margin>
+               </Text>
+               <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="330.0" spacing="30.0" style="-fx-border-color: black;">
+                   <VBox.margin>
+                       <Insets />
+                   </VBox.margin>
+                   <HBox alignment="TOP_CENTER" minWidth="-Infinity" prefWidth="302.0">
+                       <VBox alignment="TOP_CENTER">
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Métaséquence">
+                               <font>
+                                   <Font name="System Bold" size="12.0" />
+                               </font>
+                           </Text>
+                           <GridPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="150.0">
+                               <columnConstraints>
+                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                               </columnConstraints>
+                               <rowConstraints>
+                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               </rowConstraints>
+                               <Label text="Durée" />
+                               <Label fx:id="metaSeqDurationLabel" text="00:00:00" GridPane.columnIndex="1" />
+                               <Label text="Temps restant" GridPane.rowIndex="1" />
+                               <Label fx:id="metaSeqRemainingLabel" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                               <Label text="Numéro" GridPane.rowIndex="2" />
+                               <Label fx:id="numMetaSeqLabel" text="0 / 0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           </GridPane>
+                       </VBox>
+                       <Separator orientation="VERTICAL" />
+                       <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="150.0">
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Séquence">
+                               <font>
+                                   <Font name="System Bold" size="12.0" />
+                               </font>
+                           </Text>
+                           <GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="150.0">
+                               <columnConstraints>
+                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                               </columnConstraints>
+                               <rowConstraints>
+                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               </rowConstraints>
+                               <Label text="Durée" />
+                               <Label fx:id="seqDurationLabel" text="00:00:00" GridPane.columnIndex="1" />
+                               <Label text="Temps restant" GridPane.rowIndex="1" />
+                               <Label fx:id="seqRemainingLabel" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                               <Label text="Numéro" GridPane.rowIndex="2" />
+                               <Label fx:id="numSeqLabel" text="0 / 0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           </GridPane>
+                       </VBox>
+                   </HBox>
+                   <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="315.0">
+                       <columnConstraints>
+                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="200.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                       </columnConstraints>
+                       <rowConstraints>
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       </rowConstraints>
+                       <Label text="Durée totale" />
+                       <Label fx:id="durationLabel" text="00:00:00" GridPane.columnIndex="1" />
+                       <Label text="Temps restant total" GridPane.rowIndex="1" />
+                       <Label fx:id="remainingLabel" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <padding>
+                     <Insets left="3.0" />
+                  </padding>
+                   </GridPane>
+                   <VBox alignment="TOP_CENTER" spacing="10.0">
+                       <VBox.margin>
+                           <Insets/>
+                       </VBox.margin>
+                       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Luminosité">
+                           <font>
+                               <Font name="System Bold" size="12.0"/>
+                           </font>
+                       </Text>
+                       <ProgressBar minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="200.0"
+                                    progress="0.0"/>
+                   </VBox>
                <padding>
-                  <Insets top="10.0" />
+                  <Insets bottom="25.0" top="10.0" />
                </padding>
-               <VBox.margin>
-                  <Insets bottom="25.0" />
-               </VBox.margin>
-               <HBox alignment="TOP_CENTER" minWidth="-Infinity" prefWidth="330.0">
-                  <VBox alignment="TOP_CENTER">
-                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Métaséquence">
-                        <font>
-                           <Font name="System Bold" size="12.0" />
-                        </font>
-                     </Text>
-                     <GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="150.0">
-                        <columnConstraints>
-                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        </columnConstraints>
-                        <rowConstraints>
-                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        </rowConstraints>
-                        <Label text="Durée" />
-                        <Label fx:id="metaSeqDurationLabel" text="00:00:00" GridPane.columnIndex="1" />
-                        <Label text="Temps restant" GridPane.rowIndex="1" />
-                        <Label fx:id="metaSeqRemainingLabel" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label text="Numéro" GridPane.rowIndex="2" />
-                        <Label fx:id="numMetaSeqLabel" text="0 / 0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                     </GridPane>
-                  </VBox>
-                  <Separator orientation="VERTICAL" />
-                  <VBox alignment="TOP_CENTER">
-                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Séquence">
-                        <font>
-                           <Font name="System Bold" size="12.0" />
-                        </font>
-                     </Text>
-                     <GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="150.0">
-                        <columnConstraints>
-                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        </columnConstraints>
-                        <rowConstraints>
-                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        </rowConstraints>
-                        <Label text="Durée" />
-                        <Label fx:id="seqDurationLabel" text="00:00:00" GridPane.columnIndex="1" />
-                        <Label text="Temps restant" GridPane.rowIndex="1" />
-                        <Label fx:id="seqRemainingLabel" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label text="Numéro" GridPane.rowIndex="2" />
-                        <Label fx:id="numSeqLabel" text="0 / 0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                     </GridPane>
-                  </VBox>
-               </HBox>
-               <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="315.0">
-                  <columnConstraints>
-                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="200.0" />
-                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  </columnConstraints>
-                  <rowConstraints>
-                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  </rowConstraints>
-                  <Label text="Durée totale" />
-                  <Label fx:id="durationLabel" text="00:00:00" GridPane.columnIndex="1" />
-                  <Label text="Temps restant total" GridPane.rowIndex="1" />
-                  <Label fx:id="remainingLabel" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-               </GridPane>
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Luminosité">
-                  <font>
-                     <Font name="System Bold" size="12.0" />
-                  </font></Text>
-               <ProgressBar minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="200.0" progress="0.0" />
-            </VBox>
-            <ListView fx:id="commentListView" maxHeight="-Infinity" prefHeight="170.0">
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </ListView>
-            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" spacing="10.0">
-               <Button fx:id="commentButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: mediumseagreen;">
-                  <graphic>
-                     <FontIcon iconLiteral="fa-save" iconSize="15" />
-                  </graphic>
+               </VBox>
+           </VBox>
+           <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="335.0" GridPane.columnIndex="1">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Caméra">
+                   <font>
+                       <Font name="System Bold" size="18.0" />
+                   </font>
+                   <VBox.margin>
+                       <Insets bottom="5.0" top="3.0" />
+                   </VBox.margin>
+               </Text>
+               <Pane fx:id="cameraPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" style="-fx-border-color: black;">
+                   <padding>
+                       <Insets right="1.0" top="1.0" />
+                   </padding>
+               </Pane>
+           </VBox>
+           <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="335.0" prefWidth="300.0" GridPane.columnIndex="2">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Aperçu">
+                   <font>
+                       <Font name="System Bold" size="18.0" />
+                   </font>
+                   <VBox.margin>
+                       <Insets bottom="5.0" top="3.0" />
+                   </VBox.margin>
+               </Text>
+               <StackPane fx:id="previewPane" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">
+                   <MediaView fx:id="mediaView" fitHeight="300.0" fitWidth="300.0" style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;" />
+                   <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER" />
+               </StackPane>
+           </VBox>
+           <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="20.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <Button fx:id="backButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#previousSequence" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: darkorange;">
+                   <graphic>
+                       <FontIcon iconLiteral="fa-backward" iconSize="15" />
+                   </graphic>
                </Button>
-               <TextArea fx:id="commentTextArea" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="31.0" promptText="Commentaires..." wrapText="true" />
-               <HBox alignment="BOTTOM_CENTER" minWidth="-Infinity" prefWidth="50.0" spacing="5.0">
-                  <Circle fx:id="blueCircle" fill="DODGERBLUE" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
-                  <Circle fx:id="redCircle" fill="RED" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
-                  <Circle fx:id="greenCircle" fill="#00ff32" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+               <Button fx:id="stopButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#stopViewer" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: #f87167;">
+                   <graphic>
+                       <FontIcon iconLiteral="fa-stop" iconSize="15" />
+                   </graphic>
+               </Button>
+               <Button fx:id="playButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#playViewer" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: mediumseagreen;">
+                   <graphic>
+                       <FontIcon iconLiteral="fa-play" iconSize="15" />
+                   </graphic>
+               </Button>
+               <Button fx:id="forwardButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#nextSequence" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: darkorange;">
+                   <graphic>
+                       <FontIcon iconLiteral="fa-forward" iconSize="15" />
+                   </graphic>
+               </Button>
+           </HBox>
+           <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" GridPane.rowIndex="1" GridPane.rowSpan="2">
+               <ListView fx:id="commentListView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="170.0" prefWidth="330.0">
+                   <VBox.margin>
+                       <Insets bottom="10.0" />
+                   </VBox.margin>
+               </ListView>
+               <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefWidth="330.0" spacing="10.0">
+                   <Button fx:id="commentButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: mediumseagreen;">
+                       <graphic>
+                           <FontIcon iconLiteral="fa-save" iconSize="15" />
+                       </graphic>
+                   </Button>
+                   <TextArea fx:id="commentTextArea" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="31.0" promptText="Commentaires..." wrapText="true" />
+                   <HBox alignment="BOTTOM_CENTER" minWidth="-Infinity" prefWidth="50.0" spacing="5.0">
+                       <Circle fx:id="blueCircle" fill="DODGERBLUE" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+                       <Circle fx:id="redCircle" fill="RED" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+                       <Circle fx:id="greenCircle" fill="#00ff32" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+                   </HBox>
                </HBox>
-            </HBox>
-         </VBox>
-         <VBox>
-            <HBox.margin>
-               <Insets left="14.0" />
-            </HBox.margin>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="14.0">
-               <VBox alignment="TOP_CENTER" maxHeight="-Infinity">
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Caméra">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="3.0" />
-                     </VBox.margin>
-                  </Text>
-                  <Pane fx:id="cameraPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" style="-fx-border-color: black;">
-                     <padding>
-                        <Insets right="1.0" top="1.0" />
-                     </padding></Pane>
-               </VBox>
-               <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Aperçu">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="3.0" />
-                     </VBox.margin>
-                  </Text>
-                  <StackPane fx:id="previewPane" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">
-                     <MediaView fx:id="mediaView" fitHeight="300.0" fitWidth="300.0" style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;" />
-                     <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER" />
-                  </StackPane>
-                  <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="300.0" spacing="20.0">
-                     <Button fx:id="backButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#previousSequence" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: darkorange;">
-                        <graphic>
-                           <FontIcon iconLiteral="fa-backward" iconSize="15" />
-                        </graphic>
-                     </Button>
-                     <Button fx:id="stopButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#stopViewer" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: #f87167;">
-                        <graphic>
-                           <FontIcon iconLiteral="fa-stop" iconSize="15" />
-                        </graphic>
-                     </Button>
-                     <Button fx:id="playButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#playViewer" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: mediumseagreen;">
-                        <graphic>
-                           <FontIcon iconLiteral="fa-play" iconSize="15" />
-                        </graphic>
-                     </Button>
-                     <Button fx:id="forwardButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#nextSequence" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: darkorange;">
-                        <graphic>
-                           <FontIcon iconLiteral="fa-forward" iconSize="15" />
-                        </graphic>
-                     </Button>
-                  </HBox>
-               </VBox>
-            </HBox>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-               <padding>
-                  <Insets top="20.0" />
-               </padding>
+           </VBox>
+           <VBox alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Progression de la métaséquence">
-                  <VBox.margin>
-                     <Insets bottom="3.0" />
-                  </VBox.margin>
+                   <VBox.margin>
+                       <Insets bottom="3.0" />
+                   </VBox.margin>
                </Text>
                <ProgressBar fx:id="metaSeqProgressBarFX" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="625.0" progress="0.0">
-                  <VBox.margin>
-                     <Insets bottom="20.0" />
-                  </VBox.margin>
+                   <VBox.margin>
+                       <Insets bottom="20.0" />
+                   </VBox.margin>
                </ProgressBar>
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Progression de la séquence">
-                  <VBox.margin>
-                     <Insets bottom="3.0" />
-                  </VBox.margin>
+                   <VBox.margin>
+                       <Insets bottom="3.0" />
+                   </VBox.margin>
                </Text>
                <ProgressBar fx:id="seqProgressBarFX" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="625.0" progress="0.0" />
-            </VBox>
-         </VBox>
-      </HBox>
+            <padding>
+               <Insets top="20.0" />
+            </padding>
+           </VBox>
+       </GridPane>
    </center>
    <bottom>
-      <HBox spacing="705.0" BorderPane.alignment="CENTER_LEFT">
-         <BorderPane.margin>
-            <Insets bottom="15.0" left="25.0" right="25.0" />
-         </BorderPane.margin>
-         <Button fx:id="previous" mnemonicParsing="false" onMouseClicked="#previousPage" style="-fx-background-color: #457b9d;" text="Précédent" textFill="WHITE">
-            <font>
-               <Font size="16.0" />
-            </font>
-         </Button>
-         <Button fx:id="participantCalibration" mnemonicParsing="false" style="-fx-background-color: #457b9d;" text="Calibration Participant" textFill="WHITE">
-            <font>
-               <Font size="16.0" />
-            </font>
-         </Button>
-      </HBox>
+      <BorderPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="80.0" BorderPane.alignment="CENTER">
+         <left>
+             <Button fx:id="previous" mnemonicParsing="false" onMouseClicked="#previousPage" style="-fx-background-color: #457b9d;" text="Précédent" textFill="WHITE" BorderPane.alignment="CENTER_LEFT">
+                 <font>
+                     <Font size="16.0" />
+                 </font>
+               <BorderPane.margin>
+                  <Insets left="25.0" />
+               </BorderPane.margin>
+             </Button>
+         </left>
+         <right>
+             <Button fx:id="participantCalibration" mnemonicParsing="false" style="-fx-background-color: #457b9d;" text="Calibration Participant" textFill="WHITE" BorderPane.alignment="CENTER_RIGHT">
+                 <font>
+                     <Font size="16.0" />
+                 </font>
+               <BorderPane.margin>
+                  <Insets right="25.0" />
+               </BorderPane.margin>
+             </Button>
+         </right>
+      </BorderPane>
    </bottom>
 </BorderPane>

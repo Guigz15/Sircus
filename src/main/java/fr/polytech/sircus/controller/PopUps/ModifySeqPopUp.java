@@ -22,6 +22,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
+import javafx.stage.Window;
 import javafx.util.Callback;
 import lombok.Getter;
 import lombok.Setter;
@@ -84,7 +85,12 @@ public class ModifySeqPopUp {
 
     /** Last index of the selected media in table */
     private int indexSelectedMediaInTable;
-
+    @FXML
+    @Getter
+    private ButtonType modify;
+    @FXML
+    @Getter
+    private ButtonType cancel;
 
 
 
@@ -366,11 +372,20 @@ public class ModifySeqPopUp {
         AddMediaPopUp controller = fxmlLoader.getController();
         controller.getMediasList().setItems(FXCollections.observableList(sequence.getListMedias()));
 
+        Button cancelButton = (Button) dialogPane.lookupButton(controller.getCancel());
+        cancelButton.setCancelButton(true);
+        Button addButton = (Button) dialogPane.lookupButton(controller.getAdd());
+        addButton.setDefaultButton(true);
+        addButton.setStyle("-fx-background-color: #457b9d;");
+        addButton.setTextFill(javafx.scene.paint.Paint.valueOf("white"));
+
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setDialogPane(dialogPane);
         dialog.setTitle("Ajouter un média");
         dialog.initModality(Modality.WINDOW_MODAL);
         dialog.initOwner(addMediaToSeq.getScene().getWindow());
+        Window window = dialogPane.getScene().getWindow();
+        window.setOnCloseRequest(e -> dialog.hide());
 
         Optional<ButtonType> clickedButton = dialog.showAndWait();
         if (clickedButton.isPresent()) {
@@ -399,11 +414,20 @@ public class ModifySeqPopUp {
                     javafx.scene.paint.Color.rgb(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(), opacity)
             );
 
+            Button cancelButton = (Button) dialogPane.lookupButton(controller.getCancel());
+            cancelButton.setCancelButton(true);
+            Button modifyButton = (Button) dialogPane.lookupButton(controller.getModify());
+            modifyButton.setDefaultButton(true);
+            modifyButton.setStyle("-fx-background-color: #457b9d;");
+            modifyButton.setTextFill(javafx.scene.paint.Paint.valueOf("white"));
+
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
             dialog.setTitle("Modification du média");
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.initOwner(this.mediaTable.getScene().getWindow());
+            Window window = dialogPane.getScene().getWindow();
+            window.setOnCloseRequest(e -> dialog.hide());
 
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.isPresent()) {

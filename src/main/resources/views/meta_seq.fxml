@@ -1,286 +1,314 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import fr.polytech.sircus.controller.*?>
+<?import fr.polytech.sircus.controller.PreviewTimeline?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import org.kordamp.ikonli.javafx.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.Step2Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.Step2Controller">
    <center>
-      <VBox prefHeight="578.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
-         <HBox maxHeight="-Infinity" spacing="100.0">
-            <padding>
-               <Insets bottom="20.0" left="25.0" top="20.0" />
-            </padding>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+       <GridPane maxHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+           <columnConstraints>
+               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" percentWidth="33.333" />
+               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" percentWidth="33.333" />
+               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" percentWidth="33.333" />
+           </columnConstraints>
+           <rowConstraints>
+               <RowConstraints percentHeight="65.0" valignment="TOP" vgrow="SOMETIMES" />
+               <RowConstraints percentHeight="5.0" vgrow="SOMETIMES" />
+               <RowConstraints percentHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
+           </rowConstraints>
+           <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Métaséquences">
-                  <font>
-                     <Font size="20.0" />
-                  </font>
-                  <VBox.margin>
-                     <Insets bottom="5.0" />
-                  </VBox.margin>
+                   <font>
+                       <Font size="20.0" />
+                   </font>
+                   <VBox.margin>
+                       <Insets bottom="5.0" />
+                   </VBox.margin>
                </Text>
-               <ListView fx:id="metaListView" fixedCellSize="40.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0" />
+               <ListView fx:id="metaListView" fixedCellSize="40.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="252.0" prefWidth="250.0" />
                <BorderPane fx:id="adminMetaButtons" visible="false">
-                  <left>
-                     <HBox BorderPane.alignment="TOP_LEFT">
-                        <Button fx:id="addMetaButton" mnemonicParsing="false" style="-fx-background-color: mediumseagreen;">
+                   <left>
+                       <HBox BorderPane.alignment="TOP_LEFT">
+                           <Button fx:id="addMetaButton" mnemonicParsing="false" style="-fx-background-color: mediumseagreen;">
+                               <graphic>
+                                   <FontIcon iconLiteral="fa-plus" iconSize="15" />
+                               </graphic>
+                           </Button>
+                           <Button fx:id="removeMetaButton" mnemonicParsing="false" style="-fx-background-color: #f87167;">
+                               <graphic>
+                                   <FontIcon iconLiteral="fa-minus" iconSize="15" />
+                               </graphic>
+                           </Button>
+                       </HBox>
+                   </left>
+                   <right>
+                       <Button fx:id="renameMetaButton" mnemonicParsing="false" style="-fx-background-color: darkorange;" BorderPane.alignment="TOP_LEFT">
                            <graphic>
-                              <FontIcon iconLiteral="fa-plus" iconSize="15" />
+                               <FontIcon iconLiteral="fa-pencil" iconSize="15" />
                            </graphic>
-                        </Button>
-                        <Button fx:id="removeMetaButton" mnemonicParsing="false" style="-fx-background-color: #f87167;">
-                           <graphic>
-                              <FontIcon iconLiteral="fa-minus" iconSize="15" />
-                           </graphic>
-                        </Button>
-                     </HBox>
-                  </left>
-                  <right>
-                     <Button fx:id="renameMetaButton" mnemonicParsing="false" style="-fx-background-color: darkorange;" BorderPane.alignment="TOP_LEFT">
-                        <graphic>
-                           <FontIcon iconLiteral="fa-pencil" iconSize="15" />
-                        </graphic>
-                     </Button>
-                  </right>
-                  <bottom>
-                     <HBox spacing="127.0" BorderPane.alignment="CENTER">
-                        <padding>
-                           <Insets top="10.0" />
-                        </padding>
-                        <Button fx:id="importMetaButton" mnemonicParsing="false" onAction="#importMeta" style="-fx-background-color: #457b9d;" text="Importer" textFill="WHITE" />
-                        <Button fx:id="exportMetaButton" mnemonicParsing="false" onAction="#exportMeta" style="-fx-background-color: #457b9d;" text="Exporter" textFill="WHITE" />
-                     </HBox>
-                  </bottom>
+                       </Button>
+                   </right>
+                   <bottom>
+                       <HBox spacing="127.0" BorderPane.alignment="CENTER">
+                           <padding>
+                               <Insets top="10.0" />
+                           </padding>
+                           <Button fx:id="importMetaButton" mnemonicParsing="false" onAction="#importMeta" style="-fx-background-color: #457b9d;" text="Importer" textFill="WHITE" />
+                           <Button fx:id="exportMetaButton" mnemonicParsing="false" onAction="#exportMeta" style="-fx-background-color: #457b9d;" text="Exporter" textFill="WHITE" />
+                       </HBox>
+                   </bottom>
                </BorderPane>
-            </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Séquences">
-                  <font>
-                     <Font size="20.0" />
-                  </font>
-                  <VBox.margin>
-                     <Insets bottom="5.0" />
-                  </VBox.margin>
-               </Text>
-               <ListView fx:id="seqListView" fixedCellSize="40.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0" />
-               <BorderPane fx:id="adminSeqButtons" visible="false">
-                  <left>
-                     <HBox BorderPane.alignment="CENTER">
-                        <Button fx:id="addSeqButton" mnemonicParsing="false" style="-fx-background-color: mediumseagreen;">
-                           <graphic>
-                              <FontIcon iconLiteral="fa-plus" iconSize="15" />
-                           </graphic>
-                        </Button>
-                        <Button fx:id="removeSeqButton" mnemonicParsing="false" style="-fx-background-color: #f87167;">
-                           <graphic>
-                              <FontIcon iconLiteral="fa-minus" iconSize="15" />
-                           </graphic>
-                        </Button>
-                     </HBox>
-                  </left>
-                  <bottom>
-                     <HBox spacing="127.0" BorderPane.alignment="CENTER">
-                        <padding>
-                           <Insets top="10.0" />
-                        </padding>
-                        <Button fx:id="importSeqButton" mnemonicParsing="false" onAction="#importSeq" style="-fx-background-color: #457b9d;" text="Importer" textFill="WHITE" />
-                        <Button fx:id="exportSeqButton" mnemonicParsing="false" onAction="#exportSeq" style="-fx-background-color: #457b9d;" text="Exporter" textFill="WHITE" />
-                     </HBox>
-                  </bottom>
-                  <right>
-                     <Button fx:id="modifySeqButton" mnemonicParsing="false" style="-fx-background-color: darkorange;" BorderPane.alignment="CENTER">
-                        <graphic>
-                           <FontIcon iconLiteral="fa-pencil" iconSize="15" />
-                        </graphic>
-                     </Button>
-                  </right>
-               </BorderPane>
-            </VBox>
-            <VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0">
-               <Text fx:id="statsTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Statistiques de la métaséquence " textAlignment="CENTER" wrappingWidth="150.0">
-                  <font>
-                     <Font size="20.0" />
-                  </font>
-                  <VBox.margin>
-                     <Insets bottom="5.0" />
-                  </VBox.margin>
-               </Text>
-               <StackPane style="-fx-border-color: black;">
-                  <GridPane fx:id="statsForMeta" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="223.0" prefWidth="240.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="10.0" prefWidth="180.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="118.0" minWidth="10.0" prefWidth="59.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <Label text="Nombre de séquences :">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label fx:id="nbSeqLabelForMeta" text="0" GridPane.columnIndex="1">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label text="Nombre de médias :" GridPane.rowIndex="1">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label fx:id="nbMediaLabelForMeta" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label text="Nombre d'interstims :" GridPane.rowIndex="2">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label fx:id="nbInterstimLabelForMeta" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label text="Durée totale min :" GridPane.rowIndex="3">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label fx:id="totalMinDurationLabelForMeta" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label text="Durée totale max :" GridPane.rowIndex="4">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label fx:id="totalMaxDurationLabelForMeta" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                  </GridPane>
-                  <GridPane fx:id="statsForSeq" minHeight="-Infinity" minWidth="-Infinity" prefHeight="223.0" prefWidth="240.0" visible="false">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="180.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <Label text="Nombre de médias :">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label fx:id="nbMediaLabelForSeq" text="0" GridPane.columnIndex="1">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label text="Nombre d'interstims :" GridPane.rowIndex="1">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label fx:id="nbInterstimLabelForSeq" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label text="Durée totale min :" GridPane.rowIndex="2">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label fx:id="totalMinDurationLabelForSeq" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label text="Durée totale max :" GridPane.rowIndex="3">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                     <Label fx:id="totalMaxDurationLabelForSeq" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                        <font>
-                           <Font size="16.0" />
-                        </font>
-                     </Label>
-                  </GridPane>
-               </StackPane>
-               <StackPane alignment="TOP_CENTER">
-                  <padding>
-                     <Insets top="5.0" />
-                  </padding>
-                  <Button fx:id="doMixButton" mnemonicParsing="false" style="-fx-background-color: #457b9d;" text="Faire un mélange aléatoire" textFill="WHITE" visible="false" />
-                  <VBox fx:id="mixBoxButtons" alignment="TOP_CENTER" visible="false">
-                     <HBox alignment="TOP_CENTER" spacing="50.0">
-                        <Button fx:id="cancelMixButton" mnemonicParsing="false" style="-fx-background-color: #f87167;" text="Annuler" />
-                        <Button fx:id="startMixButton" mnemonicParsing="false" style="-fx-background-color: #457b9d;" text="Mélanger" textFill="WHITE" />
-                        <VBox.margin>
-                           <Insets bottom="10.0" />
-                        </VBox.margin>
-                     </HBox>
-                     <CheckBox fx:id="mixedForever" mnemonicParsing="false" text="Toujours mélanger">
-                        <font>
-                           <Font size="14.0" />
-                        </font>
-                     </CheckBox>
-                  </VBox>
-               </StackPane>
-            </VBox>
-         </HBox>
-         <VBox>
+            <GridPane.margin>
+               <Insets />
+            </GridPane.margin>
             <padding>
-               <Insets bottom="37.0" left="25.0" right="25.0" />
+               <Insets top="5.0" />
             </padding>
-            <Text fx:id="previewText" strokeType="OUTSIDE" strokeWidth="0.0" text="Prévisualisation de la métaséquence">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Text>
-            <PreviewTimeline fx:id="previewTimeline" minHeight="-Infinity" prefHeight="150.0" prefWidth="848.0" />
-         </VBox>
-         <HBox spacing="529.0">
-            <VBox.margin>
-               <Insets bottom="15.0" left="25.0" right="25.0" />
-            </VBox.margin>
-            <Button fx:id="previous" mnemonicParsing="false" onAction="#previousPage" style="-fx-background-color: #457b9d;" text="Précédent" textFill="WHITE">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
-            <HBox alignment="CENTER" spacing="20.0">
-               <Text fx:id="nextPageAdviceText" strokeType="OUTSIDE" strokeWidth="0.0" text="Sélectionner une métaséquence">
-                  <font>
-                     <Font name="System Bold Italic" size="16.0" />
-                  </font>
+           </VBox>
+           <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Séquences">
+                   <font>
+                       <Font size="20.0" />
+                   </font>
+                   <VBox.margin>
+                       <Insets bottom="5.0" />
+                   </VBox.margin>
                </Text>
-               <Button fx:id="next" mnemonicParsing="false" onAction="#nextPage" style="-fx-background-color: #457b9d;" text="Suivant" textFill="WHITE">
-                  <font>
-                     <Font size="16.0" />
-                  </font>
-               </Button>
-            </HBox>
-         </HBox>
-      </VBox>
+               <ListView fx:id="seqListView" fixedCellSize="40.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="252.0" prefWidth="250.0" />
+               <BorderPane fx:id="adminSeqButtons" visible="false">
+                   <left>
+                       <HBox BorderPane.alignment="CENTER">
+                           <Button fx:id="addSeqButton" mnemonicParsing="false" style="-fx-background-color: mediumseagreen;">
+                               <graphic>
+                                   <FontIcon iconLiteral="fa-plus" iconSize="15" />
+                               </graphic>
+                           </Button>
+                           <Button fx:id="removeSeqButton" mnemonicParsing="false" style="-fx-background-color: #f87167;">
+                               <graphic>
+                                   <FontIcon iconLiteral="fa-minus" iconSize="15" />
+                               </graphic>
+                           </Button>
+                       </HBox>
+                   </left>
+                   <bottom>
+                       <HBox spacing="127.0" BorderPane.alignment="CENTER">
+                           <padding>
+                               <Insets top="10.0" />
+                           </padding>
+                           <Button fx:id="importSeqButton" mnemonicParsing="false" onAction="#importSeq" style="-fx-background-color: #457b9d;" text="Importer" textFill="WHITE" />
+                           <Button fx:id="exportSeqButton" mnemonicParsing="false" onAction="#exportSeq" style="-fx-background-color: #457b9d;" text="Exporter" textFill="WHITE" />
+                       </HBox>
+                   </bottom>
+                   <right>
+                       <Button fx:id="modifySeqButton" mnemonicParsing="false" style="-fx-background-color: darkorange;" BorderPane.alignment="CENTER">
+                           <graphic>
+                               <FontIcon iconLiteral="fa-pencil" iconSize="15" />
+                           </graphic>
+                       </Button>
+                   </right>
+               </BorderPane>
+            <padding>
+               <Insets top="5.0" />
+            </padding>
+           </VBox>
+           <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="2">
+               <Text fx:id="statsTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Statistiques de la métaséquence " textAlignment="CENTER" wrappingWidth="150.0">
+                   <font>
+                       <Font size="20.0" />
+                   </font>
+                   <VBox.margin>
+                       <Insets bottom="5.0" />
+                   </VBox.margin>
+               </Text>
+               <StackPane maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-border-color: black;">
+                   <GridPane fx:id="statsForMeta" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="224.0" prefWidth="250.0">
+                       <columnConstraints>
+                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="10.0" prefWidth="180.0" />
+                           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="118.0" minWidth="10.0" prefWidth="59.0" />
+                       </columnConstraints>
+                       <rowConstraints>
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       </rowConstraints>
+                       <Label text="Nombre de séquences :">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label fx:id="nbSeqLabelForMeta" text="0" GridPane.columnIndex="1">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label text="Nombre de médias :" GridPane.rowIndex="1">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label fx:id="nbMediaLabelForMeta" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label text="Nombre d'interstims :" GridPane.rowIndex="2">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label fx:id="nbInterstimLabelForMeta" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label text="Durée totale min :" GridPane.rowIndex="3">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label fx:id="totalMinDurationLabelForMeta" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label text="Durée totale max :" GridPane.rowIndex="4">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label fx:id="totalMaxDurationLabelForMeta" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                   </GridPane>
+                   <GridPane fx:id="statsForSeq" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="224.0" prefWidth="250.0" visible="false">
+                       <columnConstraints>
+                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="180.0" />
+                           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                       </columnConstraints>
+                       <rowConstraints>
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       </rowConstraints>
+                       <Label text="Nombre de médias :">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label fx:id="nbMediaLabelForSeq" text="0" GridPane.columnIndex="1">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label text="Nombre d'interstims :" GridPane.rowIndex="1">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label fx:id="nbInterstimLabelForSeq" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label text="Durée totale min :" GridPane.rowIndex="2">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label fx:id="totalMinDurationLabelForSeq" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label text="Durée totale max :" GridPane.rowIndex="3">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                       <Label fx:id="totalMaxDurationLabelForSeq" text="00:00:00" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <font>
+                               <Font size="16.0" />
+                           </font>
+                       </Label>
+                   </GridPane>
+               </StackPane>
+               <StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                   <padding>
+                       <Insets top="5.0" />
+                   </padding>
+                   <Button fx:id="doMixButton" mnemonicParsing="false" style="-fx-background-color: #457b9d;" text="Faire un mélange aléatoire" textFill="WHITE" visible="false" />
+                   <VBox fx:id="mixBoxButtons" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" visible="false">
+                       <HBox alignment="TOP_CENTER" spacing="50.0">
+                           <Button fx:id="cancelMixButton" mnemonicParsing="false" style="-fx-background-color: #f87167;" text="Annuler" />
+                           <Button fx:id="startMixButton" mnemonicParsing="false" style="-fx-background-color: #457b9d;" text="Mélanger" textFill="WHITE" />
+                           <VBox.margin>
+                               <Insets bottom="10.0" />
+                           </VBox.margin>
+                       </HBox>
+                       <CheckBox fx:id="mixedForever" mnemonicParsing="false" text="Toujours mélanger">
+                           <font>
+                               <Font size="14.0" />
+                           </font>
+                       </CheckBox>
+                   </VBox>
+               </StackPane>
+            <padding>
+               <Insets top="5.0" />
+            </padding>
+           </VBox>
+         <Text fx:id="previewText" strokeType="OUTSIDE" strokeWidth="0.0" text="Prévisualisation de la métaséquence" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+            <font>
+               <Font size="20.0" />
+            </font>
+            <GridPane.margin>
+               <Insets left="25.0" />
+            </GridPane.margin>
+         </Text>
+         <PreviewTimeline fx:id="previewTimeline" minHeight="-Infinity" prefHeight="150.0" prefWidth="848.0" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+             <GridPane.margin>
+                 <Insets left="25.0" right="25.0" />
+             </GridPane.margin>
+         </PreviewTimeline>
+       </GridPane>
    </center>
+   <bottom>
+      <BorderPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="80.0" BorderPane.alignment="CENTER">
+         <left>
+             <Button fx:id="previous" mnemonicParsing="false" onAction="#previousPage" style="-fx-background-color: #457b9d;" text="Précédent" textFill="WHITE" BorderPane.alignment="CENTER">
+                 <font>
+                     <Font size="16.0" />
+                 </font>
+               <BorderPane.margin>
+                  <Insets left="25.0" />
+               </BorderPane.margin>
+             </Button>
+         </left>
+         <right>
+             <HBox alignment="CENTER" maxHeight="-Infinity" spacing="20.0" BorderPane.alignment="CENTER">
+                 <Text fx:id="nextPageAdviceText" strokeType="OUTSIDE" strokeWidth="0.0" text="Sélectionner une métaséquence">
+                     <font>
+                         <Font name="System Bold Italic" size="16.0" />
+                     </font>
+                 </Text>
+                 <Button fx:id="next" mnemonicParsing="false" onAction="#nextPage" style="-fx-background-color: #457b9d;" text="Suivant" textFill="WHITE">
+                     <font>
+                         <Font size="16.0" />
+                     </font>
+                 </Button>
+               <BorderPane.margin>
+                  <Insets right="25.0" />
+               </BorderPane.margin>
+             </HBox>
+         </right>
+      </BorderPane>
+   </bottom>
 </BorderPane>

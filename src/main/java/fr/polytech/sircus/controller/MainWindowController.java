@@ -16,8 +16,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -157,6 +160,15 @@ public class MainWindowController implements Initializable {
                 Dialog<ButtonType> dialog = new Dialog<>();
                 dialog.setDialogPane(dialogPane);
                 dialog.setTitle("Ajout d'un administrateur");
+                Window window = dialogPane.getScene().getWindow();
+                window.setOnCloseRequest(e -> dialog.hide());
+
+                Button cancelButton = (Button) dialogPane.lookupButton(controller.getCancel());
+                cancelButton.setCancelButton(true);
+                Button addButton = (Button) dialogPane.lookupButton(controller.getAdd());
+                addButton.setDefaultButton(true);
+                addButton.setStyle("-fx-background-color: #457b9d;");
+                addButton.setTextFill(Paint.valueOf("white"));
 
                 Optional<ButtonType> clickedButton = dialog.showAndWait();
                 if (clickedButton.isPresent())
@@ -174,14 +186,23 @@ public class MainWindowController implements Initializable {
                 DialogPane dialogPane = fxmlLoader.load();
                 RemoveAdminPopup controller = fxmlLoader.getController();
 
+                Button cancelButton = (Button) dialogPane.lookupButton(controller.getCancel());
+                cancelButton.setCancelButton(true);
+                Button removeButton = (Button) dialogPane.lookupButton(controller.getRemove());
+                removeButton.setDefaultButton(true);
+                removeButton.setStyle("-fx-background-color: #f87167;");
+                removeButton.setTextFill(Paint.valueOf("white"));
+
                 Dialog<ButtonType> dialog = new Dialog<>();
                 dialog.setDialogPane(dialogPane);
                 dialog.setTitle("Suppression d'un administrateur");
+                Window window = dialogPane.getScene().getWindow();
+                window.setOnCloseRequest(e -> dialog.hide());
 
                 Optional<ButtonType> clickedButton = dialog.showAndWait();
                 if (clickedButton.isPresent())
                     if (clickedButton.get() == ButtonType.FINISH)
-                        SircusApplication.dataSircus.removeAdmin(controller.admins.getValue());
+                        SircusApplication.dataSircus.removeAdmin(controller.getAdmins().getValue());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -471,10 +492,19 @@ public class MainWindowController implements Initializable {
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
             dialog.setTitle("Connexion opérateur");
+            Window window = dialogPane.getScene().getWindow();
+            window.setOnCloseRequest(e -> dialog.hide());
+
+            Button cancelButton = (Button) dialogPane.lookupButton(controller.getCancel());
+            cancelButton.setCancelButton(true);
+            Button connectButton = (Button) dialogPane.lookupButton(controller.getConnect());
+            connectButton.setDefaultButton(true);
+            connectButton.setStyle("-fx-background-color: #457b9d;");
+            connectButton.setTextFill(Paint.valueOf("white"));
 
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.isPresent()) {
-                if (clickedButton.get() == ButtonType.FINISH) {
+                if (clickedButton.get() == controller.getConnect()) {
                     if (controller.isAdmin()) {
                         SircusApplication.adminConnected = true;
                     } else if (controller.isSuperAdmin()) {
@@ -516,7 +546,7 @@ public class MainWindowController implements Initializable {
             saveInfos();
             FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/meta_seq.fxml")));
             Stage stage = (Stage) next.getScene().getWindow();
-            Scene scene = new Scene(fxmlLoader.load());
+            Scene scene = new Scene(fxmlLoader.load(), next.getScene().getWidth(), next.getScene().getHeight());
             stage.setScene(scene);
             stage.show();
         }

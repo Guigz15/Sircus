@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <DialogPane xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PopUps.AddMediaPopUp">
    <content>
-      <VBox prefWidth="480.0">
+      <VBox>
          <HBox alignment="CENTER_LEFT">
             <VBox.margin>
                <Insets bottom="20.0" />
@@ -24,7 +33,7 @@
             <ComboBox fx:id="mediasList" prefHeight="26.0" prefWidth="243.0" promptText="Sélectionner un média" />
          </HBox>
          <VBox>
-            <RadioButton fx:id="newMediaButton" mnemonicParsing="false" text="Nouveau média" toggleGroup="$addType">
+            <RadioButton fx:id="newMediaButton" mnemonicParsing="false" prefWidth="110.0" text="Nouveau média" toggleGroup="$addType">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
@@ -122,6 +131,6 @@
          </VBox>
       </VBox>
    </content>
-   <ButtonType fx:constant="FINISH" />
-   <ButtonType fx:constant="CANCEL" />
+   <ButtonType fx:id="add" text="Ajouter" />
+   <ButtonType fx:id="cancel" text="Annuler" />
 </DialogPane>

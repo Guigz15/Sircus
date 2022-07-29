@@ -7,10 +7,7 @@ import fr.polytech.sircus.model.TypeMedia;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -64,6 +61,12 @@ public class AddMediaPopUp implements Initializable {
     private ImageView interstimImage;
     @FXML
     private ImageView mediaImage;
+    @FXML
+    @Getter
+    private ButtonType add;
+    @FXML
+    @Getter
+    private ButtonType cancel;
 
 
     @Override

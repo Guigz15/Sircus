@@ -64,6 +64,6 @@
          </center>
       </BorderPane>
    </content>
-   <ButtonType fx:constant="FINISH" />
-   <ButtonType fx:constant="CANCEL" />
+   <ButtonType fx:id="modify" text="Modifier" />
+   <ButtonType fx:id="cancel" text="Annuler" />
 </DialogPane>

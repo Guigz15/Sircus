@@ -61,6 +61,12 @@ public class ParticipantCalibrationPopup implements Initializable {
     private MediaView targetVideo;
     @FXML
     private Button addVideo;
+    @FXML
+    @Getter
+    private ButtonType calibrate;
+    @FXML
+    @Getter
+    private ButtonType cancel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

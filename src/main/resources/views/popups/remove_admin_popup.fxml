@@ -13,6 +13,6 @@
          <ComboBox fx:id="admins" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0"/>
       </VBox>
    </content>
-   <ButtonType fx:constant="FINISH"/>
-   <ButtonType fx:constant="CANCEL"/>
+   <ButtonType fx:id="remove" text="Supprimer" />
+   <ButtonType fx:id="cancel" text="Annuler" />
 </DialogPane>

@@ -5,34 +5,28 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="itemContainer" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PreviewTimelineItemController">
-    <children>
-        <VBox fx:id="rulerContainer" alignment="TOP_RIGHT" maxHeight="35.0" prefHeight="35.0">
-            <children>
-                <Text fx:id="time" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="10s." textAlignment="RIGHT" />
-                <HBox fx:id="ruler" alignment="CENTER">
+<VBox fx:id="itemContainer" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/14.0.2.1"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PreviewTimelineItemController">
+    <VBox fx:id="rulerContainer" alignment="TOP_RIGHT" maxHeight="35.0" prefHeight="35.0">
+        <Text fx:id="time" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="10s."
+              textAlignment="RIGHT"/>
+        <HBox fx:id="ruler" alignment="CENTER">
+            <VBox.margin>
+                <Insets bottom="5.0"/>
+            </VBox.margin>
+            <Text fx:id="filename" strokeType="OUTSIDE" strokeWidth="0.0" text="filename"/>
+        </HBox>
+    </VBox>
+    <StackPane fx:id="imageStackPane">
+        <BorderPane fx:id="imageBorder">
+            <center>
+                <ImageView fx:id="imageView" fitHeight="82.0" fitWidth="200.0" preserveRatio="true">
                     <VBox.margin>
-                        <Insets bottom="5.0" />
+                        <Insets left="2.0" right="2.0"/>
                     </VBox.margin>
-                    <children>
-                        <Text fx:id="filename" strokeType="OUTSIDE" strokeWidth="0.0" text="filename" />
-                    </children>
-                </HBox>
-            </children>
-        </VBox>
-      <StackPane fx:id="imageStackPane">
-          <children>
-              <BorderPane fx:id="imageBorder">
-                  <center>
-                      <ImageView fx:id="imageView" fitHeight="82.0" fitWidth="200.0" preserveRatio="true">
-                          <VBox.margin>
-                              <Insets left="2.0" right="2.0" />
-                          </VBox.margin>
-                          <Image fx:id="image" url="@../../../../medias/mos01.jpg" />
-                      </ImageView>
-                  </center>
-              </BorderPane>
-          </children>
-      </StackPane>
-    </children>
+                    <Image fx:id="image" url="@../../../../medias/mos01.jpg"/>
+                </ImageView>
+            </center>
+        </BorderPane>
+    </StackPane>
 </VBox>
