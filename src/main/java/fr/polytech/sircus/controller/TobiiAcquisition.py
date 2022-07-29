@@ -22,5 +22,5 @@ if __name__ == "__main__":
 
     eyetracker.subscribe_to(tobiiresearch.implementation.EyeTracker.EYETRACKER_GAZE_DATA, gaze_data_callback, as_dictionary=True)
     # Waiting time during acquisition
-    time.sleep(float(sys.argv[1]) + 2.0)
+    time.sleep(float(sys.argv[1]) + 4.0)
     eyetracker.unsubscribe_from(tobiiresearch.implementation.EyeTracker.EYETRACKER_GAZE_DATA, gaze_data_callback)
