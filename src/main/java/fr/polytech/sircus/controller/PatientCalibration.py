@@ -1,4 +1,5 @@
 import distutils.util
+import os
 import random
 import sys
 import threading
@@ -12,17 +13,19 @@ from screeninfo import get_monitors
 test = True
 
 # Both monitors have to have the same resolution
-screens = get_monitors()
-secondScreen = None
-for screen in screens:
-    if not screen.is_primary:
-        secondScreen = screen
+if not test:
+    screens = get_monitors()
+    secondScreen = None
+    for screen in screens:
+        if not screen.is_primary:
+            secondScreen = screen
 
 # Create the window to display calibration and validation points
 root = Tk()
 root.title('Calibration Participant')
 # To force the window to be on the second screen
-root.geometry('%dx%d+%d+%d' % (secondScreen.width, secondScreen.height, secondScreen.x, 0))
+if not test:
+    root.geometry('%dx%d+%d+%d' % (secondScreen.width, secondScreen.height, secondScreen.x, 0))
 root.overrideredirect(True)
 root.bind("<Escape>", lambda event: close())
 
@@ -34,6 +37,14 @@ else:
     canvas = Canvas(root, width=root.winfo_screenwidth(), height=root.winfo_screenheight(), borderwidth=0,
                     highlightthickness=0, bg='white')
 canvas.pack()
+
+
+def restart_program():
+    """
+    Restarts the current program.
+    """
+    python = sys.executable
+    os.execl(python, python, * sys.argv)
 
 
 def close():
@@ -63,9 +74,32 @@ def plot(calibration_result, validation_result):
     plot_window = Toplevel(root)
     plot_window.attributes("-fullscreen", True)
 
-    plot_canvas = Canvas(plot_window, width=plot_window.winfo_screenwidth(), height=plot_window.winfo_screenheight(),
+    # Calibration plot canvas
+    plot_canvas = Canvas(plot_window, width=3*plot_window.winfo_screenwidth()/4, height=plot_window.winfo_screenheight(),
                          borderwidth=0, highlightthickness=0, bg='white')
-    plot_canvas.pack()
+    plot_canvas.pack(anchor=W, side=LEFT)
+
+    # Result labels
+    average_accuracy_left = Label(plot_window, text="Précision moyenne gauche : " + str(validation_result.average_accuracy_left), font=("Arial", 10))
+    average_accuracy_left.pack(anchor=E, side=TOP, fill=X, pady=20)
+    average_accuracy_right = Label(plot_window, text="Précision moyenne droite : " + str(validation_result.average_accuracy_right), font=("Arial", 10))
+    average_accuracy_right.pack(anchor=E, side=TOP, fill=X, pady=20)
+    average_precision_left = Label(plot_window, text="Précision moyenne gauche (deg) : " + str(validation_result.average_precision_left), font=("Arial", 10))
+    average_precision_left.pack(anchor=E, side=TOP, fill=X, pady=20)
+    average_precision_right = Label(plot_window, text="Précision moyenne droite (deg) : " + str(validation_result.average_precision_right), font=("Arial", 10))
+    average_precision_right.pack(anchor=E, side=TOP, fill=X, pady=20)
+    average_precision_rms_left = Label(plot_window, text="Précision quadratique moyenne gauche : " + str(validation_result.average_precision_rms_left), font=("Arial", 10))
+    average_precision_rms_left.pack(anchor=E, side=TOP, fill=X, pady=20)
+    average_precision_rms_right = Label(plot_window, text="Précision quadratique moyenne droite : " + str(validation_result.average_precision_rms_right), font=("Arial", 10))
+    average_precision_rms_right.pack(anchor=E, side=TOP, fill=X, pady=20)
+
+    # Finish button
+    finish_button = Button(plot_window, text="Terminer", command=close, bg="#FC8571")
+    finish_button.pack(anchor=E, side=BOTTOM, pady=50, padx=plot_window.winfo_screenwidth()/9.5)
+
+    # Relaunch calibration button
+    relaunch_button = Button(plot_window, text="Relancer la calibration", bg="#98D7E6", command=restart_program)
+    relaunch_button.pack(anchor=E, side=BOTTOM, padx=plot_window.winfo_screenwidth()/12)
 
     def create_circle_for_plot(x, y, r, **kwargs):
         """
@@ -76,46 +110,76 @@ def plot(calibration_result, validation_result):
         """
         return plot_canvas.create_oval(x - r, y - r, x + r, y + r, **kwargs)
 
-    for calibration_point in calibration_result.calibration_points:
-        position = calibration_point.position_on_display_area
-        create_circle_for_plot(x=plot_window.winfo_screenwidth() * position[0],
-                               y=plot_window.winfo_screenheight() * position[1], r=20)
-        create_circle_for_plot(x=plot_window.winfo_screenwidth() * position[0],
-                               y=plot_window.winfo_screenheight() * position[1], r=5, fill='black')
-        for calibration_sample in calibration_point.calibration_samples:
-            left_eye_position = calibration_sample.left_eye.position_on_display_area
-            right_eye_position = calibration_sample.right_eye.position_on_display_area
-            plot_canvas.create_line(plot_window.winfo_screenwidth() * position[0],
-                                    plot_window.winfo_screenheight() * position[1],
-                                    plot_window.winfo_screenwidth() * left_eye_position[0],
-                                    plot_window.winfo_screenheight() * left_eye_position[1],
-                                    fill='red', width=1.5)
-            plot_canvas.create_line(plot_window.winfo_screenwidth() * position[0],
-                                    plot_window.winfo_screenheight() * position[1],
-                                    plot_window.winfo_screenwidth() * right_eye_position[0],
-                                    plot_window.winfo_screenheight() * right_eye_position[1],
-                                    fill='green', width=1.5)
+    if not test:
+        for calibration_point in calibration_result.calibration_points:
+            position = calibration_point.position_on_display_area
+            create_circle_for_plot(x=3*plot_window.winfo_screenwidth()/4 * position[0],
+                                   y=plot_window.winfo_screenheight() * position[1], r=20)
+            create_circle_for_plot(x=3*plot_window.winfo_screenwidth()/4 * position[0],
+                                   y=plot_window.winfo_screenheight() * position[1], r=5, fill='black')
+            for calibration_sample in calibration_point.calibration_samples:
+                left_eye_position = calibration_sample.left_eye.position_on_display_area
+                right_eye_position = calibration_sample.right_eye.position_on_display_area
+                plot_canvas.create_line(3*plot_window.winfo_screenwidth()/4 * position[0],
+                                        plot_window.winfo_screenheight() * position[1],
+                                        3*plot_window.winfo_screenwidth()/4 * left_eye_position[0],
+                                        plot_window.winfo_screenheight() * left_eye_position[1],
+                                        fill='red', width=1.5)
+                plot_canvas.create_line(3*plot_window.winfo_screenwidth()/4 * position[0],
+                                        plot_window.winfo_screenheight() * position[1],
+                                        3*plot_window.winfo_screenwidth()/4 * right_eye_position[0],
+                                        plot_window.winfo_screenheight() * right_eye_position[1],
+                                        fill='green', width=1.5)
 
-    for validation_point in validation_result.points:
-        create_circle_for_plot(x=plot_window.winfo_screenwidth() * validation_point.x,
-                               y=plot_window.winfo_screenheight() * validation_point.y,
-                               r=20)
-        create_circle_for_plot(x=plot_window.winfo_screenwidth() * validation_point.x,
-                               y=plot_window.winfo_screenheight() * validation_point.y,
-                               r=5, fill='black')
-        for gaze_data in validation_result.points[validation_point][0].gaze_data:
-            left_eye_position = gaze_data.left_eye.gaze_point.position_on_display_area
-            right_eye_position = gaze_data.right_eye.gaze_point.position_on_display_area
-            plot_canvas.create_line(plot_window.winfo_screenwidth() * validation_point.x,
-                                    plot_window.winfo_screenheight() * validation_point.y,
-                                    plot_window.winfo_screenwidth() * left_eye_position[0],
-                                    plot_window.winfo_screenheight() * left_eye_position[1],
-                                    fill='red', width=1.5)
-            plot_canvas.create_line(plot_window.winfo_screenwidth() * validation_point.x,
-                                    plot_window.winfo_screenheight() * validation_point.y,
-                                    plot_window.winfo_screenwidth() * right_eye_position[0],
-                                    plot_window.winfo_screenheight() * right_eye_position[1],
-                                    fill='green', width=1.5)
+        for validation_point in validation_result.points:
+            create_circle_for_plot(x=plot_window.winfo_screenwidth() * validation_point.x,
+                                   y=plot_window.winfo_screenheight() * validation_point.y,
+                                   r=20)
+            create_circle_for_plot(x=plot_window.winfo_screenwidth() * validation_point.x,
+                                   y=plot_window.winfo_screenheight() * validation_point.y,
+                                   r=5, fill='black')
+            for gaze_data in validation_result.points[validation_point][0].gaze_data:
+                left_eye_position = gaze_data.left_eye.gaze_point.position_on_display_area
+                right_eye_position = gaze_data.right_eye.gaze_point.position_on_display_area
+                plot_canvas.create_line(3*plot_window.winfo_screenwidth()/4 * validation_point.x,
+                                        plot_window.winfo_screenheight() * validation_point.y,
+                                        3*plot_window.winfo_screenwidth()/4 * left_eye_position[0],
+                                        plot_window.winfo_screenheight() * left_eye_position[1],
+                                        fill='red', width=1.5)
+                plot_canvas.create_line(3*plot_window.winfo_screenwidth()/4 * validation_point.x,
+                                        plot_window.winfo_screenheight() * validation_point.y,
+                                        3*plot_window.winfo_screenwidth()/4 * right_eye_position[0],
+                                        plot_window.winfo_screenheight() * right_eye_position[1],
+                                        fill='green', width=1.5)
+    else:
+        points_to_calibrate = [(0.5, 0.5), (0.1, 0.1), (0.5, 0.1), (0.9, 0.1), (0.1, 0.5), (0.9, 0.5), (0.1, 0.9),
+                               (0.5, 0.9), (0.9, 0.9)]
+        for position in points_to_calibrate:
+            create_circle_for_plot(x=3*plot_window.winfo_screenwidth()/4 * position[0],
+                                   y=plot_window.winfo_screenheight() * position[1], r=20)
+            create_circle_for_plot(x=3*plot_window.winfo_screenwidth()/4 * position[0],
+                                   y=plot_window.winfo_screenheight() * position[1], r=5, fill='black')
+            for calibration_sample in calibration_result:
+                plot_canvas.create_line(3*plot_window.winfo_screenwidth()/4 * position[0],
+                                        plot_window.winfo_screenheight() * position[1],
+                                        3*plot_window.winfo_screenwidth()/4 * calibration_sample[0],
+                                        plot_window.winfo_screenheight() * calibration_sample[1],
+                                        fill='red', width=1.5)
+
+        points_to_validate = [Point2(0.7, 0.7), Point2(0.3, 0.3), Point2(0.7, 0.3), Point2(0.3, 0.7)]
+        for validation_point in points_to_validate:
+            create_circle_for_plot(x=3*plot_window.winfo_screenwidth()/4 * validation_point.x,
+                                   y=plot_window.winfo_screenheight() * validation_point.y,
+                                   r=20)
+            create_circle_for_plot(x=3*plot_window.winfo_screenwidth()/4 * validation_point.x,
+                                   y=plot_window.winfo_screenheight() * validation_point.y,
+                                   r=5, fill='black')
+            for gaze_data in validation_result:
+                plot_canvas.create_line(3*plot_window.winfo_screenwidth()/4 * validation_point.x,
+                                        plot_window.winfo_screenheight() * validation_point.y,
+                                        3*plot_window.winfo_screenwidth()/4 * gaze_data.x,
+                                        plot_window.winfo_screenheight() * gaze_data.y,
+                                        fill='red', width=1.5)
 
 
 def targetCalibrationValidation(eyetracker, calibration, points_to_calibrate, points_to_validate):
@@ -264,8 +328,10 @@ def calibrateAndValidate():
         calibration_result, validation_result = videoCalibrationValidation(eyetracker, calibration, points_to_calibrate,
                                                                        points_to_validate)'''
     else:
-        calibration_result, validation_result = targetCalibrationValidation(eyetracker, calibration,
-                                                                            points_to_calibrate, points_to_validate)
+        calibration_result = [(0.486258, 0.525314), (0.12143, 0.111205), (0.4852, 0.105423), (0.9125646, 0.132154),
+                              (0.095112, 0.50235), (0.9235, 0.485), (0.1235, 0.9005544), (0.545155, 0.982666), (0.9124, 0.8872)]
+
+        validation_result = [Point2(0.68942, 0.71240), Point2(0.32145, 0.30214), Point2(0.67892, 0.3124), Point2(0.314268, 0.775612)]
 
     print(validation_result.average_accuracy_left)
     print(validation_result.average_accuracy_right)
