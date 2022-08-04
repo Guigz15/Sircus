@@ -319,7 +319,7 @@ public class PlayerMonitorController {
 
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
-            dialog.setTitle("Calibration Patient");
+            dialog.setTitle("Calibration Participant");
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.initOwner(participantCalibration.getScene().getWindow());
             Window window = dialogPane.getScene().getWindow();

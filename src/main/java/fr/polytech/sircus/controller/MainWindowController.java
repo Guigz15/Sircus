@@ -233,7 +233,7 @@ public class MainWindowController implements Initializable {
 
         visitNumber.textProperty().addListener((observableValue, oldValue, newValue) -> {
             if (!newValue.matches("\\d*"))
-                birthDate.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+                visitNumber.setText(newValue.replaceAll("[^\\d]", ""));
         });
 
         birthDate.getEditor().textProperty().addListener((observableValue, oldValue, newValue) -> {
@@ -510,6 +510,11 @@ public class MainWindowController implements Initializable {
                     } else if (controller.isSuperAdmin()) {
                         SircusApplication.adminConnected = true;
                         SircusApplication.superAdminConnected = true;
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR, "Nom d'utilisateur ou mot de passe incorrect.", ButtonType.OK);
+                        alert.setTitle("Echec de Connexion");
+                        alert.setHeaderText("Erreur");
+                        alert.show();
                     }
                     adminLabel.setVisible(SircusApplication.adminConnected);
                     adminLogOut.setVisible(SircusApplication.adminConnected);

@@ -1,6 +1,7 @@
 package fr.polytech.sircus.controller;
 
 import fr.polytech.sircus.SircusApplication;
+import fr.polytech.sircus.controller.PopUps.ModifyMetaseqPopup;
 import fr.polytech.sircus.controller.PopUps.ModifySeqPopUp;
 import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Sequence;
@@ -184,9 +185,37 @@ public class Step2Controller implements Initializable {
 
         renameMetaButton.disableProperty().bind(Bindings.createBooleanBinding(() -> metaListView.getSelectionModel().isEmpty(), metaListView.getSelectionModel().getSelectedItems()));
         renameMetaButton.setOnAction(actionEvent -> {
-            metaListView.setEditable(true);
-            metaListView.edit(metaListView.getSelectionModel().getSelectedIndex());
-            metaListView.setEditable(false);
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/modify_metaseq_popup.fxml"));
+                DialogPane dialogPane = fxmlLoader.load();
+                ModifyMetaseqPopup controller = fxmlLoader.getController();
+                controller.getMetasequenceName().setText(metaListView.getSelectionModel().getSelectedItem().getName());
+
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setDialogPane(dialogPane);
+                dialog.setTitle("Modification métaséquence");
+                Window window = dialogPane.getScene().getWindow();
+                window.setOnCloseRequest(e -> dialog.hide());
+
+                Button cancelButton = (Button) dialogPane.lookupButton(controller.getCancel());
+                cancelButton.setCancelButton(true);
+                Button connectButton = (Button) dialogPane.lookupButton(controller.getModify());
+                connectButton.setDefaultButton(true);
+                connectButton.setStyle("-fx-background-color: #457b9d;");
+                connectButton.setTextFill(Paint.valueOf("white"));
+
+                Optional<ButtonType> clickedButton = dialog.showAndWait();
+                if (clickedButton.isPresent()) {
+                    if (clickedButton.get() == controller.getModify()) {
+                        MetaSequence metaSequence = metaListView.getSelectionModel().getSelectedItem();
+                        metaSequence.setName(controller.getMetasequenceName().getText());
+                        SircusApplication.dataSircus.getMetaSequencesList().set(index_Selected_MetaSequence, metaSequence);
+                        metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
         removeMetaButton.disableProperty().bind(Bindings.createBooleanBinding(() -> metaListView.getSelectionModel().isEmpty(), metaListView.getSelectionModel().getSelectedItems()));
         exportMetaButton.disableProperty().bind(Bindings.createBooleanBinding(() -> metaListView.getSelectionModel().isEmpty(), metaListView.getSelectionModel().getSelectedItems()));
@@ -205,33 +234,10 @@ public class Step2Controller implements Initializable {
 
             /*For textField ListView check the link : https://stackoverflow.com/questions/35963888/how-to-create-a-listview-of-complex-objects-and-allow-editing-a-field-on-the-obj */
             ListCell<MetaSequence> listCellForMetaSequence = new ListCell<>() {
-
                 private final TextField textField = new TextField();
-
-                {
-                    //if we are not connected as admin we can't edit textfield
-                    if (!SircusApplication.adminConnected)
-                        textField.setDisable(true);
-                    else {
-                        //defined action when we click on textfield to edit meta-sequence name
-                        textField.setOnAction(e -> {
-                            //we commit the change only if we are connected as admin
-                            commitEdit(getItem());
-
-                        });
-                        textField.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
-                            //if we click on escape we cancel the editing
-                            if (e.getCode() == KeyCode.ESCAPE) {
-                                cancelEdit();
-                            }
-                        });
-                    }
-
-                }
 
                 @Override
                 protected void updateItem(MetaSequence metaSequence, boolean empty) {
-
                     super.updateItem(metaSequence, empty);
                     if (empty) {
                         setText(null);
@@ -244,31 +250,6 @@ public class Step2Controller implements Initializable {
                         setText(metaSequence.getName());
                         setGraphic(null);
                     }
-                }
-
-                @Override
-                public void startEdit() {
-                    super.startEdit();
-                    textField.setText(getItem().getName());
-                    setText(null);
-                    setGraphic(textField);
-                    textField.selectAll();
-                    textField.requestFocus();
-                }
-
-                @Override
-                public void cancelEdit() {
-                    super.cancelEdit();
-                    setText(getItem().getName());
-                    setGraphic(null);
-                }
-
-                @Override
-                public void commitEdit(MetaSequence metaSequence) {
-                    metaSequence.setName(textField.getText());
-                    super.commitEdit(metaSequence);
-                    setText(textField.getText());
-                    setGraphic(null);
                 }
             };
 
@@ -357,7 +338,7 @@ public class Step2Controller implements Initializable {
 
         //Defined action when we pressed "delete" key. This delete current meta-sequence
         metaListView.setOnKeyReleased((KeyEvent keyEvent) -> {
-            //if we pressed delete and we have selected a meta-sequence and only if we are connected as admin
+            //if we pressed delete, and we have selected a meta-sequence and only if we are connected as admin
             if ((keyEvent.getCode() == KeyCode.DELETE) && SircusApplication.adminConnected && (index_Selected_MetaSequence >= 0)) {
                 SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
                 metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
@@ -487,7 +468,7 @@ public class Step2Controller implements Initializable {
             return listCellForSequence;
         });
 
-        //Open modifying sequence popup when we double click on sequence
+        //Open modifying sequence popup when we double-click on sequence
         seqListView.setOnMouseClicked(event ->
         {
             if(event.getClickCount() == 2 && SircusApplication.adminConnected) {
@@ -565,9 +546,9 @@ public class Step2Controller implements Initializable {
             }
         });
 
-        //Defined action when we pressed "delete" key. This delete current sequence
+        //Defined action when we pressed "delete" key. This deletes current sequence
         seqListView.setOnKeyReleased((KeyEvent keyEvent) -> {
-            //if we pressed delete and we have selected a mete-sequence and only if we are connected as admin
+            //if we pressed delete, and we have selected a mete-sequence and only if we are connected as admin
             if ((keyEvent.getCode() == KeyCode.DELETE) && SircusApplication.adminConnected && (index_Selected_Sequence >= 0) && (index_Selected_MetaSequence >= 0)) {
                 SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().remove(index_Selected_Sequence);
                 seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
