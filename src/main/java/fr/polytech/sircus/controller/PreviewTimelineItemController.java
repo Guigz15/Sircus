@@ -28,7 +28,6 @@ public class PreviewTimelineItemController implements Initializable {
      */
     private final String MEDIAS_PATH = "medias/";
 
-
     /**
      * The thickness of the image border
      */
@@ -151,7 +150,7 @@ public class PreviewTimelineItemController implements Initializable {
 
     @FXML
     public void setTime(Duration duration){
-        time.setText(duration.getSeconds()+"s");
+        time.setText(duration.getSeconds() + "s");
     }
 
     /**
@@ -184,12 +183,15 @@ public class PreviewTimelineItemController implements Initializable {
         ));
     }
 
+    /**
+     * Set image in imageView with the path.
+     * @param pathToImage
+     */
     private void setImage(String pathToImage) {
         try {
             FileInputStream fip = new FileInputStream(pathToImage);
             image = new Image(fip);
             imageView.setImage(image);
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

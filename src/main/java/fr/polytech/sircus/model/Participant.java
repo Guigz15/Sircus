@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.Period;
 
 /**
- * Represent a patient with its information
+ * Represent a participant with its information
  */
 public class Participant {
 

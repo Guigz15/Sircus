@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import java.time.LocalTime;
 
+/**
+ * This class represent a viewer data, that means the filename and its displaying time
+ */
 public class ViewerData {
 
     @Getter @Setter

@@ -25,7 +25,7 @@ import java.time.Duration;
 import java.util.ResourceBundle;
 
 /**
- * Controller of the add media section
+ * Controller of the add media popup
  */
 public class AddMediaPopUp implements Initializable {
 

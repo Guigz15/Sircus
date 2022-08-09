@@ -14,7 +14,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
@@ -172,7 +171,7 @@ public class MainWindowController implements Initializable {
 
                 Optional<ButtonType> clickedButton = dialog.showAndWait();
                 if (clickedButton.isPresent())
-                    if (clickedButton.get() == ButtonType.FINISH)
+                    if (clickedButton.get() == controller.getAdd())
                         SircusApplication.dataSircus.addAdmin(controller.getUserName().getText(),
                                 controller.getPassword().getText());
             } catch (IOException e) {
@@ -201,7 +200,7 @@ public class MainWindowController implements Initializable {
 
                 Optional<ButtonType> clickedButton = dialog.showAndWait();
                 if (clickedButton.isPresent())
-                    if (clickedButton.get() == ButtonType.FINISH)
+                    if (clickedButton.get() == controller.getRemove())
                         SircusApplication.dataSircus.removeAdmin(controller.getAdmins().getValue());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -247,7 +246,6 @@ public class MainWindowController implements Initializable {
                 birthDate.setStyle("-fx-border-color: red; -fx-border-radius: 3;");
         });
 
-        // Forename and Name
         name.textProperty().addListener((observableValue, oldValue, newValue) -> {
             if (!newValue.matches("\\sa-zA-Z*\\-"))
                 name.setText(newValue.replaceAll("[^\\sa-zA-Z\\-]", ""));
@@ -274,11 +272,10 @@ public class MainWindowController implements Initializable {
         });
 
         // Initialize all components if they have been already filled
-        /*
         if (SircusApplication.participant != null) {
             id.setText(SircusApplication.participant.getIdentifier());
             Objects.requireNonNull(getRadioButton(sex.getToggles(), SircusApplication.participant.getSex().name())).setSelected(true);
-            visitNumber.setText(SircusApplication.participant.getVisitNumber());
+            visitNumber.setText(String.valueOf(SircusApplication.participant.getVisitNumber()));
             birthDate.setValue(SircusApplication.participant.getBirthDate());
             age.setText(SircusApplication.participant.computeAge() + "  ans");
             if (SircusApplication.participant.getEyeDominance() != null)
@@ -287,14 +284,13 @@ public class MainWindowController implements Initializable {
                 Objects.requireNonNull(getRadioButton(laterality.getToggles(), SircusApplication.participant.getHandLaterality().name())).setSelected(true);
         }
         if (SircusApplication.user != null) {
-            Objects.requireNonNull(getRadioButton(type.getToggles(), SircusApplication.user.getUserType().name())).setSelected(true);
             name.setText(SircusApplication.user.getLastName());
             forename.setText(SircusApplication.user.getFirstName());
         }
         if (SircusApplication.currentLocation != null)
             locations.setValue(SircusApplication.currentLocation);
         if (SircusApplication.currentMethod != null)
-            methods.setValue(SircusApplication.currentMethod);*/
+            methods.setValue(SircusApplication.currentMethod);
     }
 
     /**
@@ -628,25 +624,5 @@ public class MainWindowController implements Initializable {
             SircusApplication.currentLocation = locations.getValue();
         if (methods.getValue() != null)
             SircusApplication.currentMethod = methods.getValue();
-    }
-
-    /********************************************************************
-     ******** PENSER A ENLEVER CETTE METHODE POUR LE RENDU FINALE *******
-     ********************************************************************/
-    @FXML
-    private void enableNextButton(MouseEvent mouseEvent) {
-        if(mouseEvent.getClickCount() == 2) {
-            SircusApplication.adminConnected = true;
-            adminLabel.setVisible(true);
-            adminLogOut.setVisible(true);
-            id.setText("ifsvliu");
-            radioM.setSelected(true);
-            birthDate.setValue(LocalDate.now());
-            ocularDominance.getToggles().get(0).setSelected(true);
-            laterality.getToggles().get(2).setSelected(true);
-            name.setText("fdfd");
-            forename.setText("lkhfdlkjhgfd");
-            locations.getSelectionModel().select(0);
-        }
     }
 }

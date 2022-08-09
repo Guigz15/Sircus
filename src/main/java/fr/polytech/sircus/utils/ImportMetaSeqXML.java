@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 
+/**
+ * This class manages meta-sequence importation
+ */
 public class ImportMetaSeqXML extends DefaultHandler {
     @Getter
     @Setter

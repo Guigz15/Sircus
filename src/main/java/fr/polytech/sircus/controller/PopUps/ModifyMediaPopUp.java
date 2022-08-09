@@ -6,6 +6,9 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import lombok.Getter;
 
+/**
+ * This class manages the modification media popup
+ */
 public class ModifyMediaPopUp {
     @FXML
     @Getter

@@ -4,6 +4,9 @@ import lombok.Getter;
 
 import java.time.LocalTime;
 
+/**
+ * Represent data from the eye tracker
+ */
 public class EyeTrackerData {
     @Getter
     private final String leftEyeCoordinates;

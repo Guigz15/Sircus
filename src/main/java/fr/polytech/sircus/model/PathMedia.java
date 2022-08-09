@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * Class to reprensent the path to a media
+ * Class to represent the path to a media
  */
 public class PathMedia  implements Serializable {
 

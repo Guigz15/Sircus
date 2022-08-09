@@ -6,6 +6,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import lombok.Getter;
 
+/**
+ * This class manages the add admin popup
+ */
 public class AddAdminPopup {
     @FXML
     @Getter

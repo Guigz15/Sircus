@@ -62,21 +62,40 @@ public class Result {
         this.comments.add(new Comment(comment));
     }
 
+    /**
+     * Add a new eye tracker tuple of data
+     * @param tuple of data
+     */
     public void addEyeTrackerData(String tuple) {
         this.eyeTrackerDatas.add(new EyeTrackerData(tuple));
     }
 
+    /**
+     * Add a new viewer tuple of data
+     * @param tuple of data
+     */
     public void addViewerData(String tuple) {
         this.viewerDatas.add(new ViewerData(tuple));
     }
 
+    /**
+     * Add a new log
+     * @param log
+     */
     public void addLog(String log) { this.logs.add(new Log(log)); }
 
+    /**
+     * To set which meta-sequence is used for the experiment
+     * @param metaSequenceUsed
+     */
     public void setMetaSequenceUsed(MetaSequence metaSequenceUsed) {
         this.metaSequenceUsed = metaSequenceUsed;
         this.duration = metaSequenceUsed.getDuration();
     }
 
+    /**
+     * To clear all list that compose result
+     */
     public void clear() {
         this.metaSequenceUsed = null;
         this.duration = Duration.ZERO;

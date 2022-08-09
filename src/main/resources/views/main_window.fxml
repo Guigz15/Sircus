@@ -479,7 +479,7 @@
          </right>
          <center>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="536.0" BorderPane.alignment="CENTER">
-               <Text id="skipMainTest" fill="RED" onMouseClicked="#enableNextButton" strokeType="OUTSIDE" strokeWidth="0.0" text="*">
+               <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="*">
                   <font>
                      <Font size="20.0" />
                   </font>

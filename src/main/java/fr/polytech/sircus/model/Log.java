@@ -6,6 +6,9 @@ import lombok.Setter;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represent an event that appears during the experiment
+ */
 public class Log {
 
     @Getter @Setter

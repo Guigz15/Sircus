@@ -41,7 +41,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- * Class Etape2AdminController : manages the metasequences settings page of the Admin
+ * Class Step2Controller : manages the meta-sequences settings page
  */
 public class Step2Controller implements Initializable {
     @FXML
@@ -129,22 +129,22 @@ public class Step2Controller implements Initializable {
 
     /**
      * Function initialize which dynamically ends the listViews initialization
-     * and enable corresponding buttons when metasequences or sequences are selected
+     * and enable corresponding buttons when meta-sequences or sequences are selected
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        /* initialize button to mix randomly the list of sequences depends if we are connected on admin mode */
+        // Initialize button to mix randomly the list of sequences depends if we are connected on admin mode
         if (SircusApplication.adminConnected) {
             adminMetaButtons.setVisible(true);
             adminSeqButtons.setVisible(true);
             doMixButton.setVisible(true);
         }
 
-        /* initialize metasequences listView */
+        // Initialize metasequences listView
         metaListView.setStyle("-fx-font-size: 14pt;");
         metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
 
-        //Defined action when the MetaSequence element selected is changed.
+        // Defined action when the MetaSequence element selected is changed.
         metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
 
         // Defined action when we reselect the sequence already selected.
@@ -166,10 +166,10 @@ public class Step2Controller implements Initializable {
 
         nextPageAdviceText.visibleProperty().bind(Bindings.createBooleanBinding(() -> metaListView.getSelectionModel().isEmpty(), metaListView.getSelectionModel().getSelectedItems()));
 
-        /* initialize sequences listView */
+        // Initialize sequences listView
         seqListView.setStyle("-fx-font-size: 14pt;");
 
-        //Defined action when the Sequence element selected is changed.
+        // Defined action when the Sequence element selected is changed.
         seqListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerSequence());
 
         // Defined action when we reselect the metasequence already selected.
@@ -199,10 +199,10 @@ public class Step2Controller implements Initializable {
 
                 Button cancelButton = (Button) dialogPane.lookupButton(controller.getCancel());
                 cancelButton.setCancelButton(true);
-                Button connectButton = (Button) dialogPane.lookupButton(controller.getModify());
-                connectButton.setDefaultButton(true);
-                connectButton.setStyle("-fx-background-color: #457b9d;");
-                connectButton.setTextFill(Paint.valueOf("white"));
+                Button modifyButton = (Button) dialogPane.lookupButton(controller.getModify());
+                modifyButton.setDefaultButton(true);
+                modifyButton.setStyle("-fx-background-color: #457b9d;");
+                modifyButton.setTextFill(Paint.valueOf("white"));
 
                 Optional<ButtonType> clickedButton = dialog.showAndWait();
                 if (clickedButton.isPresent()) {
@@ -229,7 +229,6 @@ public class Step2Controller implements Initializable {
         //---------------------------------------------------------------------------------------//
         //                          Drag and Drop behaviour for meta-sequence                    //
         //---------------------------------------------------------------------------------------//
-
         metaListView.setCellFactory((ListView<MetaSequence> param) -> {
 
             /*For textField ListView check the link : https://stackoverflow.com/questions/35963888/how-to-create-a-listview-of-complex-objects-and-allow-editing-a-field-on-the-obj */
@@ -256,8 +255,7 @@ public class Step2Controller implements Initializable {
             //----------------------------------------------------------------------------------//
             //                     Drag and Drop behaviour for meta-sequence                    //
             //----------------------------------------------------------------------------------//
-
-            //defined OnDragDetected event :
+            // Defined OnDragDetected event :
             listCellForMetaSequence.setOnDragDetected((MouseEvent event) ->
             {
                 int index_Selected_MetaSeq = listCellForMetaSequence.getIndex();
@@ -271,7 +269,7 @@ public class Step2Controller implements Initializable {
                 event.consume();
             });
 
-            //defined OnDragOver event :
+            // Defined OnDragOver event :
             listCellForMetaSequence.setOnDragOver(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
@@ -316,8 +314,7 @@ public class Step2Controller implements Initializable {
         //-------------------------------------------------------------------------------------//
         //                  Add and remove behaviours for meta-sequence                        //
         //-------------------------------------------------------------------------------------//
-
-        /* set addMetaSequence proprieties to add meta-sequence */
+        // Set addMetaSequence proprieties to add meta-sequence
         addMetaButton.setOnAction(actionEvent -> {
             String newNameMetaSequence = "Nouvelle MetaSequence " + (metaListView.getItems().size() + 1);
             MetaSequence newMetaSequence = new MetaSequence(newNameMetaSequence);
@@ -327,7 +324,7 @@ public class Step2Controller implements Initializable {
             metaListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerMetaSequence());
         });
 
-        /* set removeMetaSequence proprieties to remove meta-sequence */
+        // Set removeMetaSequence proprieties to remove meta-sequence
         removeMetaButton.setOnAction(actionEvent -> {
             //if we have selected a meta-sequence
             if (index_Selected_MetaSequence >= 0) {
@@ -336,9 +333,9 @@ public class Step2Controller implements Initializable {
             }
         });
 
-        //Defined action when we pressed "delete" key. This delete current meta-sequence
+        // Defined action when we pressed "delete" key. This delete current meta-sequence
         metaListView.setOnKeyReleased((KeyEvent keyEvent) -> {
-            //if we pressed delete, and we have selected a meta-sequence and only if we are connected as admin
+            // If we pressed delete, and we have selected a meta-sequence and only if we are connected as admin
             if ((keyEvent.getCode() == KeyCode.DELETE) && SircusApplication.adminConnected && (index_Selected_MetaSequence >= 0)) {
                 SircusApplication.dataSircus.getMetaSequencesList().remove(index_Selected_MetaSequence);
                 metaListView.setItems(FXCollections.observableList(getAllItemMetaSequence()));
@@ -348,8 +345,7 @@ public class Step2Controller implements Initializable {
         //----------------------------------------------------------------------------------//
         //                          Drag and Drop behaviour for sequence                    //
         //----------------------------------------------------------------------------------//
-
-        //Set the CellFactory we defined above. Moreover, we defined behaviours to do when we drag and drop a Sequence.
+        // Set the CellFactory we defined above. Moreover, we defined behaviours to do when we drag and drop a Sequence.
         seqListView.setCellFactory((ListView<ItemSequence> param) -> {
             ListCell<ItemSequence> listCellForSequence = new ListCell<>() {
                 private CheckBox checkBox;
@@ -407,7 +403,7 @@ public class Step2Controller implements Initializable {
                 }
             };
 
-            //defined OnDragDetected event :
+            // Defined OnDragDetected event :
             listCellForSequence.setOnDragDetected((MouseEvent event) ->
             {
                 int index_Selected_Sequence = listCellForSequence.getIndex();
@@ -421,7 +417,7 @@ public class Step2Controller implements Initializable {
                 event.consume();
             });
 
-            //defined OnDragOver event :
+            // Defined OnDragOver event :
             listCellForSequence.setOnDragOver(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
@@ -468,7 +464,7 @@ public class Step2Controller implements Initializable {
             return listCellForSequence;
         });
 
-        //Open modifying sequence popup when we double-click on sequence
+        // Open modifying sequence popup when we double-click on sequence
         seqListView.setOnMouseClicked(event ->
         {
             if(event.getClickCount() == 2 && SircusApplication.adminConnected) {
@@ -479,22 +475,21 @@ public class Step2Controller implements Initializable {
         //------------------------------------------------------------------//
         //            Add and remove behaviours for sequence                //
         //------------------------------------------------------------------//
-
-        /* set doMixButton properties */
+        // Set doMixButton properties
         doMixButton.setOnAction(event -> {
             doMixButton.setVisible(false);
             mixBoxButtons.setVisible(true);
             refreshPage();
         });
 
-        /* set cancelMixButton properties */
+        // Set cancelMixButton properties
         cancelMixButton.setOnAction(event -> {
             mixBoxButtons.setVisible(false);
             doMixButton.setVisible(true);
             refreshPage();
         });
 
-        /* set startMixButton properties */
+        // Set startMixButton properties
         startMixButton.setOnAction(event -> {
             mixBoxButtons.setVisible(false);
             doMixButton.setVisible(true);
@@ -512,32 +507,32 @@ public class Step2Controller implements Initializable {
                         currentMetaSequence.getSequencesList().remove(sequence);
                     }
                 }
-                //Shuffle the list of sequences
+                // Shuffle the list of sequences
                 Collections.shuffle(currentMetaSequence.getSequencesList());
 
-                //We sort the hashmap to insert elements in ascending order (on the index of insertion)
+                // We sort the hashmap to insert elements in ascending order (on the index of insertion)
                 fixedSequence = sortByValue(fixedSequence);
-                //restore fixed sequences
+                // Restore fixed sequences
                 fixedSequence.forEach((sequence, integer) -> currentMetaSequence.getSequencesList().add(integer, sequence));
             }
             refreshPage();
         });
 
-        /*defined action to do when we update a sequence */
+        // Defined action to do when we update a sequence
         modifySeqButton.setOnAction(actionEvent -> openModifyPopUpForSequence());
 
-        /*defined action to do when we add a sequence */
+        // Defined action to do when we add a sequence
         addSeqButton.setOnAction(actionEvent -> {
             String newNameSequence = "Nouvelle Sequence " + (seqListView.getItems().size() + 1);
             Sequence newSequence = new Sequence(newNameSequence);
             if (index_Selected_MetaSequence >= 0)
                 SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().add(newSequence);
             seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
-            //Defined action when the Sequence element selected is changed.
+            // Defined action when the Sequence element selected is changed.
             seqListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListenerSequence());
         });
 
-        /*defined action to do when we remove a sequence */
+        // Defined action to do when we remove a sequence
         removeSeqButton.setOnAction(actionEvent -> {
             //if we have selected a meta-sequence
             if (index_Selected_Sequence >= 0 && index_Selected_MetaSequence >= 0) {
@@ -546,9 +541,9 @@ public class Step2Controller implements Initializable {
             }
         });
 
-        //Defined action when we pressed "delete" key. This deletes current sequence
+        // Defined action when we pressed "delete" key. This deletes current sequence
         seqListView.setOnKeyReleased((KeyEvent keyEvent) -> {
-            //if we pressed delete, and we have selected a mete-sequence and only if we are connected as admin
+            // If we pressed delete, and we have selected a mete-sequence and only if we are connected as admin
             if ((keyEvent.getCode() == KeyCode.DELETE) && SircusApplication.adminConnected && (index_Selected_Sequence >= 0) && (index_Selected_MetaSequence >= 0)) {
                 SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().remove(index_Selected_Sequence);
                 seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
@@ -591,10 +586,8 @@ public class Step2Controller implements Initializable {
 
                 Optional<ButtonType> clickedButton = dialog.showAndWait();
                 if (clickedButton.isPresent()) {
-                    if (clickedButton.get() == ButtonType.FINISH) {
-                        Sequence oldSequence = SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().get(index_Selected_Sequence);
-                        SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().add(index_Selected_Sequence, controller.getSequence());
-                        SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().remove(oldSequence);
+                    if (clickedButton.get() == controller.getModify()) {
+                        SircusApplication.dataSircus.getMetaSequencesList().get(index_Selected_MetaSequence).getSequencesList().set(index_Selected_Sequence, controller.getSequence());
                         metaListView.getSelectionModel().getSelectedItem().computeMinMaxDurations();
 
                         // the code below allows you to update listview.
@@ -747,6 +740,9 @@ public class Step2Controller implements Initializable {
         seqListView.setItems(FXCollections.observableList(getAllItemInCurrentMetaSequence()));
     }
 
+    /**
+     * To go back to the previous page
+     */
     @FXML
     private void previousPage() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(SircusApplication.class.getClassLoader().getResource("views/main_window.fxml")));
@@ -756,6 +752,9 @@ public class Step2Controller implements Initializable {
         stage.show();
     }
 
+    /**
+     * To go to the next page
+     */
     @FXML
     private void nextPage() throws IOException {
         if (!metaListView.getSelectionModel().isEmpty()) {
@@ -770,8 +769,7 @@ public class Step2Controller implements Initializable {
     }
 
     /**
-     * Get all itemsSequence storage in the current Meta Sequence which is selected
-     *
+     * Get all itemsSequence stored in the current Meta Sequence which is selected
      * @return the itemsSequence of items
      */
     private List<ItemSequence> getAllItemInCurrentMetaSequence() {
@@ -786,8 +784,7 @@ public class Step2Controller implements Initializable {
     }
 
     /**
-     * Get all item storage in the current list of Meta-sequence
-     *
+     * Get all item stored in the current list of Meta-sequence
      * @return the list of itemsMetaSequence
      */
     private List<MetaSequence> getAllItemMetaSequence() {
@@ -796,7 +793,6 @@ public class Step2Controller implements Initializable {
 
     /**
      * Method which allow to sort a HashMap by values
-     *
      * @param hm The HashMap that we want to sort by value
      * @return HashMap sorted by value
      */

@@ -12,6 +12,9 @@ import lombok.Getter;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * This class manages the removing admin popup
+ */
 public class RemoveAdminPopup implements Initializable {
     @FXML
     @Getter

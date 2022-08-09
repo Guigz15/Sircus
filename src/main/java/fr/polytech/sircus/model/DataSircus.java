@@ -134,6 +134,10 @@ public class DataSircus implements Serializable {
             this.admins.put(username, password);
     }
 
+    /**
+     * Remove admin from admins list
+     * @param username of the admin
+     */
     public void removeAdmin(String username) {
         if (username != null)
             this.admins.remove(username);

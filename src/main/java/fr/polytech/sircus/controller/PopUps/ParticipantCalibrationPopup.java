@@ -20,6 +20,9 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
+/**
+ * This class manages the participant calibration popup
+ */
 public class ParticipantCalibrationPopup implements Initializable {
     @FXML
     @Getter
@@ -83,6 +86,7 @@ public class ParticipantCalibrationPopup implements Initializable {
         imageBox.visibleProperty().bind(Bindings.createBooleanBinding(() -> imageButton.isSelected(), imageButton.selectedProperty()));
         videoBox.visibleProperty().bind(Bindings.createBooleanBinding(() -> videoButton.isSelected(), videoButton.selectedProperty()));
 
+        // Not handled in Python code so useless for the moment
         addImage.setOnAction(actionEvent -> {
             try {
                 FileChooser fileChooser = new FileChooser();
@@ -98,22 +102,5 @@ public class ParticipantCalibrationPopup implements Initializable {
                 System.out.print("Aucun fichier sélectionné.");
             }
         });
-
-        /*addVideo.setOnAction(actionEvent -> {
-            try {
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Ajouter une vidéo");
-                fileChooser.getExtensionFilters().addAll(
-                        new FileChooser.ExtensionFilter("Video Files", "*.mp4", "*.avi", "*.mov")
-                );
-
-                File file = fileChooser.showOpenDialog(addVideo.getScene().getWindow());
-                if (file != null)
-                    targetVideo.setMediaPlayer(new MediaPlayer(new Media(file.toURI().toString())));
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.print("Aucun fichier sélectionné.");
-            }
-        });*/
     }
 }

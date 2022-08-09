@@ -34,7 +34,6 @@ import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 import org.kordamp.ikonli.javafx.FontIcon;
-
 import javax.swing.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -54,15 +53,12 @@ public class PlayerMonitorController {
 
     @Getter @Setter
     private MetaSequence metaSequenceToRead;
-
     @FXML
     private ProgressBar seqProgressBarFX;
     private TimelineProgressBar seqProgressBar;
-
     @FXML
     private ProgressBar metaSeqProgressBarFX;
     private TimelineProgressBar metaSeqProgressBar;
-
     @FXML
     private ListView<Comment> commentListView;
     @FXML
@@ -92,37 +88,28 @@ public class PlayerMonitorController {
     private MediaView mediaView;
     @FXML
     private ImageView imageView;
-
     @FXML
     private Label metaSeqDurationLabel;
     private TimelineClock metaSeqDuration;
-
     @FXML
     private Label metaSeqRemainingLabel;
     private TimelineClock metaSeqRemaining;
-
     @FXML
     private Label numMetaSeqLabel;
-
     @FXML
     private Label seqDurationLabel;
     private TimelineClock seqDuration;
-
     @FXML
     private Label seqRemainingLabel;
     private TimelineClock seqRemaining;
-
     @FXML
     private Label numSeqLabel;
-
     @FXML
     private Label durationLabel;
     private TimelineClock duration;
-
     @FXML
     private Label remainingLabel;
     private TimelineClock remaining;
-
     @FXML
     private Button previous;
     @FXML
@@ -162,12 +149,6 @@ public class PlayerMonitorController {
         this.pauseIcon = new FontIcon("fa-pause");
         this.pauseIcon.setIconSize(15);
 
-        playButton.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
-            if (e.getCode() == KeyCode.SPACE) {
-                playViewer();
-            }
-        });
-
         this.stopButton.setDisable(true);
         this.forwardButton.setDisable(true);
         this.backButton.setDisable(true);
@@ -177,6 +158,7 @@ public class PlayerMonitorController {
 
         firstPlay = true;
 
+        // To set webcam flow in camera's pane
         SwingNode swingNode = new SwingNode();
         createWebcamAndSetSwingContent(swingNode);
         cameraPane.getChildren().add(swingNode);
@@ -333,7 +315,7 @@ public class PlayerMonitorController {
                     ExecutorService threadPool = Executors.newWorkStealingPool();
                     threadPool.execute(() -> {
                         try {
-                            String command = "python src/main/java/fr/polytech/sircus/controller/PatientCalibration.py " +
+                            String command = "python PatientCalibration.py " +
                                     controller.getTargetNumber().getValue() + " " + controller.getRandomizeTarget().isSelected() + " " +
                                     String.format("#%02X%02X%02X", (int)(backgroundColor.getRed() * 255), (int)(backgroundColor.getGreen() * 255), (int)(backgroundColor.getBlue() * 255));
                             if (controller.getTargetButton().isSelected())
@@ -586,7 +568,7 @@ public class PlayerMonitorController {
                 ExecutorService threadPool = Executors.newWorkStealingPool();
                 threadPool.execute(() -> {
                     try {
-                        process = Runtime.getRuntime().exec("python src/main/java/fr/polytech/sircus/controller/TobiiAcquisition.py " + metaSequenceToRead.getDuration().getSeconds());
+                        process = Runtime.getRuntime().exec("python TobiiAcquisition.py " + metaSequenceToRead.getDuration().getSeconds());
                         Thread.sleep(3000); // Wait for eye tracker to launch
                         this.result.addLog("Lancement de l'expérience");
                         viewer.playViewer();
@@ -686,7 +668,6 @@ public class PlayerMonitorController {
      * Display the image from its filename.
      *
      * @param media the media containing the image that we want to display.
-     * @throws FileNotFoundException
      */
     public void loadImage(AbstractMedia media) throws FileNotFoundException {
         InputStream is = new FileInputStream("medias/" + media.getFilename());

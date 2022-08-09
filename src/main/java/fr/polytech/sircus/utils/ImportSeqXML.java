@@ -16,12 +16,13 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * This class manages sequence importation
+ */
 public class ImportSeqXML extends DefaultHandler {
-    @Getter
-    @Setter
+    @Getter @Setter
     private Sequence seq;
     private final StringBuilder currentValue = new StringBuilder();
-
     private Boolean filename = false;
     private Boolean minDuration = false;
     private Boolean maxDuration = false;

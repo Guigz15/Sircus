@@ -4,7 +4,7 @@ import fr.polytech.sircus.model.DataSircus;
 import java.io.*;
 
 /**
- * Class that allow the serialization et deserialization of objects easily
+ * Class that allow the serialization and deserialization of objects easily
  */
 public final class Serializer {
 

@@ -93,7 +93,6 @@ public class ModifySeqPopUp {
     private ButtonType cancel;
 
 
-
     /**
      * Initialize the controller and its attributes, then adding functionality to each component.
      */
@@ -365,6 +364,9 @@ public class ModifySeqPopUp {
         }
     }
 
+    /**
+     * Method which open the pop-up to add media.
+     */
     @FXML
     private void addMedia() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(SircusApplication.class.getClassLoader().getResource("views/popups/add_media_popup.fxml"));
@@ -389,7 +391,7 @@ public class ModifySeqPopUp {
 
         Optional<ButtonType> clickedButton = dialog.showAndWait();
         if (clickedButton.isPresent()) {
-            if (clickedButton.get() == ButtonType.FINISH) {
+            if (clickedButton.get() == controller.getAdd()) {
                 if (controller.getNewMedia() != null) {
                     sequence.addMedia(controller.getNewMedia());
                     constructMediaInterstimList();
@@ -431,7 +433,7 @@ public class ModifySeqPopUp {
 
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.isPresent()) {
-                if (clickedButton.get() == ButtonType.FINISH) {
+                if (clickedButton.get() == controller.getModify()) {
                     AbstractMedia abstractMediaToModified = mediaTable.getItems().get(indexSelectedMediaInTable);
                     abstractMediaToModified.setResizable(controller.getResizeImage().isSelected());
                     javafx.scene.paint.Color color = controller.getBackgroundColor().getValue();
