@@ -156,7 +156,7 @@ public class AddMediaPopUp implements Initializable {
                     fileChooserInterstim.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getDefaultPath()));
                 }
                 fileChooserInterstim.getExtensionFilters().addAll(
-                        new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+                        new FileChooser.ExtensionFilter("Image and Video Files", "*.png", "*.jpg", "*.jpeg", "*.mp4")
                 );
                 File interstimFile = fileChooserInterstim.showOpenDialog(addInterstimFile.getScene().getWindow());
 
@@ -173,13 +173,11 @@ public class AddMediaPopUp implements Initializable {
                 String filepath = interstimFile.getParentFile().getName() + "/" + interstimFile.getName();
                 if (!interstimFile.getName().contains(".mp4")) {
                     newInterstim = new Interstim(interstimFile.getName(), filepath, Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.PICTURE, newMedia);
-                    newInterstim.setFilePath(interstimFile.getParentFile().getName() + "/" + interstimFile.getName());
                     interstimName.setText(newInterstim.getFilename());
                     interstimDuration.setText(newInterstim.getMinDuration().toString() + "-" + newInterstim.getMaxDuration().toString());
                     interstimImage.setImage(new Image(interstimFile.toURI().toString()));
                 } else {
                     newInterstim = new Interstim(interstimFile.getName(), filepath, Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.VIDEO, newMedia);
-                    newInterstim.setFilePath(interstimFile.getParentFile().getName() + "/" + interstimFile.getName());
                     interstimName.setText(newInterstim.getFilename());
                     interstimDuration.setText(newInterstim.getMinDuration().toString() + "-" + newInterstim.getMaxDuration().toString());
                     MediaPlayer mediaPlayer = new MediaPlayer(new javafx.scene.media.Media(interstimFile.toURI().toString()));

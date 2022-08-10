@@ -165,7 +165,7 @@ public class ModifySeqPopUp {
                                                 fileChooserInterstim.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getDefaultPath()));
                                             }
                                             fileChooserInterstim.getExtensionFilters().addAll(
-                                                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+                                                    new FileChooser.ExtensionFilter("Image and Video Files", "*.png", "*.jpg", "*.jpeg", "*.mp4")
                                             );
                                             File interstimFile = fileChooserInterstim.showOpenDialog(tableViewAddButton.getScene().getWindow());
 
@@ -174,13 +174,17 @@ public class ModifySeqPopUp {
 
                                             // We compare the absolute path of the "medias" directory with the new media's one.
                                             // If they are not the same directory, we copy the new media to the application's "medias" directory.
-                                            if (!absoluteMediaPath.equals(path.toString().split("\\\\" + interstimFile.getName())[0])) {
+                                            if (!absoluteMediaPath.equals(path.toString().split("\\\\" + interstimFile.getParentFile().getName())[0])) {
                                                 OutputStream os = new FileOutputStream(MEDIAS_PATH + interstimFile.getName());
                                                 Files.copy(path, os);
                                             }
 
                                             String filepath = interstimFile.getParentFile().getName() + "/" + interstimFile.getName();
-                                            Interstim newInterstim = new Interstim(interstimFile.getName(), filepath, Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.PICTURE, parentMedia);
+                                            Interstim newInterstim;
+                                            if (!interstimFile.getName().contains(".mp4"))
+                                                newInterstim = new Interstim(interstimFile.getName(), filepath, Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.PICTURE, parentMedia);
+                                            else
+                                                newInterstim = new Interstim(interstimFile.getName(), filepath, Duration.ofSeconds(4), Duration.ofSeconds(4), TypeMedia.VIDEO, parentMedia);
 
                                             mediaTable.getItems().add(mediaTable.getItems().indexOf(parentMedia), newInterstim);
                                             mediaTable.refresh();
