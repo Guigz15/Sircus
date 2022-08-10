@@ -25,7 +25,6 @@ import javafx.util.Duration;
 import lombok.Getter;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -124,17 +123,23 @@ public class ViewerController {
      */
     @FXML
     private void showVideo(AbstractMedia video) {
-        File mediaFile = new File("medias/" + video.getFilename());
-        try {
-            Media media = new Media(mediaFile.toURI().toURL().toString());
-            mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setAutoPlay(true);
-            mediaView.setMediaPlayer(mediaPlayer);
+        File mediaFile = new File("medias/" + video.getFilePath());
+        Media media = new Media(mediaFile.toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
+        mediaView.setMediaPlayer(mediaPlayer);
+
+        if (video.isResizable()) {
+            resizeVideo();
         }
-        // If the URL is malformed, it is reported
-        catch (MalformedURLException error) {
-            System.out.println("URL mal formé, le chemin vers la vidéo est incorrect.");
-        }
+
+        java.awt.Color color = video.getBackgroundColor();
+        String hexColor = String.format( "-fx-background-color: #%02X%02X%02X;",
+                color.getRed(), color.getGreen(), color.getBlue());
+
+        stackPane.setStyle(hexColor);
+
+        playerMonitorController.loadVideo(video);
     }
 
     /**
@@ -157,7 +162,7 @@ public class ViewerController {
     private void showImage(AbstractMedia media) {
         // Try to create an InputStream with the path of the image.
         try {
-            InputStream is = new FileInputStream("medias/" + media.getFilename());
+            InputStream is = new FileInputStream("medias/" + media.getFilePath());
             Image image = new Image(is);
 
             imageView.setFitWidth(image.getWidth());
@@ -189,7 +194,8 @@ public class ViewerController {
      */
     @FXML
     private void removeImage() {
-        imageView.setImage(null);
+        if (imageView.getImage() != null)
+            imageView.setImage(null);
     }
 
     /**
@@ -308,6 +314,8 @@ public class ViewerController {
                             event -> {
                                 removeImage();
                                 showVideo(media);
+                                playerMonitorController.getResult().addViewerData(media.getFilename()
+                                        + "\t" + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss.SSS")));
                             }));
 
                     // We add to the counterDuration the duration of the media currently read.
@@ -393,6 +401,7 @@ public class ViewerController {
     @FXML
     public void closeViewer() {
         playerMonitorController.clearImage();
+        playerMonitorController.clearVideo();
         playerMonitorController.closeViewer();
         timeline.pause();
         timeline = null;
@@ -408,6 +417,18 @@ public class ViewerController {
 
             imageView.setFitWidth(imageView.getFitWidth() * ratio);
             imageView.setFitHeight(imageView.getFitHeight() * ratio);
+        }
+    }
+
+    /**
+     * Method to resize the mediaview in order to maximize width and/or height.
+     */
+    private void resizeVideo() {
+        if (mediaView.getMediaPlayer() != null) {
+            double ratio = Math.min(viewerStage.getWidth() / mediaView.getFitWidth(), viewerStage.getHeight() / mediaView.getFitHeight());
+
+            mediaView.setFitWidth(mediaView.getFitWidth() * ratio);
+            mediaView.setFitHeight(mediaView.getFitHeight() * ratio);
         }
     }
 }

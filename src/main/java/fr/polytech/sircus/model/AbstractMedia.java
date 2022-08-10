@@ -23,6 +23,12 @@ public abstract class AbstractMedia implements Serializable {
     protected String filename;
 
     /**
+     * Path of the file in the computer.
+     */
+    @Getter @Setter
+    protected String filePath;
+
+    /**
      * Minimum duration for which the media could be displayed.
      */
     @Getter @Setter
@@ -71,6 +77,7 @@ public abstract class AbstractMedia implements Serializable {
         if (!(o instanceof AbstractMedia)) return false;
         AbstractMedia media = (AbstractMedia) o;
         return getFilename().equals(media.getFilename()) &&
+                getFilePath().equals(media.getFilePath()) &&
                 getMinDuration().equals(media.getMinDuration()) &&
                 getMaxDuration().equals(media.getMaxDuration()) &&
                 getTypeMedia().equals(media.getTypeMedia()) &&

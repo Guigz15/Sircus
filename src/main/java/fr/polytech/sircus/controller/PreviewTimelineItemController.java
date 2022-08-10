@@ -6,12 +6,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -46,13 +50,13 @@ public class PreviewTimelineItemController implements Initializable {
     private ImageView imageView;
 
     @FXML @Getter @Setter
+    private MediaView mediaView;
+
+    @FXML @Getter @Setter
     private HBox ruler;
 
     @FXML @Getter @Setter
     private VBox rulerContainer;
-
-    @FXML @Getter
-    private Image image;
 
     @FXML @Getter @Setter
     private StackPane imageStackPane;
@@ -97,8 +101,8 @@ public class PreviewTimelineItemController implements Initializable {
             imageBorder.maxWidthProperty().unbind();
             //This is used to make the border pane fit the image width plus the border width
             imageBorder.maxWidthProperty().bind(
-                    image.widthProperty().multiply(
-                            imageView.fitHeightProperty().divide(image.heightProperty())
+                    imageView.xProperty().multiply(
+                            imageView.fitHeightProperty().divide(imageView.yProperty())
                     ).add(2 * IMAGE_BACKGROUND_BORDER_WIDTH)
             );
 
@@ -111,9 +115,15 @@ public class PreviewTimelineItemController implements Initializable {
 
         //Resize the image to fit the timeline height when the timeline is resized
         imageView.minHeight(50);
-        imageView.setPreserveRatio(true);
         imageView.fitHeightProperty().unbind();
         imageView.fitHeightProperty().bind(
+                itemContainer.maxHeightProperty().subtract(rulerContainer.heightProperty()).subtract(2 * IMAGE_BACKGROUND_BORDER_WIDTH)
+        );
+
+        //Resize the video to fit the timeline height when the timeline is resized
+        mediaView.minHeight(50);
+        mediaView.fitHeightProperty().unbind();
+        mediaView.fitHeightProperty().bind(
                 itemContainer.maxHeightProperty().subtract(rulerContainer.heightProperty()).subtract(2 * IMAGE_BACKGROUND_BORDER_WIDTH)
         );
     }
@@ -161,9 +171,11 @@ public class PreviewTimelineItemController implements Initializable {
 
         this.media = media;
 
-        String file = media.getFilename();
-        setImage(MEDIAS_PATH+file);
-        filename.setText(file);
+        if (!media.getFilename().contains(".mp4"))
+            setImage(MEDIAS_PATH + media.getFilePath());
+        else
+            setVideo(MEDIAS_PATH + media.getFilePath());
+        filename.setText(media.getFilename());
 
         Color borderColor = Color.WHITE;
 
@@ -190,10 +202,15 @@ public class PreviewTimelineItemController implements Initializable {
     private void setImage(String pathToImage) {
         try {
             FileInputStream fip = new FileInputStream(pathToImage);
-            image = new Image(fip);
-            imageView.setImage(image);
+            imageView.setImage(new Image(fip));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setVideo(String pathToVideo) {
+        File video = new File(pathToVideo);
+        MediaPlayer mediaPlayer = new MediaPlayer(new Media(video.toURI().toString()));
+        mediaView.setMediaPlayer(mediaPlayer);
     }
 }

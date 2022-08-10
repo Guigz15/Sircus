@@ -22,6 +22,7 @@ public class Media extends AbstractMedia implements Serializable {
 
     public Media() {
         filename = null;
+        filePath = null;
         minDuration = null;
         maxDuration = null;
         duration = null;
@@ -32,12 +33,13 @@ public class Media extends AbstractMedia implements Serializable {
         interstim = null;
     }
 
-    public Media(String filename, Duration minDuration, Duration maxDuration, TypeMedia typeMedia) {
-        this(filename, minDuration, maxDuration, typeMedia, true, false, Color.WHITE, null);
+    public Media(String filename, String filepath, Duration minDuration, Duration maxDuration, TypeMedia typeMedia) {
+        this(filename, filepath, minDuration, maxDuration, typeMedia, true, false, Color.WHITE, null);
     }
 
-    public Media(String filename, Duration minDuration, Duration maxDuration, TypeMedia typeMedia, boolean isLocked, boolean isResizable, Color backgroundColor, Interstim interstim) {
+    public Media(String filename, String filepath, Duration minDuration, Duration maxDuration, TypeMedia typeMedia, boolean isLocked, boolean isResizable, Color backgroundColor, Interstim interstim) {
         this.filename = filename;
+        this.filePath = filepath;
         this.minDuration = minDuration;
         this.maxDuration = maxDuration;
         duration = Duration.ZERO;
@@ -49,7 +51,7 @@ public class Media extends AbstractMedia implements Serializable {
     }
 
     public Media(Media media) {
-        this(media.filename, media.getMinDuration(), media.getMaxDuration(), media.getTypeMedia(), media.isLocked, media.isResizable, media.getBackgroundColor(), null);
+        this(media.getFilename(), media.getFilePath(), media.getMinDuration(), media.getMaxDuration(), media.getTypeMedia(), media.isLocked(), media.isResizable(), media.getBackgroundColor(), null);
         if (media.getInterstim() != null) {
             this.interstim = new Interstim(media.getInterstim());
             this.interstim.setMedia(this);
@@ -72,6 +74,7 @@ public class Media extends AbstractMedia implements Serializable {
     public String toXML() throws Exception {
         String XML = "<media>\n" +
                 "<filename>" + filename.replace(" ", "%20") + "</filename>\n" +
+                "<filepath>" + filePath.replace(" ", "%20") + "</filepath>\n" +
                 "<minDuration>" + minDuration + "</minDuration>\n" +
                 "<maxDuration>" + maxDuration + "</maxDuration>\n" +
                 "<type>" + typeMedia + "</type>\n";

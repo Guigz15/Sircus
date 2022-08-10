@@ -21,12 +21,13 @@ public class Interstim extends AbstractMedia implements Serializable {
     @Getter @Setter
     private Media media;
 
-    public Interstim(String filename, Duration minDuration, Duration maxDuration, TypeMedia typeMedia, Media media) {
-        this(filename, minDuration, maxDuration, typeMedia, false, Color.WHITE, media);
+    public Interstim(String filename, String filepath, Duration minDuration, Duration maxDuration, TypeMedia typeMedia, Media media) {
+        this(filename, filepath, minDuration, maxDuration, typeMedia, false, Color.WHITE, media);
     }
 
-    public Interstim(String filename, Duration minDuration, Duration maxDuration, TypeMedia typeMedia, boolean isResizable, Color backgroundColor, Media media) {
+    public Interstim(String filename, String filepath, Duration minDuration, Duration maxDuration, TypeMedia typeMedia, boolean isResizable, Color backgroundColor, Media media) {
         this.filename = filename;
+        this.filePath = filepath;
         this.minDuration = minDuration;
         this.maxDuration = maxDuration;
         this.duration = Duration.ZERO;
@@ -39,7 +40,7 @@ public class Interstim extends AbstractMedia implements Serializable {
     }
 
     public Interstim(Interstim interstim) {
-        this(interstim.getFilename(), interstim.getMinDuration(), interstim.getMaxDuration(), interstim.getTypeMedia(), interstim.isResizable(), interstim.getBackgroundColor(), interstim.getMedia());
+        this(interstim.getFilename(), interstim.getFilePath(), interstim.getMinDuration(), interstim.getMaxDuration(), interstim.getTypeMedia(), interstim.isResizable(), interstim.getBackgroundColor(), interstim.getMedia());
     }
 
     @Override
@@ -58,7 +59,8 @@ public class Interstim extends AbstractMedia implements Serializable {
      */
     public String toXML() throws Exception {
         String XML = "<interstim filename=\"" + filename.replace(" ", "%20") +
-                "\" minDuration=\"" + minDuration + "\" maxDuration=\"" + maxDuration + "\" type=\"" + typeMedia + "\" lock=\"" +
+                "\" filepath=\"" + filePath.replace(" ", "%20") + "\" " +
+                "minDuration=\"" + minDuration + "\" maxDuration=\"" + maxDuration + "\" type=\"" + typeMedia + "\" lock=\"" +
                 isLocked + "\" isResizable=\"" + isResizable + "\" backgroundColor=\"" +
                 String.format("0x%02x%02x%02x", backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue())
                 + "\" />\n";

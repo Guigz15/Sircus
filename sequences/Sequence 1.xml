@@ -3,16 +3,18 @@
     <listMedia>
         <media>
             <filename>mos01.jpg</filename>
+            <filepath>base/mos01.jpg</filepath>
             <minDuration>PT5S</minDuration>
             <maxDuration>PT5S</maxDuration>
             <type>PICTURE</type>
-            <interstim backgroundColor="0xffffff" filename="white.jpg" isResizable="true" lock="true" maxDuration="PT5S" minDuration="PT2S" type="PICTURE"/>
+            <interstim backgroundColor="0xffffff" filename="white.jpg" filepath="base/white.jpg" isResizable="true" lock="true" maxDuration="PT5S" minDuration="PT2S" type="PICTURE"/>
             <lock>true</lock>
             <isResizable>false</isResizable>
             <backgroundColor>0x00ffff</backgroundColor>
         </media>
         <media>
             <filename>mos02.jpg</filename>
+            <filepath>base/mos02.jpg</filepath>
             <minDuration>PT3S</minDuration>
             <maxDuration>PT3S</maxDuration>
             <type>PICTURE</type>

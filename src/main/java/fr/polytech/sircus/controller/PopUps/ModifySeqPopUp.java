@@ -179,7 +179,8 @@ public class ModifySeqPopUp {
                                                 Files.copy(path, os);
                                             }
 
-                                            Interstim newInterstim = new Interstim(interstimFile.getName(), Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.PICTURE, parentMedia);
+                                            String filepath = interstimFile.getParentFile().getName() + "/" + interstimFile.getName();
+                                            Interstim newInterstim = new Interstim(interstimFile.getName(), filepath, Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.PICTURE, parentMedia);
 
                                             mediaTable.getItems().add(mediaTable.getItems().indexOf(parentMedia), newInterstim);
                                             mediaTable.refresh();

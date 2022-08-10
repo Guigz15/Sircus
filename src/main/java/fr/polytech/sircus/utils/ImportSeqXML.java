@@ -24,6 +24,7 @@ public class ImportSeqXML extends DefaultHandler {
     private Sequence seq;
     private final StringBuilder currentValue = new StringBuilder();
     private Boolean filename = false;
+    private Boolean filepath = false;
     private Boolean minDuration = false;
     private Boolean maxDuration = false;
     private Boolean type = false;
@@ -63,6 +64,8 @@ public class ImportSeqXML extends DefaultHandler {
             seq.getListMedias().add(media);
         } else if (qName.equalsIgnoreCase("filename")) {
             filename = true;
+        } else if (qName.equalsIgnoreCase("filepath")) {
+            filepath = true;
         } else if (qName.equalsIgnoreCase("minDuration")) {
             minDuration = true;
         } else if (qName.equalsIgnoreCase("maxDuration")) {
@@ -73,6 +76,8 @@ public class ImportSeqXML extends DefaultHandler {
             // read the attributes in the tag
             String filename = attributes.getValue("filename");
             filename = filename.replace("%20", " ");
+            String filepath = attributes.getValue("filepath");
+            filepath = filepath.replace("%20", " ");
             Duration minDuration = Duration.parse(attributes.getValue("minDuration"));
             Duration maxDuration = Duration.parse(attributes.getValue("maxDuration"));
             TypeMedia type = TypeMedia.valueOf(attributes.getValue("type"));
@@ -82,7 +87,7 @@ public class ImportSeqXML extends DefaultHandler {
             // the media of the interstim is the last one in the list of the sequence
             Media media = seq.getListMedias().get(seq.getListMedias().size() - 1);
 
-            Interstim inter = new Interstim(filename, minDuration, maxDuration, type, isResizable, backgroundColor, media);
+            Interstim inter = new Interstim(filename, filepath, minDuration, maxDuration, type, isResizable, backgroundColor, media);
             media.setInterstim(inter);
         } else if (qName.equalsIgnoreCase("lock")) {
             lock = true;
@@ -98,10 +103,14 @@ public class ImportSeqXML extends DefaultHandler {
      */
     @Override
     public void endElement(String uri, String localName, String qName) {
-        // filename is true if we determine in startElement that filename was read
         if (filename) {
+            seq.getListMedias().get(seq.getListMedias().size() - 1).setFilename(currentValue.toString().replace("%20", " "));
+            filename = false;
+        }
+        // filepath is true if we determine in startElement that filepath was read
+        else if (filepath) {
             String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
-            // test if the filename exist in media
+            // test if the filepath exist in media
             File file;
             if(osName.contains("win")) {
                 file = new File(System.getProperty("user.dir") +"\\medias\\" + currentValue.toString().replace("%20", " "));
@@ -110,9 +119,9 @@ public class ImportSeqXML extends DefaultHandler {
             }
 
             if(!file.exists()){
-                // the filename reference an object that doesn't exist
+                // the filepath reference an object that doesn't exist
                 seq.getListMedias().get(seq.getListMedias().size() - 1).setFilename("erreur.jpg");
-                filename = false;
+                filepath = false;
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Attention");
@@ -125,8 +134,8 @@ public class ImportSeqXML extends DefaultHandler {
                 });
             } else {
                 //everything is good
-                seq.getListMedias().get(seq.getListMedias().size() - 1).setFilename(currentValue.toString().replace("%20", " "));
-                filename = false;
+                seq.getListMedias().get(seq.getListMedias().size() - 1).setFilePath(currentValue.toString().replace("%20", " "));
+                filepath = false;
             }
         } else if (minDuration) {
             seq.getListMedias().get(seq.getListMedias().size() - 1).setMinDuration(Duration.parse(currentValue.toString()));

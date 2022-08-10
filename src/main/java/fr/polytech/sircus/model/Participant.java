@@ -55,13 +55,16 @@ public class Participant {
     }
 
     public String toXML() {
-        return "<patient>\n" +
-                "<id>" + this.identifier + "</id>\n" +
-                "<sex>" + this.sex.toString() + "</sex>\n" +
-                "<visitNumber>" + this.visitNumber + "</visitNumber>\n" +
-                "<birthDate>" + this.birthDate.toString() + "</birthDate>\n" +
-                "<eyeDominance>" + this.eyeDominance.toString() + "</eyeDominance>\n" +
-                "<handLaterality>" + this.handLaterality.toString() + "</handLaterality>\n" +
-                "</patient>\n";
+        String XML = "<patient>\n" +
+                     "<id>" + this.identifier + "</id>\n" +
+                     "<sex>" + this.sex.toString() + "</sex>\n" +
+                     "<visitNumber>" + this.visitNumber + "</visitNumber>\n" +
+                     "<birthDate>" + this.birthDate.toString() + "</birthDate>\n";
+        if (this.eyeDominance != null)
+            XML += "<eyeDominance>" + this.eyeDominance + "</eyeDominance>\n";
+        if (this.handLaterality != null)
+            XML = "<handLaterality>" + this.handLaterality + "</handLaterality>\n";
+        XML += "</patient>\n";
+        return XML;
     }
 }

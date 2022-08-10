@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import lombok.Getter;
 
@@ -60,7 +62,11 @@ public class AddMediaPopUp implements Initializable {
     @FXML
     private ImageView interstimImage;
     @FXML
+    private MediaView interstimVideo;
+    @FXML
     private ImageView mediaImage;
+    @FXML
+    private MediaView mediaVideo;
     @FXML
     @Getter
     private ButtonType add;
@@ -105,7 +111,7 @@ public class AddMediaPopUp implements Initializable {
                     fileChooserMedia.setInitialDirectory(new File(SircusApplication.dataSircus.getPath().getDefaultPath()));
                 }
                 fileChooserMedia.getExtensionFilters().addAll(
-                        new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+                        new FileChooser.ExtensionFilter("Image and Video Files", "*.png", "*.jpg", "*.jpeg", "*.mp4")
                 );
                 File mediaFile = fileChooserMedia.showOpenDialog(addMediaFile.getScene().getWindow());
 
@@ -114,16 +120,28 @@ public class AddMediaPopUp implements Initializable {
 
                 // We compare the absolute path of the "medias" directory with the new media's one.
                 // If they are not the same directory, we copy the new media to the application's "medias" directory.
-                if (!absoluteMediaPath.equals(path.toString().split("\\\\" + mediaFile.getName())[0])) {
+                if (!absoluteMediaPath.equals(path.toString().split("\\\\" + mediaFile.getParentFile().getName())[0])) {
                     OutputStream os = new FileOutputStream(MEDIAS_PATH + mediaFile.getName());
                     Files.copy(path, os);
                 }
 
-                newMedia = new Media(mediaFile.getName(), Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.PICTURE);
-                mediaName.setText(newMedia.getFilename());
-                mediaDuration.setText(newMedia.getMinDuration().toString() + "-" + newMedia.getMaxDuration().toString());
-                mediaImage.setImage(new Image(mediaFile.toURI().toString()));
+                String filepath = mediaFile.getParentFile().getName() + "/" + mediaFile.getName();
+                if (!mediaFile.getName().contains(".mp4")) {
+                    newMedia = new Media(mediaFile.getName(), filepath, Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.PICTURE);
+                    mediaName.setText(newMedia.getFilename());
+                    mediaDuration.setText(newMedia.getMinDuration().toString() + "-" + newMedia.getMaxDuration().toString());
+                    mediaImage.setImage(new Image(mediaFile.toURI().toString()));
+                } else {
+                    newMedia = new Media(mediaFile.getName(), filepath, Duration.ofSeconds(4), Duration.ofSeconds(4), TypeMedia.VIDEO);
+                    newMedia.setFilePath(mediaFile.getParentFile().getName() + "/" + mediaFile.getName());
+                    mediaName.setText(newMedia.getFilename());
+                    mediaDuration.setText(newMedia.getMinDuration().toString() + "-" + newMedia.getMaxDuration().toString());
+                    MediaPlayer mediaPlayer = new MediaPlayer(new javafx.scene.media.Media(mediaFile.toURI().toString()));
+                    mediaPlayer.setAutoPlay(true);
+                    mediaVideo.setMediaPlayer(mediaPlayer);
+                }
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.print("Aucun fichier sélectionné.");
             }
         });
@@ -147,15 +165,27 @@ public class AddMediaPopUp implements Initializable {
 
                 // We compare the absolute path of the "medias" directory with the new media's one.
                 // If they are not the same directory, we copy the new media to the application's "medias" directory.
-                if (!absoluteMediaPath.equals(path.toString().split("\\\\" + interstimFile.getName())[0])) {
+                if (!absoluteMediaPath.equals(path.toString().split("\\\\" + interstimFile.getParentFile().getName())[0])) {
                     OutputStream os = new FileOutputStream(MEDIAS_PATH + interstimFile.getName());
                     Files.copy(path, os);
                 }
 
-                newInterstim = new Interstim(interstimFile.getName(), Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.PICTURE, newMedia);
-                interstimName.setText(newInterstim.getFilename());
-                interstimDuration.setText(newInterstim.getMinDuration().toString() + "-" + newInterstim.getMaxDuration().toString());
-                interstimImage.setImage(new Image(interstimFile.toURI().toString()));
+                String filepath = interstimFile.getParentFile().getName() + "/" + interstimFile.getName();
+                if (!interstimFile.getName().contains(".mp4")) {
+                    newInterstim = new Interstim(interstimFile.getName(), filepath, Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.PICTURE, newMedia);
+                    newInterstim.setFilePath(interstimFile.getParentFile().getName() + "/" + interstimFile.getName());
+                    interstimName.setText(newInterstim.getFilename());
+                    interstimDuration.setText(newInterstim.getMinDuration().toString() + "-" + newInterstim.getMaxDuration().toString());
+                    interstimImage.setImage(new Image(interstimFile.toURI().toString()));
+                } else {
+                    newInterstim = new Interstim(interstimFile.getName(), filepath, Duration.ofSeconds(1), Duration.ofSeconds(1), TypeMedia.VIDEO, newMedia);
+                    newInterstim.setFilePath(interstimFile.getParentFile().getName() + "/" + interstimFile.getName());
+                    interstimName.setText(newInterstim.getFilename());
+                    interstimDuration.setText(newInterstim.getMinDuration().toString() + "-" + newInterstim.getMaxDuration().toString());
+                    MediaPlayer mediaPlayer = new MediaPlayer(new javafx.scene.media.Media(interstimFile.toURI().toString()));
+                    mediaPlayer.setAutoPlay(true);
+                    interstimVideo.setMediaPlayer(mediaPlayer);
+                }
             } catch (Exception e) {
                 System.out.print("Aucun fichier sélectionné.");
             }
@@ -165,14 +195,27 @@ public class AddMediaPopUp implements Initializable {
             newMedia = new Media(mediasList.getSelectionModel().getSelectedItem());
             if(newMedia.getInterstim() != null) {
                 newInterstim = new Interstim(newMedia.getInterstim());
-                File insterstim = new File(MEDIAS_PATH + newInterstim.getFilename());
-                interstimImage.setImage(new Image(insterstim.toURI().toString()));
+                File insterstim = new File(MEDIAS_PATH + newInterstim.getFilePath());
+                if (!insterstim.getName().contains(".mp4"))
+                    interstimImage.setImage(new Image(insterstim.toURI().toString()));
+                else {
+                    MediaPlayer mediaPlayer = new MediaPlayer(new javafx.scene.media.Media(insterstim.toURI().toString()));
+                    mediaPlayer.setAutoPlay(true);
+                    interstimVideo.setMediaPlayer(mediaPlayer);
+                }
             } else {
                 newInterstim = null;
                 interstimImage.setImage(null);
+                interstimVideo.setMediaPlayer(null);
             }
-            File media = new File(MEDIAS_PATH + newMedia.getFilename());
-            mediaImage.setImage(new Image(media.toURI().toString()));
+            File media = new File(MEDIAS_PATH + newMedia.getFilePath());
+            if (!media.getName().contains(".mp4"))
+                mediaImage.setImage(new Image(media.toURI().toString()));
+            else {
+                MediaPlayer mediaPlayer = new MediaPlayer(new javafx.scene.media.Media(media.toURI().toString()));
+                mediaPlayer.setAutoPlay(true);
+                mediaVideo.setMediaPlayer(mediaPlayer);
+            }
         });
     }
 }

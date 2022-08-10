@@ -3,29 +3,29 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.media.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="itemContainer" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/14.0.2.1"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PreviewTimelineItemController">
+<VBox fx:id="itemContainer" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/14.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.polytech.sircus.controller.PreviewTimelineItemController">
     <VBox fx:id="rulerContainer" alignment="TOP_RIGHT" maxHeight="35.0" prefHeight="35.0">
-        <Text fx:id="time" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="10s."
-              textAlignment="RIGHT"/>
+        <Text fx:id="time" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" />
         <HBox fx:id="ruler" alignment="CENTER">
             <VBox.margin>
-                <Insets bottom="5.0"/>
+                <Insets bottom="5.0" />
             </VBox.margin>
-            <Text fx:id="filename" strokeType="OUTSIDE" strokeWidth="0.0" text="filename"/>
+            <Text fx:id="filename" strokeType="OUTSIDE" strokeWidth="0.0" />
         </HBox>
     </VBox>
     <StackPane fx:id="imageStackPane">
         <BorderPane fx:id="imageBorder">
             <center>
-                <ImageView fx:id="imageView" fitHeight="82.0" fitWidth="200.0" preserveRatio="true">
+                <StackPane>
                     <VBox.margin>
-                        <Insets left="2.0" right="2.0"/>
+                        <Insets left="2.0" right="2.0" />
                     </VBox.margin>
-                    <Image fx:id="image" url="@../../../../medias/mos01.jpg"/>
-                </ImageView>
+                    <ImageView fx:id="imageView" fitHeight="72.0" fitWidth="128.0" preserveRatio="true" />
+                    <MediaView fx:id="mediaView" fitHeight="72.0" fitWidth="128.0" />
+                </StackPane>
             </center>
         </BorderPane>
     </StackPane>

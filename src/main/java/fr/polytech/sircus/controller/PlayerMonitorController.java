@@ -24,6 +24,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -670,7 +671,9 @@ public class PlayerMonitorController {
      * @param media the media containing the image that we want to display.
      */
     public void loadImage(AbstractMedia media) throws FileNotFoundException {
-        InputStream is = new FileInputStream("medias/" + media.getFilename());
+        clearVideo();
+
+        InputStream is = new FileInputStream("medias/" + media.getFilePath());
         Image image = new Image(is);
 
         imageView.setImage(image);
@@ -702,6 +705,50 @@ public class PlayerMonitorController {
      */
     public void clearImage() {
         imageView.setImage(null);
+        String hexColor ="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid; -fx-background-color: transparent;";
+        previewPane.setStyle(hexColor);
+    }
+
+    /**
+     * Display the video from its filename.
+     *
+     * @param media the media containing the video that we want to display.
+     */
+    public void loadVideo(AbstractMedia media) {
+        clearImage();
+
+        File mediaFile = new File("medias/" + media.getFilePath());
+        javafx.scene.media.Media video = new javafx.scene.media.Media(mediaFile.toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(video);
+        mediaPlayer.setAutoPlay(true);
+        mediaView.setMediaPlayer(mediaPlayer);
+
+        resizeVideo();
+
+        java.awt.Color color = media.getBackgroundColor();
+        String hexColor = String.format( "-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid; " +
+                "-fx-background-color: #%02X%02X%02X;", color.getRed(), color.getGreen(), color.getBlue());
+
+        previewPane.setStyle(hexColor);
+    }
+
+    /**
+     * Method to resize the mediaView in order to set a correct size in the preview.
+     */
+    private void resizeVideo() {
+        if (mediaView.getMediaPlayer() != null) {
+            double ratio = Math.min(previewPane.getWidth() / mediaView.getFitWidth(), previewPane.getHeight() / mediaView.getFitHeight());
+
+            mediaView.setFitWidth(mediaView.getFitWidth() * ratio);
+            mediaView.setFitHeight(mediaView.getFitHeight() * ratio);
+        }
+    }
+
+    /**
+     * Clears the video section.
+     */
+    public void clearVideo() {
+        mediaView.setMediaPlayer(null);
         String hexColor ="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid; -fx-background-color: transparent;";
         previewPane.setStyle(hexColor);
     }
