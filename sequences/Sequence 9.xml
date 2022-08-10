@@ -3,7 +3,7 @@
     <listMedia>
         <media>
             <filename>croix.jpg</filename>
-            <filepath>base/croix.jpg</filepath>
+            <filepath>Base/croix.jpg</filepath>
             <minDuration>PT4S</minDuration>
             <maxDuration>PT4S</maxDuration>
             <type>PICTURE</type>
@@ -13,7 +13,7 @@
         </media>
         <media>
             <filename>ob01.jpg</filename>
-            <filepath>base/ob01.jpg</filepath>
+            <filepath>Base/ob01.jpg</filepath>
             <minDuration>PT10S</minDuration>
             <maxDuration>PT10S</maxDuration>
             <type>PICTURE</type>
@@ -23,7 +23,7 @@
         </media>
         <media>
             <filename>ob01.jpg</filename>
-            <filepath>base/ob01.jpg</filepath>
+            <filepath>Base/ob01.jpg</filepath>
             <minDuration>PT10S</minDuration>
             <maxDuration>PT10S</maxDuration>
             <type>PICTURE</type>

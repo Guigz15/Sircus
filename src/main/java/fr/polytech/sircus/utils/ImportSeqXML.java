@@ -120,7 +120,7 @@ public class ImportSeqXML extends DefaultHandler {
 
             if(!file.exists()){
                 // the filepath reference an object that doesn't exist
-                seq.getListMedias().get(seq.getListMedias().size() - 1).setFilename("erreur.jpg");
+                seq.getListMedias().get(seq.getListMedias().size() - 1).setFilename("Base/erreur.jpg");
                 filepath = false;
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -3,7 +3,7 @@
     <listMedia>
         <media>
             <filename>mosob01.jpg</filename>
-            <filepath>base/mosob01.jpg</filepath>
+            <filepath>Base/mosob01.jpg</filepath>
             <minDuration>PT1S</minDuration>
             <maxDuration>PT1S</maxDuration>
             <type>PICTURE</type>
@@ -13,7 +13,7 @@
         </media>
         <media>
             <filename>ob01.jpg</filename>
-            <filepath>base/ob01.jpg</filepath>
+            <filepath>Base/ob01.jpg</filepath>
             <minDuration>PT10S</minDuration>
             <maxDuration>PT10S</maxDuration>
             <type>PICTURE</type>

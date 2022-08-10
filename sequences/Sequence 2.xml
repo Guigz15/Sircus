@@ -3,7 +3,7 @@
     <listMedia>
         <media>
             <filename>mosob01.jpg</filename>
-            <filepath>base/mosob01.jpg</filepath>
+            <filepath>Base/mosob01.jpg</filepath>
             <minDuration>PT1S</minDuration>
             <maxDuration>PT1S</maxDuration>
             <type>PICTURE</type>
@@ -13,7 +13,7 @@
         </media>
         <media>
             <filename>vis03.jpg</filename>
-            <filepath>base/vis03.jpg</filepath>
+            <filepath>Base/vis03.jpg</filepath>
             <minDuration>PT7S</minDuration>
             <maxDuration>PT7S</maxDuration>
             <type>PICTURE</type>
@@ -23,7 +23,7 @@
         </media>
         <media>
             <filename>vismos01.jpg</filename>
-            <filepath>base/vismos01.jpg</filepath>
+            <filepath>Base/vismos01.jpg</filepath>
             <minDuration>PT5S</minDuration>
             <maxDuration>PT5S</maxDuration>
             <type>PICTURE</type>
@@ -33,7 +33,7 @@
         </media>
         <media>
             <filename>visob02.jpg</filename>
-            <filepath>base/visob02.jpg</filepath>
+            <filepath>Base/visob02.jpg</filepath>
             <minDuration>PT5S</minDuration>
             <maxDuration>PT5S</maxDuration>
             <type>PICTURE</type>
@@ -43,7 +43,7 @@
         </media>
         <media>
             <filename>croix.jpg</filename>
-            <filepath>base/croix.jpg</filepath>
+            <filepath>Base/croix.jpg</filepath>
             <minDuration>PT4S</minDuration>
             <maxDuration>PT4S</maxDuration>
             <type>PICTURE</type>

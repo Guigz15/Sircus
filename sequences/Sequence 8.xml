@@ -3,7 +3,7 @@
     <listMedia>
         <media>
             <filename>vismos01.jpg</filename>
-            <filepath>base/vismos01.jpg</filepath>
+            <filepath>Base/vismos01.jpg</filepath>
             <minDuration>PT5S</minDuration>
             <maxDuration>PT5S</maxDuration>
             <type>PICTURE</type>
@@ -13,7 +13,7 @@
         </media>
         <media>
             <filename>visob02.jpg</filename>
-            <filepath>base/visob02.jpg</filepath>
+            <filepath>Base/visob02.jpg</filepath>
             <minDuration>PT5S</minDuration>
             <maxDuration>PT5S</maxDuration>
             <type>PICTURE</type>
@@ -23,7 +23,7 @@
         </media>
         <media>
             <filename>vismos01.jpg</filename>
-            <filepath>base/vismos01.jpg</filepath>
+            <filepath>Base/vismos01.jpg</filepath>
             <minDuration>PT5S</minDuration>
             <maxDuration>PT5S</maxDuration>
             <type>PICTURE</type>
