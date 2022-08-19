@@ -482,7 +482,7 @@ public class PlayerMonitorController {
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.YES, ButtonType.NO);
         alert.setTitle("Meta séquence terminée");
-        alert.setHeaderText("Le taux d'acquisition pour cette meta-séquence est de {placeholder}%.");
+        alert.setHeaderText("Terminée");
         alert.setContentText("Voulez-vous rejouer la métaséquence ?");
         alert.setOnHidden(dialogEvent -> {
             Optional<ButtonType> result = Optional.ofNullable(alert.getResult());

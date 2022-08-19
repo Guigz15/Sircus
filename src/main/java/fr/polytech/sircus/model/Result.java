@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Class used to store the results gathered by a meta sequence.
+ * This class will be changed when algorithm form LIFAT will be done.
  */
 public class Result {
 
