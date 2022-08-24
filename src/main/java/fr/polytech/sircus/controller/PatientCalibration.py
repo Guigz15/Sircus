@@ -132,10 +132,10 @@ def plot(calibration_result, validation_result):
                                     fill='green', width=1.5)
 
     for validation_point in validation_result.points:
-        create_circle_for_plot(x=plot_window.winfo_screenwidth() * validation_point.x,
+        create_circle_for_plot(x=3*plot_window.winfo_screenwidth() / 4 * validation_point.x,
                                y=plot_window.winfo_screenheight() * validation_point.y,
                                r=20)
-        create_circle_for_plot(x=plot_window.winfo_screenwidth() * validation_point.x,
+        create_circle_for_plot(x=3* plot_window.winfo_screenwidth() / 4 * validation_point.x,
                                y=plot_window.winfo_screenheight() * validation_point.y,
                                r=5, fill='black')
         for gaze_data in validation_result.points[validation_point][0].gaze_data:

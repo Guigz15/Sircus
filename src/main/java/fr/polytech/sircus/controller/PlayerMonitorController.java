@@ -310,7 +310,7 @@ public class PlayerMonitorController {
 
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.isPresent()) {
-                if (clickedButton.get() == ButtonType.FINISH) {
+                if (clickedButton.get() == controller.getCalibrate()) {
                     Color backgroundColor = controller.getBackgroundColor().getValue();
                     Color targetColor = controller.getTargetColor().getValue();
                     ExecutorService threadPool = Executors.newWorkStealingPool();
