@@ -5,12 +5,15 @@ import fr.polytech.sircus.model.MetaSequence;
 import fr.polytech.sircus.model.Sequence;
 import fr.polytech.sircus.utils.ItemSequence;
 import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import org.junit.jupiter.api.*;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.matcher.control.TextMatchers.hasText;
 
@@ -26,8 +29,7 @@ public class MetaSequenceTest {
         robot = new FxRobot();
 
         //go to the meta-sequence view
-        robot.doubleClickOn("#skipMainTest"); /** TO REMOVE HERE AND IN XML ALSO */
-        /*robot.clickOn("#id").write("identifiant");
+        robot.clickOn("#id").write("identifiant");
         robot.clickOn((RadioButton) robot.lookup("M").query());
         robot.clickOn("#birthDate").write("03/05/2010").press(KeyCode.ENTER).release((KeyCode.ENTER));
         robot.clickOn((RadioButton) robot.lookup("Droit").query());
@@ -37,9 +39,9 @@ public class MetaSequenceTest {
         ComboBox<String> location = robot.lookup("#locations").query();
         robot.interact(() -> location.getSelectionModel().select(0));
         robot.clickOn("#admin");
-        robot.clickOn("#userName").write("root");
+        robot.clickOn("#userName").write("admin");
         robot.clickOn("#password").write("password");
-        robot.press(KeyCode.ENTER);*/
+        robot.press(KeyCode.ENTER);
         robot.clickOn("#next");
     }
 
@@ -64,8 +66,9 @@ public class MetaSequenceTest {
 
         robot.clickOn((Node) robot.lookup(hasText("Nouvelle MetaSequence " + metaSequenceListView.getItems().size())).query());
         robot.clickOn("#renameMetaButton");
+        robot.clickOn("#metasequenceName").doubleClickOn(MouseButton.PRIMARY);
         robot.write("Rename test");
-        robot.type(KeyCode.ENTER);
+        robot.press(KeyCode.ENTER);
 
         assertTrue(metaSequenceListView.getItems().contains(new MetaSequence("Rename test")));
     }

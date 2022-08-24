@@ -27,9 +27,6 @@ public class MainWindowTest{
     }
 
     @AfterEach
-
-
-
     public void cleanup() {
         ((TextField) robot.lookup("#id").query()).clear();
         ((RadioButton) robot.lookup("M").query()).setSelected(false);
@@ -296,6 +293,7 @@ public class MainWindowTest{
     @Test
     @Order(15)
     public void test15_adminDisconnection() {
+        //TODO modify these admin tests
         System.out.println("Testing the admin disconnection");
 
         robot.clickOn("#admin");
